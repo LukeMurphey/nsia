@@ -1,0 +1,183 @@
+package net.lukeMurphey.nsia;
+
+import net.lukeMurphey.nsia.LicenseManagement.LicenseDescriptor;
+import net.lukeMurphey.nsia.eventLog.EventLogField;
+import net.lukeMurphey.nsia.eventLog.EventLogMessage;
+import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
+import net.lukeMurphey.nsia.eventLog.EventLogMessage.Category;
+import net.lukeMurphey.nsia.scanRules.DefinitionArchive;
+import net.lukeMurphey.nsia.scanRules.DefinitionSet.DefinitionVersionID;
+
+import java.util.TimerTask;
+
+public class DefinitionUpdateWorker extends TimerTask implements WorkerThread  {
+
+	private State state = State.INITIALIZED;
+	
+	private int startTime;
+	private static int EXPECTED_MAX_TIME = 20000;
+	private static int THIRD = (EXPECTED_MAX_TIME / 3);
+	private DefinitionVersionID versionID = null;
+	private boolean checkingForNewDefinitions = false;
+	private boolean definitionsCurrent = true;
+	private Exception exceptionThrown = null;
+	private boolean force = false;
+	private String message = null;
+	
+	public DefinitionUpdateWorker(){
+		
+	}
+	
+	/**
+	 * This constructor takes a boolean that indicates if the definitions download should be performed even if auto-updating is disabled.
+	 * @param force
+	 */
+	public DefinitionUpdateWorker( boolean force ){
+		this.force = force;
+	}
+	
+	@Override
+	public boolean canPause() {
+		return false;
+	}
+
+	@Override
+	public int getProgress() {
+		int currentTime = (int)System.currentTimeMillis();
+		
+		int diff = currentTime - startTime;
+		
+		if( diff <= THIRD){
+			return (100*diff/THIRD) / 2;
+		}
+		else if(diff > EXPECTED_MAX_TIME){
+			return 100;
+		}
+		else{
+			return 50+ ((100*(diff - THIRD)) / (EXPECTED_MAX_TIME - THIRD))/2;
+		}
+		
+		//progress += 10;
+		//return -1;
+	}
+
+	@Override
+	public State getStatus() {
+		return state;
+	}
+
+	@Override
+	public String getStatusDescription() {
+		
+		if( message != null ){
+			return message;
+		}
+		
+		if( checkingForNewDefinitions && state == State.STARTED ){
+			return "Checking for new definitions";
+		}
+		
+		if( state == State.INITIALIZED ){
+			return "Ready to update";
+		}
+		else if(state == State.STARTING ){
+			return "Preparing to update";
+		}
+		else if(state == State.STARTED ){
+			return "Retrieving updates";
+		}
+		else if( exceptionThrown != null && state == State.STOPPED ){
+			return "Unable to update definitions";
+		}
+		else if( definitionsCurrent && versionID != null && state == State.STOPPED ){
+			return "Definitions current (" + versionID.toString() + ")";
+		}
+		else if( definitionsCurrent && versionID == null && state == State.STOPPED ){
+			return "Definitions current";
+		}
+		else if( versionID != null && state == State.STOPPED ){
+			return "Definitions current";
+		}
+		else if( versionID == null && state == State.STOPPED ){
+			return "Definitions were not updated";
+		}
+		else{
+			return "Retrieving updates";
+		}
+	}
+	
+	@Override
+	public boolean cancel(){
+		terminate();
+		return true;
+	}
+
+	@Override
+	public String getTaskDescription() {
+		return "Definitions Updater";
+	}
+
+	@Override
+	public void pause() {
+		//Don't do anything, definition updates cannot be paused
+	}
+
+	@Override
+	public boolean reportsProgress() {
+		return false;
+	}
+
+	@Override
+	public void terminate() {
+		// TODO Implement termination routine
+	}
+
+	@Override
+	public void run() {
+		
+		try {
+			if( force == false && Application.getApplication().getApplicationConfiguration().getAutoDefinitionUpdating() == false ){
+				state = State.STOPPED;
+				return; //Auto-updating disabled, just return
+			}
+		
+			state = State.STARTING;
+			startTime = (int)System.currentTimeMillis();
+			exceptionThrown = null;
+
+			DefinitionArchive archive = DefinitionArchive.getArchive();
+			state = State.STARTED;
+			checkingForNewDefinitions = true;
+			boolean newDefinitionsAvailable;
+			
+			newDefinitionsAvailable = archive.isNewDefinitionSetAvailable();
+			checkingForNewDefinitions = false;
+			
+			LicenseDescriptor license = Application.getApplication().getApplicationConfiguration().getLicense(false);
+			if( license.isValid() == false ){
+				message = "New definitions cannot be downloaded: do not have a valid license";
+			}
+			else if( newDefinitionsAvailable ){
+				versionID = archive.updateDefinitions();
+			}
+			else{
+				versionID = archive.getVersionID();
+				definitionsCurrent = true;
+			}
+		}
+		catch(Exception e){
+			EventLogMessage message = new EventLogMessage(Category.TASK_FAILED);
+			message.addField(new EventLogField(FieldName.TASK, this.getTaskDescription()));
+			Application.getApplication().logExceptionEvent(message, e);
+			exceptionThrown = e;
+		}
+		
+		state = State.STOPPED;
+	}
+
+	@Override
+	public Throwable getException() {
+		return exceptionThrown;
+	}
+
+}

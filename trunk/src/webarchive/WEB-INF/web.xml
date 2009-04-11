@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- <!DOCTYPE web-app
+     PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+     "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd"> -->
+ <web-app>
+
+	<servlet>
+		 <servlet-class>net.lukeMurphey.nsia.htmlInterface.DefaultServlet</servlet-class>
+		 <servlet-name>Default</servlet-name>
+	 </servlet> 
+
+	 <servlet-mapping>
+		 <servlet-name>Default</servlet-name>
+		 <url-pattern>/</url-pattern>
+	 </servlet-mapping>
+
+
+
+	 <servlet>
+		 <servlet-class>net.lukeMurphey.nsia.htmlInterface.WebConsoleServlet</servlet-class>
+		 <servlet-name>Console</servlet-name>
+	 </servlet>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/Dashboard/*</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/SystemStatus/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/SiteGroup/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/ScanRule/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/HttpStaticScanRule/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/EventLog/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/UserManagement/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/GroupManagement/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/Sessions/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/SystemConfiguration/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/AccessControl/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/UserRights/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/ScanResult/*</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/SelectRuleType/*</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/DatabaseBackup/*</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/Definitions/*</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/HttpDiscoveryRule/*</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/SiteScan/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/ServiceMonitoring/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 	<servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/ScanPolicy/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/License/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/Tasks/*</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/ExceptionManagement/*</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/Update/*</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>Console</servlet-name>
+		 <url-pattern>/DefinitionErrors/*</url-pattern>
+	 </servlet-mapping>
+
+     <servlet-mapping>
+         <servlet-name>Console</servlet-name>
+         <url-pattern>/Ajax/*</url-pattern>
+     </servlet-mapping>
+	 
+	 <servlet-mapping>
+         <servlet-name>Console</servlet-name>
+         <url-pattern>/Response/*</url-pattern>
+     </servlet-mapping>
+
+	 <servlet>
+		 <servlet-class>net.lukeMurphey.nsia.xmlRpcInterface.XmlrpcServlet</servlet-class>
+		 <servlet-name>xml-rpc</servlet-name>
+	 </servlet>
+	 
+	 <servlet-mapping>
+		 <servlet-name>xml-rpc</servlet-name>
+		 <url-pattern>/xml-rpc</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet>
+		 <servlet-class>net.lukeMurphey.nsia.htmlInterface.GraphServlet</servlet-class>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <load-on-startup>1</load-on-startup>
+	 </servlet>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/StatusGraph.png</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/RulesEvalGraph.png</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/StatusGraph</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/RulesEvalGraph</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/RuleScanHistory</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/RuleScanHistory.png</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/ContentTypeResults</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/ContentTypeResults.png</url-pattern>
+	 </servlet-mapping>
+
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/SeverityResults</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/SeverityResults.png</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/ServiceScanDeviations</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/ServiceScanDeviations.png</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/UDPSummary</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/UDPSummary.png</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/TCPSummary</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/TCPSummary.png</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping>
+		 <servlet-name>GraphServlet</servlet-name>
+		 <url-pattern>/graph/*</url-pattern>
+	 </servlet-mapping>
+</web-app>

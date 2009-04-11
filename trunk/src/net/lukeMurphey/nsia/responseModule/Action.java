@@ -1,0 +1,304 @@
+package net.lukeMurphey.nsia.responseModule;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import net.lukeMurphey.nsia.Application;
+import net.lukeMurphey.nsia.NoDatabaseConnectionException;
+import net.lukeMurphey.nsia.Application.DatabaseAccessType;
+import net.lukeMurphey.nsia.eventLog.EventLogField;
+import net.lukeMurphey.nsia.eventLog.EventLogMessage;
+import net.lukeMurphey.nsia.extension.ArgumentFieldsInvalidException;
+import net.lukeMurphey.nsia.extension.FieldLayout;
+
+import org.apache.commons.lang.StringUtils;
+
+public abstract class Action implements Serializable  {
+	
+	public static class MessageVariable{
+		private String name;
+		private String value;
+		public static final String ARGUMENT_NAME = "\\$[a-zA-Z0-9_]+";
+		
+		public MessageVariable(String name, String value){
+			
+			// 0 -- Precondition check
+			
+			//	 0.1 -- Make sure name is not null
+			if( name == null ){
+				throw new IllegalArgumentException("The name cannot be null");
+			}
+			
+			//	 0.2 -- Make sure name is properly formatted
+			if( Pattern.matches(ARGUMENT_NAME, name) == false ){
+				throw new IllegalArgumentException("The name is not valid");
+			}
+			 
+			
+			// 1 -- Initialize the class
+			this.name = name;
+			this.value = value;
+		}
+		
+		public String getName(){
+			return name;
+		}
+		
+		public String getValue(){
+			return value;
+		}
+		
+		public static Vector<MessageVariable> getMessageVariables(EventLogMessage logMessage){
+			Vector<MessageVariable> vars = new Vector<MessageVariable>();
+			
+			for(EventLogField field : logMessage.getFields()){
+				vars.add( new MessageVariable( "$" + field.getName().getSimpleNameFormat(), field.getDescription() )  );
+			}
+			
+			vars.add( new MessageVariable( "$Category", logMessage.getCategory().getName()) );
+			vars.add( new MessageVariable( "$CategoryID", Integer.toString( logMessage.getCategory().ordinal()) ) );
+			vars.add( new MessageVariable( "$SeverityID", Integer.toString( logMessage.getSeverity().getSyslogEquivalent()) ) );
+			vars.add( new MessageVariable( "$Severity", logMessage.getSeverity().toString() ) );
+			vars.add( new MessageVariable( "$Date", logMessage.getDate().toString() ) );
+			vars.add( new MessageVariable( "$Message", logMessage.getMessageName() ) );
+			
+			return vars;
+		}
+		
+		public static String processMessageTemplate( String template, Vector<MessageVariable> vars){
+			
+			// 1 -- Identify each variable in the text
+			Pattern pattern = Pattern.compile(ARGUMENT_NAME, Pattern.CASE_INSENSITIVE);
+			Matcher matcher = pattern.matcher(template);
+			Vector<String> varsWithinTemplate = new Vector<String>();
+			
+			while( matcher.find() ){
+				varsWithinTemplate.add( matcher.group(0) );
+			}
+			
+			
+			// 2 -- Find the variable in the list and replace it
+			for( int c = 0; c < varsWithinTemplate.size(); c++ ){
+				String value = null;
+				
+				// 2.1 -- Identify the variable that matches the name
+				for( int d = 0; d < vars.size(); d++ ){
+					if( StringUtils.equalsIgnoreCase( vars.get(d).getName(), varsWithinTemplate.get(c)) ){
+						value = vars.get(d).getValue();
+					}
+				}
+				
+				// 2.2 -- If the match was found, then do the replacement
+				if( value != null ){
+					template = StringUtils.replace(template, varsWithinTemplate.get(c), value);
+				}
+				
+				// 2.3 -- If the match was not found, then substitute in text that notes that the variable was not found 
+				else{
+					template = StringUtils.replace(template, varsWithinTemplate.get(c), "[" + varsWithinTemplate.get(c).substring(1) + " was undefined]");
+				}
+				
+			}
+			
+			
+			// 3 -- Return the result
+			return template;
+		}
+	}
+	
+	protected String description;
+	protected String extendedDescription;
+	private int actionID = -1;
+	
+	public abstract void execute(EventLogMessage logMessage) throws ActionFailedException;
+	
+	protected Action(String description, String extenededDescription){
+		
+		// 0 -- Precondition check
+		if( description == null ){
+			throw new IllegalArgumentException("The description of the action cannot be null");
+		}
+		
+		
+		// 1 -- Initialize the class
+		this.description = description;
+		this.extendedDescription = extenededDescription;
+	}
+	
+	public String getUserLongDescription(){
+		return extendedDescription;
+	}
+	
+	public String getDescription(){
+		return description;
+	}
+	
+	public int getActionID(){
+		return actionID;
+	}
+	
+	public abstract Hashtable<String, String> getValues();
+	
+	public abstract FieldLayout getLayoutWithValues();
+	
+	public abstract void configure(Hashtable<String, String> values) throws ArgumentFieldsInvalidException;
+	
+	public void save() throws NoDatabaseConnectionException, SQLException, IOException{
+		
+		// 1 -- Get the serialized stream from the object
+		byte[] bytes = null;
+		ByteArrayOutputStream byteOutStream = null; 
+		ObjectOutputStream outStream = null;
+		IOException cause = null;
+		
+		try{
+			byteOutStream = new ByteArrayOutputStream();
+			outStream = new ObjectOutputStream(byteOutStream);
+			
+			outStream.writeObject(this);
+			bytes = byteOutStream.toByteArray();
+			
+		}
+		catch(IOException e){
+			cause = e;
+		}
+		finally{
+			
+			try{
+				if( byteOutStream != null ){
+					byteOutStream.close();
+				}
+				
+				if( outStream != null ){
+					outStream.close();
+				}
+			}
+			catch(IOException e){
+				if( e.getCause() == null && cause != null ){
+					e.initCause(cause);
+					throw e;
+				}
+				else if( e.getCause() != null && cause != null){
+					throw cause;
+				}
+				else{
+					throw e;
+				}
+			}
+			
+		}
+		
+		
+		// 2 -- Write the bytes to the database
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet keys = null;
+		
+		try{
+			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.ACTION);
+			
+			// If the action identifier is greater or equal to zero, then the action was previously saved to the database and the existing item should be updated 
+			if( actionID >= 0){
+				statement = connection.prepareStatement("Update Action set State = ? where ActionID = ?");
+				
+				statement.setBytes(1, bytes);
+				statement.setInt(2, actionID);
+				statement.executeUpdate();
+			}
+			else{
+				statement = connection.prepareStatement("Insert into Action (State) values (?)", PreparedStatement.RETURN_GENERATED_KEYS);
+				statement.setBytes(1, bytes);
+				statement.executeUpdate();
+				
+				keys = statement.getGeneratedKeys();
+				
+				if( keys.next() ){
+					actionID = keys.getInt(1);
+				}
+			}
+		}
+		finally{
+			if( connection != null ){
+				connection.close();
+			}
+			
+			if( statement != null ){
+				statement.close();
+			}
+			
+			if( keys != null ){
+				keys.close();
+			}
+		}
+		
+	}
+	
+	public static Action loadFromDatabase( Connection connection, int actionID ) throws SQLException, ActionInstantiationException{
+		
+		// 0 -- Precondition check
+		if( connection == null ){
+			throw new IllegalArgumentException("The database connection cannot be null");
+		}
+		
+		
+		// 1 -- Load the parameters
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		
+		try{
+			// 1.1 -- Setup and perform the database query
+			statement = connection.prepareStatement("Select * from Action where ActionID = ?");
+			statement.setInt(1, actionID);
+			result = statement.executeQuery();
+			
+			// 1.2 -- Load the action object from the result (if the connection succeeded)
+			if( result.next() ){
+				
+				byte[] bytes = result.getBytes("State");
+				
+				ByteArrayInputStream byteInStream = new ByteArrayInputStream(bytes);
+				ObjectInputStream inStream = new ObjectInputStream(byteInStream);
+				
+				Action action = (Action)inStream.readObject();
+				
+				return action;
+			}
+		}
+		catch(ClassNotFoundException e){
+			throw new ActionInstantiationException(e);
+		}
+		catch(IOException e){
+			throw new ActionInstantiationException(e);
+		}
+		finally{
+			
+			if( statement != null ){
+				statement.close();
+			}
+			
+			if( result != null ){
+				result.close();
+			}
+		}
+		
+		return null; //The loading of the object failed
+		
+	}
+	
+	public abstract String getConfigDescription();
+}
+

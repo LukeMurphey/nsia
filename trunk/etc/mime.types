@@ -1,0 +1,799 @@
+# Macintosh BinHexed Archive File
+
+application/mac-binhex40       hqx
+
+#
+
+# Microsoft Word File
+
+application/msword             doc dot rtf
+
+#
+
+# Binary File
+
+application/octet-stream       bin dms lha lzh exe ani class            
+
+#
+
+# Adobe Acrobat File
+
+application/pdf                pdf
+
+#
+
+# PostScript File
+
+application/postscript         ai eps ps
+
+#
+
+# Rich Text File
+
+application/rtf                rtf
+
+#
+
+# Rich Text File
+
+text/richtext                  rtx
+
+#
+
+# WordPerfect File
+
+application/wordperfectd       wpd
+
+#
+
+# WordPerfect File
+
+application/wordperfect        wp wpd
+
+#
+
+# WordPerfect Version 5.1 File
+
+application/wordperfect5.1     wp5
+
+#
+
+# WordPerfect Version 6.1 File
+
+application/wordperfect6.1     wp6
+
+#
+
+# C-Shell Program
+
+application/x-csh              csh
+
+#
+
+# Director File
+
+application/x-director         dcr dir dxr
+
+#
+
+# TeX DVI Format File
+
+application/x-dvi              dvi
+
+#
+
+# NCSA HDF File
+
+application/x-hdf              hdf
+
+#
+
+# Latex File
+
+application/x-latex            latex
+
+#
+
+# sh Shell Program
+
+application/x-sh               sh
+
+#
+
+# Macromedia Shockwave File
+
+application/x-shockwave-flash  swf
+
+#
+
+# TCL Programming Language File
+
+application/x-tcl              tcl
+
+#
+
+# Tex/LaTeX File
+
+application/x-tex              tex
+
+#
+
+# TexInfo File
+
+application/x-texinfo          texinfo texi
+
+#
+
+# Troff File
+
+application/x-troff            t tr roff
+
+#
+
+# Troff with MAN Macros File
+
+application/x-troff-man        man
+
+#
+
+# Troff with ME Macros File
+
+application/x-troff-me         me
+
+#
+
+# Troff with MS Macros File
+
+application/x-troff-ms         ms
+
+#
+
+# WAIS Source File
+
+application/x-wais-source      src
+
+#
+
+# ZIP Compressed File
+
+application/zip                zip
+
+#
+
+# GZip and Tar File
+
+application/x-gtar             gtar
+
+#
+
+# UNIX Tape Archive File
+
+application/x-tar              tar
+
+#
+
+# Ustar File
+
+application/x-ustar            ustar
+
+#
+
+# Launcher File
+
+application/launcher           mpp mpx mpt mpv mpc mpw
+
+#
+
+# Microsoft Excel File
+
+application/excel              xls xlc xlw xlt xla xll xlb xlm
+
+#
+
+# Microsoft PowerPoint Slideshow File 
+
+application/mspowerpoint       pps
+
+#
+
+# Microsoft Powerpoint File
+
+application/mspowerpoint       ppt
+
+#
+
+# RealAudio Sound File
+
+application/x-pn-realaudio     ram ra
+
+#
+
+# RealAudio Sound File
+
+audio/x-pn-realaudio           ra ram rm rpm
+
+#
+
+# Audio Sound File
+
+audio/basic                    au snd
+
+#
+
+# MIDI Sound File
+
+audio/x-midi		       mid
+
+#
+
+# MIDI Sound File
+
+audio/midi                     mid
+
+#
+
+# AIFF Sound File
+
+audio/x-aiff                   aif aiff aifc
+
+#
+
+# WAV Sound File
+
+audio/x-wav                    wav
+
+#
+
+# MP3 Sound File
+
+audio/x-mpegurl                mp3
+
+#
+
+# MP3 Sound File
+
+audio/mpeg3                    mp3
+
+#
+
+# MP3 Sound File
+
+audio/x-mpeg-3                 mp3
+
+#
+
+# MP3 Sound File
+
+audio/x-mpeg                   mp3
+
+#
+
+# MP2 Sound File
+
+audio/mpeg                     mp2 mpa mpg mpga
+
+#
+
+# M3U Playlist
+
+audio/playlist                 m3u M3U
+
+#
+
+# PLS File
+
+audio/x-scpls                  pls PLS
+
+#
+
+# MP2 Sound File
+
+audio/x-mpeg                   mp2
+
+#
+
+# GIF Image File
+
+image/gif                      gif
+
+#
+
+# Image Exchange File
+
+image/ief                      ief
+
+#
+
+# JPG Image File
+
+image/jpeg                     jpeg jpg jpe
+
+#
+
+# Portable Network Graphics File
+
+image/png                      png
+
+#
+
+# TIFF Image File
+
+image/tiff                     tiff tif
+
+#
+
+# Icon File
+
+image/x-icon                   ico
+
+#
+
+# CMU Raster File
+
+image/x-cmu-raster             ras
+
+#
+
+# Portable Anymap File
+
+image/x-portable-anymap        pnm             
+
+#
+
+# Portable Bitmap File
+
+image/x-portable-bitmap        pbm             
+
+#
+
+# Portable Graymap File
+
+image/x-portable-graymap       pgm             
+
+#
+
+# Portable Pixmap File
+
+image/x-portable-pixmap        ppm             
+
+#
+
+# RGB Image File
+
+image/x-rgb                    rgb
+
+#
+
+# X-Bitmap Image File
+
+image/x-xbitmap                xbm
+
+#
+
+# X-Pixmap Image File
+
+image/x-xpixmap                xpm
+
+#
+
+# SGML Document File
+
+text/x-sgml		       sgml sgm
+
+#
+
+# Tab-Separated Values File
+
+text/tab-separated-values      tsv
+
+#
+
+# Microsoft Access File
+
+application/access             mdf
+
+#
+
+# Microsoft Access File
+
+application/vnd.ms-access      mdb mda mde
+
+#
+
+# Microsoft Access File
+
+application/access             mdb
+
+#
+
+# TrueDoc Portable Font Resource File
+
+application/font-tdpfr         pfr
+
+#
+
+# Macromedia Flash
+
+application/futuresplash       spl
+
+#
+
+# Hummingbird Host Explorer Profiles
+
+application/hep                hep
+
+#
+
+# Lotus 123 File
+
+application/lotus-123	       wks
+
+#
+
+# PageMaker File
+
+application/pagemaker          pm5 pt5 pm
+
+#
+
+# ToolBook File
+
+application/toolbook           tbk
+
+#
+
+# WinFrames File
+
+application/x-ica              ica
+
+#
+
+# Java Network Launching Protocol
+
+application/x-java-jnlp-file   jnlp
+
+#
+
+# Javascript File
+
+application/x-javascript       js
+
+#
+
+# SPSS File
+
+application/x-spss             sav spp sbs sps spo 
+
+#
+
+# Macintosh Stuff-It File
+
+application/x-stuffit          sit
+
+#
+
+# Macintosh Stuff-It Lite File
+
+application/stuffit-lite       sea
+
+#
+
+# Microsoft Project File
+
+application/vnd.ms-project     mpp
+
+#
+
+# PDP Chemistry Model File
+
+chemical/x-pdb		       pdb
+
+#
+
+# XYZ Chemistry Model File
+
+chemical/x-xyz		       xyz
+
+#
+
+# AutoCAD File
+
+drawing/x-dwf                  dwf
+
+#
+
+# Cascading Style Sheet File
+
+text/css                       css
+
+#
+
+# HTML File
+
+text/html                      html htm
+
+#
+
+# Plain Text File
+
+text/plain                     txt
+
+#
+
+# MPEG Movie File
+
+video/mpeg                     mpeg mpg mpe
+
+#
+
+# QuickTime Movie File
+
+video/quicktime                qt mov
+
+#
+
+# Quicktime Player File
+
+application/x-quicktimeplayer  qtl
+
+#
+
+# Microsoft Windows Media File
+
+video/x-ms-asf                 asf asx
+
+#
+
+# AVI Movie File
+
+video/x-msvideo                avi
+
+#
+
+# SGI Movie File
+
+video/x-sgi-movie              movie
+
+#
+
+#
+
+text/x-setext                  etx             
+
+#
+
+#
+
+image/x-xwindowdump            xwd             
+
+#
+
+#
+
+video/x-fli		       fli
+
+video/x-flv		       flv
+
+#
+
+#
+
+application/oda                oda
+
+#
+
+#
+
+application/x-bcpio            bcpio
+
+#
+
+#
+
+application/x-cpio             cpio
+
+#
+
+#
+
+application/x-shar             shar            
+
+#
+
+#
+
+application/x-sv4cpio          sv4cpio         
+
+#
+
+#
+
+application/x-sv4crc           sv4crc          
+
+#
+
+#
+
+application/x-mif              mif
+
+#
+
+#
+
+application/x-netcdf           nc cdf          
+
+#
+
+#
+
+application/wita                               
+
+#
+
+#
+
+application/activemessage
+
+#
+
+# Microsoft Office 2007 Open XML Document Types
+
+application/vnd.openxmlformats       docx pptx xlsx
+
+#
+
+#
+
+application/andrew-inset                       
+
+#
+
+#
+
+application/applefile
+
+#
+
+#
+
+application/atomicmail                         
+
+#
+
+#
+
+application/dca-rft                            
+
+#
+
+#
+
+application/dec-dx                             
+
+#
+
+#
+
+message/external-body
+
+#
+
+#
+
+message/news
+
+#
+
+#
+
+message/partial
+
+#
+
+#
+
+message/rfc822
+
+#
+
+#
+
+multipart/alternative
+
+#
+
+#
+
+multipart/appledouble
+
+#
+
+#
+
+multipart/digest
+
+#
+
+#
+
+multipart/mixed
+
+#
+
+#
+
+multipart/parallel
+
+#
+
+#
+
+application/slate                              
+
+#
+
+#
+
+application/macwriteii
+
+#
+
+#
+
+application/news-message-id                    
+
+#
+
+#
+
+application/news-transmission                  
+
+#
+
+#
+
+application/remote-printing                    
+
+#
+
+# Rich Format XML
+
+application/rdf+xml            rdf
+
+#
+
+# Style Sheet Transformation
+
+application/xslt+xml           xslt
+
+#
+
+# Display Images
+
+application/svg+xml            svg
+
+#
+
+# Rich Atom
+
+application/atom+xml           atom
+
+#
+
+# XHTML Embedded in HTML
+
+application/xhtml+xml          xhtml xht
+
+#
+
+# RSS Podcast
+
+application/rss+xml            rss
+
+#
+
+# Generic XML Content
+
+application/xml                xml xsl
+
+#  
