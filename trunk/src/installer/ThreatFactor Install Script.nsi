@@ -14,7 +14,7 @@
 !include "MUI.nsh"
 
 ; Set the path where the files are located (dependent on the location of the project)
-!define ROOT_PATH "C:\Users\Luke\workspace\ThreatFactor NSIA"
+!define ROOT_PATH "../.."
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -69,7 +69,7 @@ Page custom LoginPasswordForm LoginPasswordFormLeave
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "ThreatFactor NSIA Setup.exe"
+OutFile "../../bin/ThreatFactor NSIA Setup.exe"
 InstallDir "$PROGRAMFILES\ThreatFactor NSIA"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
