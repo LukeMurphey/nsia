@@ -45,7 +45,7 @@ public final class Application {
 	
 	public static final int VERSION_MAJOR = 0;
 	public static final int VERSION_MINOR = 8;
-	public static final int VERSION_REVISION = 90;
+	public static final int VERSION_REVISION = 91;
 	public static final String VERSION_STATUS = null;
 	public static final String DATABASE_LOCATION = "../var/database";
 	
@@ -109,6 +109,8 @@ public final class Application {
 	private boolean usingInternalDatabase;
 	private Vector<WorkerThreadDescriptor> workerThreadQueue = new Vector<WorkerThreadDescriptor>();
 	private RunMode runMode;
+	private Timer timer;
+	private ReindexerWorker reindexer = null;
 	
 	public static class WorkerThreadDescriptor{
 		
@@ -734,7 +736,7 @@ public final class Application {
 	 */
 	private void startTasks(){
 		
-		Timer timer = new Timer("Scheduled Task Timer", true);
+		timer = new Timer("Scheduled Task Timer", true);
 		
 		// 1 -- Start the definition updater
 		DefinitionUpdateWorker worker = new DefinitionUpdateWorker();
@@ -742,7 +744,7 @@ public final class Application {
 		
 		// 2 -- Start the index defragmenter (if the internal database was used)
 		if( usingInternalDatabase ){
-			ReindexerWorker reindexer = new ReindexerWorker();
+			reindexer = new ReindexerWorker();
 			Calendar cal = Calendar.getInstance();
 			
 			int hour = cal.get(Calendar.HOUR_OF_DAY);
@@ -967,10 +969,13 @@ public final class Application {
 		synchronized( shutdownInProgress ){
 			
 			// 0 -- Precondition check
-			if( shutdownInProgress.booleanValue() )
+			if( shutdownInProgress.booleanValue() ){
 				return;
+			}
 			
 			shutdownInProgress = Boolean.TRUE;
+			reindexer.terminate();
+			timer.cancel();
 			
 			if( shutdownCommandSource == ShutdownRequestSource.API ){
 				System.out.print("System is shutting down (received shutdown command from API interface)...");
