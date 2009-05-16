@@ -670,7 +670,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 						currentItem = currentItem.substring(0, fragmentOffset);
 					}
 					
-					URL newURL = new URL(parentUrl, currentItem);
+					URL newURL = new URL(parentUrl, currentItem.trim());
 					
 					//System.out.println( parentUrl + " + " + currentItem + " = " + newURL.toString() ); //DEBUG
 					
