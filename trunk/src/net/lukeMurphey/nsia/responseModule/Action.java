@@ -29,6 +29,8 @@ import org.apache.commons.lang.StringUtils;
 
 public abstract class Action implements Serializable  {
 	
+	private static final long serialVersionUID = -5095063314974282138L;
+
 	public static class MessageVariable{
 		private String name;
 		private String value;
