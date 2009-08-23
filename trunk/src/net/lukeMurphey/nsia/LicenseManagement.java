@@ -194,7 +194,7 @@ public class LicenseManagement {
 				throw (XmlRpcException)result;
 			}
 			
-	        if ( result != null && result instanceof Hashtable ){
+	        if ( result != null && result instanceof Hashtable<?, ?> ){
 	        	@SuppressWarnings("unchecked")
 	        	Hashtable<String, Object> hashTableResult = (Hashtable<String, Object>)result;
 	        	String licensee = (String)hashTableResult.get("Licensee");
