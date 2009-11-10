@@ -148,8 +148,8 @@ public class HtmlSeekingRule extends HtmlContentProvider{
 		int recursionDepth = 10;
 		int scanLimit = 100;
 		String domainLimit = "*";
-		int scanFrequencyUnits = 3600;
-		int scanFrequencyValue = 1;
+		int scanFrequencyUnits = 0;
+		int scanFrequencyValue = 0;
 		long siteGroupId = -1;
 		
 		//	 2.1  -- Get the relevant fields
@@ -203,6 +203,10 @@ public class HtmlSeekingRule extends HtmlContentProvider{
 					scanFrequencyUnits = 1;
 					scanFrequencyValue = frequency;
 				}
+			}
+			else{
+				scanFrequencyUnits = 3600;
+				scanFrequencyValue = 1;
 			}
 
 			//	 2.1.3 -- Get the various other parameters
