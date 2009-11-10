@@ -60,7 +60,7 @@ public class HtmlLicense extends HtmlContentProvider {
 			licenseKey = "";
 		}
 		
-		String keyForm = "<p/>Once you have a license key, enter it below:<form method=\"POST\" action=\"License\"><input class=\"textInput\" size=\"48\" type=\"text\" name=\"LicenseKey\" value=\"" + StringEscapeUtils.escapeHtml( licenseKey ) + "\"><input type=\"Submit\" class=\"button\" value=\"Apply\" name=\"Apply\"></form>";
+		String keyForm = "<p/>Once you have a valid license key, enter it below:<form method=\"POST\" action=\"License\"><input class=\"textInput\" size=\"48\" type=\"text\" name=\"LicenseKey\" value=\"" + StringEscapeUtils.escapeHtml( licenseKey ) + "\"><input type=\"Submit\" class=\"button\" value=\"Apply\" name=\"Apply\"></form>";
 		
 		if( license == null ){
 			body.append( Html.getWarningDialog("No License", "The application does not possess a valid license. Thus, the application cannot receive definition updates. Purchase a license at <a href=\"http://ThreatFactor.com/\">ThreatFactor.com now</a>." + keyForm) );
@@ -69,7 +69,7 @@ public class HtmlLicense extends HtmlContentProvider {
 			body.append( Html.getInformationDialog("License Being Verified", "The application license is currently being verified by the application.<p/>If you need support, please go to <a href=\"http://ThreatFactor.com/Support\">ThreatFactor.com</a> now.<p/><form method=\"POST\" action=\"/\"><input type=\"Submit\" class=\"button\" value=\"OK\" name=\"OK\"></form>", null, null) );
 		}
 		else if( license.getStatus() == LicenseManagement.LicenseStatus.EXPIRED ){
-			body.append( Html.getWarningDialog("Expired License", "The license has expired. Thus, the application cannot receive definition updates. Purchase an updated license at <a href=\"http://ThreatFactor.com/\">ThreatFactor.com now</a>.") );
+			body.append( Html.getWarningDialog("Expired License", "The license has expired. Thus, the application cannot receive definition updates. Purchase an updated license at <a href=\"http://ThreatFactor.com/\">ThreatFactor.com now</a>." + keyForm) );
 		}
 		else if( license.getStatus() == LicenseManagement.LicenseStatus.ACTIVE ){
 			body.append( Html.getInformationDialog("License Up to Date", "The application license has been granted to " + license.getLicensee() + " and is valid until " + license.getExpirationDate().toString() + ".<p/>If you need support, please go to <a href=\"http://ThreatFactor.com/Support/\">ThreatFactor.com</a> now.<p/><form method=\"POST\" action=\"/\"><input type=\"Submit\" class=\"button\" value=\"OK\" name=\"OK\"></form>", null, null) );
