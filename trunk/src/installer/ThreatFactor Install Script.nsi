@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ThreatFactor NSIA"
-!define PRODUCT_VERSION "0.8.90"
+!define PRODUCT_VERSION "0.8.91"
 !define PRODUCT_PUBLISHER "ThreatFactor"
 !define PRODUCT_WEB_SITE "http://ThreatFactor.com"
 
