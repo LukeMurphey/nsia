@@ -50,8 +50,8 @@ public class HtmlServiceScanRule extends HtmlContentProvider {
 			String portsToScan = "";
 			String portsExpectedOpen = "";
 			String serverAddress = "";
-			int scanFrequencyUnits = 3600;
-			int scanFrequencyValue = 12;
+			int scanFrequencyUnits = 0;
+			int scanFrequencyValue = 0;
 			ServiceScanRule scanRule = null;
 			
 			//		1.1 -- Get the rule ID
@@ -230,14 +230,16 @@ public class HtmlServiceScanRule extends HtmlContentProvider {
 	
 			body.append( "<tr class=\"Background3\"><td class=\"alignRight\" colspan=\"99\">");
 			
-			if( siteGroupId >= 0 ){
-				body.append( "<input type=\"hidden\" name=\"Action\" value=\"New\">")
-				.append( "<input type=\"hidden\" name=\"SiteGroupID\" value=\"").append( siteGroupId ).append( "\">");
-			}
-			if(scanRuleId >= 0) {
+			if( scanRuleId >= 0 ) {
 				body.append( "<input type=\"hidden\" name=\"Action\" value=\"Edit\">")
 				.append( "<input type=\"hidden\" name=\"RuleID\" value=\"").append( scanRuleId ).append( "\">" );
 			}
+			
+			else if( siteGroupId >= 0 ){
+				body.append( "<input type=\"hidden\" name=\"Action\" value=\"New\">")
+				.append( "<input type=\"hidden\" name=\"SiteGroupID\" value=\"").append( siteGroupId ).append( "\">");
+			}
+
 			
 			//body.append( "<input class=\"button\" type=\"submit\" onClick=\"showHourglass('Scanning...')\" value=\"Auto-Populate\" name=\"AutoPopulate\">&nbsp;&nbsp;")
 			body.append( "<input class=\"button\" type=\"submit\" value=\"Apply Changes\" name=\"Submit\"></td></tr>"  );
@@ -346,12 +348,20 @@ public class HtmlServiceScanRule extends HtmlContentProvider {
 			
 			//		1.2.3 -- Get the scan frequency
 			if( requestDescriptor.request.getParameter("ScanFrequencyValue") != null && requestDescriptor.request.getParameter("ScanFrequencyUnits") != null  ){
+				
+				//		1.2.3.1 -- Parse the scan frequency
 				try{
 					scanFrequencyValue = Integer.parseInt( requestDescriptor.request.getParameter("ScanFrequencyValue"));
 					scanFrequencyUnits  = Integer.parseInt( requestDescriptor.request.getParameter("ScanFrequencyUnits"));
 				}
 				catch( NumberFormatException e ){
 					Html.addMessage(MessageType.WARNING, "A valid scan frequency was not provided", requestDescriptor.userId.longValue());
+					return new ActionDescriptor(OP_EDIT_SCAN_FREQUENCY_INVALID);
+				}
+				
+				//		1.2.3.2 -- Make sure the scan frequency is not too low
+				if( scanFrequencyUnits == 1 && scanFrequencyValue < 30){
+					Html.addMessage(MessageType.WARNING, "The scan frequency cannot be less than 30 seconds", requestDescriptor.userId.longValue());
 					return new ActionDescriptor(OP_EDIT_SCAN_FREQUENCY_INVALID);
 				}
 			}
