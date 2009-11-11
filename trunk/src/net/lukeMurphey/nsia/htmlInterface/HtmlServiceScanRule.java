@@ -63,6 +63,9 @@ public class HtmlServiceScanRule extends HtmlContentProvider {
 					return new ContentDescriptor( title, Html.getWarningNote("A valid rule was not provided") );
 				}
 			}
+			else if( actionDesc.result == ActionDescriptor.OP_ADD_SUCCESS && actionDesc.addData != null && actionDesc.addData instanceof Long ){
+				scanRuleId = (Long)actionDesc.addData;
+			}
 			
 			// Load the associated rule
 			if( scanRuleId >= 0 ){
@@ -99,7 +102,7 @@ public class HtmlServiceScanRule extends HtmlContentProvider {
 			}
 			
 			//		1.3 -- Get the scan frequency
-			if( scanFrequencyUnits == 0 || scanFrequencyValue == 0 && scanRule != null){
+			if( (scanFrequencyUnits == 0 || scanFrequencyValue == 0) && scanRule != null){
 				int frequency = scanRule.getScanFrequency();
 				if( ( frequency % 86400) == 0){ //Days
 					scanFrequencyUnits = 86400;
@@ -431,8 +434,9 @@ public class HtmlServiceScanRule extends HtmlContentProvider {
 			
 			if( action.equalsIgnoreCase("New") ){
 				try {
-					scanData.addServiceScanRule(requestDescriptor.sessionIdentifier, siteGroupId, serverAddress, portsToScanRanges, portsExpectedOpenRanges, scanFrequencyUnits * scanFrequencyValue );
+					long rule_id = scanData.addServiceScanRule(requestDescriptor.sessionIdentifier, siteGroupId, serverAddress, portsToScanRanges, portsExpectedOpenRanges, scanFrequencyUnits * scanFrequencyValue );
 					Html.addMessage(MessageType.INFORMATIONAL, "Rule successfully created", requestDescriptor.userId.longValue());
+					return new ActionDescriptor( ActionDescriptor.OP_ADD_SUCCESS, rule_id);
 				} catch (InsufficientPermissionException e) {
 					Html.addMessage(MessageType.WARNING, "You do not have permission to create a new rule", requestDescriptor.userId.longValue());
 					return new ActionDescriptor( ActionDescriptor.OP_ADD_FAILED);
