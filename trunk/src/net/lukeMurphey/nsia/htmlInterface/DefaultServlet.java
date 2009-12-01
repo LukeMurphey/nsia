@@ -62,7 +62,7 @@ public class DefaultServlet extends HttpServlet {
 			if( zipEntry == null || zipEntry.isDirectory() ){
 				//If the file is actually a directory, then send the user to user to the main console servlet
 				RequestDispatcher requestDispatcher;
-				requestDispatcher = request.getRequestDispatcher("Dashboard");
+				requestDispatcher = request.getRequestDispatcher("/Dashboard");
 				requestDispatcher.forward((ServletRequest)request, (ServletResponse)response);
 				
 				return;
@@ -112,8 +112,8 @@ public class DefaultServlet extends HttpServlet {
 			else
 				consoleServlet.doPost(request, response);
 
-		}catch(Exception e){
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.WEB_ERROR, e);
+		}catch(Throwable t){
+			Application.getApplication().logExceptionEvent(EventLogMessage.Category.WEB_ERROR, t);
 		}
 		
 	}
