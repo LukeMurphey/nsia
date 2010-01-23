@@ -208,7 +208,7 @@ public class UserView extends View {
 		// 4 -- Get the breadcrumbs
 		Vector<Link> breadcrumbs = new Vector<Link>();
 		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-		breadcrumbs.add(  new Link("User Management", createURL()) );
+		breadcrumbs.add(  new Link("User Management", UsersView.getURL()) );
 		breadcrumbs.add(  new Link("View User", createURL(user.getUserID())) );
 		data.put("breadcrumbs", breadcrumbs);
 		
