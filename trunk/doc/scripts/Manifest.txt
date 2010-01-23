@@ -1,4 +1,4 @@
-Main-Class: net.lukeMurphey.nsia.Main
+Main-Class: net.lukemurphey.nsia.Main
 Class-Path: ../lib/commons-codec-1.3.jar 
  ../lib/JSAP-2.0b.jar 
  ../lib/commons-httpclient-3.0.1.jar 
@@ -30,3 +30,4 @@ Class-Path: ../lib/commons-codec-1.3.jar
  ../lib/trilead-ssh2-build213.jar 
  ../lib/mail.jar 
  ../lib/swt.jar 
+ ../lib/freemarker.jar 
