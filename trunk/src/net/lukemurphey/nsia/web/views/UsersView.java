@@ -25,7 +25,7 @@ import net.lukemurphey.nsia.web.templates.TemplateLoader;
 
 public class UsersView extends View {
 
-	public static final String VIEW_NAME ="users";
+	public static final String VIEW_NAME ="users_list";
 	
 	public UsersView() {
 		super("Users", VIEW_NAME);
