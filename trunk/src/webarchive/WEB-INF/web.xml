@@ -4,37 +4,102 @@
      "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd"> -->
  <web-app>
 
-	<servlet>
-		 <servlet-class>net.lukeMurphey.nsia.htmlInterface.DefaultServlet</servlet-class>
-		 <servlet-name>Default</servlet-name>
+	 <servlet>
+		<servlet-class>net.lukemurphey.nsia.web.DefaultServlet</servlet-class>
+		<servlet-name>Default</servlet-name>
 	 </servlet> 
 
 	 <servlet-mapping>
-		 <servlet-name>Default</servlet-name>
-		 <url-pattern>/</url-pattern>
+		<servlet-name>Default</servlet-name>
+		<url-pattern>/</url-pattern>
 	 </servlet-mapping>
 
-
-
 	 <servlet>
-		 <servlet-class>net.lukeMurphey.nsia.htmlInterface.WebConsoleServlet</servlet-class>
+		<servlet-class>net.lukemurphey.nsia.web.WebConsoleServlet</servlet-class>
+		<servlet-name>WebConsole</servlet-name>
+	 </servlet>
+
+     <servlet-mapping>
+        <servlet-name>WebConsole</servlet-name>
+        <url-pattern>/Login</url-pattern>
+     </servlet-mapping>
+     
+     <servlet-mapping>
+        <servlet-name>WebConsole</servlet-name>
+        <url-pattern>/Logout</url-pattern>
+     </servlet-mapping>
+
+     <servlet-mapping>
+        <servlet-name>WebConsole</servlet-name>
+        <url-pattern>/Dashboard</url-pattern>
+     </servlet-mapping>
+     
+     <servlet-mapping>
+        <servlet-name>WebConsole</servlet-name>
+        <url-pattern>/Scanner/Stop</url-pattern>
+     </servlet-mapping>
+     
+    <servlet-mapping>
+        <servlet-name>WebConsole</servlet-name>
+        <url-pattern>/Scanner/Start</url-pattern>
+    </servlet-mapping>
+     
+    <servlet-mapping>
+         <servlet-name>WebConsole</servlet-name>
+         <url-pattern>/System/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+         <servlet-name>WebConsole</servlet-name>
+         <url-pattern>/Definitions/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+         <servlet-name>WebConsole</servlet-name>
+         <url-pattern>/Definition/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+         <servlet-name>WebConsole</servlet-name>
+         <url-pattern>/License/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+         <servlet-name>WebConsole</servlet-name>
+         <url-pattern>/SiteGroup/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+         <servlet-name>WebConsole</servlet-name>
+         <url-pattern>/Users/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+         <servlet-name>WebConsole</servlet-name>
+         <url-pattern>/User/*</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- Below is servlet information for the old web console -->
+	 <servlet>
+		 <servlet-class>net.lukemurphey.nsia.htmlInterface.WebConsoleServlet</servlet-class>
 		 <servlet-name>Console</servlet-name>
 	 </servlet>
 	 
-	 <servlet-mapping>
+	 <!-- <servlet-mapping>
 		 <servlet-name>Console</servlet-name>
 		 <url-pattern>/Dashboard/*</url-pattern>
-	 </servlet-mapping>
+	 </servlet-mapping> -->
 
 	 <servlet-mapping>
 		 <servlet-name>Console</servlet-name>
 		 <url-pattern>/SystemStatus/*</url-pattern>
 	 </servlet-mapping>
 	 
-	 <servlet-mapping>
+	 <!-- <servlet-mapping>
 		 <servlet-name>Console</servlet-name>
 		 <url-pattern>/SiteGroup/*</url-pattern>
-	 </servlet-mapping>
+	 </servlet-mapping> -->
 	 
 	 <servlet-mapping>
 		 <servlet-name>Console</servlet-name>
@@ -98,7 +163,7 @@
 
 	 <servlet-mapping>
 		 <servlet-name>Console</servlet-name>
-		 <url-pattern>/Definitions/*</url-pattern>
+		 <url-pattern>/DefinitionsOLD/*</url-pattern>
 	 </servlet-mapping>
 
 	 <servlet-mapping>
@@ -123,7 +188,7 @@
 	 
 	 <servlet-mapping>
 		 <servlet-name>Console</servlet-name>
-		 <url-pattern>/License/*</url-pattern>
+		 <url-pattern>/OLD/License/*</url-pattern>
 	 </servlet-mapping>
 	 
 	 <servlet-mapping>
@@ -157,7 +222,7 @@
      </servlet-mapping>
 
 	 <servlet>
-		 <servlet-class>net.lukeMurphey.nsia.xmlRpcInterface.XmlrpcServlet</servlet-class>
+		 <servlet-class>net.lukemurphey.nsia.xmlRpcInterface.XmlrpcServlet</servlet-class>
 		 <servlet-name>xml-rpc</servlet-name>
 	 </servlet>
 	 
@@ -167,7 +232,7 @@
 	 </servlet-mapping>
 
 	 <servlet>
-		 <servlet-class>net.lukeMurphey.nsia.htmlInterface.GraphServlet</servlet-class>
+		 <servlet-class>net.lukemurphey.nsia.htmlInterface.GraphServlet</servlet-class>
 		 <servlet-name>GraphServlet</servlet-name>
 		 <load-on-startup>1</load-on-startup>
 	 </servlet>
