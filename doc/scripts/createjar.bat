@@ -1,4 +1,4 @@
-set corePath=../../bin
+set corePath=../../java-bin
 
 cd %corePath%
 
