@@ -1,9 +1,9 @@
 
-set corePath=C:\Users\Luke\workspace\
+set corePath=C:\Users\Luke\workspace\ThreatFactor NSIA
 
 REM Clean
-DEL "%corePath%\NSIA\lib\webConsole.war"
+DEL "%corePath%\lib\webConsole.war"
 
 REM Create the Web-Application Archive (WAR)
-cd "%corePath%\NSIA\deployment"
-"jar" cvf "%corePath%\NSIA\lib\webConsole.war" *
+cd "%corePath%\src\webarchive"
+"jar" cvf "%corePath%\lib\webConsole.war" *
