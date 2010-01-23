@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 
 import java.security.*;
@@ -854,6 +854,18 @@ public class SessionManagement {
 		
 		
 		return sessionInfo;
+	}
+	
+	/**
+	 *  Determines if a session identifier created at the time given has expired.
+	 * @param sessionIdCreateTime
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
+	protected boolean isSessionIdentiferExpired(long sessionIdCreateTime ) throws NoDatabaseConnectionException, SQLException, InputValidationException{
+		return isSessionIdentiferExpired( sessionIdCreateTime, System.currentTimeMillis() );
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import javax.servlet.ServletException;
 
@@ -9,24 +9,24 @@ import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.*;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.DisallowedOperationException;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.GroupManagement;
-import net.lukeMurphey.nsia.GroupMembershipDescriptor;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.InvalidLocalPartException;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.PasswordInvalidException;
-import net.lukeMurphey.nsia.UserManagement;
-import net.lukeMurphey.nsia.GroupManagement.GroupDescriptor;
-import net.lukeMurphey.nsia.UserManagement.UserDescriptor;
-import net.lukeMurphey.nsia.trustBoundary.ApiGroupManagement;
-import net.lukeMurphey.nsia.trustBoundary.ApiUserManagement;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DisallowedOperationException;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.GroupManagement;
+import net.lukemurphey.nsia.GroupMembershipDescriptor;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.InvalidLocalPartException;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.PasswordInvalidException;
+import net.lukemurphey.nsia.UserManagement;
+import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
+import net.lukemurphey.nsia.UserManagement.UserDescriptor;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.trustBoundary.ApiGroupManagement;
+import net.lukemurphey.nsia.trustBoundary.ApiUserManagement;
 
 import org.apache.commons.lang.StringEscapeUtils;
 

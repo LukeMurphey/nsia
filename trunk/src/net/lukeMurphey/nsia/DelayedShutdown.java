@@ -1,6 +1,6 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
-import net.lukeMurphey.nsia.Application.ShutdownRequestSource;
+import net.lukemurphey.nsia.Application.ShutdownRequestSource;
 
 public class DelayedShutdown implements WorkerThread{
 

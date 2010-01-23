@@ -1,7 +1,7 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
-import net.lukeMurphey.nsia.UserManagement;
-import net.lukeMurphey.nsia.UserManagement.UserDescriptor;
+import net.lukemurphey.nsia.UserManagement;
+import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 
 public class SimpleUserDescriptor {
 	protected String name;

@@ -1,17 +1,17 @@
-package net.lukeMurphey.nsia.xmlRpcInterface;
+package net.lukemurphey.nsia.xmlRpcInterface;
 
 import java.sql.SQLException;
 import java.util.*;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.SiteGroupScanResult;
-import net.lukeMurphey.nsia.scanRules.ScanRule;
-import net.lukeMurphey.nsia.scanRules.ScanResult;
-import net.lukeMurphey.nsia.trustBoundary.ApiScanData;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.SiteGroupScanResult;
+import net.lukemurphey.nsia.scan.ScanResult;
+import net.lukemurphey.nsia.scan.ScanRule;
+import net.lukemurphey.nsia.trustBoundary.ApiScanData;
 
 public class XmlrpcScanData extends XmlrpcHandler{
 

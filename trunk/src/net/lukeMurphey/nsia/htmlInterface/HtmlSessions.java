@@ -1,18 +1,18 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.io.IOException;
 import java.util.*;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.SessionManagement;
-import net.lukeMurphey.nsia.SessionStatus;
-import net.lukeMurphey.nsia.trustBoundary.ApiSessionManagement;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.SessionManagement;
+import net.lukemurphey.nsia.SessionStatus;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.trustBoundary.ApiSessionManagement;
 
 
 public class HtmlSessions extends HtmlContentProvider{

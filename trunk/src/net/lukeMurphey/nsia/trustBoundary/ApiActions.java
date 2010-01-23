@@ -1,22 +1,22 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogHook;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogSeverity;
-import net.lukeMurphey.nsia.eventLog.RuleStatusEventLogHook;
-import net.lukeMurphey.nsia.eventLog.SiteGroupStatusEventLogHook;
-import net.lukeMurphey.nsia.eventLog.SystemStatusEventLogHook;
-import net.lukeMurphey.nsia.extension.ArgumentFieldsInvalidException;
-import net.lukeMurphey.nsia.responseModule.Action;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogHook;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogSeverity;
+import net.lukemurphey.nsia.eventlog.RuleStatusEventLogHook;
+import net.lukemurphey.nsia.eventlog.SiteGroupStatusEventLogHook;
+import net.lukemurphey.nsia.eventlog.SystemStatusEventLogHook;
+import net.lukemurphey.nsia.extension.ArgumentFieldsInvalidException;
+import net.lukemurphey.nsia.response.Action;
 
 public class ApiActions extends ApiHandler {
 	

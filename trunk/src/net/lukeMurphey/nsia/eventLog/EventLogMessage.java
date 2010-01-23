@@ -1,10 +1,10 @@
-package net.lukeMurphey.nsia.eventLog;
+package net.lukemurphey.nsia.eventlog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 
 public class EventLogMessage {
 	
@@ -246,8 +246,8 @@ public class EventLogMessage {
 		this.date = new Date();
 		this.category = category;
 		
-		for (EventLogField eventLogField : fields) {
-			this.fields.add(eventLogField);
+		for (EventLogField eventlogField : fields) {
+			this.fields.add(eventlogField);
 		}
 		
 	}

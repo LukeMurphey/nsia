@@ -1,17 +1,17 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
 import java.sql.SQLException;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogSeverity;
-import net.lukeMurphey.nsia.eventLog.EventLogViewer;
-import net.lukeMurphey.nsia.eventLog.EventLogViewer.EventLogEntry;
-import net.lukeMurphey.nsia.eventLog.EventLogViewer.EventLogFilter;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogSeverity;
+import net.lukemurphey.nsia.eventlog.EventLogViewer;
+import net.lukemurphey.nsia.eventlog.EventLogViewer.EventLogEntry;
+import net.lukemurphey.nsia.eventlog.EventLogViewer.EventLogFilter;
 
 public class ApiEventLogViewer extends ApiHandler {
 
@@ -26,6 +26,7 @@ public class ApiEventLogViewer extends ApiHandler {
 	public EventLogEntry[] getEntries( String sessionIdentifier, EventLogFilter filter ) throws GeneralizedException, NoSessionException{
 		
 		// 0 -- Precondition check
+		
 		//	 0.1 -- Make sure the user has a valid session
 		checkSession( sessionIdentifier );
 		

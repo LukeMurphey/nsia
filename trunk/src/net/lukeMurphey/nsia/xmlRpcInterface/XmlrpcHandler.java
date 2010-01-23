@@ -1,6 +1,6 @@
-package net.lukeMurphey.nsia.xmlRpcInterface;
+package net.lukemurphey.nsia.xmlRpcInterface;
 
-import net.lukeMurphey.nsia.Application;
+import net.lukemurphey.nsia.Application;
 
 
 /**

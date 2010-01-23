@@ -1,9 +1,9 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.net.BindException;
 
-import net.lukeMurphey.nsia.Application.RunMode;
-import net.lukeMurphey.nsia.tools.AppLaunch;
+import net.lukemurphey.nsia.Application.RunMode;
+import net.lukemurphey.nsia.tools.AppLaunch;
 
 import org.mortbay.util.MultiException;
 

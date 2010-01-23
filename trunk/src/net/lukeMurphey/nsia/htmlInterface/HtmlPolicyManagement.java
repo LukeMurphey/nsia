@@ -1,24 +1,24 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.io.IOException;
 import java.util.Vector;
 
 import org.apache.commons.lang.StringUtils;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
-import net.lukeMurphey.nsia.scanRules.DefinitionPolicyDescriptor;
-import net.lukeMurphey.nsia.scanRules.DefinitionPolicySet;
-import net.lukeMurphey.nsia.scanRules.DefinitionSet.DefinitionCategory;
-import net.lukeMurphey.nsia.scanRules.DefinitionPolicyDescriptor.DefinitionPolicyAction;
-import net.lukeMurphey.nsia.trustBoundary.ApiDefinitionPolicyManagement;
-import net.lukeMurphey.nsia.trustBoundary.ApiDefinitionSet;
-import net.lukeMurphey.nsia.trustBoundary.ApiSiteGroupManagement;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor;
+import net.lukemurphey.nsia.scan.DefinitionPolicySet;
+import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor.DefinitionPolicyAction;
+import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionCategory;
+import net.lukemurphey.nsia.trustBoundary.ApiDefinitionPolicyManagement;
+import net.lukemurphey.nsia.trustBoundary.ApiDefinitionSet;
+import net.lukemurphey.nsia.trustBoundary.ApiSiteGroupManagement;
 
 public class HtmlPolicyManagement extends HtmlContentProvider {
 

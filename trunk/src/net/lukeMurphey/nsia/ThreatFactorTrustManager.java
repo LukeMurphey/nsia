@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import javax.net.ssl.*;
 import java.security.cert.*;

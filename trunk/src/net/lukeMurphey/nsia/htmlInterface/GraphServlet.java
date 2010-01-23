@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.io.IOException;
 import java.util.*;
@@ -11,16 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.awt.*;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.SessionStatus;
-import net.lukeMurphey.nsia.ApplicationStateMonitor.ApplicationStateDataPoint;
-import net.lukeMurphey.nsia.trustBoundary.ApiScanData;
-import net.lukeMurphey.nsia.trustBoundary.ApiSessionManagement;
-import net.lukeMurphey.nsia.scanRules.*;
-import net.lukeMurphey.nsia.scanRules.Definition.Severity;
-import net.lukeMurphey.nsia.NameIntPair;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.NameIntPair;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.SessionStatus;
+import net.lukemurphey.nsia.ApplicationStateMonitor.ApplicationStateDataPoint;
+import net.lukemurphey.nsia.scan.*;
+import net.lukemurphey.nsia.scan.Definition.Severity;
+import net.lukemurphey.nsia.trustBoundary.ApiScanData;
+import net.lukemurphey.nsia.trustBoundary.ApiSessionManagement;
 
 import org.jfree.data.xy.*;
 import org.jfree.chart.*;
@@ -410,7 +410,7 @@ public class GraphServlet extends HttpServlet {
 			doRequest( request, response, HtmlContentProvider.METHOD_GET );
 		}
 		catch(Exception e){
-			//Application.getApplication().logExceptionEvent( net.lukeMurphey.nsia.StringTable.MSGID_WEB_ERROR, e);
+			//Application.getApplication().logExceptionEvent( net.lukemurphey.nsia.StringTable.MSGID_WEB_ERROR, e);
 		}
 	}
 	
@@ -419,7 +419,7 @@ public class GraphServlet extends HttpServlet {
 			doRequest( request, response, HtmlContentProvider.METHOD_POST );
 		}
 		catch(Exception e){
-			//Application.getApplication().logExceptionEvent( net.lukeMurphey.nsia.StringTable.MSGID_WEB_ERROR, e);
+			//Application.getApplication().logExceptionEvent( net.lukemurphey.nsia.StringTable.MSGID_WEB_ERROR, e);
 		}
 	}
 

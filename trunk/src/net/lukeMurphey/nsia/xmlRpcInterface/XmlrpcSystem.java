@@ -1,14 +1,14 @@
-package net.lukeMurphey.nsia.xmlRpcInterface;
+package net.lukemurphey.nsia.xmlRpcInterface;
 
 import java.sql.*;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.ApplicationStateMonitor.ApplicationStateDataPoint;
-import net.lukeMurphey.nsia.Application.ApplicationStatusDescriptor;
-import net.lukeMurphey.nsia.trustBoundary.ApiSystem;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.Application.ApplicationStatusDescriptor;
+import net.lukemurphey.nsia.ApplicationStateMonitor.ApplicationStateDataPoint;
+import net.lukemurphey.nsia.trustBoundary.ApiSystem;
 
 import java.util.*;
 

@@ -1,27 +1,27 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
 import java.io.IOException;
 import java.sql.*;
 
 import org.apache.xmlrpc.XmlRpcException;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.DelayedShutdown;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.GenericUtils;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NetworkManager;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.VersionManagement;
-import net.lukeMurphey.nsia.ApplicationStateMonitor.ApplicationStateDataPoint;
-import net.lukeMurphey.nsia.Application.ApplicationStatusDescriptor;
-import net.lukeMurphey.nsia.Application.ShutdownRequestSource;
-import net.lukeMurphey.nsia.UserManagement.UserDescriptor;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DelayedShutdown;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.GenericUtils;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NetworkManager;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.VersionManagement;
+import net.lukemurphey.nsia.Application.ApplicationStatusDescriptor;
+import net.lukemurphey.nsia.Application.ShutdownRequestSource;
+import net.lukemurphey.nsia.ApplicationStateMonitor.ApplicationStateDataPoint;
+import net.lukemurphey.nsia.UserManagement.UserDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 
 /**
  * Class provides an interface to the system configuration and status methods.

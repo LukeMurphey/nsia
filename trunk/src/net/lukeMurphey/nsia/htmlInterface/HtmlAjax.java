@@ -1,15 +1,15 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.WorkerThread;
-import net.lukeMurphey.nsia.Application.WorkerThreadDescriptor;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage.Category;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.WorkerThread;
+import net.lukemurphey.nsia.Application.WorkerThreadDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
 
 public class HtmlAjax extends HtmlContentProvider{
 	

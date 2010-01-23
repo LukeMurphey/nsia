@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.util.Date;
 
@@ -6,20 +6,20 @@ import javax.servlet.http.*;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.SessionStatus;
-import net.lukeMurphey.nsia.SiteGroupManagement;
-import net.lukeMurphey.nsia.SiteGroupScanResult;
-import net.lukeMurphey.nsia.Application.ApplicationStatusDescriptor;
-import net.lukeMurphey.nsia.Application.WorkerThreadDescriptor;
-import net.lukeMurphey.nsia.LicenseManagement.LicenseDescriptor;
-import net.lukeMurphey.nsia.LicenseManagement.LicenseStatus;
-import net.lukeMurphey.nsia.trustBoundary.ApiApplicationConfiguration;
-import net.lukeMurphey.nsia.trustBoundary.ApiScanData;
-import net.lukeMurphey.nsia.trustBoundary.ApiScannerController;
-import net.lukeMurphey.nsia.trustBoundary.ApiSystem;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.SessionStatus;
+import net.lukemurphey.nsia.SiteGroupManagement;
+import net.lukemurphey.nsia.SiteGroupScanResult;
+import net.lukemurphey.nsia.Application.ApplicationStatusDescriptor;
+import net.lukemurphey.nsia.Application.WorkerThreadDescriptor;
+import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
+import net.lukemurphey.nsia.LicenseManagement.LicenseStatus;
+import net.lukemurphey.nsia.trustBoundary.ApiApplicationConfiguration;
+import net.lukemurphey.nsia.trustBoundary.ApiScanData;
+import net.lukemurphey.nsia.trustBoundary.ApiScannerController;
+import net.lukemurphey.nsia.trustBoundary.ApiSystem;
 
 
 public class HtmlDashboardHeader extends HtmlContentProvider{

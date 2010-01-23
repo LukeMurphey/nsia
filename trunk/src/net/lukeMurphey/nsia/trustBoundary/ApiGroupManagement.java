@@ -1,20 +1,20 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
 import java.sql.SQLException;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.GroupManagement;
-import net.lukeMurphey.nsia.GroupMembershipDescriptor;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.UserManagement.UserDescriptor;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.GroupManagement;
+import net.lukemurphey.nsia.GroupMembershipDescriptor;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.UserManagement.UserDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 
 public class ApiGroupManagement extends ApiHandler {
 

@@ -1,8 +1,8 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.sql.SQLException;
 
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 
 public class LicenseCheckWorker implements WorkerThread{
 

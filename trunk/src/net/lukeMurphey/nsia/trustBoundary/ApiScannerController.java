@@ -1,35 +1,35 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 import java.net.*;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.DuplicateEntryException;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.RuleScanWorker;
-import net.lukeMurphey.nsia.ScanCallback;
-import net.lukeMurphey.nsia.ScannerController;
-import net.lukeMurphey.nsia.SiteGroupManagement;
-import net.lukeMurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
-import net.lukeMurphey.nsia.UserManagement.UserDescriptor;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
-import net.lukeMurphey.nsia.scanRules.DefinitionErrorList;
-import net.lukeMurphey.nsia.scanRules.HttpSeekingScanRule;
-import net.lukeMurphey.nsia.scanRules.HttpStaticScanRule;
-import net.lukeMurphey.nsia.scanRules.HttpStaticScanResult;
-import net.lukeMurphey.nsia.scanRules.ScanException;
-import net.lukeMurphey.nsia.scanRules.ScanRule;
-import net.lukeMurphey.nsia.scanRules.ScanResult;
-import net.lukeMurphey.nsia.scanRules.ScanRuleLoader;
-import net.lukeMurphey.nsia.Wildcard;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.RuleScanWorker;
+import net.lukemurphey.nsia.ScanCallback;
+import net.lukemurphey.nsia.ScannerController;
+import net.lukemurphey.nsia.SiteGroupManagement;
+import net.lukemurphey.nsia.Wildcard;
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.UserManagement.UserDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.scan.DefinitionErrorList;
+import net.lukemurphey.nsia.scan.HttpSeekingScanRule;
+import net.lukemurphey.nsia.scan.HttpStaticScanResult;
+import net.lukemurphey.nsia.scan.HttpStaticScanRule;
+import net.lukemurphey.nsia.scan.ScanException;
+import net.lukemurphey.nsia.scan.ScanResult;
+import net.lukemurphey.nsia.scan.ScanRule;
+import net.lukemurphey.nsia.scan.ScanRuleLoader;
 
 public class ApiScannerController extends ApiHandler{
 	
@@ -128,7 +128,7 @@ public class ApiScannerController extends ApiHandler{
 	 * @throws NoSessionException 
 	 * @throws DuplicateEntryException 
 	 */
-	public String scanRules( String sessionIdentifier, int[] rules, boolean archiveResults ) throws GeneralizedException, InsufficientPermissionException, NoSessionException, DuplicateEntryException{
+	public String scanRules( String sessionIdentifier, long[] rules, boolean archiveResults ) throws GeneralizedException, InsufficientPermissionException, NoSessionException, DuplicateEntryException{
 		
 		// 0 -- Precondition check
 		
@@ -138,7 +138,7 @@ public class ApiScannerController extends ApiHandler{
 		long siteGroupID = -1;
 		
 		try {
-			for (int ruleID : rules) {
+			for (long ruleID : rules) {
 				if(siteGroupID == -1){
 					siteGroupID = ScanRule.getAssociatedSiteGroup(ruleID);
 				}

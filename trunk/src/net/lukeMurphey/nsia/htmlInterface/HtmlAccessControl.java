@@ -1,14 +1,14 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
-import net.lukeMurphey.nsia.AccessControlDescriptor;
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.ObjectPermissionDescriptor;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
-import net.lukeMurphey.nsia.trustBoundary.*;
+import net.lukemurphey.nsia.AccessControlDescriptor;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.ObjectPermissionDescriptor;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.trustBoundary.*;
 
 public class HtmlAccessControl extends HtmlContentProvider {
 

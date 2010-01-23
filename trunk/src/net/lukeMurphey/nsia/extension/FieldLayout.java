@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.extension;
+package net.lukemurphey.nsia.extension;
 
 import java.util.Hashtable;
 import java.util.Vector;

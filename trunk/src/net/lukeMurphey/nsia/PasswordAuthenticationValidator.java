@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 /**
  * This class represents the validator for simple password authentication. The validator clears the password buffer directly to ensure that

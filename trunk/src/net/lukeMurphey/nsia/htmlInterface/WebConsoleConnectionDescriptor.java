@@ -1,7 +1,7 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.SessionStatus;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.SessionStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

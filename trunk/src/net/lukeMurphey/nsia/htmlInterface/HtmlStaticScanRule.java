@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -8,22 +8,22 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 import java.net.*;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.scanRules.HttpHeaderRule;
-import net.lukeMurphey.nsia.scanRules.HttpStaticScanRule;
-import net.lukeMurphey.nsia.scanRules.HttpStaticScanResult;
-import net.lukeMurphey.nsia.scanRules.ScanResult;
-import net.lukeMurphey.nsia.scanRules.ScanException;
-import net.lukeMurphey.nsia.scanRules.ScanResultCode;
-import net.lukeMurphey.nsia.scanRules.ScanRule.ScanRuleLoadFailureException;
-import net.lukeMurphey.nsia.trustBoundary.ApiScanData;
-import net.lukeMurphey.nsia.trustBoundary.ApiScannerController;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.scan.HttpHeaderRule;
+import net.lukemurphey.nsia.scan.HttpStaticScanResult;
+import net.lukemurphey.nsia.scan.HttpStaticScanRule;
+import net.lukemurphey.nsia.scan.ScanException;
+import net.lukemurphey.nsia.scan.ScanResult;
+import net.lukemurphey.nsia.scan.ScanResultCode;
+import net.lukemurphey.nsia.scan.ScanRule.ScanRuleLoadFailureException;
+import net.lukemurphey.nsia.trustBoundary.ApiScanData;
+import net.lukemurphey.nsia.trustBoundary.ApiScannerController;
 
 
 public class HtmlStaticScanRule extends HtmlContentProvider {

@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
@@ -6,8 +6,8 @@ import java.sql.*;
 import java.util.regex.*;
 import java.util.*;
 
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 
 
 
@@ -1052,6 +1052,10 @@ public class UserManagement {
 		
 		public boolean isBruteForceLocked(){
 			return bruteForceLocked;
+		}
+		
+		public String toString(){
+			return getUserName();
 		}
 	}
 	

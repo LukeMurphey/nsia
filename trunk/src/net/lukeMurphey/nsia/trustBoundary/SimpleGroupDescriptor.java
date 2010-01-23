@@ -1,7 +1,7 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
-import net.lukeMurphey.nsia.GroupManagement;
-import net.lukeMurphey.nsia.GroupManagement.GroupDescriptor;
+import net.lukemurphey.nsia.GroupManagement;
+import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
 
 public class SimpleGroupDescriptor{
 	protected String name;

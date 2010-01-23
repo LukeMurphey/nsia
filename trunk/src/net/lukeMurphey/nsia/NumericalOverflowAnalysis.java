@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 /**
  * This class is intended to analyze operands to determine a numerical operation may result in a overflow. Such an overflow

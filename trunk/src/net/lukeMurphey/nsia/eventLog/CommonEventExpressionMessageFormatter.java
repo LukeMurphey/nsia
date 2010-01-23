@@ -1,8 +1,8 @@
-package net.lukeMurphey.nsia.eventLog;
+package net.lukemurphey.nsia.eventlog;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.eventLog.CommonEventExpressionMessage.CommonEventExpressionField;
-import net.lukeMurphey.nsia.eventLog.CommonEventExpressionMessage.ExtensionField;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.eventlog.CommonEventExpressionMessage.CommonEventExpressionField;
+import net.lukemurphey.nsia.eventlog.CommonEventExpressionMessage.ExtensionField;
 
 public class CommonEventExpressionMessageFormatter extends MessageFormatter {
 

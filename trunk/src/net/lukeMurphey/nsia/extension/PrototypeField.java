@@ -1,8 +1,8 @@
-package net.lukeMurphey.nsia.extension;
+package net.lukemurphey.nsia.extension;
 
 import org.apache.commons.lang.StringUtils;
 
-import net.lukeMurphey.nsia.extension.FieldValidator.FieldValidatorResult;
+import net.lukemurphey.nsia.extension.FieldValidator.FieldValidatorResult;
 
 public abstract class PrototypeField implements Cloneable {
 

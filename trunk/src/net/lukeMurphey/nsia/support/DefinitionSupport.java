@@ -1,10 +1,10 @@
-package net.lukeMurphey.nsia.support;
+package net.lukemurphey.nsia.support;
 
 import java.util.*;
 import java.io.*;
 import java.text.*;
 
-import net.lukeMurphey.nsia.scanRules.*;
+import net.lukemurphey.nsia.scan.*;
 
 public class DefinitionSupport {
 

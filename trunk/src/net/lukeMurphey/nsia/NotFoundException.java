@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 /**
  * This exception is intended to indicate that an object could not be found (such as user could not be found with the user identifier).

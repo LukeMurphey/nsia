@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

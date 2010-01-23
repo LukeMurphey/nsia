@@ -1,9 +1,9 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.NoSessionException;
 
 public class HtmlSelectRule extends HtmlContentProvider {
 	

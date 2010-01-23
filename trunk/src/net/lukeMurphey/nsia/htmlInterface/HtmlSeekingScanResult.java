@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -6,17 +6,17 @@ import java.util.*;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.MaxMinCount;
-import net.lukeMurphey.nsia.NameIntPair;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.scanRules.HttpSeekingScanResult;
-import net.lukeMurphey.nsia.scanRules.HttpDefinitionScanResult;
-import net.lukeMurphey.nsia.scanRules.ScanResultCode;
-import net.lukeMurphey.nsia.scanRules.DefinitionMatch;
-import net.lukeMurphey.nsia.scanRules.Definition.Severity;
-import net.lukeMurphey.nsia.trustBoundary.ApiScanData;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.MaxMinCount;
+import net.lukemurphey.nsia.NameIntPair;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.scan.DefinitionMatch;
+import net.lukemurphey.nsia.scan.HttpDefinitionScanResult;
+import net.lukemurphey.nsia.scan.HttpSeekingScanResult;
+import net.lukemurphey.nsia.scan.ScanResultCode;
+import net.lukemurphey.nsia.scan.Definition.Severity;
+import net.lukemurphey.nsia.trustBoundary.ApiScanData;
 
 public class HtmlSeekingScanResult {
 	

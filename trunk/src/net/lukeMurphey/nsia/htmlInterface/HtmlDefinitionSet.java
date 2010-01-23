@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -6,29 +6,29 @@ import java.util.Vector;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.DisallowedOperationException;
-import net.lukeMurphey.nsia.DuplicateEntryException;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.WorkerThread;
-import net.lukeMurphey.nsia.scanRules.Definition;
-import net.lukeMurphey.nsia.trustBoundary.ApiDefinitionSet;
-import net.lukeMurphey.nsia.scanRules.InvalidDefinitionException;
-import net.lukeMurphey.nsia.scanRules.ScriptDefinition;
-import net.lukeMurphey.nsia.scanRules.DefinitionArchiveException;
-import net.lukeMurphey.nsia.scanRules.DefinitionSetLoadException;
-import net.lukeMurphey.nsia.scanRules.DefinitionUpdateFailedException;
-import net.lukeMurphey.nsia.scanRules.PatternDefinition;
-import net.lukeMurphey.nsia.scanRules.Definition.Reference;
-import net.lukeMurphey.nsia.scanRules.DefinitionSet.DefinitionVersionID;
-import net.lukeMurphey.nsia.scanRules.UnpurposedDefinitionException;
-import net.lukeMurphey.nsia.Application.WorkerThreadDescriptor;
-import net.lukeMurphey.nsia.WorkerThread.State;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DisallowedOperationException;
+import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.WorkerThread;
+import net.lukemurphey.nsia.Application.WorkerThreadDescriptor;
+import net.lukemurphey.nsia.WorkerThread.State;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.scan.Definition;
+import net.lukemurphey.nsia.scan.DefinitionArchiveException;
+import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
+import net.lukemurphey.nsia.scan.DefinitionUpdateFailedException;
+import net.lukemurphey.nsia.scan.InvalidDefinitionException;
+import net.lukemurphey.nsia.scan.PatternDefinition;
+import net.lukemurphey.nsia.scan.ScriptDefinition;
+import net.lukemurphey.nsia.scan.UnpurposedDefinitionException;
+import net.lukemurphey.nsia.scan.Definition.Reference;
+import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
+import net.lukemurphey.nsia.trustBoundary.ApiDefinitionSet;
 
 import java.util.Date;
 
@@ -380,7 +380,6 @@ public class HtmlDefinitionSet extends HtmlContentProvider {
 				else{
 					body.append( "<input id=\"NotFilter\" type=\"checkbox\" name=\"Not\"><label for=\"NotFilter\">Exclude (excludes items based on the filter)</label></input>" );
 				}
-				
 				
 				body.append( "</form>" );
 				

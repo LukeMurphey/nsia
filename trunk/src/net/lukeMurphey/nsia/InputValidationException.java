@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 /**
  * This class is used to signal that some input has failed validation (such as injection attempts).

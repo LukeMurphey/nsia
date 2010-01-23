@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.eventLog;
+package net.lukemurphey.nsia.eventlog;
 
 import java.util.Vector;
 

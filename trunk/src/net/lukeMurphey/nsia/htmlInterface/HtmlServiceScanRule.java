@@ -1,19 +1,19 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.util.Vector;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.trustBoundary.ApiScanData;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
-import net.lukeMurphey.nsia.scanRules.LineParseException;
-import net.lukeMurphey.nsia.scanRules.NetworkPortRange;
-import net.lukeMurphey.nsia.scanRules.ServiceScanRule;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.scan.LineParseException;
+import net.lukemurphey.nsia.scan.NetworkPortRange;
+import net.lukemurphey.nsia.scan.ServiceScanRule;
+import net.lukemurphey.nsia.trustBoundary.ApiScanData;
 
 public class HtmlServiceScanRule extends HtmlContentProvider {
 

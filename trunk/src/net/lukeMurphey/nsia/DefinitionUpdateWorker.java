@@ -1,12 +1,12 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
-import net.lukeMurphey.nsia.LicenseManagement.LicenseDescriptor;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage.Category;
-import net.lukeMurphey.nsia.scanRules.DefinitionArchive;
-import net.lukeMurphey.nsia.scanRules.DefinitionSet.DefinitionVersionID;
+import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.scan.DefinitionArchive;
+import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
 
 import java.util.TimerTask;
 

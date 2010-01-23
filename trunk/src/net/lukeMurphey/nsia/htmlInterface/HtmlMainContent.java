@@ -1,15 +1,15 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.SessionStatus;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.SessionStatus;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 
 public class HtmlMainContent extends HtmlContentProvider {
 

@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 /**
  * This exception is returned by the XML-RPC functions when an internal error occurs. This exception
