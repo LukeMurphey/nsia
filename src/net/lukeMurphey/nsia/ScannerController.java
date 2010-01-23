@@ -1,13 +1,13 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.sql.*;
 import java.util.*;
 
-import net.lukeMurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.scanRules.ScanResult;
-import net.lukeMurphey.nsia.scanRules.ScanResultLoader;
-import net.lukeMurphey.nsia.scanRules.ScanRule.ScanResultLoadFailureException;
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.scan.ScanResult;
+import net.lukemurphey.nsia.scan.ScanResultLoader;
+import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
 
 
 /**

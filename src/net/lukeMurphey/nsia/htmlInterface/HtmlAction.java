@@ -1,26 +1,26 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
-import net.lukeMurphey.nsia.eventLog.EventLogHook;
-import net.lukeMurphey.nsia.eventLog.SiteGroupStatusEventLogHook;
-import net.lukeMurphey.nsia.extension.ArgumentFieldsInvalidException;
-import net.lukeMurphey.nsia.extension.Extension;
-import net.lukeMurphey.nsia.extension.ExtensionType;
-import net.lukeMurphey.nsia.extension.FieldLayout;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
-import net.lukeMurphey.nsia.responseModule.Action;
-import net.lukeMurphey.nsia.trustBoundary.ApiActions;
-import net.lukeMurphey.nsia.trustBoundary.ApiExtensions;
-import net.lukeMurphey.nsia.trustBoundary.ApiSiteGroupManagement;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogHook;
+import net.lukemurphey.nsia.eventlog.SiteGroupStatusEventLogHook;
+import net.lukemurphey.nsia.extension.ArgumentFieldsInvalidException;
+import net.lukemurphey.nsia.extension.Extension;
+import net.lukemurphey.nsia.extension.ExtensionType;
+import net.lukemurphey.nsia.extension.FieldLayout;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.response.Action;
+import net.lukemurphey.nsia.trustBoundary.ApiActions;
+import net.lukemurphey.nsia.trustBoundary.ApiExtensions;
+import net.lukemurphey.nsia.trustBoundary.ApiSiteGroupManagement;
 
 public class HtmlAction extends HtmlContentProvider{
 	

@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,15 +13,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.ClientData;
-//import net.lukeMurphey.nsia.Firewall;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.SessionStatus;
-import net.lukeMurphey.nsia.UserManagement;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.trustBoundary.ApiSessionManagement;
+//import net.lukemurphey.nsia.Firewall;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.ClientData;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.SessionStatus;
+import net.lukemurphey.nsia.UserManagement;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.trustBoundary.ApiSessionManagement;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

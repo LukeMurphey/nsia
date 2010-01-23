@@ -1,30 +1,30 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
 import java.sql.SQLException;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.DisallowedOperationException;
-import net.lukeMurphey.nsia.DuplicateEntryException;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.DefinitionUpdateWorker;
-import net.lukeMurphey.nsia.SessionManagement.SessionInfo;
-import net.lukeMurphey.nsia.UserManagement.UserDescriptor;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage.Category;
-import net.lukeMurphey.nsia.scanRules.Definition;
-import net.lukeMurphey.nsia.scanRules.DefinitionSet.DefinitionCategory;
-import net.lukeMurphey.nsia.scanRules.DefinitionSet.DefinitionVersionID;
-import net.lukeMurphey.nsia.scanRules.DefinitionArchive;
-import net.lukeMurphey.nsia.scanRules.DefinitionSetLoadException;
-import net.lukeMurphey.nsia.scanRules.DefinitionArchiveException;
-import net.lukeMurphey.nsia.scanRules.DefinitionUpdateFailedException;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DefinitionUpdateWorker;
+import net.lukemurphey.nsia.DisallowedOperationException;
+import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.SessionManagement.SessionInfo;
+import net.lukemurphey.nsia.UserManagement.UserDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.scan.Definition;
+import net.lukemurphey.nsia.scan.DefinitionArchive;
+import net.lukemurphey.nsia.scan.DefinitionArchiveException;
+import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
+import net.lukemurphey.nsia.scan.DefinitionUpdateFailedException;
+import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionCategory;
+import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
 
 import java.util.Date;
 
@@ -201,7 +201,7 @@ public class ApiDefinitionSet extends ApiHandler {
 		
 		
 		// 1 -- Perform the operation
-		return archive.getDefinition(definitionID);
+		return archive.getDefinitionByLocalID(definitionID);
 
 	}
 	

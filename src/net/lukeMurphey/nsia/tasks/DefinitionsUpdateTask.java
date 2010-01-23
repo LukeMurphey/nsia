@@ -1,7 +1,7 @@
-package net.lukeMurphey.nsia.tasks;
+package net.lukemurphey.nsia.tasks;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.DefinitionUpdateWorker;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DefinitionUpdateWorker;
 
 import java.util.TimerTask;
 

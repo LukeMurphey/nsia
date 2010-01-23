@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import org.mortbay.http.HttpContext;
 import org.mortbay.http.SocketListener;

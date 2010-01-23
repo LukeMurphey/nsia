@@ -1,19 +1,19 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.util.Vector;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.scanRules.HttpHeaderRule;
-import net.lukeMurphey.nsia.scanRules.HttpHeaderScanResult;
-import net.lukeMurphey.nsia.scanRules.HttpStaticScanRule;
-import net.lukeMurphey.nsia.trustBoundary.ApiScanData;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.scan.HttpHeaderRule;
+import net.lukemurphey.nsia.scan.HttpHeaderScanResult;
+import net.lukemurphey.nsia.scan.HttpStaticScanRule;
+import net.lukemurphey.nsia.trustBoundary.ApiScanData;
 
 public class HtmlRules_HttpDataHash_Header extends HtmlContentProvider {
 	

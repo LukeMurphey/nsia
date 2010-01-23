@@ -1,11 +1,11 @@
-package net.lukeMurphey.nsia.extension;
+package net.lukemurphey.nsia.extension;
 
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.responseModule.CommandActionExtension;
-import net.lukeMurphey.nsia.responseModule.EmailActionExtension;
-import net.lukeMurphey.nsia.responseModule.LogFileActionExtension;
-import net.lukeMurphey.nsia.responseModule.SSHCommandActionExtension;
+import net.lukemurphey.nsia.response.CommandActionExtension;
+import net.lukemurphey.nsia.response.EmailActionExtension;
+import net.lukemurphey.nsia.response.LogFileActionExtension;
+import net.lukemurphey.nsia.response.SSHCommandActionExtension;
 
 public class ExtensionManager {
 	

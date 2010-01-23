@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
@@ -6,28 +6,28 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.DuplicateEntryException;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.ScannerController;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.WorkerThread;
-import net.lukeMurphey.nsia.Application.ApplicationStatusDescriptor;
-import net.lukeMurphey.nsia.Application.WorkerThreadDescriptor;
-import net.lukeMurphey.nsia.LicenseManagement.LicenseDescriptor;
-/*import net.lukeMurphey.nsia.scanRules.Definition;
-import net.lukeMurphey.nsia.scanRules.DefinitionMatch;
-import net.lukeMurphey.nsia.trustBoundary.ApiScanData;*/
-import net.lukeMurphey.nsia.trustBoundary.ApiApplicationConfiguration;
-import net.lukeMurphey.nsia.trustBoundary.ApiMaintenanceTasks;
-import net.lukeMurphey.nsia.trustBoundary.ApiScannerController;
-import net.lukeMurphey.nsia.trustBoundary.ApiSystem;
-import net.lukeMurphey.nsia.WorkerThread.State;
-import net.lukeMurphey.nsia.eventLog.EventLog;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
+/*import net.lukemurphey.nsia.scanRules.Definition;
+import net.lukemurphey.nsia.scanRules.DefinitionMatch;
+import net.lukemurphey.nsia.trustBoundary.ApiScanData;*/
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.ScannerController;
+import net.lukemurphey.nsia.WorkerThread;
+import net.lukemurphey.nsia.Application.ApplicationStatusDescriptor;
+import net.lukemurphey.nsia.Application.WorkerThreadDescriptor;
+import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
+import net.lukemurphey.nsia.WorkerThread.State;
+import net.lukemurphey.nsia.eventlog.EventLog;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.trustBoundary.ApiApplicationConfiguration;
+import net.lukemurphey.nsia.trustBoundary.ApiMaintenanceTasks;
+import net.lukemurphey.nsia.trustBoundary.ApiScannerController;
+import net.lukemurphey.nsia.trustBoundary.ApiSystem;
 
 
 public class HtmlSystemStatus extends HtmlContentProvider{
@@ -205,17 +205,17 @@ public class HtmlSystemStatus extends HtmlContentProvider{
 		body.append( tableEnd );
 		
 		//	 1.3 -- Print out the log server information
-		EventLog eventLog = Application.getApplication().getEventLog();
+		EventLog eventlog = Application.getApplication().getEventLog();
 		
-		if( eventLog.isExternalLoggingEnabled() ){
+		if( eventlog.isExternalLoggingEnabled() ){
 			body.append( "<div class=\"Text_2\">External Log Server</div>");
 			body.append(tableStart);
 			
 			// 	1.3.1 -- External log server information
-			body.append(createRow( "Server",  getInfoNote( eventLog.getLogServerAddress() + ":" + eventLog.getLogServerPort() + " (" + eventLog.getLogServerProtocol() + ")") ));
+			body.append(createRow( "Server",  getInfoNote( eventlog.getLogServerAddress() + ":" + eventlog.getLogServerPort() + " (" + eventlog.getLogServerProtocol() + ")") ));
 			
 			//  1.3.2 -- External log server status
-			if( eventLog.isLogServerResponding() ){
+			if( eventlog.isLogServerResponding() ){
 				body.append(createRow( "Status",  getCheckNote( "No Errors Noted") ));
 			}
 			else{
@@ -223,8 +223,8 @@ public class HtmlSystemStatus extends HtmlContentProvider{
 			}
 			
 			//  1.3.3 -- Log cache information
-			int max = eventLog.getMaxLogCacheSize();
-			int actual = eventLog.getLogCacheSize();
+			int max = eventlog.getMaxLogCacheSize();
+			int actual = eventlog.getLogCacheSize();
 			
 			if( actual >= max){
 				body.append(createRow( "Cache",  getErrorNote( "Log cache filled, events being discarded" ) ));

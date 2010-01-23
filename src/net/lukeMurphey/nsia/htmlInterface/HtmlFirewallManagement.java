@@ -1,8 +1,8 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
-//import net.lukeMurphey.nsia.GeneralizedException;
-//import net.lukeMurphey.nsia.NoSessionException;
-//import net.lukeMurphey.nsia.trustBoundary.ApiAccessControl;
+//import net.lukemurphey.nsia.GeneralizedException;
+//import net.lukemurphey.nsia.NoSessionException;
+//import net.lukemurphey.nsia.trustBoundary.ApiAccessControl;
 
 public class HtmlFirewallManagement extends HtmlContentProvider {
 

@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.extension;
+package net.lukemurphey.nsia.extension;
 
 import org.apache.commons.lang.StringUtils;
 

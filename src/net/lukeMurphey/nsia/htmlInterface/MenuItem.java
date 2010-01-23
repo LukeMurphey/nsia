@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 public class MenuItem{
 	public static final int LEVEL_ONE = 0;

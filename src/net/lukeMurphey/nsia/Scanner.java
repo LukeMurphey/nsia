@@ -1,11 +1,11 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.sql.*;
 
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.scanRules.ScanRule;
-import net.lukeMurphey.nsia.scanRules.ScanResult;
-import net.lukeMurphey.nsia.scanRules.ScanRuleLoader;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.scan.ScanResult;
+import net.lukemurphey.nsia.scan.ScanRule;
+import net.lukemurphey.nsia.scan.ScanRuleLoader;
 
 /**
  * The scanner class faciltates the scanning of a scan rule.

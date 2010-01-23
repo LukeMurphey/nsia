@@ -1,11 +1,11 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.DuplicateEntryException;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.ReindexerWorker;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.ReindexerWorker;
 
 public class ApiMaintenanceTasks extends ApiHandler {
 

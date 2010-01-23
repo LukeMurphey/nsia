@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 /**
  * The following class represents the result of an action performed by one of the HTML generation classes.

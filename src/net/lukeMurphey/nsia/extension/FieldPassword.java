@@ -1,6 +1,6 @@
-package net.lukeMurphey.nsia.extension;
+package net.lukemurphey.nsia.extension;
 
-import net.lukeMurphey.nsia.extension.FieldValidator.FieldValidatorResult;
+import net.lukemurphey.nsia.extension.FieldValidator.FieldValidatorResult;
 
 public class FieldPassword extends PrototypeField {
 

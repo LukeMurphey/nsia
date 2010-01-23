@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -12,27 +12,27 @@ import java.io.StringReader;
 import java.io.BufferedReader;
 import java.io.UnsupportedEncodingException;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.DuplicateEntryException;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.RuleScanWorker;
-import net.lukeMurphey.nsia.scanRules.HttpSeekingScanRule;
-import net.lukeMurphey.nsia.scanRules.HttpSeekingScanResult;
-import net.lukeMurphey.nsia.scanRules.HttpDefinitionScanResult;
-import net.lukeMurphey.nsia.scanRules.ScanResultCode;
-import net.lukeMurphey.nsia.scanRules.ScanResultLoader;
-import net.lukeMurphey.nsia.scanRules.DefinitionMatch;
-import net.lukeMurphey.nsia.scanRules.Definition.Severity;
-import net.lukeMurphey.nsia.scanRules.ScanRule.ScanResultLoadFailureException;
-import net.lukeMurphey.nsia.trustBoundary.ApiScannerController;
-import net.lukeMurphey.nsia.trustBoundary.ApiTasks;
-import net.lukeMurphey.nsia.Wildcard;
-import net.lukeMurphey.nsia.WorkerThread;
-import net.lukeMurphey.nsia.Application.WorkerThreadDescriptor;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.RuleScanWorker;
+import net.lukemurphey.nsia.Wildcard;
+import net.lukemurphey.nsia.WorkerThread;
+import net.lukemurphey.nsia.Application.WorkerThreadDescriptor;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.scan.DefinitionMatch;
+import net.lukemurphey.nsia.scan.HttpDefinitionScanResult;
+import net.lukemurphey.nsia.scan.HttpSeekingScanResult;
+import net.lukemurphey.nsia.scan.HttpSeekingScanRule;
+import net.lukemurphey.nsia.scan.ScanResultCode;
+import net.lukemurphey.nsia.scan.ScanResultLoader;
+import net.lukemurphey.nsia.scan.Definition.Severity;
+import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
+import net.lukemurphey.nsia.trustBoundary.ApiScannerController;
+import net.lukemurphey.nsia.trustBoundary.ApiTasks;
 
 
 public class HtmlSiteScan extends HtmlContentProvider {

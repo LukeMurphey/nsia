@@ -1,8 +1,8 @@
-package net.lukeMurphey.nsia.eventLog;
+package net.lukemurphey.nsia.eventlog;
 
-import net.lukeMurphey.nsia.eventLog.EventLogMessage.Category;
-import net.lukeMurphey.nsia.responseModule.Action;
-import net.lukeMurphey.nsia.responseModule.ActionFailedException;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.response.Action;
+import net.lukemurphey.nsia.response.ActionFailedException;
 
 public class RuleStatusEventLogHook extends EventLogHook {
 

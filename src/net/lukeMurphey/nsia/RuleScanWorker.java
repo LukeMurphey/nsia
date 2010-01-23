@@ -1,23 +1,23 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.util.Vector;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import net.lukeMurphey.nsia.Application.DatabaseAccessType;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage.Category;
-import net.lukeMurphey.nsia.scanRules.ScanException;
-import net.lukeMurphey.nsia.scanRules.ScanResult;
-import net.lukeMurphey.nsia.scanRules.ScanRule;
-import net.lukeMurphey.nsia.scanRules.ScanRuleLoader;
-import net.lukeMurphey.nsia.scanRules.ScanRule.ScanRuleLoadFailureException;
+import net.lukemurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.scan.ScanException;
+import net.lukemurphey.nsia.scan.ScanResult;
+import net.lukemurphey.nsia.scan.ScanRule;
+import net.lukemurphey.nsia.scan.ScanRuleLoader;
+import net.lukemurphey.nsia.scan.ScanRule.ScanRuleLoadFailureException;
 
 public class RuleScanWorker implements WorkerThread{
 
-	private Vector<Integer> ruleIDsToScan = null;
+	private Vector<Long> ruleIDsToScan = null;
 	private Vector<ScanRule> instantiatedRulesToScan = null;
 	private Vector<Long> scanResultIDs = new Vector<Long>();
 	private int currentOffset = 0;
@@ -26,7 +26,7 @@ public class RuleScanWorker implements WorkerThread{
 	private State state = State.INITIALIZED;
 	private Throwable exceptionThrown = null;
 	
-	public RuleScanWorker( Vector<Integer> rulesToScan ){
+	public RuleScanWorker( Vector<Long> rulesToScan ){
 		
 		// 0 -- Precondition check
 		
@@ -96,7 +96,7 @@ public class RuleScanWorker implements WorkerThread{
 		return total;
 	}
 	
-	public RuleScanWorker( int[] rules ){
+	public RuleScanWorker( long[] rules ){
 		
 		// 0 -- Precondition check
 		
@@ -112,10 +112,10 @@ public class RuleScanWorker implements WorkerThread{
 		
 		
 		// 1 -- Initialize the class
-		this.ruleIDsToScan = new Vector<Integer>();
+		this.ruleIDsToScan = new Vector<Long>();
 		
 		for(int c = 0; c < rules.length; c++){
-			ruleIDsToScan.add( Integer.valueOf(rules[c]) );
+			ruleIDsToScan.add( Long.valueOf(rules[c]) );
 		}
 	}
 	

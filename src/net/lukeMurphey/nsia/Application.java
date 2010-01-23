@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import com.martiansoftware.jsap.*;
 
@@ -8,21 +8,21 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
-import net.lukeMurphey.nsia.ApplicationStateMonitor.ApplicationStateDataPoint;
 
-import net.lukeMurphey.nsia.DatabaseInitializer.DatabaseInitializationState;
 
-import net.lukeMurphey.nsia.WorkerThread.State;
-import net.lukeMurphey.nsia.consoleInterface.ConsoleListener;
 
-import net.lukeMurphey.nsia.eventLog.EventLog;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogSeverity;
-import net.lukeMurphey.nsia.eventLog.MessageFormatter;
-import net.lukeMurphey.nsia.eventLog.MessageFormatterFactory;
-import net.lukeMurphey.nsia.eventLog.SyslogNGAppender;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
+import net.lukemurphey.nsia.ApplicationStateMonitor.ApplicationStateDataPoint;
+import net.lukemurphey.nsia.DatabaseInitializer.DatabaseInitializationState;
+import net.lukemurphey.nsia.WorkerThread.State;
+import net.lukemurphey.nsia.console.ConsoleListener;
+import net.lukemurphey.nsia.eventlog.EventLog;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogSeverity;
+import net.lukemurphey.nsia.eventlog.MessageFormatter;
+import net.lukemurphey.nsia.eventlog.MessageFormatterFactory;
+import net.lukemurphey.nsia.eventlog.SyslogNGAppender;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 
 import org.apache.commons.dbcp.*;
 
@@ -37,7 +37,7 @@ public final class Application {
 	
 	private static Application appRes;
 	
-	private EventLog eventLog = null;
+	private EventLog eventlog = null;
 	private ApplicationConfiguration appConfig = null; // NOPMD by luke on 5/26/07 10:50 AM
 	
 	public static final String APPLICATION_NAME = "NSIA";
@@ -250,7 +250,7 @@ public final class Application {
 		}
 		
 		// 3 -- Create the event log facility
-		eventLog = new EventLog();
+		eventlog = new EventLog();
 		
 		// 4 -- Connect to the database
 		connectToDatabase(properties);
@@ -259,10 +259,10 @@ public final class Application {
 		
 		// 5 -- Create the application parameter and configuration manager
 		appConfig = new ApplicationConfiguration( this );
-		eventLog.setApplication(this);
+		eventlog.setApplication(this);
 		
 		try {
-			eventLog.loadHooks();
+			eventlog.loadHooks();
 		} catch (SQLException e) {
 			logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
 		}
@@ -436,8 +436,8 @@ public final class Application {
 	 * @param thread
 	 * @throws DuplicateEntryException 
 	 */
-	public void addWorkerToQueue(WorkerThread thread, String uniqueName) throws DuplicateEntryException{
-		addWorkerToQueue(thread, uniqueName, -1);
+	public WorkerThreadDescriptor addWorkerToQueue(WorkerThread thread, String uniqueName) throws DuplicateEntryException{
+		return addWorkerToQueue(thread, uniqueName, -1);
 	}
 	
 	/**
@@ -445,7 +445,7 @@ public final class Application {
 	 * @param thread
 	 * @throws DuplicateEntryException 
 	 */
-	public void addWorkerToQueue(WorkerThread thread, String uniqueName, int userId) throws DuplicateEntryException{
+	public WorkerThreadDescriptor addWorkerToQueue(WorkerThread thread, String uniqueName, int userId) throws DuplicateEntryException{
 		// 0 -- Precondition check
 		
 		//	 0.1 -- Make sure the thread is not null
@@ -467,7 +467,10 @@ public final class Application {
 				}
 			}
 			
-			workerThreadQueue.add( new WorkerThreadDescriptor( thread, uniqueName, userId ) );
+			WorkerThreadDescriptor desc = new WorkerThreadDescriptor( thread, uniqueName, userId );
+			
+			workerThreadQueue.add( desc );
+			return desc;
 		}
 	}
 	
@@ -808,36 +811,36 @@ public final class Application {
 			}
 			
 			MessageFormatter formatter = MessageFormatterFactory.getFormatter( appRes.getApplicationConfiguration().getLogFormat() );
-			appRes.eventLog.setMessageFormatter( formatter );
+			appRes.eventlog.setMessageFormatter( formatter );
 			
 			if( address != null && port >= 0 && port <= 65535 ){
-				appRes.eventLog.setLogServer(address, port, protocol, enabled);
+				appRes.eventlog.setLogServer(address, port, protocol, enabled);
 			}
 			
 		} catch (SQLException e) {
-			if( appRes.eventLog != null ){
-				appRes.eventLog.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
+			if( appRes.eventlog != null ){
+				appRes.eventlog.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
 			}
 			else{
 				e.printStackTrace();
 			}
 		} catch (InputValidationException e) {
-			if( appRes.eventLog != null ){
-				appRes.eventLog.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
+			if( appRes.eventlog != null ){
+				appRes.eventlog.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
 			}
 			else{
 				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			if( appRes.eventLog != null ){
-				appRes.eventLog.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
+			if( appRes.eventlog != null ){
+				appRes.eventlog.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
 			}
 			else{
 				e.printStackTrace();
 			}
 		}
 		
-		appRes.eventLog.setLoggingLevel(EventLogSeverity.DEBUG);
+		appRes.eventlog.setLoggingLevel(EventLogSeverity.DEBUG);
 		appRes.logEvent( new EventLogMessage(EventLogMessage.Category.APPLICATION_STARTED, new EventLogField(FieldName.VERSION, Application.getVersion())));
 		
 		// Launch console listener for accepting command line commands
@@ -1028,9 +1031,7 @@ public final class Application {
 				}
 			}
 			
-			if( shutdownCommandSource != ShutdownRequestSource.CLI ){
-				System.out.println("Done");
-			}
+			System.out.println("Done");
 			
 			// 6 -- Shutdown console listeners
 			/*
@@ -1183,7 +1184,7 @@ public final class Application {
 	
 	
 	public void logEvent( EventLogMessage message ){
-		eventLog.logEvent(message);
+		eventlog.logEvent(message);
 	}
 	
 	/**
@@ -1220,10 +1221,10 @@ public final class Application {
 	 * Set the event log class to be used for application logging.
 	 * @precondition The event must be validly prepared
 	 * @postcondition A reference to the event log will be set
-	 * @param eventLog
+	 * @param eventlog
 	 */
-	public void setEventLog(EventLog eventLog){
-		this.eventLog = eventLog;
+	public void setEventLog(EventLog eventlog){
+		this.eventlog = eventlog;
 	}
 	
 	/**
@@ -1233,7 +1234,7 @@ public final class Application {
 	 * @return A reference to the event log, or null if none exists
 	 */
 	public EventLog getEventLog(){
-		return eventLog;
+		return eventlog;
 	}
 	
 	/**
@@ -1556,7 +1557,7 @@ public final class Application {
 	 * @param field
 	 */
 	public void logEvent( EventLogMessage.Category category, EventLogField ... fields ){
-		eventLog.logEvent(new EventLogMessage(category, fields));
+		eventlog.logEvent(new EventLogMessage(category, fields));
 	}
 	
 	/**
@@ -1564,7 +1565,7 @@ public final class Application {
 	 * @param category
 	 */
 	public void logEvent( EventLogMessage.Category category ){
-		eventLog.logEvent(new EventLogMessage(category));
+		eventlog.logEvent(new EventLogMessage(category));
 	}
 	
 	/**
@@ -1573,7 +1574,7 @@ public final class Application {
 	 * @param t
 	 */
 	public void logExceptionEvent( EventLogMessage.Category category, Throwable t ){
-		eventLog.logExceptionEvent(new EventLogMessage(category), t);
+		eventlog.logExceptionEvent(new EventLogMessage(category), t);
 	}
 	
 	/**
@@ -1582,7 +1583,7 @@ public final class Application {
 	 * @param t
 	 */
 	public void logExceptionEvent( EventLogMessage message, Throwable t ){
-		eventLog.logExceptionEvent(message, t);
+		eventlog.logExceptionEvent(message, t);
 	}
 	
 	/**
@@ -1733,12 +1734,12 @@ public final class Application {
 		/*
 		long newestFile = 0;
 		
-		newestFile = Math.max(newestFileInDir(new File("./net/lukeMurphey/nsia/")), newestFile);
-		newestFile = Math.max(newestFileInDir(new File("./net/lukeMurphey/nsia/consoleInterface")), newestFile);
-		newestFile = Math.max(newestFileInDir(new File("./net/lukeMurphey/nsia/htmlInterface")), newestFile);
-		newestFile = Math.max(newestFileInDir(new File("./net/lukeMurphey/nsia/scanRules")), newestFile);
-		newestFile = Math.max(newestFileInDir(new File("./net/lukeMurphey/nsia/trustBoundary")), newestFile);
-		newestFile = Math.max(newestFileInDir(new File("./net/lukeMurphey/nsia/xmlRpcInterface")), newestFile);
+		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/")), newestFile);
+		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/consoleInterface")), newestFile);
+		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/htmlInterface")), newestFile);
+		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/scanRules")), newestFile);
+		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/trustBoundary")), newestFile);
+		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/xmlRpcInterface")), newestFile);
 	    
 		newestFile -=  1072933200;
 		

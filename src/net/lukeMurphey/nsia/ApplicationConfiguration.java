@@ -1,19 +1,19 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
-import net.lukeMurphey.nsia.LicenseManagement.LicenseDescriptor;
-import net.lukeMurphey.nsia.LicenseManagement.LicenseStatus;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.MessageFormatter;
-import net.lukeMurphey.nsia.eventLog.MessageFormatterFactory;
-import net.lukeMurphey.nsia.eventLog.SyslogNGAppender;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage.Category;
+import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
+import net.lukemurphey.nsia.LicenseManagement.LicenseStatus;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.MessageFormatter;
+import net.lukemurphey.nsia.eventlog.MessageFormatterFactory;
+import net.lukemurphey.nsia.eventlog.SyslogNGAppender;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
 
 public class ApplicationConfiguration {
 

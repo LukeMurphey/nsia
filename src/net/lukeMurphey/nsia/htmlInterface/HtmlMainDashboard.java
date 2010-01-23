@@ -1,18 +1,18 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.ScannerController;
-import net.lukeMurphey.nsia.SiteGroupScanResult;
-import net.lukeMurphey.nsia.Application.ApplicationStatusDescriptor;
-import net.lukeMurphey.nsia.scanRules.ScanResultCode;
-import net.lukeMurphey.nsia.trustBoundary.ApiScanData;
-import net.lukeMurphey.nsia.trustBoundary.ApiScannerController;
-import net.lukeMurphey.nsia.SiteGroupManagement;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.ScannerController;
+import net.lukemurphey.nsia.SiteGroupManagement;
+import net.lukemurphey.nsia.SiteGroupScanResult;
+import net.lukemurphey.nsia.Application.ApplicationStatusDescriptor;
+import net.lukemurphey.nsia.scan.ScanResultCode;
+import net.lukemurphey.nsia.trustBoundary.ApiScanData;
+import net.lukemurphey.nsia.trustBoundary.ApiScannerController;
 
 import java.util.*;
 

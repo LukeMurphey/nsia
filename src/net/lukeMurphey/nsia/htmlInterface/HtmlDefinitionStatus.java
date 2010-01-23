@@ -1,14 +1,14 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.scanRules.DefinitionError;
-import net.lukeMurphey.nsia.scanRules.DefinitionErrorList;
-import net.lukeMurphey.nsia.trustBoundary.ApiScannerController;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.scan.DefinitionError;
+import net.lukemurphey.nsia.scan.DefinitionErrorList;
+import net.lukemurphey.nsia.trustBoundary.ApiScannerController;
 
 public class HtmlDefinitionStatus extends HtmlContentProvider {
 

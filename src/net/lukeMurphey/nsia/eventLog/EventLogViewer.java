@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.eventLog;
+package net.lukemurphey.nsia.eventlog;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -9,10 +9,10 @@ import java.sql.SQLException;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.Application.DatabaseAccessType;
 
 public class EventLogViewer {
 	

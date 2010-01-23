@@ -1,18 +1,18 @@
-package net.lukeMurphey.nsia.xmlRpcInterface;
+package net.lukemurphey.nsia.xmlRpcInterface;
 
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.*;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.DuplicateEntryException;
-import net.lukeMurphey.nsia.FirewallRule;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InetAddressRange;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.trustBoundary.ApiFirewallManagement;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.FirewallRule;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InetAddressRange;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.trustBoundary.ApiFirewallManagement;
 
 public class XmlrpcFirewallManagement extends XmlrpcHandler {
 	

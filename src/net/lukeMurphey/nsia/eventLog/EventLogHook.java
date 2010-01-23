@@ -1,9 +1,9 @@
-package net.lukeMurphey.nsia.eventLog;
+package net.lukemurphey.nsia.eventlog;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.Application.DatabaseAccessType;
-import net.lukeMurphey.nsia.responseModule.Action;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.response.Action;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,17 +26,17 @@ import java.sql.SQLException;
  */
 public abstract class EventLogHook implements Serializable{
 
-	protected int eventLogHookID = -1;
+	protected int eventlogHookID = -1;
 	
 	public abstract void processEvent( EventLogMessage message ) throws EventLogHookException;
 	
 	public abstract Action getAction();
 	
 	public int getEventLogHookID(){
-		return eventLogHookID;
+		return eventlogHookID;
 	}
 	
-	public static EventLogHook loadFromDatabase( Connection connection, int eventLogHookID ) throws SQLException{
+	public static EventLogHook loadFromDatabase( Connection connection, int eventlogHookID ) throws SQLException{
 		
 		// 0 -- Precondition check
 		if( connection == null ){
@@ -51,7 +51,7 @@ public abstract class EventLogHook implements Serializable{
 		try{
 			// 1.1 -- Setup and perform the database query
 			statement = connection.prepareStatement("Select * from EventLogHook where EventLogHookID = ?");
-			statement.setInt(1, eventLogHookID);
+			statement.setInt(1, eventlogHookID);
 			result = statement.executeQuery();
 			
 			if( result.next() ){
@@ -109,7 +109,7 @@ public abstract class EventLogHook implements Serializable{
 				eventlogHook = (EventLogHook)inStream.readObject();
 			
 				// 4 -- Assign the identifier
-				eventlogHook.eventLogHookID = hookID;
+				eventlogHook.eventlogHookID = hookID;
 				
 				return eventlogHook;
 			}
@@ -142,7 +142,7 @@ public abstract class EventLogHook implements Serializable{
 	 * @throws NoDatabaseConnectionException
 	 */
 	public void delete() throws SQLException, NoDatabaseConnectionException{
-		delete(this.eventLogHookID);
+		delete(this.eventlogHookID);
 	}
 	
 	public static void delete( long hookID ) throws SQLException, NoDatabaseConnectionException{
@@ -276,11 +276,11 @@ public abstract class EventLogHook implements Serializable{
 			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.ACTION);
 			
 			// If the action identifier is greater or equal to zero, then the action was previously saved to the database and the existing item should be updated 
-			if( eventLogHookID >= 0){
+			if( eventlogHookID >= 0){
 				statement = connection.prepareStatement("Update EventLogHook set State = ? where EventLogHookID = ?");
 				
 				statement.setBytes(1, bytes);
-				statement.setInt(2, eventLogHookID);
+				statement.setInt(2, eventlogHookID);
 				statement.executeUpdate();
 			}
 			else{
@@ -300,7 +300,7 @@ public abstract class EventLogHook implements Serializable{
 				keys = statement.getGeneratedKeys();
 				
 				if( keys.next() ){
-					eventLogHookID = keys.getInt(1);
+					eventlogHookID = keys.getInt(1);
 				}
 			}
 		}

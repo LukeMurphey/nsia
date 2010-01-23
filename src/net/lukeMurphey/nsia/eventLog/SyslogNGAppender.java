@@ -1,6 +1,6 @@
-package net.lukeMurphey.nsia.eventLog;
+package net.lukemurphey.nsia.eventlog;
 
-import net.lukeMurphey.nsia.eventLog.EventLog.LoggerErrorHandler;
+import net.lukemurphey.nsia.eventlog.EventLog.LoggerErrorHandler;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.AppenderSkeleton;

@@ -1,23 +1,23 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.io.IOException;
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.AccessControlDescriptor;
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.GroupManagement;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.RightDescriptor;
-import net.lukeMurphey.nsia.UserManagement;
-import net.lukeMurphey.nsia.GroupManagement.GroupDescriptor;
-import net.lukeMurphey.nsia.UserManagement.UserDescriptor;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
-import net.lukeMurphey.nsia.trustBoundary.ApiAccessControl;
-import net.lukeMurphey.nsia.trustBoundary.ApiGroupManagement;
-import net.lukeMurphey.nsia.trustBoundary.ApiUserManagement;
+import net.lukemurphey.nsia.AccessControlDescriptor;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.GroupManagement;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.RightDescriptor;
+import net.lukemurphey.nsia.UserManagement;
+import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
+import net.lukemurphey.nsia.UserManagement.UserDescriptor;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.trustBoundary.ApiAccessControl;
+import net.lukemurphey.nsia.trustBoundary.ApiGroupManagement;
+import net.lukemurphey.nsia.trustBoundary.ApiUserManagement;
 
 public class HtmlUserRights extends HtmlContentProvider{
 	

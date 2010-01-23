@@ -1,12 +1,12 @@
-package net.lukeMurphey.nsia.xmlRpcInterface;
+package net.lukemurphey.nsia.xmlRpcInterface;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.Firewall;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.HostAddress;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.Firewall;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.HostAddress;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.Application.DatabaseAccessType;
 
-import net.lukeMurphey.nsia.DerbyDatabaseInitializer.DatabaseIndex;
 
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
+import net.lukemurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.DerbyDatabaseInitializer.DatabaseIndex;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 
 public class ReindexerWorker implements WorkerThread {
 

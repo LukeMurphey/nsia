@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,11 +10,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.zip.ZipOutputStream;
 
-import net.lukeMurphey.nsia.Application.DatabaseAccessType;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage.Category;
+import net.lukemurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
 
 
 public class DatabaseBackup implements WorkerThread{
@@ -24,6 +24,7 @@ public class DatabaseBackup implements WorkerThread{
 	private Exception exceptionThrown = null;
 	private boolean stop = false;
 	private Phase phase = null;
+	private String BACKUP_LOCATION = "../var/backups/";
 	
 	private enum Phase{
 		INITIALIZING, EXPORTING_DATABASE, COMPRESSING_ARCHIVE, CLEANING_UP, DONE
@@ -137,7 +138,7 @@ public class DatabaseBackup implements WorkerThread{
 			phase = Phase.COMPRESSING_ARCHIVE;
 			
 			//	 3.1 -- Create the backups directory if it does not exist
-			File backupsDir = new File("./Backups/");
+			File backupsDir = new File(BACKUP_LOCATION);
 			if(backupsDir.exists() == false ){
 				if( backupsDir.mkdir() == false ){
 					throw new IOException("Could not create directory to store databaes backups");
@@ -145,7 +146,7 @@ public class DatabaseBackup implements WorkerThread{
 			}
 			
 			//	 3.2 -- Stream the database backup to the backups directory
-			backupFile = "./Backups/" + "backup_" + dateFormat.format( date ) + ".zip";
+			backupFile = BACKUP_LOCATION + "backup_" + dateFormat.format( date ) + ".zip";
 			outputStream = new FileOutputStream( new File(backupFile) );
 			zos = new ZipOutputStream(outputStream);
 			GenericUtils.zipDir(temporaryDirectory, zos);

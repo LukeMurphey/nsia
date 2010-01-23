@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 /**
  * The right descriptor describes the permissions a user or a group has to a right. A right is global operation, such as 

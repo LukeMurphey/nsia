@@ -1,13 +1,13 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.scanRules.NetworkPortRange;
-import net.lukeMurphey.nsia.scanRules.ServiceScanResult;
-import net.lukeMurphey.nsia.scanRules.NetworkPortRange.Protocol;
-import net.lukeMurphey.nsia.scanRules.NetworkPortRange.SocketState;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.scan.NetworkPortRange;
+import net.lukemurphey.nsia.scan.ServiceScanResult;
+import net.lukemurphey.nsia.scan.NetworkPortRange.Protocol;
+import net.lukemurphey.nsia.scan.NetworkPortRange.SocketState;
 
 public class HtmlServiceScanResult {
 

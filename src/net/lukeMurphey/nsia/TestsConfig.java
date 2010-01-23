@@ -1,10 +1,10 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.net.BindException;
 import java.sql.SQLException;
 
-import net.lukeMurphey.nsia.Application.RunMode;
-import net.lukeMurphey.nsia.eventLog.EventLog;
+import net.lukemurphey.nsia.Application.RunMode;
+import net.lukemurphey.nsia.eventlog.EventLog;
 
 
 public class TestsConfig {
@@ -21,8 +21,8 @@ public class TestsConfig {
 		Application appRes = Application.getApplication();//new Application(new String[0]);
 		//appRes.connectToDatabase(DB_PATH, DB_PASSWORD, DB_DRIVER);
 		
-		EventLog eventLog = new EventLog();//new File(LOG_FILE));
-		appRes.setEventLog(eventLog);
+		EventLog eventlog = new EventLog();//new File(LOG_FILE));
+		appRes.setEventLog(eventlog);
 		
 		
 		// 2 -- return the result

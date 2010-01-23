@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -6,22 +6,22 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Connection;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.Application.DatabaseAccessType;
-import net.lukeMurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.scanRules.Definition;
-import net.lukeMurphey.nsia.scanRules.DefinitionPolicyDescriptor;
-import net.lukeMurphey.nsia.scanRules.InvalidDefinitionException;
-import net.lukeMurphey.nsia.scanRules.DefinitionPolicyManagement;
-import net.lukeMurphey.nsia.scanRules.DefinitionPolicySet;
-import net.lukeMurphey.nsia.scanRules.DefinitionPolicyDescriptor.DefinitionPolicyAction;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.scan.Definition;
+import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor;
+import net.lukemurphey.nsia.scan.DefinitionPolicyManagement;
+import net.lukemurphey.nsia.scan.DefinitionPolicySet;
+import net.lukemurphey.nsia.scan.InvalidDefinitionException;
+import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor.DefinitionPolicyAction;
 
 public class ApiDefinitionPolicyManagement extends ApiHandler{
 

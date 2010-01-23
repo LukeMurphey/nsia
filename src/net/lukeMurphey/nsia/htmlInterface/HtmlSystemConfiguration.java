@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.net.UnknownHostException;
 import java.util.Enumeration;
@@ -7,17 +7,17 @@ import java.util.Vector;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.EmailAddress;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.InvalidLocalPartException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.ScannerController;
-import net.lukeMurphey.nsia.trustBoundary.ApiApplicationConfiguration;
-import net.lukeMurphey.nsia.trustBoundary.ApiScannerController;
-import net.lukeMurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.EmailAddress;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.InvalidLocalPartException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.ScannerController;
+import net.lukemurphey.nsia.htmlInterface.Html.MessageType;
+import net.lukemurphey.nsia.trustBoundary.ApiApplicationConfiguration;
+import net.lukemurphey.nsia.trustBoundary.ApiScannerController;
 
 
 public class HtmlSystemConfiguration extends HtmlContentProvider{

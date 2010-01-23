@@ -1,19 +1,19 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
 import java.net.InetAddress;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.DuplicateEntryException;
-import net.lukeMurphey.nsia.Firewall;
-import net.lukeMurphey.nsia.FirewallRule;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.HostAddress;
-import net.lukeMurphey.nsia.InetAddressRange;
-import net.lukeMurphey.nsia.InsufficientPermissionException;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.Firewall;
+import net.lukemurphey.nsia.FirewallRule;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.HostAddress;
+import net.lukemurphey.nsia.InetAddressRange;
+import net.lukemurphey.nsia.InsufficientPermissionException;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 
 import java.net.UnknownHostException;
 import java.sql.SQLException;

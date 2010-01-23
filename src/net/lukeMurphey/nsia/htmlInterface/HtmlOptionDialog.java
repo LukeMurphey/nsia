@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import java.util.Hashtable;

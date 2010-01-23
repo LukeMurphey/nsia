@@ -1,16 +1,16 @@
-package net.lukeMurphey.nsia.htmlInterface;
+package net.lukemurphey.nsia.htmlInterface;
 
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.GeneralizedException;
-import net.lukeMurphey.nsia.InputValidationException;
-import net.lukeMurphey.nsia.NoSessionException;
-import net.lukeMurphey.nsia.NotFoundException;
-import net.lukeMurphey.nsia.eventLog.EventLogSeverity;
-import net.lukeMurphey.nsia.eventLog.EventLogViewer.EventLogEntry;
-import net.lukeMurphey.nsia.eventLog.EventLogViewer.EventLogFilter;
-import net.lukeMurphey.nsia.trustBoundary.ApiEventLogViewer;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
+import net.lukemurphey.nsia.eventlog.EventLogSeverity;
+import net.lukemurphey.nsia.eventlog.EventLogViewer.EventLogEntry;
+import net.lukemurphey.nsia.eventlog.EventLogViewer.EventLogFilter;
+import net.lukemurphey.nsia.trustBoundary.ApiEventLogViewer;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -244,11 +244,11 @@ public class HtmlEventLogViewer extends HtmlContentProvider {
 		
 		//	 3.1 -- Create the log filter
 		EventLogFilter filter = new EventLogFilter(ENTRIES_PER_PAGE);
-		EventLogSeverity eventLogSeverity = null;
+		EventLogSeverity eventlogSeverity = null;
 		
 		if( severity >= 0 ){
-			eventLogSeverity = EventLogSeverity.getSeverityById(severity);
-			filter.setSeverityFilter(eventLogSeverity);
+			eventlogSeverity = EventLogSeverity.getSeverityById(severity);
+			filter.setSeverityFilter(eventlogSeverity);
 		}
 		
 		if( contentFilter != null && !contentFilter.isEmpty()){
@@ -256,9 +256,9 @@ public class HtmlEventLogViewer extends HtmlContentProvider {
 		}
 		
 		//	 3.2 -- Compute the start entry
-		int firstEntry = logViewer.getMinEntryID( requestDescriptor.sessionIdentifier, contentFilter, eventLogSeverity);
+		int firstEntry = logViewer.getMinEntryID( requestDescriptor.sessionIdentifier, contentFilter, eventlogSeverity);
 		
-		int lastEntry = logViewer.getMaxEntryID( requestDescriptor.sessionIdentifier, contentFilter, eventLogSeverity);
+		int lastEntry = logViewer.getMaxEntryID( requestDescriptor.sessionIdentifier, contentFilter, eventlogSeverity);
 		
 		if( startEntry > -1 ){
 			filter.setEntryID(startEntry, getEventsAfterID);
@@ -272,7 +272,6 @@ public class HtmlEventLogViewer extends HtmlContentProvider {
 		body.append( "<span class=\"Text_1\">Event Log</span><br>&nbsp;" );
 		
 		//	 4.1 -- Get the actual entries
-		
 		EventLogEntry[] entries;
 		entries = logViewer.getEntries(requestDescriptor.sessionIdentifier, filter);
 		

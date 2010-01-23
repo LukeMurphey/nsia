@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 //http://www.ietf.org/rfc/rfc2822.txt
 public class InvalidLocalPartException extends Exception {

@@ -1,10 +1,10 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.sql.*;
 
 import java.util.*;
 
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 
 /**
  * The access control class provides a method to determine if a user or group is allowed access to a 

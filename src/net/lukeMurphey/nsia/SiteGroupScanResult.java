@@ -1,11 +1,11 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.sql.Timestamp;
 import java.util.Hashtable;
 
-import net.lukeMurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
-import net.lukeMurphey.nsia.scanRules.ScanResult;
-import net.lukeMurphey.nsia.scanRules.ScanResultCode;
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.scan.ScanResult;
+import net.lukemurphey.nsia.scan.ScanResultCode;
 
 public class SiteGroupScanResult {
 	protected ScanResultCode resultCode = null;
@@ -32,10 +32,9 @@ public class SiteGroupScanResult {
 					if( results[c].getResultCode().equals(ScanResultCode.SCAN_COMPLETED) == false){
 						incompleteRules++;
 					}
-					//else{//if()
+					
 					deviationCount += results[c].getDeviations();
 					deviatingRules++;
-					//}
 				}
 				
 				// Determine the overall status

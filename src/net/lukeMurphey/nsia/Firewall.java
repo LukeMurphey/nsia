@@ -1,10 +1,10 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.util.*;
 import java.net.*;
 import java.sql.*;
 
-import net.lukeMurphey.nsia.FirewallRule.Result;
+import net.lukemurphey.nsia.FirewallRule.Result;
 
 public class Firewall {
 	private Application appRes;

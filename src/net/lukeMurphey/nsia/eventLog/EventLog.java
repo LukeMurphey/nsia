@@ -1,14 +1,13 @@
-package net.lukeMurphey.nsia.eventLog;
+package net.lukemurphey.nsia.eventlog;
 
-import java.io.*;
 import java.util.Iterator;
 import java.util.Vector;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.NoDatabaseConnectionException;
-import net.lukeMurphey.nsia.Application.DatabaseAccessType;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage.Category;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
 
 import org.apache.log4j.*;
 import org.apache.log4j.spi.ErrorHandler;
@@ -37,7 +36,7 @@ public class EventLog {
 	
 	protected EventLogSeverity loggingLevel = EventLogSeverity.INFORMATIONAL; //Prevents entries from being logged; logged iff severity >= loggingLevel
 	
-	private static final Logger logger = Logger.getLogger(net.lukeMurphey.nsia.eventLog.EventLog.class.getName());
+	private static final Logger logger = Logger.getLogger(net.lukemurphey.nsia.eventlog.EventLog.class.getName());
 	private static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
 	
 	private Vector<EventLogHook> hooks = new Vector<EventLogHook>();
@@ -141,11 +140,23 @@ public class EventLog {
 		apacheLogger.setLevel(EventLogSeverity.OFF);//TODO Replace with application specific log types
 		
 		Logger httpClientLogger = Logger.getLogger("httpclient");
-		httpClientLogger.setLevel(EventLogSeverity.OFF);
+		httpClientLogger.setLevel(EventLogSeverity.OFF);		
 
 		// 2 -- Configure the Jetty logger
 		Logger jettyLogger = Logger.getLogger("org.mortbay");
 		jettyLogger.setLevel(EventLogSeverity.OFF);//TODO Replace with application specific log types
+		
+		// 3 -- Configure the freemarker logger
+		Logger freemarkerLogger = Logger.getLogger("freemarker.cache");
+		freemarkerLogger.setLevel(EventLogSeverity.OFF);
+		
+		Logger freemarkerRuntimeLogger = Logger.getLogger("freemarker.runtime");
+		freemarkerRuntimeLogger.setLevel(EventLogSeverity.OFF);
+		
+		Logger freemarkerBeansLogger = Logger.getLogger("freemarker.beans");
+		freemarkerBeansLogger.setLevel(EventLogSeverity.OFF);
+		
+		// 4 -- Configure the default logger 
 		NullAppender appender = new NullAppender();
 		logger.addAppender(appender);
 		logger.setLevel(EventLogSeverity.ALL);
@@ -507,15 +518,15 @@ public class EventLog {
 	
 	/**
 	 * Get the event log hook associated with the given identifier. Returns null if no hook with the given identifier is found.
-	 * @param eventLogHookID
+	 * @param eventlogHookID
 	 * @return
 	 */
-	public EventLogHook getHook(long eventLogHookID ){
+	public EventLogHook getHook(long eventlogHookID ){
 		
 		synchronized (hooks) {
 			
 			for (EventLogHook hook : hooks) {
-				if( hook.getEventLogHookID() == eventLogHookID ){
+				if( hook.getEventLogHookID() == eventlogHookID ){
 					return hook;
 				}
 			}
@@ -705,14 +716,39 @@ public class EventLog {
 	 * @param t
 	 * @return
 	 */
-	private static String getStackTrace(Throwable t)
+	private static String getStackTrace(Throwable t){
+		return getStackTrace( t, 50);
+	}
+	private static String getStackTrace(Throwable t, int max_size)
     {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw, true);
-        t.printStackTrace(pw);
-        pw.flush();
-        sw.flush();
-        return sw.toString();
+		StringBuffer buffer = new StringBuffer();
+		int iterations = 0;
+		StackTraceElement[] stack_trace = t.getStackTrace();
+		
+		if( stack_trace.length > max_size ){
+			iterations = max_size;
+		}
+		else{
+			iterations = stack_trace.length;
+		}
+		
+		buffer.append(t);
+		buffer.append("\n");
+		
+		for( int c = 0; c < iterations; c++ ){
+			buffer.append(stack_trace[c]);
+			
+			if( c < (iterations-1) ){
+				buffer.append(" at ");
+			}
+			
+		}
+		
+		if( iterations != stack_trace.length){
+			buffer.append("\n... (" + (stack_trace.length-iterations) +" more omitted)");
+		}
+		
+		return buffer.toString();
     }
 	
 	/***

@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.eventLog;
+package net.lukemurphey.nsia.eventlog;
 
 import org.apache.log4j.*;
 
@@ -65,4 +65,34 @@ public class EventLogSeverity extends Level {
 		return NOTICE;
 	}
 	
+	
+	public static EventLogSeverity getSeverityBySyslogID( int severity ){
+		if( severity == EventLogSeverity.EMERGENCY.getSyslogEquivalent() ){
+			return EventLogSeverity.EMERGENCY;
+		}
+		else if( severity == EventLogSeverity.CRITICAL.getSyslogEquivalent() ){
+			return EventLogSeverity.CRITICAL;
+		}
+		else if( severity == EventLogSeverity.ALERT.getSyslogEquivalent() ){
+			return EventLogSeverity.ALERT;
+		}
+		else if( severity == EventLogSeverity.ERROR.getSyslogEquivalent() ){
+			return EventLogSeverity.ERROR;
+		}
+		else if( severity == EventLogSeverity.NOTICE.getSyslogEquivalent() ){
+			return EventLogSeverity.NOTICE;
+		}
+		else if( severity == EventLogSeverity.WARNING.getSyslogEquivalent() ){
+			return EventLogSeverity.WARNING;
+		}
+		else if( severity == EventLogSeverity.INFORMATIONAL.getSyslogEquivalent() ){
+			return EventLogSeverity.INFORMATIONAL;
+		}
+		else if( severity == EventLogSeverity.DEBUG.getSyslogEquivalent() ){
+			return EventLogSeverity.DEBUG;
+		}
+		
+		// Default (if none of the above match)
+		return NOTICE;
+	}
 }

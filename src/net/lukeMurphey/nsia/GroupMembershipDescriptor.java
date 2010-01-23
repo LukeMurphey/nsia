@@ -1,6 +1,6 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
-import net.lukeMurphey.nsia.GroupManagement.GroupDescriptor;
+import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
 
 import java.sql.*;
 
@@ -66,6 +66,15 @@ public class GroupMembershipDescriptor {
 	 */
 	public int getSize(){
 		return isMember.length;
+	}
+	
+	/**
+	 * Determines if the user is a member of the given group.
+	 * @param group
+	 * @return
+	 */
+	public boolean isMemberOfGroup( GroupDescriptor group ){
+		return isMemberOfGroupByID(group.getGroupId());
 	}
 	
 	/**

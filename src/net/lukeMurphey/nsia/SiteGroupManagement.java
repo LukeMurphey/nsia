@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.sql.*;
 import java.util.regex.Matcher;
@@ -584,6 +584,19 @@ public class SiteGroupManagement {
 		 */
 		public State getGroupState(){
 			return groupState;
+		}
+		
+		/**
+		 * Indicates if the site group is enabled.
+		 * @return
+		 */
+		public boolean isEnabled(){
+			if( getGroupState() == State.INACTIVE ){
+				return false;
+			}
+			else{
+				return true;
+			}
 		}
 		
 		/**

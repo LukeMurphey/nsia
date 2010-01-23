@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.sql.*;
 import java.util.*;
@@ -42,7 +42,7 @@ public abstract class DatabaseInitializer {
 		protected Result signatures;
 		protected Result scriptEnvironment;
 		protected Result specimenArchive;
-		protected Result eventLog;
+		protected Result eventlog;
 		protected Result httpDiscovery;
 		protected Result ruleURL;
 		protected Result httpSignatureScanResult;
@@ -53,7 +53,7 @@ public abstract class DatabaseInitializer {
 		protected Result serviceScanRule;
 		protected Result serviceScanResult;
 		protected Result actions;
-		protected Result eventLogHooks;
+		protected Result eventlogHooks;
 		protected Result definitionErrors;
 		
 		public Result getApplicationParametersTableState(){
@@ -149,7 +149,7 @@ public abstract class DatabaseInitializer {
 		}
 		
 		public Result getEventLogTableState(){
-			return eventLog;
+			return eventlog;
 		}
 		
 		public Result getRuleURLTableState(){
@@ -277,7 +277,7 @@ public abstract class DatabaseInitializer {
 		initResults.users = createUsersTable();
 		initResults.signatures = createDefinitionsTable();
 		initResults.scriptEnvironment = createScriptEnvironmentTable();
-		initResults.eventLog = createEventLogTable();
+		initResults.eventlog = createEventLogTable();
 		
 		initResults.httpDiscovery = createHttpDiscoveryRuleTable();
 		initResults.ruleURL = createRuleURLTable();
@@ -289,7 +289,7 @@ public abstract class DatabaseInitializer {
 		initResults.serviceScanRule = createServiceScanRuleTable();
 		initResults.serviceScanResult = createServiceScanResultTable();
 		initResults.actions = createActionsTable();
-		initResults.eventLogHooks = createEventLogHooksTable();
+		initResults.eventlogHooks = createEventLogHooksTable();
 		initResults.definitionErrors = createDefinitionErrorTable();
 		
 		// 3 -- Insert the necessary entries

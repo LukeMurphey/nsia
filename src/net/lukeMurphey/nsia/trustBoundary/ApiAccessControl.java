@@ -1,11 +1,11 @@
-package net.lukeMurphey.nsia.trustBoundary;
+package net.lukemurphey.nsia.trustBoundary;
 
 import java.sql.SQLException;
 
-import net.lukeMurphey.nsia.*;
-import net.lukeMurphey.nsia.eventLog.EventLogField;
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
-import net.lukeMurphey.nsia.eventLog.EventLogField.FieldName;
+import net.lukemurphey.nsia.*;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 
 /**
  * Class provides the API wrapped around the methods that maintain and create the access control entries
@@ -324,7 +324,7 @@ public class ApiAccessControl extends ApiHandler {
 		//	0.1 -- Determine if the user has the right to change permissions
 		if( sessionInfo.getUserId() == rightDescriptor.getSubjectId() && rightDescriptor.getSubjectType() == AccessControlDescriptor.Subject.USER ){
 			// Fall through and allow the operation
-			//TODO Determine whats rights should exist for allowing/denying changes to user and group rights
+			//TODO Determine what rights should exist for allowing/denying changes to user and group rights
 			//checkRight( sessionIdentifier, "Administration.ManageRights" ); 
 		}
 		

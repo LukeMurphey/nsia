@@ -1,11 +1,11 @@
-package net.lukeMurphey.nsia;
+package net.lukemurphey.nsia;
 
 import java.io.*;
 import eu.medsea.util.*;
 
 import javax.activation.MimetypesFileTypeMap;
 
-import net.lukeMurphey.nsia.eventLog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 
 public class MimeType {
 

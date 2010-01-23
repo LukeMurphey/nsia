@@ -1,4 +1,4 @@
-package net.lukeMurphey.nsia.tools;
+package net.lukemurphey.nsia.tools;
 
 import java.awt.AWTException;
 import java.awt.SystemTray;
@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.lukeMurphey.nsia.Application;
-import net.lukeMurphey.nsia.NetworkManager;
-import net.lukeMurphey.nsia.Application.RunMode;
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.NetworkManager;
+import net.lukemurphey.nsia.Application.RunMode;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;
