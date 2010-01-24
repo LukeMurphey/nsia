@@ -217,8 +217,8 @@ public class UserView extends View {
 		Shortcuts.addDashboardHeaders(request, response, data);
 		data.put("title", "User: " + user);
 		
-		data.put("can_enum_groups", true);//TODO change per
-		
+		//checkRight( sessionIdentifier, "Groups.View");
+		data.put("can_enum_groups", true);//TODO change and add permissions
 		
 		TemplateLoader.renderToResponse("User.ftl", data, response);
 		
