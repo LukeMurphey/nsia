@@ -1,6 +1,6 @@
 <table border="0" cellpadding="0" cellspacing="8">
     <tr>
-        <td class="AlignedTop" rowspan="2"><img src="${icon}" alt="Warning">&nbsp;&nbsp;</td>
+        <td class="AlignedTop" rowspan="2"><img src="${icon}" alt="Warning" />&nbsp;&nbsp;</td>
         <td class="Text_2"><#if warn??><span class="Text_1"><span class="WarnText">${title}</span></span><#else><span class="Text_1">${title}</span></#if><td>
     </tr>
     <tr>
