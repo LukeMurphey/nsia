@@ -33,8 +33,10 @@ import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
 public class UserView extends View {
 
+	public static final String VIEW_NAME = "user";
+	
 	public UserView() {
-		super("User", "user", Pattern.compile("[0-9]+"));
+		super("User", VIEW_NAME, Pattern.compile("[0-9]+"));
 	}
 
 	public static String getURL( UserDescriptor user ) throws URLInvalidException{
