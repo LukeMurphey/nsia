@@ -13,7 +13,7 @@
             </tr>
             <tr class="Background1">
                 <td class="Text_3">Username</td>
-                <td>${user.userName}</td>
+                <td>${user.userName} <#if user.bruteForceLocked><span class="WarnText">(account is locked due to authentication failures,</span> <a href="<@url name="user_unlock" args=[user.userID] />">Unlock now</a><span class="WarnText">)</span></#if></td>
             </tr>
             <#if user.fullname?? >
             <tr class="Background1">
@@ -38,7 +38,6 @@
                 <td>(Unspecified)</td>
             </tr>
             </#if>
-            
             <tr class="Background1">
                 <td class="Text_3">Account Type</td>
                 <td>
@@ -58,6 +57,11 @@
             </tr>
         </table>
      </form>
+
+    <#-- <#if user.bruteForceLocked>
+        <#assign message>The account was locked due to repeated and unsuccessful authentication attempts<p/><a href="<@url name="user_unlock" args=[user.userID] />">[Unlock Account]</a></#assign>
+        <@getwarndialog title="Account Locked" message=message />
+    </#if> -->
 
      <br><span class="Text_1">Group Membership</span>
         
