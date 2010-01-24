@@ -115,6 +115,7 @@ public class UserView extends View {
 			ViewNotFoundException {
 
 		// 0 -- Check permissions
+		//TODO check rights
 		
 		// 1 -- Get the user
 		int userID;
