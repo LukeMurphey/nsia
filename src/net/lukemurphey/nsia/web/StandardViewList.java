@@ -31,6 +31,7 @@ import net.lukemurphey.nsia.web.views.TaskStopView;
 import net.lukemurphey.nsia.web.views.DefinitionsUpdateView;
 import net.lukemurphey.nsia.web.views.UserDisableView;
 import net.lukemurphey.nsia.web.views.UserEnableView;
+import net.lukemurphey.nsia.web.views.UserGroupMembershipEditView;
 import net.lukemurphey.nsia.web.views.UserView;
 import net.lukemurphey.nsia.web.views.UsersView;
 
@@ -77,6 +78,7 @@ public class StandardViewList {
 				view_list.registerView( new UserDisableView() );
 				view_list.registerView( new UsersView() );
 				view_list.registerView( new UserView() );
+				view_list.registerView( new UserGroupMembershipEditView() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
