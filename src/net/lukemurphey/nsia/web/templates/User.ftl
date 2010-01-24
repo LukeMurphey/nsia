@@ -71,7 +71,7 @@
             <#assign message>No groups exist yet. Create a group first, then add the user to the specified group or groups. <p><a href="GroupManagement?Action=New">[Create Group Now]</a></#assign>
             <@getinfodialog title="No Groups Exist" message=message />
         <#else>
-            <form action="UserManagement">
+            <form method="POST" action="<@url name="user_edit_membership" args=[user.userID] />">
                 <input type="hidden" name="UserID" value="${user.userID}">
                 <input type="hidden" name="Action" value="SetGroup">
             
