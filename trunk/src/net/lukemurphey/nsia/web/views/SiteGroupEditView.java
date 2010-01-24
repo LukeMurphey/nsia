@@ -41,7 +41,7 @@ public class SiteGroupEditView extends View {
 	}
 
 	/**
-	 * Get a form that can validate the 
+	 * Get a form that can validate the site group.
 	 * @return
 	 */
 	private Form getSiteGroupForm( ){
