@@ -15,7 +15,7 @@
     <#list users as user>
     <tr class="Background1">
         <td>${user.userID}</td>
-        <td><a href="UserManagement?UserID=${user.userID}">${user.userName}        
+        <td><a href="<@url name="user" args=[user.userID]/>">${user.userName}        
         <#-- 1 -- Output the icon associated with the account type -->
         <#if user.unrestricted && user.accountStatus != DISABLED >
         &nbsp;&nbsp;<img src="/media/img/16_Admin" alt="Unrestricted"></a></td>
