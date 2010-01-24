@@ -467,6 +467,30 @@ public class UserManagement {
 	 * <p>
 	 * An account will be created if an equivalent account does not already exist (equivalent is defined as another account with a username
 	 * that is equal). Note that the usernames are case-insensitive.
+	 * @param userName
+	 * @param realName
+	 * @param password
+	 * @param emailAddress
+	 * @param unrestricted
+	 * @return
+	 * @throws SQLException
+	 * @throws NoSuchAlgorithmException
+	 * @throws InputValidationException
+	 * @throws NoDatabaseConnectionException
+	 */
+	public synchronized long addAccount( String userName, String realName, String password, EmailAddress emailAddress, boolean unrestricted ) throws SQLException, NoSuchAlgorithmException, InputValidationException, NoDatabaseConnectionException{
+		String hashAlgorithm = appRes.getApplicationConfiguration().getHashAlgorithm();
+		long iterationCount = appRes.getApplicationConfiguration().getHashIterations();
+		
+		return addAccount(userName, realName, password, hashAlgorithm, iterationCount, emailAddress, unrestricted);
+	}
+	
+	/**
+	 * Method creates a use account corresponding to the given information. The method is synchronized to prevent the creation of 
+	 * two user accounts for the same username in the unlikely event that two accounts for equivalent usernames are created simultaneously.
+	 * <p>
+	 * An account will be created if an equivalent account does not already exist (equivalent is defined as another account with a username
+	 * that is equal). Note that the usernames are case-insensitive.
 	 * @precondition username, realname, password, must be valid (non-null, non-empty, valid characters); hash algorithm must be an available algorithm ; hash iteration count must be greater than zero
 	 * @postcondition An account will be created if an equivalent account does not already exist (equivalent is defined as another account with a username that is equal (case-insensitive))
 	 * @param userName
