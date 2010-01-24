@@ -438,6 +438,18 @@ public class UserManagement {
 	
 	/**
 	 * Clear the count of authentication failures. This will re-enable an account that was locked due to repeated authentication failures.
+	 * @param user
+	 * @throws SQLException
+	 * @throws NumericalOverflowException
+	 * @throws InputValidationException
+	 * @throws NoDatabaseConnectionException
+	 */
+	public void clearAuthFailedCount( UserDescriptor user ) throws SQLException, NumericalOverflowException, InputValidationException, NoDatabaseConnectionException{
+		clearAuthFailedCount(user.getUserName());
+	}
+	
+	/**
+	 * Clear the count of authentication failures. This will re-enable an account that was locked due to repeated authentication failures.
 	 * @param username
 	 * @throws SQLException
 	 * @throws NumericalOverflowException
