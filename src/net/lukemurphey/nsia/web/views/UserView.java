@@ -190,10 +190,10 @@ public class UserView extends View {
 		menu.add( new Link("View Logged in Users", "ADDURL") );
 		
 		if( user.getAccountStatus() == AccountStatus.DISABLED ){
-			menu.add( new Link("Enable User", UserEnableView.getURL() ) );
+			menu.add( new Link("Enable User", UserEnableView.getURL(user) ) );
 		}
 		else{
-			menu.add( new Link("Disable User", UserDisableView.getURL() ) );
+			menu.add( new Link("Disable User", UserDisableView.getURL(user) ) );
 		}
 			
 		menu.add( new Link("Delete User", "ADDURL") );
