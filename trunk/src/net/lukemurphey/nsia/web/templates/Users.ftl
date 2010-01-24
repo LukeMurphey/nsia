@@ -6,7 +6,7 @@
 <table>
     <tr class="Background0">
         <td class="Text_3">User ID</td>
-        <td width="200" class="Text_3">Username</td>
+        <td width="270" class="Text_3">Username</td>
         <td width="200" class="Text_3">Full Name</td>
         <td class="Text_3">Status</td>
         <td class="Text_3">Unrestricted</td>
@@ -18,14 +18,15 @@
         <td><a href="<@url name="user" args=[user.userID]/>">${user.userName}        
         <#-- 1 -- Output the icon associated with the account type -->
         <#if user.unrestricted && user.accountStatus != DISABLED >
-        &nbsp;&nbsp;<img src="/media/img/16_Admin" alt="Unrestricted"></a></td>
+        &nbsp;&nbsp;<img src="/media/img/16_Admin" alt="Unrestricted"></a>
         <#elseif user.unrestricted && user.accountStatus = DISABLED >
-        &nbsp;&nbsp;<img src="/media/img/16_AdminDisabled" alt="Unrestricted"></a></td>
+        &nbsp;&nbsp;<img src="/media/img/16_AdminDisabled" alt="Unrestricted"></a>
         <#elseif user.accountStatus = DISABLED >
-        &nbsp;&nbsp;<img src="/media/img/16_UserDisabled" alt="Unrestricted"></a></td>
+        &nbsp;&nbsp;<img src="/media/img/16_UserDisabled" alt="Unrestricted"></a>
         <#else>
-        &nbsp;&nbsp;<img src="/media/img/16_User" alt="Restricted"></a></td>
+        &nbsp;&nbsp;<img src="/media/img/16_User" alt="Restricted"></a>
         </#if>
+        <#if user.bruteForceLocked><span class="WarnText">(account is locked)</span></#if></td>
         
         <#if user.fullname?? >
         <td><a href="UserManagement?UserID=${user.userID}">${user.fullname}</td>
