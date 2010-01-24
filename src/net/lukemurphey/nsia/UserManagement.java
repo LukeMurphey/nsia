@@ -478,7 +478,7 @@ public class UserManagement {
 	 * @throws InputValidationException
 	 * @throws NoDatabaseConnectionException
 	 */
-	public synchronized long addAccount( String userName, String realName, String password, EmailAddress emailAddress, boolean unrestricted ) throws SQLException, NoSuchAlgorithmException, InputValidationException, NoDatabaseConnectionException{
+	public synchronized int addAccount( String userName, String realName, String password, EmailAddress emailAddress, boolean unrestricted ) throws SQLException, NoSuchAlgorithmException, InputValidationException, NoDatabaseConnectionException{
 		String hashAlgorithm = appRes.getApplicationConfiguration().getHashAlgorithm();
 		long iterationCount = appRes.getApplicationConfiguration().getHashIterations();
 		
@@ -506,7 +506,7 @@ public class UserManagement {
 	 * @throws InputValidationException
 	 * @throws NoDatabaseConnectionException 
 	 */
-	public synchronized long addAccount( String userName, String realName, String password, String hashAlgorithm, long hashIterationCount, EmailAddress emailAddress, boolean unrestricted ) throws SQLException, NoSuchAlgorithmException, InputValidationException, NoDatabaseConnectionException{
+	public synchronized int addAccount( String userName, String realName, String password, String hashAlgorithm, long hashIterationCount, EmailAddress emailAddress, boolean unrestricted ) throws SQLException, NoSuchAlgorithmException, InputValidationException, NoDatabaseConnectionException{
 		
 		// 0 -- Precondition check
 		
@@ -594,7 +594,7 @@ public class UserManagement {
 			// 4 -- Return the user ID
 			keys = preparedStatement.getGeneratedKeys();
 			if( keys.next() )
-				return keys.getLong(1);
+				return keys.getInt(1);
 			else
 				return -1;
 			
@@ -624,7 +624,7 @@ public class UserManagement {
 	 * @throws InputValidationException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public String changePasswordToRandom( long userId, int newPasswordLength ) throws NoDatabaseConnectionException, SQLException, InputValidationException, NoSuchAlgorithmException{
+	public String changePasswordToRandom( int userId, int newPasswordLength ) throws NoDatabaseConnectionException, SQLException, InputValidationException, NoSuchAlgorithmException{
 		String newPassword = LocalPasswordAuthentication.generateRandomPassword( newPasswordLength );
 		
 		if( changePassword( userId, newPassword ) )
@@ -648,7 +648,7 @@ public class UserManagement {
 	 * @throws InputValidationException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public boolean changePassword( long userId, String newPassword ) throws NoDatabaseConnectionException, SQLException, InputValidationException, NoSuchAlgorithmException{
+	public boolean changePassword( int userId, String newPassword ) throws NoDatabaseConnectionException, SQLException, InputValidationException, NoSuchAlgorithmException{
 		// 0 -- Precondition check
 		
 		//	 0.1 -- Make sure the new password is valid
@@ -713,7 +713,7 @@ public class UserManagement {
 	 * @throws SQLException
 	 * @throws NoDatabaseConnectionException
 	 */
-	public boolean updateAccount( long userId, String userName, String realName, EmailAddress emailAddress ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
+	public boolean updateAccount( int userId, String userName, String realName, EmailAddress emailAddress ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		// 0 -- Precondition check
 		
 		//	 0.1 -- User ID must be valid
@@ -791,7 +791,7 @@ public class UserManagement {
 	 * @throws SQLException
 	 * @throws NoDatabaseConnectionException
 	 */
-	public boolean updateAccount( long userId, String userName, String realName, EmailAddress emailAddress, boolean accountEnabled ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
+	public boolean updateAccount( int userId, String userName, String realName, EmailAddress emailAddress, boolean accountEnabled ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		// 0 -- Precondition check
 		
 		//	 0.1 -- User ID must be valid
@@ -875,7 +875,7 @@ public class UserManagement {
 	 * @throws SQLException
 	 * @throws NoDatabaseConnectionException
 	 */
-	public boolean updateAccountEx( long userId, String userName, String realName, EmailAddress emailAddress, boolean unrestricted, boolean accountEnabled ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
+	public boolean updateAccountEx( int userId, String userName, String realName, EmailAddress emailAddress, boolean unrestricted, boolean accountEnabled ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		// 0 -- Precondition check
 		
 		//	 0.1 -- User ID must be valid
@@ -959,7 +959,7 @@ public class UserManagement {
 	 * @throws SQLException
 	 * @throws NoDatabaseConnectionException
 	 */
-	public boolean updateAccountEx( long userId, String userName, String realName, EmailAddress emailAddress, boolean unrestricted ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
+	public boolean updateAccountEx( int userId, String userName, String realName, EmailAddress emailAddress, boolean unrestricted ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		// 0 -- Precondition check
 		
 		//	 0.1 -- User ID must be valid
