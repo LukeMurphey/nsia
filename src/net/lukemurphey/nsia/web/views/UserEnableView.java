@@ -12,6 +12,7 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.UserManagement;
+import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
@@ -29,11 +30,11 @@ public class UserEnableView extends View {
 		super("User/Enable", "user_enable", Pattern.compile("[0-9]+", Pattern.CASE_INSENSITIVE));
 	}
 
-	public static String getURL() throws URLInvalidException{
+	public static String getURL( UserDescriptor user ) throws URLInvalidException{
 		
 		UserEnableView view = new UserEnableView();
 		
-		return view.createURL();
+		return view.createURL(user.getUserID());
 		
 	}
 	
