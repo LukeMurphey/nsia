@@ -962,11 +962,11 @@ public class HtmlUserManagement extends HtmlContentProvider{
 		// 6 -- Edit account
 		else if( action.matches("Edit") ){
 			String userIdString = requestDescriptor.request.getParameter("UserID");
-			long userId = -1;
+			int userId = -1;
 			
 			if( userIdString != null ){
 				try{
-					userId = Long.parseLong(userIdString);
+					userId = Integer.parseInt(userIdString);
 				}
 				catch( NumberFormatException e){
 					userId = -2;
@@ -987,7 +987,7 @@ public class HtmlUserManagement extends HtmlContentProvider{
 					if( emailAddress.trim().length() == 0 )
 						emailAddress = null;
 					
-					boolean updatedSuccessfully = xUserManager.updateAccountEx( requestDescriptor.sessionIdentifier, (long)userId, userName, realName, emailAddress, unrestrictedAccount );
+					boolean updatedSuccessfully = xUserManager.updateAccountEx( requestDescriptor.sessionIdentifier, userId, userName, realName, emailAddress, unrestrictedAccount );
 					
 					if( updatedSuccessfully == false ){
 						Html.addMessage(MessageType.WARNING, "User account update failed", requestDescriptor.userId.longValue());
