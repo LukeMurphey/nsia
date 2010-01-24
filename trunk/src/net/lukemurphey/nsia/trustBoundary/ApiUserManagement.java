@@ -291,7 +291,7 @@ public class ApiUserManagement extends ApiHandler {
 	 * @throws InsufficientPermissionException
 	 * @throws InputValidationException
 	 */
-	public String changePasswordToRandom( String sessionIdentifier, long userId, int newPasswordLength ) throws NoSessionException, GeneralizedException, InsufficientPermissionException, InputValidationException{
+	public String changePasswordToRandom( String sessionIdentifier, int userId, int newPasswordLength ) throws NoSessionException, GeneralizedException, InsufficientPermissionException, InputValidationException{
 		
 		// 0 -- Precondition check
 		
@@ -794,7 +794,7 @@ public class ApiUserManagement extends ApiHandler {
 	 * @throws InvalidLocalPartException
 	 * @throws DisallowedOperationException 
 	 */
-	public boolean updateAccount( String sessionIdentifier, long userId, String userName, String realName, String emailAddress ) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
+	public boolean updateAccount( String sessionIdentifier, int userId, String userName, String realName, String emailAddress ) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
 		return updateAccount ( sessionIdentifier, userId, userName, realName, emailAddress, null );
 	}
 	
@@ -813,7 +813,7 @@ public class ApiUserManagement extends ApiHandler {
 	 * @throws InvalidLocalPartException
 	 * @throws DisallowedOperationException 
 	 */
-	public boolean updateAccount( String sessionIdentifier, long userId, boolean accountEnabled, String userName, String realName, String emailAddress) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
+	public boolean updateAccount( String sessionIdentifier, int userId, boolean accountEnabled, String userName, String realName, String emailAddress) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
 		return updateAccount ( sessionIdentifier, userId, userName, realName, emailAddress, null, accountEnabled );
 	}
 	
@@ -838,7 +838,7 @@ public class ApiUserManagement extends ApiHandler {
 	 * @throws InvalidLocalPartException
 	 * @throws DisallowedOperationException 
 	 */
-	public boolean updateAccountEx( String sessionIdentifier, long userId, boolean accountEnabled, String userName, String realName, String emailAddress, boolean unrestricted) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
+	public boolean updateAccountEx( String sessionIdentifier, int userId, boolean accountEnabled, String userName, String realName, String emailAddress, boolean unrestricted) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
 		//	 0.1 -- Make sure the user has a valid session
 		// Will checked in ACL checks below
 		
@@ -1006,7 +1006,7 @@ public class ApiUserManagement extends ApiHandler {
 	 * @throws InvalidLocalPartException
 	 * @throws DisallowedOperationException 
 	 */
-	public boolean updateAccountEx( String sessionIdentifier, long userId, String userName, String realName, String emailAddress, boolean unrestricted ) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
+	public boolean updateAccountEx( String sessionIdentifier, int userId, String userName, String realName, String emailAddress, boolean unrestricted ) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
 		
 		return updateAccount( sessionIdentifier, userId, userName, realName, emailAddress, Boolean.valueOf(unrestricted) );
 	}
@@ -1032,7 +1032,7 @@ public class ApiUserManagement extends ApiHandler {
 	 * @throws InvalidLocalPartException
 	 * @throws DisallowedOperationException 
 	 */
-	private boolean updateAccount( String sessionIdentifier, long userId, String userName, String realName, String emailAddress, Boolean unrestricted, boolean accountEnabled ) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
+	private boolean updateAccount( String sessionIdentifier, int userId, String userName, String realName, String emailAddress, Boolean unrestricted, boolean accountEnabled ) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
 		//	 0.1 -- Make sure the user has a valid session
 		// Will checked in ACL checks below
 		
@@ -1206,7 +1206,7 @@ public class ApiUserManagement extends ApiHandler {
 	 * @throws InvalidLocalPartException
 	 * @throws DisallowedOperationException 
 	 */
-	private boolean updateAccount( String sessionIdentifier, long userId, String userName, String realName, String emailAddress, Boolean unrestricted ) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
+	private boolean updateAccount( String sessionIdentifier, int userId, String userName, String realName, String emailAddress, Boolean unrestricted ) throws InsufficientPermissionException, GeneralizedException, NoSessionException, UnknownHostException, InputValidationException, InvalidLocalPartException, DisallowedOperationException{
 		//	 0.1 -- Make sure the user has a valid session
 		// Will checked in ACL checks below
 		

@@ -42,7 +42,7 @@ public class SetPasswordCommand extends ConsoleCommand {
 		
 		// 1 -- Set the password
 		UserManagement userManagement = new UserManagement(application);
-		long userId;
+		int userId;
 		
 		//	 1.1 -- Get the user ID
 		try{
