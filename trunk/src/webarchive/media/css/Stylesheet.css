@@ -17,7 +17,7 @@ body{
    	border-color:#7F9DB9;
    	border-width:1px;
    	margin: 2px;
-   	background-image: url(buttonFade.gif); 
+   	background-image: url('/media/img/buttonFade.gif'); 
 }
 
 .buttonDisabled{
@@ -29,7 +29,7 @@ body{
    	border-color:#aaaaaa;
    	border-width:1px;
    	margin: 2px;
-   	background-image: url(buttonFade.gif); 
+   	background-image: url('/media/img/buttonFade.gif'); 
 }
 
 .button:active{
@@ -41,7 +41,7 @@ body{
    	border-width:1px;
    	margin: 2px;
    	border-color:#FF8707;
-   	background-image: url(buttonFade.gif); 
+   	background-image: url('/media/img/buttonFade.gif'); 
 }
 
 textarea, .textInput{
@@ -105,7 +105,7 @@ table.MainTable{
 .Menu{
 	background-color: #e4e5e9;
 	vertical-align: center;
-	background-image: url('BG_Light.png');
+	background-image: url('/media/img/BG_Light.png');
 	background-repeat: repeat;
 	color: #000000;
 	font-size: small;
@@ -133,7 +133,7 @@ table.MainTable{
 
 
 table.HeaderImageTable{
-	background-image: url('BannerBG.png');
+	background-image: url('/media/img/BannerBG.png');
 	background-repeat: repeat-x;
 }
 
@@ -176,7 +176,7 @@ img.MainImage{
 .ContentMain{
 	background-color: #e4e5e9;
 	vertical-align: top;
-	background-image: url('BG.png');
+	background-image: url('/media/img/BG.png');
 	background-repeat: repeat;
 }
 
@@ -246,7 +246,7 @@ Div.TabPanel{
 	border-left: 1px solid #B9C4D0;
 	border-right: 1px solid #B9C4D0;
 	background-color:  #F1F1F1;
-	background-image: url('BG_Light.png');
+	background-image: url('/media/img/BG_Light.png');
 }
 
 
@@ -302,70 +302,70 @@ ul#NavigationTabs a:hover { /* settings for hover effect */
 .StatGreenSmall{
 	border: 1px solid #BBBBBB;
 	background-color: #0baa08;/*#74ff6d;#b8ffba;*/	
-	background-image: url('CrossHatchGreen.png');
+	background-image: url('/media/img/CrossHatchGreen.png');
 	background-repeat: repeat;
 }
 
 .StatRedSmall{
 	border: 1px solid #BBBBBB;
 	background-color: #c93209;/*#ff6d77; /*#ffb8b8;*/
-	background-image: url('CrossHatchRed.png');
+	background-image: url('/media/img/CrossHatchRed.png');
 	background-repeat: repeat;
 }
 
 .StatYellowSmall{
 	border: 1px solid #BBBBBB;
 	background-color: #a0aa08;/*#f9f062; #ffdd66; #feffb8;*/
-	background-image: url('CrossHatchYellow.png');
+	background-image: url('/media/img/CrossHatchYellow.png');
 	background-repeat: repeat;
 }
 
 .StatBlueSmall{
 	border: 1px solid #BBBBBB;
 	background-color: #0817aa;/*#80a4ff;/*#b8ccff;*/
-	background-image: url('CrossHatchBlue.png');
+	background-image: url('/media/img/CrossHatchBlue.png');
 	background-repeat: repeat;
 }
 
 .StatGreen{
 	border: 1px solid #BBBBBB;
 	background-color: #0baa08;/*#74ff6d;#b8ffba;*/	
-	background-image: url('GreenShine.png');
+	background-image: url('/media/img/GreenShine.png');
 	background-repeat: repeat-x;
 }
 
 .StatRed{
 	border: 1px solid #BBBBBB;
 	background-color: #c93209;/*#ff6d77; /*#ffb8b8;*/
-	background-image: url('RedShine.png');
+	background-image: url('/media/img/RedShine.png');
 	background-repeat: repeat-x;
 }
 
 .StatYellow{
 	border: 1px solid #BBBBBB;
 	background-color: #a0aa08;/*#f9f062; #ffdd66; #feffb8;*/
-	background-image: url('YellowShine.png');
+	background-image: url('/media/img/YellowShine.png');
 	background-repeat: repeat-x;
 }
 
 .StatBlue{
 	border: 1px solid #BBBBBB;
 	background-color: #0817aa;/*#80a4ff;/*#b8ccff;*/
-	background-image: url('BlueShine.png');
+	background-image: url('/media/img/BlueShine.png');
 	background-repeat: repeat-x;
 }
 
 .StatGray{
 	border: 1px solid #BBBBBB;
 	background-color: #d2d2d2;/*#b0b0b0;*/
-	background-image: url('GrayShine.png');
+	background-image: url('/media/img/GrayShine.png');
 	background-repeat: repeat-x;
 }
 
 .StatGrayDark{
 	border: 1px solid #BBBBBB;
 	background-color: #d2d2d2;/*#b0b0b0;*/
-	background-image: url('DarkGrayShine.png');
+	background-image: url('/media/img/DarkGrayShine.png');
 	background-repeat: repeat-x;
 }
 
@@ -451,7 +451,7 @@ span.SideNote{
 
 .BackgroundLoading1{
 	background-color: #d0d7de;
-	background-image: url('16_Loading.gif');
+	background-image: url('/media/img/16_Loading.gif');
 	background-position: center center;
 	background-repeat: no-repeat;
 }
@@ -563,6 +563,13 @@ a.NoChangeLink2{
 	font-weight: bold;
 }
 
+/* --- Form --- */
+.FormError{
+    background: url('/media/img/16_Warning.png') no-repeat;
+    padding-left: 20px;
+    font-weight: bold;
+    color: #eb1718;
+}
 
 /* --- Data Table --- */
 table.DataTable {
