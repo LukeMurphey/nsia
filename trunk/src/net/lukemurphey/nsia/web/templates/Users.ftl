@@ -29,7 +29,7 @@
         <#if user.bruteForceLocked><span class="WarnText">(account is locked)</span></#if></td>
         
         <#if user.fullname?? >
-        <td><a href="UserManagement?UserID=${user.userID}">${user.fullname}</td>
+        <td><a href="<@url name="user" args=[user.userID]/>">${user.fullname}</td>
         <#else>
         <td>(Unspecified)</td>
         </#if>
