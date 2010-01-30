@@ -4,12 +4,11 @@
 <#assign content>
     <span class="Text_1"><#if sitegroup??>Edit<#else>New</#if> Site Group</span>
     <#if sitegroup??><br><span class="LightText">${sitegroup.groupName}</span><p></#if>
-    <#if (form_errors??)>Please correct the errors below and try again
-    <div class="Form">
-    <#list form_errors.values() as error>
-        <#if error.getMessage()??><div class="Error">${error.getMessage()}</div></#if>
-    </#list>
-    </div>
+    <#if (form_errors??)>
+    <div class="FormError">Please correct the errors below and try again</div>
+    <ul class="FormErrorList"><#list form_errors.values() as error>
+        <#if error.getMessage()??><li><div class="RedText">${error.getMessage()}</div></li></#if>
+    </#list></ul>
     </#if>
     <form action="<#if !sitegroup??><@url name="sitegroup" args=["New"]/><#else><@url name="sitegroup" args=["Edit", sitegroup.groupId]/></#if>" method="post">
         <#if sitegroup??><input type="hidden" name="SiteGroupID" value="${sitegroup.groupId}"></#if>
@@ -24,7 +23,7 @@
             </tr>
             <tr class="Background3">
                 <td class="alignRight" colspan="2">
-                    <#if !sitegroup??><input class="button" type="Submit" name="Submit" value="Add Site Group"><#else><input class="button" type="Submit" name="Submit" value="Apply Changes"></#if>
+                    <#if !sitegroup??><input class="button" type="Submit" name="Submit" value="Create Site Group"><#else><input class="button" type="Submit" name="Submit" value="Apply Changes"></#if>
                 </td>
             </tr>
         </table>
