@@ -12,7 +12,6 @@ import java.util.Vector;
 public class FieldErrors /*implements Map<String, FieldError>*/{
 	private HashMap<String, FieldError> errors = new HashMap<String, FieldError>();
 
-	//@Override
 	public void clear() {
 		errors.clear();
 	}
