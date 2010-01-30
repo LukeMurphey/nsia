@@ -28,6 +28,7 @@ import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
 import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
+import net.lukemurphey.nsia.web.forms.EmailAddressValidator;
 import net.lukemurphey.nsia.web.forms.Field;
 import net.lukemurphey.nsia.web.forms.FieldError;
 import net.lukemurphey.nsia.web.forms.FieldErrors;
@@ -45,6 +46,12 @@ public class UserEditView extends View {
 		super("User", VIEW_NAME, Pattern.compile("(New)|(Edit)", Pattern.CASE_INSENSITIVE), Pattern.compile("[0-9]*"));
 	}
 
+	public static String getURL( Object... args ) throws URLInvalidException{
+		UserEditView view = new UserEditView();
+		
+		return view.createURL(args);
+	}
+	
 	/**
 	 * This form checks to make sure both passwords are identical.
 	 * @author Luke
@@ -61,8 +68,8 @@ public class UserEditView extends View {
 				return errors;
 			}
 			else{
-				if( request.getParameter("Password") == request.getParameter("Password_Confirmation") ){
-					errors.put(new FieldError("Password_Confirmation", request.getParameter("Password_Confirmation"), "The passwords are not identical"));
+				if( request.getParameter("Password") != null && !request.getParameter("Password").equalsIgnoreCase( request.getParameter("PasswordConfirm") ) ){
+					errors.put(new FieldError("PasswordConfirm", request.getParameter("PasswordConfirm"), "The passwords are not identical"));
 				}
 			}
 			
@@ -76,27 +83,38 @@ public class UserEditView extends View {
 	 * Get a form that can validate the site group.
 	 * @return
 	 */
-	private Form getUserEditForm( ){
+	private Form getUserEditForm( boolean includePasswordFields ){
 		UserEditForm form = new UserEditForm();
 		
-		form.addField( new Field("Name", new PatternValidator(Pattern.compile("[-A-Z0-9a-z_ .]{1,32}", Pattern.CASE_INSENSITIVE))) );
-		form.addField( new Field("Full_Name", new PatternValidator(Pattern.compile("[-A-Z0-9a-z_ ().]{1,128}", Pattern.CASE_INSENSITIVE))) );
-		form.addField( new Field("Email_Address", new PatternValidator(Pattern.compile("[-a-z0-9 _]{1,32}", Pattern.CASE_INSENSITIVE))) );
-		form.addField( new Field("Password", new PasswordValidator()) );
-		form.addField( new Field("Password_Confirmation") );
-		form.addField( new Field("Account_Type") );
+		form.addField( new Field("Username", new PatternValidator(Pattern.compile("[-A-Z0-9a-z_ .]{1,32}", Pattern.CASE_INSENSITIVE), "Username is not valid")) );
+		form.addField( new Field("Fullname", new PatternValidator(Pattern.compile("[-A-Z0-9a-z_ ().]{1,128}", Pattern.CASE_INSENSITIVE), "Full name is not valid")) );
+		form.addField( new Field("EmailAddress", new EmailAddressValidator("Email address is not valid") ) );
+		
+		if( includePasswordFields ){
+			form.addField( new Field("Password", new PasswordValidator()) );
+			form.addField( new Field("PasswordConfirm") );
+		}
+		
+		form.addField( new Field("Unrestricted") );
 		
 		return form;
 	}
 	
-	protected boolean performActions( HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data, UserDescriptor user ) throws ViewFailedException, IOException, URLInvalidException, ViewNotFoundException{
+	private boolean performActions( HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data, UserDescriptor user ) throws ViewFailedException, IOException, URLInvalidException, ViewNotFoundException{
 		try{
 			
 			UserManagement userManager = new UserManagement(Application.getApplication());
 			
 			if( "POST".equalsIgnoreCase( request.getMethod() ) ) {
 				
-				Form form = getUserEditForm();
+				Form form;
+				
+				if( args.length > 0 && args[0].equalsIgnoreCase("Edit") ){
+					form = getUserEditForm(false);
+				}
+				else{
+					form = getUserEditForm(true);
+				}
 				
 				// 1 -- Validate the form
 				FieldErrors errors = form.validate(request);
@@ -110,13 +128,13 @@ public class UserEditView extends View {
 				else{
 					
 					// 3.1 -- Get the field data
-					String name = request.getParameter("Name");
-					String fullname = request.getParameter("Full_Name");
-					EmailAddress emailAddress = EmailAddress.getByAddress( request.getParameter("Email_Address") );
+					String name = request.getParameter("Username");
+					String fullname = request.getParameter("Fullname");
+					EmailAddress emailAddress = EmailAddress.getByAddress( request.getParameter("EmailAddress") );
 					String password = request.getParameter("Password");
 					boolean unrestricted = false;
 					
-					if( request.getParameter("Account_Type") != null ){
+					if( request.getParameter("Unrestricted") != null ){
 						unrestricted = true;
 					}
 					
@@ -229,8 +247,8 @@ public class UserEditView extends View {
 		
 		menu.add( new Link("User Management") );
 		menu.add( new Link("List Users", UsersView.getURL()) );
-		menu.add( new Link("Add New User", "ADDURL") );
-		menu.add( new Link("View Logged in Users", "ADDURL") );
+		menu.add( new Link("Add New User", UserEditView.getURL("New")) );
+		menu.add( new Link("View Logged in Users", UserSessionsView.getURL()) );
 		
 		if( user != null ){
 			if(  user.getAccountStatus() == AccountStatus.DISABLED ){
@@ -242,7 +260,7 @@ public class UserEditView extends View {
 				
 			menu.add( new Link("Delete User", "ADDURL") );
 			menu.add( new Link("Manage Rights", "ADDURL") );
-			menu.add( new Link("Update Password", "ADDURL") );
+			menu.add( new Link("Update Password", UserPasswordUpdateView.getURL(user)) );
 		}
 		
 		menu.add( new Link("Group Management") );
