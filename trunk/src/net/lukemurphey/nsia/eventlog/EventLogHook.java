@@ -26,6 +26,7 @@ import java.sql.SQLException;
  */
 public abstract class EventLogHook implements Serializable{
 
+	private static final long serialVersionUID = -3742174021147412985L;
 	protected int eventlogHookID = -1;
 	
 	public abstract void processEvent( EventLogMessage message ) throws EventLogHookException;
