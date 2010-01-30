@@ -5,7 +5,7 @@
     <span class="Text_1">User Management</span><br />
     <br/>
     
-    <form action="UserManagement" method="post">
+    <form action="<@url name="user_editor" args=["Edit", user.userID]/>" method="get">
         <table>
             <tr class="Background1">
                 <td width="150" class="Text_3">User ID</td>
@@ -51,8 +51,6 @@
             <tr class="Background3">
                 <td colspan="99" align="right">
                     <input class="button" type="submit" value="Edit User">
-                    <input type="hidden" name="UserID" value="${user.userID}">
-                    <input type="hidden" name="Action" value="Edit">
                 </td>
             </tr>
         </table>
