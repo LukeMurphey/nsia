@@ -10,6 +10,7 @@ import net.lukemurphey.nsia.web.views.DefinitionsExportView;
 import net.lukemurphey.nsia.web.views.DefinitionsImportView;
 import net.lukemurphey.nsia.web.views.DefinitionsView;
 import net.lukemurphey.nsia.web.views.DefragmentIndexesView;
+import net.lukemurphey.nsia.web.views.EndUserSessionView;
 import net.lukemurphey.nsia.web.views.EventLogEntryView;
 import net.lukemurphey.nsia.web.views.EventLogView;
 import net.lukemurphey.nsia.web.views.LicenseView;
@@ -33,6 +34,8 @@ import net.lukemurphey.nsia.web.views.UserDisableView;
 import net.lukemurphey.nsia.web.views.UserEditView;
 import net.lukemurphey.nsia.web.views.UserEnableView;
 import net.lukemurphey.nsia.web.views.UserGroupMembershipEditView;
+import net.lukemurphey.nsia.web.views.UserPasswordUpdateView;
+import net.lukemurphey.nsia.web.views.UserSessionsView;
 import net.lukemurphey.nsia.web.views.UserUnlockView;
 import net.lukemurphey.nsia.web.views.UserView;
 import net.lukemurphey.nsia.web.views.UsersView;
@@ -78,11 +81,14 @@ public class StandardViewList {
 				view_list.registerView( new SiteGroupEnableView() );
 				view_list.registerView( new UserEnableView() );
 				view_list.registerView( new UserDisableView() );
+				view_list.registerView( new UserPasswordUpdateView() );
 				view_list.registerView( new UsersView() );
 				view_list.registerView( new UserView() );
 				view_list.registerView( new UserEditView() );
 				view_list.registerView( new UserGroupMembershipEditView() );
 				view_list.registerView( new UserUnlockView() );
+				view_list.registerView( new UserSessionsView() );
+				view_list.registerView( new EndUserSessionView() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
