@@ -75,7 +75,7 @@ public class UsersView extends View {
 		menu.add( new Link("Add Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
 		
 		menu.add( new Link("User Management") );
-		menu.add( new Link("Add New User", "ADDURL") );
+		menu.add( new Link("Add New User", UserEditView.getURL("New")) );
 		menu.add( new Link("View Logged in Users", "ADDURL") );
 		
 		menu.add( new Link("Group Management") );
