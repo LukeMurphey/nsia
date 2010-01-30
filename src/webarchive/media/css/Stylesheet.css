@@ -569,6 +569,14 @@ a.NoChangeLink2{
     padding-left: 20px;
     font-weight: bold;
     color: #eb1718;
+    margin-bottom: 0px;
+    margin-top: 12px;
+}
+
+.FormErrorList{
+	color: #eb1718;
+	font-weight: bold;
+	margin-top: 0px;
 }
 
 /* --- Data Table --- */
