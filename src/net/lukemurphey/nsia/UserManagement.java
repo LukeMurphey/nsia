@@ -634,6 +634,22 @@ public class UserManagement {
 	}
 	
 	/**
+	 * Updates the password for the given user . Note that the passwords will be hashed using the current hash iteration count. If
+	 * the hash count was 4000 the last time the password was set, and the hash count is 10000 now; then the password will be hashed
+	 * 10000 times. Thus, this function may be called to update the user's password to reflect a change in the iteration count. 
+	 * @param user
+	 * @param newPassword
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 * @throws NoSuchAlgorithmException
+	 */
+	public boolean changePassword( UserDescriptor user, String newPassword ) throws NoDatabaseConnectionException, SQLException, InputValidationException, NoSuchAlgorithmException{
+		return changePassword(user.getUserID(), newPassword);
+	}
+	
+	/**
 	 * Updates the password for the user associated with the given user ID. Note that the passwords will be hashed using the current 
 	 * hash iteration count. If the hash count was 4000 the last time the password was set, and the hash count is 10000 now; then the
 	 * password will be hashed 10000 times. Thus, this function may be called to update the user's password to reflect a change in
