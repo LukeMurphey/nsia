@@ -3,7 +3,6 @@
 <#assign content>
 <#if (scanresults?? & scanresults?size = 0 && rules?size = 0) >
     <@getinfodialog message="No rules exist yet. Define a rule set to begin monitoring.<p><a href=\"\">[Create Rule Now]</a>" title="No Rules" />
-    <#-- Html.getDialog("No rules exist yet. Define a rule set to begin monitoring.<p><a href="SelectRuleType?SiteGroupID=" + siteGroupId + "">[Create Rule Now]</a>", "No Rules", "/32_Information", false) ); -->
 <#else>
     <form action="${request.thisURL}">
         <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId}">
