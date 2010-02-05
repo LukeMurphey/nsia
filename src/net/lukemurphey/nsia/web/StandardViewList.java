@@ -13,10 +13,16 @@ import net.lukemurphey.nsia.web.views.DefragmentIndexesView;
 import net.lukemurphey.nsia.web.views.EndUserSessionView;
 import net.lukemurphey.nsia.web.views.EventLogEntryView;
 import net.lukemurphey.nsia.web.views.EventLogView;
+import net.lukemurphey.nsia.web.views.GroupDeleteView;
+import net.lukemurphey.nsia.web.views.GroupDisableView;
+import net.lukemurphey.nsia.web.views.GroupEditView;
+import net.lukemurphey.nsia.web.views.GroupEnableView;
+import net.lukemurphey.nsia.web.views.GroupListView;
 import net.lukemurphey.nsia.web.views.LicenseView;
 import net.lukemurphey.nsia.web.views.LoginView;
 import net.lukemurphey.nsia.web.views.LogoutView;
 import net.lukemurphey.nsia.web.views.MainDashboardView;
+import net.lukemurphey.nsia.web.views.RuleEditView;
 import net.lukemurphey.nsia.web.views.ShutdownView;
 import net.lukemurphey.nsia.web.views.ScannerStartView;
 import net.lukemurphey.nsia.web.views.ScannerStopView;
@@ -89,6 +95,12 @@ public class StandardViewList {
 				view_list.registerView( new UserUnlockView() );
 				view_list.registerView( new UserSessionsView() );
 				view_list.registerView( new EndUserSessionView() );
+				view_list.registerView( new GroupEditView() );
+				view_list.registerView( new GroupListView() );
+				view_list.registerView( new GroupDisableView() );
+				view_list.registerView( new GroupEnableView() );
+				view_list.registerView( new GroupDeleteView() );
+				view_list.registerView( new RuleEditView() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
