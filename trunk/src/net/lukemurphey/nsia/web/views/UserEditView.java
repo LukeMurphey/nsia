@@ -80,7 +80,7 @@ public class UserEditView extends View {
 	}
 	
 	/**
-	 * Get a form that can validate the site group.
+	 * Get a form that can validate the user information.
 	 * @return
 	 */
 	private Form getUserEditForm( boolean includePasswordFields ){
@@ -242,7 +242,7 @@ public class UserEditView extends View {
 		// 3 -- Get the menu
 		Vector<Link> menu = new Vector<Link>();
 		menu.add( new Link("Site Groups") );
-		menu.add( new Link("View List", SiteGroupView.getURL() ) );
+		menu.add( new Link("View List", MainDashboardView.getURL() ) );
 		menu.add( new Link("Add Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
 		
 		menu.add( new Link("User Management") );
@@ -290,7 +290,6 @@ public class UserEditView extends View {
 		TemplateLoader.renderToResponse("UserEdit.ftl", data, response);
 		
 		return true;
-		
 	}
 
 }
