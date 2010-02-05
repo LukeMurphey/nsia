@@ -32,6 +32,12 @@ public class MainDashboardView extends View {
 		super("Dashboard", VIEW_NAME);
 	}
 	
+	public static String getURL() throws URLInvalidException{
+		MainDashboardView view = new MainDashboardView();
+		
+		return view.createURL();
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		
