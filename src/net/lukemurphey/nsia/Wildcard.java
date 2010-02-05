@@ -26,6 +26,10 @@ public class Wildcard {
 		return pattern;
 	}
 	
+	public String toString(){
+		return wildcard;
+	}
+	
     private static Pattern compile( String wildcard, boolean caseInsensitive ){
         StringBuffer s = new StringBuffer(wildcard.length());
         s.append('^');
