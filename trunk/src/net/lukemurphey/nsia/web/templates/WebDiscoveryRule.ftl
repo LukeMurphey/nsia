@@ -18,17 +18,18 @@
         }
     </script>
     <form name="editorform" id="editorform" onSubmit="return submitEditorForm(this.form)" action="HttpDiscoveryRule" method="post">
-        <input type="hidden" name="StartAddresses2" value="${startAddresses}">
+        <input type="hidden" name="StartAddresses2" value="<#if request.getParameter("StartAddresses")??>${request.getParameter("StartAddresses")}<#elseif rule??><#list rule.seedUrls as url>${url}&nbsp;</#list></#if>">
         <table class="DataTable">
             <#-- 3 -- Output scan frequency -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("ScanFrequencyValue"))>ValidationFailed<#else>Background1</#if>">
                 <td class="Text_3">Scan Frequency</td>
-                <td><input class="textInput" type="text" name="ScanFrequencyValue" value="<#if request.getParameter("ScanFrequencyUnits")??>${request.getParameter("ScanFrequencyUnits")}<#elseif rule??>${rule.scanFrequency}</#if>" />&nbsp;&nbsp;
+                <td><input class="textInput" type="text" name="ScanFrequencyValue" value="<#if request.getParameter("ScanFrequencyUnits")??>${request.getParameter("ScanFrequencyUnits")}<#elseif rule??>${rule.scanFrequency?c}</#if>" />&nbsp;&nbsp;
+                    <#assign scanFrequencyUnits><#if request.getParameter("ScanFrequencyUnits")??>${request.getParameter("ScanFrequencyUnits")}<#elseif rule??>${rule.scanFrequency?c}</#if></#assign>
                     <select name="ScanFrequencyUnits">
-                        <option value="86400"<#if scanFrequencyUnits == 84600> selected</#if>>Days</option>
-                        <option value="3600"<#if scanFrequencyUnits == 3600> selected</#if>>Hours</option>
-                        <option value="60"<#if scanFrequencyUnits == 60> selected</#if>>Minutes</option>
-                        <option value="1"<#if scanFrequencyUnits == 1> selected</#if>>Seconds</option>
+                        <option value="86400"<#if scanFrequencyUnits == "84600"> selected</#if>>Days</option>
+                        <option value="3600"<#if scanFrequencyUnits == "3600"> selected</#if>>Hours</option>
+                        <option value="60"<#if scanFrequencyUnits == "60"> selected</#if>>Minutes</option>
+                        <option value="1"<#if scanFrequencyUnits == "1"> selected</#if>>Seconds</option>
                     </select>
                 </td>
             </tr>
@@ -54,7 +55,7 @@
             </tr>
             <tr class="lastRow">
                 <td class="alignRight" colspan="99">
-                <#if scanrule >
+                <#if rule?? >
                     <input class="button" type="submit" value="Add" name="Action">&nbsp;&nbsp;
                     <input type="hidden" name="SiteGroupID" value="${siteGroupID}">
                 <#else>
