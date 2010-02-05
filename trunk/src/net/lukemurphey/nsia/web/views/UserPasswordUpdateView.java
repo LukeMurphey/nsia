@@ -201,7 +201,7 @@ public class UserPasswordUpdateView extends View {
 		// 3 -- Get the menu
 		Vector<Link> menu = new Vector<Link>();
 		menu.add( new Link("Site Groups") );
-		menu.add( new Link("View List", SiteGroupView.getURL() ) );
+		menu.add( new Link("View List", MainDashboardView.getURL() ) );
 		menu.add( new Link("Add Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
 		
 		menu.add( new Link("User Management") );
