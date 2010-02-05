@@ -83,6 +83,11 @@
          <servlet-name>WebConsole</servlet-name>
          <url-pattern>/Group/*</url-pattern>
     </servlet-mapping>
+	
+	<servlet-mapping>
+         <servlet-name>WebConsole</servlet-name>
+         <url-pattern>/Rule/*</url-pattern>
+    </servlet-mapping>
 
 
     <!-- Below is servlet information for the old web console -->
