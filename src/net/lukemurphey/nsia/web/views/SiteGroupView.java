@@ -63,10 +63,10 @@ public class SiteGroupView extends View {
 		super("SiteGroup", VIEW_NAME, Pattern.compile("[0-9]+", Pattern.CASE_INSENSITIVE));
 	}
 
-	public static String getURL() throws URLInvalidException{
+	public static String getURL( int siteGroupID ) throws URLInvalidException{
 		SiteGroupView view = new SiteGroupView();
 		
-		return view.createURL();
+		return view.createURL(siteGroupID);
 	}
 	
 	public class RuleStatusDescriptor{
