@@ -1,7 +1,12 @@
-<#assign content>
 <#include "GetURLFunction.ftl">
 <#include "GetDialog.ftl">
-
+<#assign content>
+<#if (users?? & users?size = 0) >
+    <#assign message>
+        No users exist yet. <p><a href="<@url name="user_editor" args=["New"] />">[Create User Now]</a>
+    </#assign>
+    <@getinfodialog message=message title="No Users Exist Yet" />
+<#else>
 <span class="Text_1">Users</span><br>&nbsp;
 <table>
     <tr class="Background0">
@@ -61,5 +66,6 @@
     </tr>
     </#list>
 </table>
+</#if>
 </#assign>
 <#include "BaseWithNav.ftl" />
