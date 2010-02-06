@@ -39,8 +39,8 @@ public class NetworkPortRange{
 	private static final Pattern REGEX_RANGE = Pattern.compile("([0-9]+)[ ]*\\-[ ]*([0-9]+)");
 	private static final Pattern REGEX_PORT = Pattern.compile("[0-9]+");
 	
-	private static final Pattern REGEX_RANGE_PROTOCOL = Pattern.compile("(UDP|TCP)\\\\([0-9]+)[ ]*\\-[ ]*([0-9]+)");
-	private static final Pattern REGEX_PORT_PROTOCOL = Pattern.compile("(UDP|TCP)\\\\([0-9]+)");
+	private static final Pattern REGEX_RANGE_PROTOCOL = Pattern.compile("(UDP|TCP)(\\\\|/)([0-9]+)[ ]*\\-[ ]*([0-9]+)");
+	private static final Pattern REGEX_PORT_PROTOCOL = Pattern.compile("(UDP|TCP)(\\\\|/)([0-9]+)");
 	
 	private int startPort;
 	private int endPort;
@@ -207,8 +207,8 @@ public class NetworkPortRange{
 						else
 							protocol = Protocol.TCP;
 						
-						int start = Integer.parseInt( range.group(2) );
-						int end = Integer.parseInt( range.group(3) );
+						int start = Integer.parseInt( range.group(3) );
+						int end = Integer.parseInt( range.group(4) );
 						
 						portsListArray[entries] = new NetworkPortRange(start, end, protocol, state);
 					}
@@ -218,7 +218,7 @@ public class NetworkPortRange{
 						else
 							protocol = Protocol.TCP;
 						
-						portsListArray[entries] = new NetworkPortRange(Integer.parseInt(port.group(2)), protocol, state);
+						portsListArray[entries] = new NetworkPortRange(Integer.parseInt(port.group(3)), protocol, state);
 					}
 					else{
 						throw new LineParseException("The port number is invalid", lineNumber);
