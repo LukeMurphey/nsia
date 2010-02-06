@@ -32,8 +32,7 @@
     <#else>
     <tr>
         <td>&nbsp;</td>
-        <td height="34" valign="top">&nbsp;</td>
-        <td><img alt="Working..." src="/media/img/ProgressBarAnimation"></td>
+        <td height="34" valign="top"><img alt="Working..." src="/media/img/ProgressBarAnimation"></td>
     </tr>
     </#if>
     </#if>
