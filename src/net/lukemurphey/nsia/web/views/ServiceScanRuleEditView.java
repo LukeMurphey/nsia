@@ -72,11 +72,11 @@ public class ServiceScanRuleEditView extends View {
 
 			// Get the ports expected open
 			String portsExpectedOpenStr = null;
-			if( request.getParameter("PortsExpectedOpen2") != null ){
-				portsExpectedOpenStr = request.getParameter("PortsExpectedOpen2");
-			}
-			else if( request.getParameter("PortsExpectedOpen") != null ){
+			if( request.getParameter("PortsExpectedOpen") != null ){
 				portsExpectedOpenStr = request.getParameter("PortsExpectedOpen");
+			}
+			else if( request.getParameter("PortsExpectedOpen2") != null ){
+				portsExpectedOpenStr = request.getParameter("PortsExpectedOpen2");
 			}
 			
 			NetworkPortRange[] portsExpectedOpen;
@@ -130,6 +130,7 @@ public class ServiceScanRuleEditView extends View {
 
 			if( rule == null ){
 				rule = new ServiceScanRule(Application.getApplication(), address, portsExpectedOpen, portsToScan );
+				rule.setScanFrequency(scanFrequency);
 				isNewRule = true;
 			}
 			else{
@@ -182,7 +183,7 @@ public class ServiceScanRuleEditView extends View {
 		if( data.get("rule") != null ){
 			rule = (ServiceScanRule)data.get("rule");
 		}
-
+		
 		if( request.getMethod().equalsIgnoreCase("POST") ){
 			viewHandled = performActions(request, response, context, args, data, rule);
 		}
