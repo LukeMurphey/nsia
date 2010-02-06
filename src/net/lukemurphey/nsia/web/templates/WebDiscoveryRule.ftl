@@ -1,7 +1,7 @@
 <#include "GetURLFunction.ftl">
 <#include "GetDialog.ftl">
 <#include "Forms.ftl">
-
+<#include "Shortcuts.ftl">
 <#assign content>
     <div><span class="Text_1">HTTP Content Auto-Discovery Rule</span>
     <br><span class="LightText">Automatically crawls the website in order to identify malicious content</span>
@@ -17,26 +17,25 @@
             return true;
         }
     </script>
-    <form name="editorform" id="editorform" onSubmit="return submitEditorForm(this.form)" action="HttpDiscoveryRule" method="post">
-        <input type="hidden" name="StartAddresses2" value="<#if request.getParameter("StartAddresses")??>${request.getParameter("StartAddresses")}<#elseif rule??><#list rule.seedUrls as url>${url}&nbsp;</#list></#if>">
+    <form name="editorform" id="editorform" onSubmit="return submitEditorForm(this.form)" action="<#if rule??><@url name="rule_editor" args=["Edit", rule.ruleId]/><#else><@url name="rule_editor" args=["New"]/></#if>" method="post">
+        <input type="hidden" name="StartAddresses2" value="<#if request.getParameter("StartAddresses")??>${request.getParameter("StartAddresses")}<#elseif rule??><#list rule.seedUrls as url>${url}<@endline /></#list></#if>">
         <table class="DataTable">
             <#-- 3 -- Output scan frequency -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("ScanFrequencyValue"))>ValidationFailed<#else>Background1</#if>">
                 <td class="Text_3">Scan Frequency</td>
-                <td><input class="textInput" type="text" name="ScanFrequencyValue" value="<#if request.getParameter("ScanFrequencyUnits")??>${request.getParameter("ScanFrequencyUnits")}<#elseif rule??>${rule.scanFrequency?c}</#if>" />&nbsp;&nbsp;
-                    <#assign scanFrequencyUnits><#if request.getParameter("ScanFrequencyUnits")??>${request.getParameter("ScanFrequencyUnits")}<#elseif rule??>${rule.scanFrequency?c}</#if></#assign>
+                <td><input class="textInput" type="text" name="ScanFrequencyValue" value="${scanFrequencyValue}" />&nbsp;&nbsp;
                     <select name="ScanFrequencyUnits">
-                        <option value="86400"<#if scanFrequencyUnits == "84600"> selected</#if>>Days</option>
-                        <option value="3600"<#if scanFrequencyUnits == "3600"> selected</#if>>Hours</option>
-                        <option value="60"<#if scanFrequencyUnits == "60"> selected</#if>>Minutes</option>
-                        <option value="1"<#if scanFrequencyUnits == "1"> selected</#if>>Seconds</option>
+                        <option value="86400"<#if scanFrequencyUnits == 84600> selected</#if>>Days</option>
+                        <option value="3600"<#if scanFrequencyUnits == 3600> selected</#if>>Hours</option>
+                        <option value="60"<#if scanFrequencyUnits == 60> selected</#if>>Minutes</option>
+                        <option value="1"<#if scanFrequencyUnits == 1> selected</#if>>Seconds</option>
                     </select>
                 </td>
             </tr>
             <#-- 4 -- Output the start addresses -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("StartAddresses"))>ValidationFailed<#else>Background1</#if>">
                 <td style="vertical-align: top;"><div style="margin-top: 5px;" class="TitleText">Addresses to Scan:</div></td>
-                <td><textarea id="cp1" class="codepress urls autocomplete-off" wrap="virtual" rows="11" cols="48" name="StartAddresses"><#if request.getParameter("StartAddresses")??>${request.getParameter("StartAddresses")}<#elseif rule??><#list rule.seedUrls as url>${url}&nbsp;</#list></#if></textarea></td>
+                <td><textarea id="cp1" class="codepress urls autocomplete-off" wrap="virtual" rows="11" cols="48" name="StartAddresses"><#if request.getParameter("StartAddresses")??>${request.getParameter("StartAddresses")}<#elseif rule??><#list rule.seedUrls as url>${url?trim}<@endline /></#list></#if></textarea></td>
             </tr>
             <#-- 5 -- Output the domain limiter -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("Domain"))>ValidationFailed<#else>Background1</#if>">
@@ -55,11 +54,12 @@
             </tr>
             <tr class="lastRow">
                 <td class="alignRight" colspan="99">
-                <#if rule?? >
-                    <input class="button" type="submit" value="Add" name="Action">&nbsp;&nbsp;
+                <#if !rule?? >
+                    <input class="button" type="submit" value="Create Rule" name="Action">&nbsp;&nbsp;
                     <input type="hidden" name="SiteGroupID" value="${siteGroupID}">
+                    <input type="hidden" name="RuleType" value="${request.getParameter("RuleType")}">
                 <#else>
-                    <input class="button" type="submit" value="Edit" name="Action">&nbsp;&nbsp;
+                    <input class="button" type="submit" value="Apply Changes" name="Action">&nbsp;&nbsp;
                     <input type="hidden" name="RuleID" value="${rule.ruleId}">
                 </#if>
                     <input class="button" type="submit" value="Cancel" name="Action">
