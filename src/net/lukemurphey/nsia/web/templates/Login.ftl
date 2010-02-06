@@ -1,6 +1,7 @@
 <#assign content>
     <p>&nbsp;
     <form action="${request.thisURL}" onsubmit="showHourglass('Authenticating...')" method="post">
+        <input type="hidden" name="ForwardTo" value="<#if request.getParameter("ForwardTo")??>${request.getParameter("ForwardTo")}<#else>${request.thisURL}</#if>" />
         <table align="center">
             <tr>
                 <td colspan="99">&nbsp;</td>
