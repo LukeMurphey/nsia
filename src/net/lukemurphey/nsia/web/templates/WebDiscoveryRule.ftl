@@ -8,8 +8,7 @@
     <#if (form_errors??)>
     <@getFormErrors form_errors=form_errors />
     </#if>
-    <script src="/media/codepress/codepress.js" type="text/javascript"></script>
-    
+    <script src="/media/misc/codepress/codepress.js" type="text/javascript"></script>
     <script type="text/javascript">
         function submitEditorForm(editorform){
             document.editorform.StartAddresses2.value = cp1.getCode();
