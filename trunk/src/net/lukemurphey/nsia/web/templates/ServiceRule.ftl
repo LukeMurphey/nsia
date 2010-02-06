@@ -1,15 +1,14 @@
 <#include "GetURLFunction.ftl">
 <#include "GetDialog.ftl">
 <#include "Forms.ftl">
-
+<#include "Shortcuts.ftl">
 <#assign content>
     <div><span class="Text_1">Service Scan Rule</span>
     <br><span class="LightText">Monitors a server to identify when new ports are opened or when existing ports are closed</span>
     <#if (form_errors??)>
     <@getFormErrors form_errors=form_errors />
     </#if>
-    <script src="/media/codepress/codepress.js" type="text/javascript"></script>
-    
+    <script src="/media/misc/codepress/codepress.js" type="text/javascript"></script>
     <script type="text/javascript">
         function submitEditorForm(editorform){
             document.editorform.PortsExpectedOpen2.value = cp2.getCode();
@@ -41,14 +40,14 @@
             <#-- 3 -- Output ports to scan -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("PortsToScan"))>ValidationFailed<#else>Background1</#if>">
                 <td style="vertical-align: top;" class="Text_3">Ports to Scan</td>
-                <td><textarea id="cp1" class="codepress ports" wrap="virtual" rows="6" cols="48" name="PortsToScan"><#if request.getParameter("PortsToScan")??>${request.getParameter("PortsToScan")}<#elseif rule??><#list rule.portsExpectedOpen as port>${port}<@endline /></#list></#if></textarea>
-                    <input type="hidden" name="PortsToScan2" value="<#if request.getParameter("PortsToScan2")??>${request.getParameter("PortsToScan2")}<#elseif rule??><#list rule.portsExpectedOpen as port>${port}<@endline /></#list></#if>"></td>
+                <td><textarea id="cp1" class="codepress ports" wrap="virtual" rows="6" cols="48" name="PortsToScan"><#if request.getParameter("PortsToScan")??>${request.getParameter("PortsToScan")}<#elseif rule??><#list rule.portsToScan as port>${port}<@endline /></#list></#if></textarea>
+                    <input type="hidden" name="PortsToScan2" value="<#if request.getParameter("PortsToScan2")??>${request.getParameter("PortsToScan2")}<#elseif rule??><#list rule.portsToScan as port>${port}<@endline /></#list></#if>"></td>
             </tr>
             <#-- 4 -- Output ports expected open -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("PortsExpectedOpen"))>ValidationFailed<#else>Background1</#if>">
                 <td style="vertical-align: top;" class="Text_3">Ports Expected Open</td>
-                <td><textarea id="cp2" class="codepress ports" wrap="virtual" rows="6" cols="48" name="PortsExpectedOpen"><#if request.getParameter("PortsExpectedOpen")??>${request.getParameter("PortsExpectedOpen")}<#elseif rule??><#list rule.portsToScan as port>${port}<@endline /></#list></#if></textarea>
-                    <input type="hidden" name="PortsExpectedOpen2" value="<#if request.getParameter("PortsExpectedOpen2")??>${request.getParameter("PortsExpectedOpen2")}<#elseif rule??><#list rule.portsToScan as port>${port}<@endline /></#list></#if>"></td>
+                <td><textarea id="cp2" class="codepress ports" wrap="virtual" rows="6" cols="48" name="PortsExpectedOpen"><#if request.getParameter("PortsExpectedOpen")??>${request.getParameter("PortsExpectedOpen")}<#elseif rule??><#list rule.portsExpectedOpen as port>${port}<@endline /></#list></#if></textarea>
+                    <input type="hidden" name="PortsExpectedOpen2" value="<#if request.getParameter("PortsExpectedOpen2")??>${request.getParameter("PortsExpectedOpen2")}<#elseif rule??><#list rule.portsExpectedOpen as port>${port}<@endline /></#list></#if>"></td>
             </tr>
             <tr class="lastRow">
                 <td class="alignRight" colspan="99">
