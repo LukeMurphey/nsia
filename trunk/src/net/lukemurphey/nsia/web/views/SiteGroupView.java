@@ -69,6 +69,12 @@ public class SiteGroupView extends View {
 		return view.createURL(siteGroupID);
 	}
 	
+	public static String getURL( long siteGroupID ) throws URLInvalidException{
+		SiteGroupView view = new SiteGroupView();
+		
+		return view.createURL(siteGroupID);
+	}
+	
 	public class RuleStatusDescriptor{
 		private RuleState status;
 		private int deviations;
