@@ -73,7 +73,7 @@ public class HtmlServiceScanRule extends HtmlContentProvider {
 				
 				scanRule = (ServiceScanRule)scanData.getScanRule(requestDescriptor.sessionIdentifier, scanRuleId);
 				
-				portsToScan = NetworkPortRange.convertToString( scanRule.getPortToScan() );
+				portsToScan = NetworkPortRange.convertToString( scanRule.getPortsToScan() );
 				portsExpectedOpen = NetworkPortRange.convertToString( scanRule.getPortsExpectedOpen() );
 				serverAddress = scanRule.getServerAddress();
 			}

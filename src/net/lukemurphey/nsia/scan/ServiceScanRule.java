@@ -250,7 +250,7 @@ public class ServiceScanRule extends ScanRule implements WorkerThread {
 		
 	}
 
-	public NetworkPortRange[] getPortToScan(){
+	public NetworkPortRange[] getPortsToScan(){
 		NetworkPortRange[] range = new NetworkPortRange[portsToBeScanned.length];
 		
 		System.arraycopy(portsToBeScanned, 0, range, 0, portsToBeScanned.length);
