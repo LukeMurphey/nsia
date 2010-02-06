@@ -115,7 +115,13 @@ public class LoginView extends View {
 				
 				response.addCookie(cookie);
 				try {
-					response.sendRedirect("/");
+					String forwardTo = request.getParameter("ForwardTo");
+					if( forwardTo != null ){
+						response.sendRedirect(forwardTo);
+					}
+					else{
+						response.sendRedirect("/");
+					}
 				} catch (IOException e) {
 					throw new ViewFailedException(e);
 				}
