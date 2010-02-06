@@ -160,7 +160,11 @@ public class RuleEditView extends View {
 		}
 		else if( (scanFrequencyUnits == 0 || scanFrequencyValue == 0) && rule != null){
 			int frequency = rule.getScanFrequency();
-			if( ( frequency % 86400) == 0){ //Days
+			if( frequency == 0){
+				scanFrequencyUnits = 86400;
+				scanFrequencyValue = 1;
+			}
+			else if( ( frequency % 86400) == 0){ //Days
 				scanFrequencyUnits = 86400;
 				scanFrequencyValue = frequency / 86400;
 			}
@@ -213,6 +217,11 @@ public class RuleEditView extends View {
 
 		//Get the dashboard headers
 		Shortcuts.addDashboardHeaders(request, response, data);
+		
+		if( "Cancel".equalsIgnoreCase( request.getParameter("Action") ) ){
+			response.sendRedirect( SiteGroupView.getURL(siteGroupID) );
+			return true;
+		}
 		
 		// 5 -- Get the view associated with the rule
 		String ruleType = HttpSeekingScanRule.RULE_TYPE;
