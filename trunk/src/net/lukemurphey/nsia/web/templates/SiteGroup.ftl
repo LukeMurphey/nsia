@@ -58,8 +58,8 @@
                 <td class="Background1">
                     <table>
                         <tr>
-                            <td><a href="ScanRule?Action=Edit&RuleID=${rule.ID}"><img class="imagebutton" alt="configure" src="/16_Configure"></a></td>
-                            <td><a href="ScanRule?RuleID=${rule.ID}">Details</a></td>
+                            <td><a href="<@url name="rule_editor" args=["Edit", rule.ID] />"><img class="imagebutton" alt="configure" src="/16_Configure"></a></td>
+                            <td><a href="<@url name="rule_editor" args=["Edit", rule.ID] />">Details</a></td>
                         </tr>
                     </table>
                 </td>
@@ -85,6 +85,14 @@
                  </td>
              </tr>
            </tbody>
+        </table>
+        
+        <table>
+            <tr>
+                <td width="4"></td>
+                <td><img src="/media/img/16_Add"></td>
+                <td><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroup.groupId}">[Add a new rule]</a></td>
+            </tr>
         </table>
 </#if>
 </#assign>
