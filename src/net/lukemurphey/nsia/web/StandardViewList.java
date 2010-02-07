@@ -23,6 +23,7 @@ import net.lukemurphey.nsia.web.views.LoginView;
 import net.lukemurphey.nsia.web.views.LogoutView;
 import net.lukemurphey.nsia.web.views.MainDashboardView;
 import net.lukemurphey.nsia.web.views.RuleEditView;
+import net.lukemurphey.nsia.web.views.ScanResultHistoryView;
 import net.lukemurphey.nsia.web.views.ShutdownView;
 import net.lukemurphey.nsia.web.views.ScannerStartView;
 import net.lukemurphey.nsia.web.views.ScannerStopView;
@@ -101,6 +102,7 @@ public class StandardViewList {
 				view_list.registerView( new GroupEnableView() );
 				view_list.registerView( new GroupDeleteView() );
 				view_list.registerView( new RuleEditView() );
+				view_list.registerView( new ScanResultHistoryView() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
