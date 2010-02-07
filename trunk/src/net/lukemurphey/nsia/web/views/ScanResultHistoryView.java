@@ -45,6 +45,12 @@ public class ScanResultHistoryView extends View {
 		return view.createURL(ruleID);
 	}
 	
+	public static String getURL( long ruleID ) throws URLInvalidException{
+		ScanResultHistoryView view = new ScanResultHistoryView();
+		
+		return view.createURL(ruleID);
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request,
 			HttpServletResponse response, RequestContext context,
