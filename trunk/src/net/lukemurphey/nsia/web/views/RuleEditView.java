@@ -42,13 +42,13 @@ public class RuleEditView extends View {
 	public static String getURL( int ruleID ) throws URLInvalidException{
 		RuleEditView view = new RuleEditView();
 		
-		return view.createURL(ruleID);
+		return view.createURL("Edit", ruleID);
 	}
 	
 	public static String getURL( long ruleID ) throws URLInvalidException{
 		RuleEditView view = new RuleEditView();
 		
-		return view.createURL(ruleID);
+		return view.createURL("Edit", ruleID);
 	}
 	
 	@Override
@@ -194,7 +194,7 @@ public class RuleEditView extends View {
 		menu.add( new Link("Site Groups") );
 		//menu.add( new Link("Add Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
 		menu.add( new Link("Edit", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "Edit", siteGroup.getGroupId())) );
-		menu.add( new Link("Delete", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
+		menu.add( new Link("New", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
 		menu.add( new Link("Scan Now", "ADDURL") );
 		menu.add( new Link("View Exceptions", "ADDURL") );
 
