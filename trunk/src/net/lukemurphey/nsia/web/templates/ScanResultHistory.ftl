@@ -45,8 +45,8 @@
                     <td class="Background1">
                         <table>
                             <tr>
-                                <td><a href="ScanRule?Action=Edit&RuleID=${result.scanResultID?c}"><img class="imagebutton" alt="configure" src="/media/img/16_magnifier"></a></td>
-                                <td><a href="ScanResult?ResultID=${result.scanResultID?c}">View Details</a></td>
+                                <td><a href="<@url name="scan_result" args=[result.scanResultID] />"><img class="imagebutton" alt="configure" src="/media/img/16_magnifier"></a></td>
+                                <td><a href="<@url name="scan_result" args=[result.scanResultID] />">View Details</a></td>
                             </tr>
                         </table>
                     </td>
