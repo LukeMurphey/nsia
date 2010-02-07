@@ -67,8 +67,8 @@
                 <td class="Background1">
                     <table>
                         <tr>
-                            <td><a href="ScanResult?RuleID=${rule.ID}"><img class="imagebutton" alt="scan results" src="/16_BarChart"></a></td>
-                            <td><a href="ScanResult?RuleID=${rule.ID}">Scan History</a></td>
+                            <td><a href="<@url name="scan_result_history" args=[rule.ID]/>"><img class="imagebutton" alt="scan results" src="/16_BarChart"></a></td>
+                            <td><a href="<@url name="scan_result_history" args=[rule.ID]/>">Scan History</a></td>
                         </tr>
                     </table>
                 </td>

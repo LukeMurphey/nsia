@@ -88,6 +88,11 @@
          <servlet-name>WebConsole</servlet-name>
          <url-pattern>/Rule/*</url-pattern>
     </servlet-mapping>
+    
+    <servlet-mapping>
+         <servlet-name>WebConsole</servlet-name>
+         <url-pattern>/ScanResult/*</url-pattern>
+    </servlet-mapping>
 
 
     <!-- Below is servlet information for the old web console -->
@@ -158,7 +163,7 @@
 	 
 	 <servlet-mapping>
 		 <servlet-name>Console</servlet-name>
-		 <url-pattern>/ScanResult/*</url-pattern>
+		 <url-pattern>/OLD/ScanResult/*</url-pattern>
 	 </servlet-mapping>
 
 	 <servlet-mapping>
