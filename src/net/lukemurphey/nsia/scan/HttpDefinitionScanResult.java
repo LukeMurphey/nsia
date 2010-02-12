@@ -636,6 +636,27 @@ public class HttpDefinitionScanResult extends ScanResult {
 		}
 	}
 	
+	/**
+	 * Get the maximum severity of the definition matches.
+	 * @return
+	 */
+	public Severity maxSeverity(){
+		Severity severity = Severity.LOW;
+		DefinitionMatch[] matches = getDefinitionMatches();
+		
+		for( int c = 0; c < matches.length; c++ ){
+			if( matches[c].getSeverity() == Severity.HIGH){
+				return Severity.HIGH;
+			}
+			
+			else if( matches[c].getSeverity() == Severity.MEDIUM){
+				severity = Severity.MEDIUM;
+			}
+		}
+		
+		return severity;
+	}
+	
 	protected void loadFromScanResult( ResultSet findingResult, Application application ) throws SQLException, NoDatabaseConnectionException, ScanResultLoadFailureException, MalformedURLException{
 		String url = findingResult.getString("URL");
 		
