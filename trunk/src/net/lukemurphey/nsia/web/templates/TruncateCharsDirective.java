@@ -34,7 +34,7 @@ public class TruncateCharsDirective implements TemplateDirectiveModel{
             TemplateModel paramValue = ent.getValue();
             
             if (paramName.equals(PARAM_STRING_LENGTH)) {
-            	if ( (paramValue instanceof TemplateNumberModel) == false) {
+            	if ( (paramValue instanceof TemplateNumberModel) == true) {
             		string_length = ((TemplateNumberModel)paramValue).getAsNumber().intValue();
             	}
             }
