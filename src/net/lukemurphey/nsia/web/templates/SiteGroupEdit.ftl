@@ -1,14 +1,12 @@
 <#include "GetURLFunction.ftl">
 <#include "GetDialog.ftl">
+<#include "Forms.ftl">
 
 <#assign content>
     <span class="Text_1"><#if sitegroup??>Edit<#else>New</#if> Site Group</span>
     <#if sitegroup??><br><span class="LightText">${sitegroup.groupName}</span><p></#if>
     <#if (form_errors??)>
-    <div class="FormError">Please correct the errors below and try again</div>
-    <ul class="FormErrorList"><#list form_errors.values() as error>
-        <#if error.getMessage()??><li><div class="RedText">${error.getMessage()}</div></li></#if>
-    </#list></ul>
+    <@getFormErrors form_errors=form_errors />
     </#if>
     <form action="<#if !sitegroup??><@url name="sitegroup" args=["New"]/><#else><@url name="sitegroup" args=["Edit", sitegroup.groupId]/></#if>" method="post">
         <#if sitegroup??><input type="hidden" name="SiteGroupID" value="${sitegroup.groupId}"></#if>
