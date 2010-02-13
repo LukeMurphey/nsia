@@ -124,7 +124,8 @@ public class ScanResultView extends View {
 
 			// 6 -- Render the view
 			if( rule.getRuleType().equalsIgnoreCase(HttpSeekingScanRule.RULE_TYPE) ){
-				
+				WebDiscoveryScanResultView view = new WebDiscoveryScanResultView();
+				return view.process(request, response, context, args, data);
 			}
 			else if( rule.getRuleType().equalsIgnoreCase(ServiceScanRule.RULE_TYPE) ){
 				ServiceScanResultView view = new ServiceScanResultView();
@@ -134,7 +135,7 @@ public class ScanResultView extends View {
 				throw new ViewFailedException("The view type \"" + rule.getRuleType() + "\" is not recognized");
 			}
 			
-			return true;
+			//return true;
 		}
 		catch(ScanResultLoadFailureException e){
 			Dialog.getDialog(response, context, data, "A scan result with the given ID was not found", "Scan Result Not Found", DialogType.WARNING);
