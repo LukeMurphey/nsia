@@ -640,7 +640,7 @@ public class HttpDefinitionScanResult extends ScanResult {
 	 * Get the maximum severity of the definition matches.
 	 * @return
 	 */
-	public Severity maxSeverity(){
+	public Severity getMaxSeverity(){
 		Severity severity = Severity.LOW;
 		DefinitionMatch[] matches = getDefinitionMatches();
 		
