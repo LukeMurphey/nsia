@@ -1,5 +1,8 @@
 package net.lukemurphey.nsia.eventlog;
 
+import java.util.Vector;
+
+import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
 import net.lukemurphey.nsia.response.Action;
 import net.lukemurphey.nsia.response.ActionFailedException;
@@ -54,4 +57,27 @@ public class SystemStatusEventLogHook extends EventLogHook {
 		return action;
 	}
 
+	/**
+	 * Get the system status event log hooks.
+	 * @param sessionIdentifier
+	 * @return
+	 */
+	public static SystemStatusEventLogHook[] getSystemStatusEventLogHooks(Application app){
+		
+		// 1 -- Get the list of hooks
+		EventLogHook[] allHooks = app.getEventLog().getHooks();
+		
+		Vector<SystemStatusEventLogHook> ruleHooks = new Vector<SystemStatusEventLogHook>();
+		
+		for(int c = 0; c < allHooks.length; c++){
+			if( allHooks[c] instanceof SystemStatusEventLogHook ){
+				ruleHooks.add( (SystemStatusEventLogHook) allHooks[c] );
+			}
+		}
+		
+		SystemStatusEventLogHook[] hooksArray = new SystemStatusEventLogHook[ruleHooks.size()];
+		ruleHooks.toArray(hooksArray);
+		return hooksArray;
+	}
+	
 }

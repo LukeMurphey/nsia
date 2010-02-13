@@ -1,5 +1,8 @@
 package net.lukemurphey.nsia.eventlog;
 
+import java.util.Vector;
+
+import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
 import net.lukemurphey.nsia.response.Action;
 import net.lukemurphey.nsia.response.ActionFailedException;
@@ -69,6 +72,30 @@ public class RuleStatusEventLogHook extends EventLogHook {
 	
 	public Action getAction(){
 		return action;
+	}
+	
+	/**
+	 * Retrieves all of the rule status event log hooks for the rule with the given ID.
+	 * @param app
+	 * @param ruleID
+	 * @return
+	 */
+	public static RuleStatusEventLogHook[] getRuleStatusEventLogHooks(Application app, long ruleID){
+		
+		// 1 -- Get the list of hooks
+		EventLogHook[] allHooks = app.getEventLog().getHooks();
+		
+		Vector<RuleStatusEventLogHook> ruleHooks = new Vector<RuleStatusEventLogHook>();
+		
+		for(int c = 0; c < allHooks.length; c++){
+			if( allHooks[c] instanceof RuleStatusEventLogHook && ((RuleStatusEventLogHook)allHooks[c]).getRuleID() == ruleID ){
+				ruleHooks.add( (RuleStatusEventLogHook) allHooks[c] );
+			}
+		}
+		
+		RuleStatusEventLogHook[] hooksArray = new RuleStatusEventLogHook[ruleHooks.size()];
+		ruleHooks.toArray(hooksArray);
+		return hooksArray;
 	}
 
 }
