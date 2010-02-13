@@ -1,5 +1,8 @@
 package net.lukemurphey.nsia.eventlog;
 
+import java.util.Vector;
+
+import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
 import net.lukemurphey.nsia.response.Action;
 import net.lukemurphey.nsia.response.ActionFailedException;
@@ -69,6 +72,30 @@ public class SiteGroupStatusEventLogHook extends EventLogHook {
 	
 	public Action getAction(){
 		return action;
+	}
+	
+	/**
+	 * Get all of the event hooks for the given site group.
+	 * @param app
+	 * @param siteGroupID
+	 * @return
+	 */
+	public static SiteGroupStatusEventLogHook[] getSiteGroupEventLogHooks(Application app, long siteGroupID){
+		
+		// 1 -- Get the list of hooks
+		EventLogHook[] allHooks = app.getEventLog().getHooks();
+		
+		Vector<SiteGroupStatusEventLogHook> siteGroupHooks = new Vector<SiteGroupStatusEventLogHook>();
+		
+		for(int c = 0; c < allHooks.length; c++){
+			if( allHooks[c] instanceof SiteGroupStatusEventLogHook && ((SiteGroupStatusEventLogHook)allHooks[c]).getSiteGroupID() == siteGroupID ){
+				siteGroupHooks.add( (SiteGroupStatusEventLogHook) allHooks[c] );
+			}
+		}
+		
+		SiteGroupStatusEventLogHook[] hooksArray = new SiteGroupStatusEventLogHook[siteGroupHooks.size()];
+		siteGroupHooks.toArray(hooksArray);
+		return hooksArray;
 	}
 
 }
