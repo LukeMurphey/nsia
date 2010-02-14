@@ -31,7 +31,7 @@ import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
 public class ActionsListView extends View {
 
-	public static final String VIEW_NAME = "rule_actions";
+	public static final String VIEW_NAME = "sitegroup_actions";
 	
 	public ActionsListView() {
 		super("Actions/SiteGroup", VIEW_NAME, Pattern.compile("[0-9]+"));
@@ -65,6 +65,9 @@ public class ActionsListView extends View {
 		
 		for (long hookID : hooks) {
 			EventLogHook.delete(hookID);
+			
+			Application.getApplication().getEventLog().deleteHook(hookID);
+			
 			hooksDeleted++;
 		}
 		
