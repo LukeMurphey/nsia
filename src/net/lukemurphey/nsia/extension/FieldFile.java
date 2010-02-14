@@ -42,5 +42,10 @@ public class FieldFile extends PrototypeField {
 	public int getHeight(){
 		return height;
 	}
+	
+	@Override
+	public String getType() {
+		return "file";
+	}
 
 }

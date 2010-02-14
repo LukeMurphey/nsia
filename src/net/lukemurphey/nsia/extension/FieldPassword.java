@@ -25,4 +25,9 @@ public class FieldPassword extends PrototypeField {
 		return result;
 	}
 
+	@Override
+	public String getType() {
+		return "password";
+	}
+
 }

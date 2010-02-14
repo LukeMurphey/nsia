@@ -79,11 +79,16 @@ public abstract class PrototypeField implements Cloneable {
 		this.name = name;
 	}
 
-	public void setTitle( String title ){
+	/**
+	 * Returns a string describing what type of the field this is (password, text, etc.)
+	 * @return
+	 */
+	public abstract String getType();
 	
-	// 1 -- Set the title
-	this.title = title;
-}
+	public void setTitle( String title ){
+		// 1 -- Set the title
+		this.title = title;
+	}
 	
 	public abstract FieldValidatorResult validate(String value);
 

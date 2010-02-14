@@ -42,4 +42,9 @@ public class FieldText extends PrototypeField{
 	public int getHeight(){
 		return height;
 	}
+	
+	@Override
+	public String getType() {
+		return "text";
+	}
 }
