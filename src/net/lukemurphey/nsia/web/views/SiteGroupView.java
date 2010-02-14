@@ -561,6 +561,10 @@ public class SiteGroupView extends View {
 				menu.add( new Link("Exceptions", "ADDURL") );
 			}
 			
+			menu.add( new Link("Incident Response") );
+			menu.add( new Link("Add New Action", ActionEditView.getURL() + "?SiteGroupID=" + siteGroup.getGroupId() ) );
+			menu.add( new Link("List Actions", ActionsListView.getURL(siteGroup.getGroupId()) ) );
+			
 			data.put("menu", menu);
 			
 			//	8.3 -- Add the sitegroup

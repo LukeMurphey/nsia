@@ -6,11 +6,11 @@
 <#assign content>
 
 <#if (actions?? && actions?size > 0)>
-    <span class="Text_1">
-    Incident Response Actions
-            
+    <span class="Text_1">Incident Response Actions</span>
     <#if ( isSiteGroup?? && isSiteGroup )>
     <form method="post" action="Response"><input type="hidden" name="SiteGroupID" value="${siteGroup.groupId}">
+    <#else>
+    <form method="post" action="<@url name="sitegroup_actions" args=[siteGroup.groupId] />">
     </#if>
     
     </span><p/>
@@ -30,8 +30,8 @@
                     <td>
                         <table>
                             <tr>
-                                <td><a href="/Response?Action=Edit&ActionID=${action.eventLogHookID}"><img class="imagebutton" src="/media/img/16_Configure"/></a></td>
-                                <td><a href="/Response?Action=Edit&ActionID=${action.eventLogHookID}">Edit</a></td>
+                                <td><a href="<@url name="sitegroup_action_editor" args=["Edit", action.eventLogHookID]/>"><img class="imagebutton" src="/media/img/16_Configure"/></a></td>
+                                <td><a href="<@url name="sitegroup_action_editor" args=["Edit", action.eventLogHookID]/>">Edit</a></td>
                             </tr>
                         </table>
                     </td>
@@ -44,7 +44,8 @@
        </table>
    </form>
 <#else>
-    <@getinfodialog title="No Actions Exist" message="No actions exist yet for the given site-group<br><a href=\"Response?SiteGroupID=${siteGroup.groupId}&Action=New\">[create a new action now]</a>" />
+    <#assign message>No actions exist yet for the given site-group<br><a href="<@url name="sitegroup_action_editor" args=["New"] />?SiteGroupID=${siteGroup.groupId}">[create a new action now]</a></#assign>
+    <@getinfodialog title="No Actions Exist" message=message />
 </#if>
 
 </#assign>

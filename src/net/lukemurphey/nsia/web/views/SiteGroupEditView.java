@@ -191,8 +191,8 @@ public class SiteGroupEditView extends View {
 				menu.add( new Link("Add New Rule", "ADDURL") );
 				
 				menu.add( new Link("Incident Response") );
-				menu.add( new Link("List Actions", "ADDURL") );
-				menu.add( new Link("Add New Action", "ADDURL") );
+				menu.add( new Link("Add New Action", ActionEditView.getURL() + "?SiteGroupID=" + siteGroup.getGroupId() ) );
+				menu.add( new Link("List Actions", ActionsListView.getURL(siteGroup.getGroupId()) ) );
 			}
 			else{
 				menu.add( new Link("View Default Scan Policy", StandardViewList.getURL(DefinitionPolicyView.VIEW_NAME) ) ); 

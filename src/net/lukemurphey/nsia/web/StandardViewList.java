@@ -1,5 +1,7 @@
 package net.lukemurphey.nsia.web;
 
+import net.lukemurphey.nsia.web.views.ActionEditView;
+import net.lukemurphey.nsia.web.views.ActionsListView;
 import net.lukemurphey.nsia.web.views.BackupView;
 import net.lukemurphey.nsia.web.views.DashboardStatusPanel;
 import net.lukemurphey.nsia.web.views.DefinitionDeleteView;
@@ -105,6 +107,8 @@ public class StandardViewList {
 				view_list.registerView( new RuleEditView() );
 				view_list.registerView( new ScanResultHistoryView() );
 				view_list.registerView( new ScanResultView() );
+				view_list.registerView( new ActionsListView() );
+				view_list.registerView( new ActionEditView() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

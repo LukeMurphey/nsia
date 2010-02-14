@@ -93,6 +93,11 @@
          <servlet-name>WebConsole</servlet-name>
          <url-pattern>/ScanResult/*</url-pattern>
     </servlet-mapping>
+    
+    <servlet-mapping>
+         <servlet-name>WebConsole</servlet-name>
+         <url-pattern>/Actions/*</url-pattern>
+    </servlet-mapping>
 
 
     <!-- Below is servlet information for the old web console -->
