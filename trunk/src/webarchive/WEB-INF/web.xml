@@ -98,6 +98,11 @@
          <servlet-name>WebConsole</servlet-name>
          <url-pattern>/Actions/*</url-pattern>
     </servlet-mapping>
+    
+    <servlet-mapping>
+         <servlet-name>WebConsole</servlet-name>
+         <url-pattern>/AccessControl/*</url-pattern>
+    </servlet-mapping>
 
 
     <!-- Below is servlet information for the old web console -->
@@ -158,7 +163,7 @@
 	 
 	 <servlet-mapping>
 		 <servlet-name>Console</servlet-name>
-		 <url-pattern>/AccessControl/*</url-pattern>
+		 <url-pattern>/OLD/AccessControl/*</url-pattern>
 	 </servlet-mapping>
 	 
 	 <servlet-mapping>

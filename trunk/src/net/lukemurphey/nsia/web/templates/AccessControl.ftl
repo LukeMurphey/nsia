@@ -4,14 +4,14 @@
 <#include "Shortcuts.ftl">
 
 <#assign content>
-<form action="AccessControl" method="post">
+<form action="<@url name="access_control" args=[objectID?c] />" method="post">
     <table cellpadding="7" cellspacing="0" width="100%" align="center">
         <tr>
             <td colspan="99" class="TopBottomBorder2">&nbsp;</td>
         </tr>
         <tr>
             <td class="TopBottomBorder2" style="width: 20px; background-color: #FFFFFF;">
-                <img style="margin-top: 4px;" src=\"/media/img/32_Lock" alt="ACL">
+                <img style="margin-top: 4px;" src="/media/img/32_Lock" alt="ACL">
             </td>
             <td class="TopBottomBorder2" style="background-color: #FFFFFF;" >
                 <span class="Text_2">Access Control</span><br/>View, modify the ACLs
@@ -42,8 +42,8 @@
             <td width="15%" colspan="2">&nbsp;</td>
         </tr>
     <#list permissions as permission>
-        <#if permission.group>
-            <#if group.enabled>
+        <#if permission.group?? >
+            <#if permission.subject.enabled>
                 <tr class="Background1">
                     <td>
                         <table>
@@ -57,7 +57,7 @@
                                 <td><img alt="Group_Disabled" src="/media/img/16_GroupDisabled"></td>
             </#if>
         <#else>
-            <#if group.enabled>
+            <#if permission.subject.enabled>
                 <tr class="Background1">
                     <td>
                         <table>
@@ -72,15 +72,15 @@
             </#if>
         </#if>
         <#if permission.group>
-                                <td>${group.name}</td>
+                                <td>${permission.subject.name}</td>
                             </tr>
                         </table>
-                    <td>Group ${permission.subjectId}</td>
+                    <td>Group ${permission.subjectID}</td>
         <#else>
-                                <td>${user.userName}</td>
+                                <td>${permission.subject.userName}</td>
                             </tr>
                         </table>
-                    <td>User ${permission.subjectId}</td>
+                    <td>User ${permission.subjectID}</td>
         </#if>
 
         <#-- Print read -->
@@ -107,7 +107,7 @@
                 <table>
                     <tr>
                         <td><img class="imagebutton" alt="edit" src="/media/img/16_Configure"></td>
-                        <td><a href="AccessControl?Action=Edit&Subject=user${permission.subjectId}&ObjectID=${permission.objectId}">Edit</a></td>
+                        <td><a href="AccessControl?Action=Edit&Subject=user${permission.subjectID}&ObjectID=${permission.objectID}">Edit</a></td>
                     </tr>
                 </table>
              </td>
@@ -116,7 +116,7 @@
                 <table>
                     <tr>
                         <td><img class="imagebutton" alt="edit" src="/media/img/16_Configure"></td>
-                        <td><a href="AccessControl?Action=Edit&Subject=group${permission.subjectId}&ObjectID=${permission.objectId}">Edit</a></td>
+                        <td><a href="AccessControl?Action=Edit&Subject=group${permission.subjectID}&ObjectID=${permission.objectID}">Edit</a></td>
                     </tr>
                 </table>
              </td>
@@ -126,8 +126,8 @@
             <td>
                 <table>
                     <tr>
-                        <td><img class=\"imagebutton\" alt=\"delete\" src=\"/16_Delete\"></td>
-                        <td><a href="AccessControl?Action=Delete&Subject=user${permission.subjectId}&ObjectID=${permission.objectId}">Delete</a></td>
+                        <td><img class="imagebutton" alt="delete" src="/media/img/16_Delete"></td>
+                        <td><a href="AccessControl?Action=Delete&Subject=user${permission.subjectID}&ObjectID=${permission.objectID}">Delete</a></td>
                     </tr>
                 </table>
             </td>
@@ -135,13 +135,20 @@
             <td>
                 <table>
                     <tr>
-                        <td><img class=\"imagebutton\" alt=\"delete\" src=\"/16_Delete\"></td>
-                        <td><a href="AccessControl?Action=Delete&Subject=group${permission.subjectId}&ObjectID=${permission.objectId}">Delete</a></td>
+                        <td><img class="imagebutton" alt="delete" src="/media/img/16_Delete"></td>
+                        <td><a href="AccessControl?Action=Delete&Subject=group${permission.subjectID}&ObjectID=${permission.objectID}">Delete</a></td>
                     </tr>
                 </table>
             </td>
         </#if>
         </tr>
+        <tr class="Background3">
+        	<td align="Right" colspan="10">
+        		<input type="hidden" name="ObjectID" value="${objectID}">
+        		<input class="button" type="Submit" value="New Entry" name="New">&nbsp;&nbsp;&nbsp;
+        		<input onClick="javascript:window.close();" class="button" type="Submit" value="Close">
+        	</td>
+       	</tr>
     </#list>            
     <#if ( permissions?size == 0)>
         <tr class="Background3">

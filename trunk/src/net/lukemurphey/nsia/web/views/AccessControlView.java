@@ -11,24 +11,102 @@ import javax.servlet.http.HttpServletResponse;
 import net.lukemurphey.nsia.AccessControl;
 import net.lukemurphey.nsia.AccessControlDescriptor;
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GroupManagement;
+import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.ObjectPermissionDescriptor;
+import net.lukemurphey.nsia.UserManagement;
+import net.lukemurphey.nsia.AccessControlDescriptor.Action;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
+import net.lukemurphey.nsia.web.templates.TemplateLoader;
 
 public class AccessControlView extends View {
 	
 	private static final int VALUE_UNDEFINED = -1;
 	private static final int VALUE_INVALID = -2;
-	public static final String VIEW_NAME = "access_control_editor";
+	public static final String VIEW_NAME = "access_control";
 	
 	public AccessControlView() {
 		super("AccessControl", VIEW_NAME, Pattern.compile("[0-9]+"));
 	}
 
+	public class PermissionDescriptor{
+		private ObjectPermissionDescriptor objectDescriptor = null;
+		private Object subject;
+		
+		public PermissionDescriptor( ObjectPermissionDescriptor obj ) throws SQLException, InputValidationException, NoDatabaseConnectionException, NotFoundException{
+			this.objectDescriptor = obj;
+			
+			subject = populateSubject();
+		}
+		
+		public int getSubjectID(){
+			return objectDescriptor.getSubjectId();
+		}
+		
+		public long getObjectID(){
+			return objectDescriptor.getObjectId();
+		}
+		
+		public AccessControlDescriptor.Subject getSubjectType(){
+			return objectDescriptor.getSubjectType();
+		}
+		
+		public boolean isGroup(){
+			return objectDescriptor.isGroup();
+		}
+		
+		public boolean isUser(){
+			return objectDescriptor.isUser();
+		}
+		
+		public Action getControlPermission(){
+			return objectDescriptor.getControlPermission();
+		}
+		
+		public Action getCreatePermission(){
+			return objectDescriptor.getCreatePermission();
+		}
+		
+		public Action getDeletePermission(){
+			return objectDescriptor.getDeletePermission();
+		}
+		
+		public Action getExecutePermission(){
+			return objectDescriptor.getExecutePermission();
+		}
+		
+		public Action getModifyPermission(){
+			return objectDescriptor.getModifyPermission();
+		}
+		
+		public Action getReadPermission(){
+			return objectDescriptor.getReadPermission();
+		}
+		
+		public Object getSubject(){
+			return subject;
+		}
+		
+		private Object populateSubject() throws SQLException, InputValidationException, NoDatabaseConnectionException, NotFoundException{
+			int subjectID = objectDescriptor.getSubjectId();
+			
+			if( objectDescriptor.isGroup() ){
+				GroupManagement groupMgmt = new GroupManagement(Application.getApplication());
+				return groupMgmt.getGroupDescriptor(subjectID);
+			}
+			else{
+				UserManagement userMgmt = new UserManagement(Application.getApplication());
+				return userMgmt.getUserDescriptor(subjectID);
+			}
+		}
+	}
+	
 	private class ACLDescriptor{
         public AccessControlDescriptor.Action read = AccessControlDescriptor.Action.UNSPECIFIED;
         public AccessControlDescriptor.Action write = AccessControlDescriptor.Action.UNSPECIFIED;
@@ -88,9 +166,9 @@ public class AccessControlView extends View {
 			
 	        //	 1.1 -- Get the object ID
 	        long objectId = VALUE_UNDEFINED;
-	        if( request.getParameter("ObjectID") != null ){
+	        if( args.length > 0){
 	            try{
-	                objectId = Long.parseLong( request.getParameter("ObjectID") );
+	                objectId = Long.parseLong( args[0] );
 	            }
 	            catch (NumberFormatException e){
 	                objectId = VALUE_INVALID;
@@ -127,14 +205,41 @@ public class AccessControlView extends View {
 	        if( objectId < 0){
 	            //throw new InvalidHtmlParameterException("Invalid Parameter", "The object identifier is invalid", "Console" );
 	        }
+	        
+	        // 2 -- If just viewing, then get all of the permission descriptors for the object
+	        if( isEditing == false ){
+	        	ObjectPermissionDescriptor[] descriptors = accessControl.getAllAclEntries(objectId);
+	        	PermissionDescriptor[] subject_descriptors = new PermissionDescriptor[descriptors.length];
+	        	
+	        	for (int c = 0; c < descriptors.length; c++ ) {
+					subject_descriptors[c] = new PermissionDescriptor( descriptors[c] );
+				}
+	        	
+	        	data.put("permissions", subject_descriptors);
+	        }
 			
-			// TODO Auto-generated method stub
-			return false;
+	        // 3 -- Render the page
+	        data.put("title", "Access Control");
+	        data.put("objectID", objectId);
+	        data.put("GROUP", AccessControlDescriptor.Subject.GROUP);
+	        data.put("USER", AccessControlDescriptor.Subject.USER);
+	        data.put("DENY", AccessControlDescriptor.Action.DENY);
+	        data.put("PERMIT", AccessControlDescriptor.Action.PERMIT);
+	        data.put("UNSPECIFIED", AccessControlDescriptor.Action.UNSPECIFIED);
+	        
+			TemplateLoader.renderToResponse("AccessControl.ftl", data, response);
+			return true;
 		}
 		catch(NoDatabaseConnectionException e){
 			throw new ViewFailedException(e);
 		}
 		catch(SQLException e){
+			throw new ViewFailedException(e);
+		}
+		catch(NotFoundException e){
+			throw new ViewFailedException(e);
+		}
+		catch(InputValidationException e){
 			throw new ViewFailedException(e);
 		}
 	}
