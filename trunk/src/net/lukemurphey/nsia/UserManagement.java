@@ -1082,6 +1082,15 @@ public class UserManagement {
 			return accountStatus;
 		}
 		
+		public boolean isEnabled(){
+			if( accountStatus == AccountStatus.DISABLED ){
+				return false;
+			}
+			else{
+				return true;
+			}
+		}
+		
 		public String getFullname(){
 			return fullname;
 		}
