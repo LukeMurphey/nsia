@@ -17,7 +17,7 @@
     <script type="text/javascript" language="javascript" src="/media/js/jquery-1.3.2.min.js"></script>
 </head>
 
-<body face="Arial, sans-serif">
+<body class="ContentMain" face="Arial, sans-serif">
 ${content}
 </body>
 
