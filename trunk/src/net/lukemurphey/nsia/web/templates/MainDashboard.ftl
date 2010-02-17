@@ -1,3 +1,4 @@
+<#include "GetDialog.ftl">
 <#assign content>
 <#macro statusrow htmlclass icon title message link>
         <table cellspacing="0" cellpadding="0" width="95%">
@@ -27,6 +28,7 @@
 <@statusrow htmlclass=htmlclass icon=icon message="${system_status.longDescription}" title="Manager Status" link=link />
 <div style="height: 16px"></div>
 
+<#if (sitegroups?? && (sitegroups?size > 0))>
 <span class="Text_2">Scan Results</span>
 <#list sitegroups as sitegroup>
     <#if sitegroup.deviatingRules == 1>
@@ -55,6 +57,12 @@
         <td><a href="<@url name="sitegroup" args=["New"] />">[Create another Site Group]</a></td>
     </tr>
 </table>
+<#else>
+	<#assign message>
+	No resources are being monitored yet. Create a site group and define a rule to begin monitoring.
+	<p><a href="<@url name="sitegroup" args=["New"] />">[Create Site Group Now]</a></#assign>
+	<@getinfodialog title="No Monitored Resources" message=message />
+</#if>
 </#assign>
 
 <#include "BaseWithNav.ftl">
