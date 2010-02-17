@@ -4,12 +4,12 @@
     <p/><div style="width: 600px">
     
     <#assign keyform>
-        <p/>Once you have a valid license key, enter it below:<form method="POST" action="License">
+        <p/>Once you have a valid license key, enter it below:<form method="POST" action="<@url name="license" />">
         <input class="textInput" size="48" type="text" name="LicenseKey" value="${license_key}">
         <input type="Submit" class="button" value="Apply" name="Apply"></form>
     </#assign>
     
-    <#if !license??>
+    <#if !license?? || license.status = UNLICENSED>
         <#assign message>
             The application does not possess a valid license. Thus, the application cannot receive definition updates. Purchase a license at <a href="http://ThreatFactor.com/">ThreatFactor.com now</a>.${keyform}
         </#assign>
