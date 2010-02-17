@@ -304,6 +304,31 @@ public class DefinitionSet {
 	}
 	
 	/**
+	 * This function replicates the Element.getTextContent() method that is available in JRE 1.5 and above.
+	 * @param element
+	 * @return
+	 */
+	private static String getTextContent(Node element){
+		if( element.getNodeType() == Element.DOCUMENT_NODE || element.getNodeType() == Element.DOCUMENT_TYPE_NODE || element.getNodeType() == Element.NOTATION_NODE){
+			return null;
+		}
+		else if( element.getNodeType() == Element.TEXT_NODE || element.getNodeType() == Element.CDATA_SECTION_NODE || element.getNodeType() == Element.COMMENT_NODE || element.getNodeType() == Element.PROCESSING_INSTRUCTION_NODE){
+			return element.getNodeValue();
+		}
+		else{
+			StringBuffer buffer = new StringBuffer();
+			
+			NodeList nodes = element.getChildNodes();
+			
+			for(int c = 0; c < nodes.getLength(); c++ ){
+				buffer.append( getTextContent(nodes.item(c)) );
+			}
+			
+			return buffer.toString();
+		}
+	}
+	
+	/**
 	 * Load the definitions from the XML given. This method is useful for loading new definitions from a file on disk or from a website.
 	 * @param document
 	 * @return
@@ -351,10 +376,10 @@ public class DefinitionSet {
 				}
 			}
 			catch( UnpurposedDefinitionException e){
-				throw new DefinitionSetLoadException("Invalid definition observed (has not purpose): " + element.getTextContent(), e);
+				throw new DefinitionSetLoadException("Invalid definition observed (has not purpose): " + getTextContent(element), e);
 			}
 			catch( InvalidDefinitionException e){
-				throw new DefinitionSetLoadException("Invalid definition detected (could not be parsed): " + element.getTextContent(), e);
+				throw new DefinitionSetLoadException("Invalid definition detected (could not be parsed): " + getTextContent(element), e);
 			}
 		}
 
