@@ -20,32 +20,36 @@
 </#macro>
 
 <#assign content>
-<form action="<#if isEditing><@url name="access_control_editor" args=["1", "Edit", subjectType, objectID] /><#else><@url name="access_control_editor" args=["1", "New"] /></#if>" method="post">
-    <table cellpadding="0" cellspacing="0" width="100%" align="center">
+<form action="<#if isEditing><@url name="access_control_editor" args=[objectID, "Edit", subjectType, subjectID] /><#else><@url name="access_control_editor" args=[objectID, "New"] /></#if>" method="post">
+
+    <table cellpadding="7" cellspacing="0" width="100%" align="center">
         <tr>
-            <td class="TopBottomBorder2">&nbsp;</td>
+            <td colspan="99" class="TopBottomBorder2">&nbsp;</td>
         </tr>
         <tr>
-            <td class="TopBottomBorder2">
-                <div style="padding-top: 6px; padding-bottom: 6px; background-color: #FFFFFF;">
-                    <div style="height: 36px; position:relative; left: 10px;">
-                        <img src="/media/img/32_Lock" alt="ACL">
-                        <div style="position:relative; left: 40px; top: -32px;">
-                            <div class="Text_2">Access Control</div>View, modify the ACLs</div>
-                        </div>
-                    </div>
-             </td>
+            <td class="TopBottomBorder2" style="width: 20px; background-color: #FFFFFF;">
+                <img style="margin-top: 4px;" src="/media/img/32_Lock" alt="ACL">
+            </td>
+            <td class="TopBottomBorder2" style="background-color: #FFFFFF;" >
+                <span class="Text_2">Access Control</span><br/>View, modify the ACLs
+            </td>
         </tr>
-        
+        <#if (context.messages?? && context.messages?size > 0)>
         <tr>
-            <td>&nbsp;
-            <#-- body.append(Html.renderMessages(requestDescriptor.userId)); -->
+            <td colspan="99">&nbsp;
+            <@usermessages context />
             <#if form_errors??><@getFormErrors form_errors=form_errors /></#if>
             </td>
         </tr>
+        </#if>
+    </table>
+    <table cellpadding="0" cellspacing="0" width="100%" align="center">
+        <tr>
+            <td colspan="2" >&nbsp;</td>
+        </tr>
         <#-- Output the table start -->
         <tr>
-            <td>
+            <td colspan="2">
                 <table width="100%">
                     <tr class="Background1">
                         <td class="Text_2">Name</td>
@@ -150,9 +154,6 @@
         <#else>
                 <input type="hidden" name="Action" value="New">
         </#if>
-            </td>
-        </tr>
-    </table>
             </td>
         </tr>
     </table>

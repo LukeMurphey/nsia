@@ -17,6 +17,14 @@
                 <span class="Text_2">Access Control</span><br/>View, modify the ACLs
             </td>
         </tr>
+        <#if (context.messages?? && context.messages?size > 0)>
+        <tr>
+            <td colspan="99">&nbsp;
+            <@usermessages context />
+            <#if form_errors??><@getFormErrors form_errors=form_errors /></#if>
+            </td>
+        </tr>
+        </#if>
     </table>
 <#-- message -->
     <#macro actioncell action perm>
@@ -116,7 +124,7 @@
                 <table>
                     <tr>
                         <td><img class="imagebutton" alt="edit" src="/media/img/16_Configure"></td>
-                        <td><a href="AccessControl?Action=Edit&Subject=group${permission.subjectID}&ObjectID=${permission.objectID}">Edit</a></td>
+                        <td><a href="<@url name="access_control_editor" args=[objectID, "Edit", "User", permission.subjectID] />">Edit</a></td>
                     </tr>
                 </table>
              </td>
@@ -150,21 +158,12 @@
             <@infonote message="No Access Control List Entries Exist" />
             </td>
         </tr>
-        <tr class="Background3">
-            <td align="Right" colspan="10">
-                <input type="hidden" name="ObjectID" value="${objectID?c}">
-                <input class="button" type="Submit" value="New Entry" name="New">
-                &nbsp;&nbsp;&nbsp;<input onClick="javascript:window.close();" class="button" type="Submit" value="Close">
-            </td>
-        </tr>
-     <#else>
+    </#if>
      	<tr class="Background3">
         	<td align="Right" colspan="10">
-        		<input type="hidden" name="ObjectID" value="${objectID?c}">
         		<input class="button" type="Submit" value="New Entry" name="New">&nbsp;&nbsp;&nbsp;
         		<input onClick="javascript:window.close();" class="button" type="Submit" value="Close">
         	</td>
        	</tr>
-     </#if>
 </#assign>
 <#include "Basic.ftl">
