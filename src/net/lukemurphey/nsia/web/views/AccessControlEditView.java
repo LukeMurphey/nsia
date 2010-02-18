@@ -240,12 +240,14 @@ public class AccessControlEditView extends View {
 	                    objectPermissionDescriptor = accessControl.getGroupPermissions( groupId, objectId);
 	                    data.put("permission", new AccessControlView.PermissionDescriptor(objectPermissionDescriptor) );
 	                    data.put("subjectType", "Group");
+	                    data.put("subjectID", groupId);
 	                }
 	                else if( subjectType.equalsIgnoreCase("User") ){
 	                    userId = Integer.parseInt(subject);
 	                    objectPermissionDescriptor = accessControl.getUserPermissions( userId, objectId, false);
 	                    data.put("permission", new AccessControlView.PermissionDescriptor(objectPermissionDescriptor) );
 	                    data.put("subjectType", "User");
+	                    data.put("subjectID", userId);
 	                }
 	            }
 	            catch(NumberFormatException e){
