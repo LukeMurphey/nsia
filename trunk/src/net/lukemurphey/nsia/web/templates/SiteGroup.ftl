@@ -2,10 +2,11 @@
 <#include "GetDialog.ftl">
 <#assign content>
 <#if (scanresults?? & scanresults?size = 0 && rules?size = 0) >
-    <@getinfodialog message="No rules exist yet. Define a rule set to begin monitoring.<p><a href=\"\">[Create Rule Now]</a>" title="No Rules" />
+	<#assign message>No rules exist yet. Define a rule set to begin monitoring.<p><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroup.groupId?c}">[Create Rule Now]</a></#assign>
+    <@getinfodialog message=message title="No Rules" />
 <#else>
     <form action="${request.thisURL}">
-        <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId}">
+        <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId?c}">
         <table class="DataTable" summary="HeaderEntries">
             <thead>
                 <tr>
