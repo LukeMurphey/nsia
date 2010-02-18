@@ -14,6 +14,7 @@ import net.lukemurphey.nsia.SessionManagement.SessionInfo;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.web.views.Dialog;
+import net.lukemurphey.nsia.web.views.LoginView;
 import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
 import javax.servlet.http.Cookie;
@@ -79,7 +80,7 @@ public class WebConsoleServlet extends HttpServlet {
 				//context = new RequestContext(session_messages);
 				
 				//Show the login form since the user has failed to login yet
-				View view = StandardViewList.getView("login");
+				View view = new LoginView();
 				response.setStatus(401); //Set the HTTP response code to 401 so that it can be programmatically determined that authentication is necessary to complete the request
 				view.process(request, response, context, true);
 				return;
