@@ -3,8 +3,24 @@
 <#include "Forms.ftl">
 <#include "Shortcuts.ftl">
 
+<#macro getacl perm>
+		<#if ( perm == DENY)>
+			<option value="Allow">Allow
+			<option value="Deny" selected>Deny
+			<option value="Undefined">Undefined
+		<#elseif ( perm == PERMIT)>
+			<option value="Allow" selected>Allow
+			<option value="Deny">Deny
+			<option value="Undefined">Undefined
+		<#elseif ( perm == UNSPECIFIED)>
+			<option value="Allow">Allow
+			<option value="Deny">Deny
+			<option value="Undefined" selected>Undefined
+		</#if>
+</#macro>
+
 <#assign content>
-<form action="AccessControl" method="post">
+<form action="<#if isEditing><@url name="access_control_editor" args=["1", "Edit", subjectType, objectID] /><#else><@url name="access_control_editor" args=["1", "New"] /></#if>" method="post">
     <table cellpadding="0" cellspacing="0" width="100%" align="center">
         <tr>
             <td class="TopBottomBorder2">&nbsp;</td>
@@ -23,7 +39,8 @@
         
         <tr>
             <td>&nbsp;
-            body.append(Html.renderMessages(requestDescriptor.userId));
+            <#-- body.append(Html.renderMessages(requestDescriptor.userId)); -->
+            <#if form_errors??><@getFormErrors form_errors=form_errors /></#if>
             </td>
         </tr>
         <#-- Output the table start -->
@@ -41,7 +58,7 @@
                             <#list users as user>
                                 <tr>
                                     <td width="3">
-                                        <input type="radio" name="Subject" value="user${user.userID}" <#if user.userID = userID>checked</#if><#if isEditing> disabled</#if>/>
+                                        <input type="radio" name="Subject" value="user${user.userID?c}" <#if user.userID = userID>checked</#if><#if isEditing> disabled</#if>/>
                                     </td>
                                     <td width="3">
                                         <img src="<#if user.enabled >/media/img/16_User<#else>/media/img/16_UserDisabled</#if>" alt="user${user.userID?c}" />
@@ -52,7 +69,7 @@
                             <#list groups as group>
                                 <tr>
                                     <td width="3">
-                                        <input type="radio" name="Subject" value="group${group.identifier}" <#if group.identifier = groupID>checked</#if><#if isEditing> disabled</#if>/>
+                                        <input type="radio" name="Subject" value="group${group.identifier?c}" <#if group.identifier = groupID>checked</#if><#if isEditing> disabled</#if>/>
                                     </td>
                                     <td width="3">
                                         <img src="<#if group.enabled >/media/img/16_Group<#else>/media/img/16_GroupDisabled</#if>" alt="group${group.identifier?c}" />
@@ -76,7 +93,7 @@
                                 <tr>
                                     <td>Modify:</td>
                                     <td>
-                                        <select name="OperationWrite"><@getacl write /></select>
+                                        <select name="OperationModify"><@getacl write /></select>
                                     </td>
                                 </tr>
         
@@ -119,16 +136,16 @@
         </tr>
         <tr class="Background3">
             <td align="Right" colspan="7">
-                <input type="hidden" name="ObjectID" value="${objectID}">
+                <input type="hidden" name="ObjectID" value="${objectID?c}">
                 <input class="button" type="Submit" value="Apply Changes" name="Apply">&nbsp;&nbsp;&nbsp;
                 <input class="button" type="Submit" value="Cancel" name="Cancel">&nbsp;&nbsp;&nbsp;
                 <input class="button" onClick="javascript:window.close();" type="Button" value="Close">
         
-        <#if (isEditing && groupId != VALUE_UNDEFINED) >
-                <input type="hidden" name="Subject" value="group"${groupID}">
+        <#if (isEditing && groupID != VALUE_UNDEFINED) >
+                <input type="hidden" name="Subject" value="group"${groupID?c}">
                 <input type="hidden" name="Action" value="Edit">
-        <#elseif (isEditing && userId != VALUE_UNDEFINED) >
-                <input type="hidden" name="Subject" value="user${userID}">
+        <#elseif (isEditing && userID != VALUE_UNDEFINED) >
+                <input type="hidden" name="Subject" value="user${userID?c}">
                 <input type="hidden" name="Action" value="Edit">
         <#else>
                 <input type="hidden" name="Action" value="New">

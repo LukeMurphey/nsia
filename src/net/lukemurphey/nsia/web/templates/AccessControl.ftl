@@ -4,7 +4,7 @@
 <#include "Shortcuts.ftl">
 
 <#assign content>
-<form action="<@url name="access_control" args=[objectID?c] />" method="post">
+<form action="<@url name="access_control_editor" args=[objectID?c, "New"] />" method="get">
     <table cellpadding="7" cellspacing="0" width="100%" align="center">
         <tr>
             <td colspan="99" class="TopBottomBorder2">&nbsp;</td>
@@ -107,7 +107,7 @@
                 <table>
                     <tr>
                         <td><img class="imagebutton" alt="edit" src="/media/img/16_Configure"></td>
-                        <td><a href="AccessControl?Action=Edit&Subject=user${permission.subjectID}&ObjectID=${permission.objectID}">Edit</a></td>
+                        <td><a href="<@url name="access_control_editor" args=[objectID, "Edit", "User", permission.subjectID] />">Edit</a></td>
                     </tr>
                 </table>
              </td>
@@ -142,13 +142,7 @@
             </td>
         </#if>
         </tr>
-        <tr class="Background3">
-        	<td align="Right" colspan="10">
-        		<input type="hidden" name="ObjectID" value="${objectID}">
-        		<input class="button" type="Submit" value="New Entry" name="New">&nbsp;&nbsp;&nbsp;
-        		<input onClick="javascript:window.close();" class="button" type="Submit" value="Close">
-        	</td>
-       	</tr>
+
     </#list>            
     <#if ( permissions?size == 0)>
         <tr class="Background3">
@@ -158,11 +152,19 @@
         </tr>
         <tr class="Background3">
             <td align="Right" colspan="10">
-                <input type="hidden" name="ObjectID" value="${objectID}">
+                <input type="hidden" name="ObjectID" value="${objectID?c}">
                 <input class="button" type="Submit" value="New Entry" name="New">
                 &nbsp;&nbsp;&nbsp;<input onClick="javascript:window.close();" class="button" type="Submit" value="Close">
             </td>
         </tr>
+     <#else>
+     	<tr class="Background3">
+        	<td align="Right" colspan="10">
+        		<input type="hidden" name="ObjectID" value="${objectID?c}">
+        		<input class="button" type="Submit" value="New Entry" name="New">&nbsp;&nbsp;&nbsp;
+        		<input onClick="javascript:window.close();" class="button" type="Submit" value="Close">
+        	</td>
+       	</tr>
      </#if>
 </#assign>
 <#include "Basic.ftl">

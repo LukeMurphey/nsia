@@ -35,7 +35,17 @@ public class AccessControlView extends View {
 		super("AccessControl", VIEW_NAME, Pattern.compile("[0-9]+"));
 	}
 
-	public class PermissionDescriptor{
+	public static String getURL( int objectID ) throws URLInvalidException{
+		AccessControlView view = new AccessControlView();
+		return view.createURL(objectID);
+	}
+	
+	public static String getURL( long objectID ) throws URLInvalidException{
+		AccessControlView view = new AccessControlView();
+		return view.createURL(objectID);
+	}
+	
+	public static class PermissionDescriptor{
 		private ObjectPermissionDescriptor objectDescriptor = null;
 		private Object subject;
 		
@@ -107,50 +117,6 @@ public class AccessControlView extends View {
 		}
 	}
 	
-	private class ACLDescriptor{
-        public AccessControlDescriptor.Action read = AccessControlDescriptor.Action.UNSPECIFIED;
-        public AccessControlDescriptor.Action write = AccessControlDescriptor.Action.UNSPECIFIED;
-        public AccessControlDescriptor.Action delete = AccessControlDescriptor.Action.UNSPECIFIED;
-        public AccessControlDescriptor.Action control = AccessControlDescriptor.Action.UNSPECIFIED;
-        public AccessControlDescriptor.Action execute = AccessControlDescriptor.Action.UNSPECIFIED;
-        public AccessControlDescriptor.Action create = AccessControlDescriptor.Action.UNSPECIFIED;
-        
-        public ACLDescriptor(ObjectPermissionDescriptor objectPermissionDescriptor, HttpServletRequest request){
-        	
-            if( objectPermissionDescriptor != null){
-                read = objectPermissionDescriptor.getReadPermission();
-                write = objectPermissionDescriptor.getModifyPermission();
-                delete = objectPermissionDescriptor.getDeletePermission();
-                control = objectPermissionDescriptor.getControlPermission();
-                create = objectPermissionDescriptor.getCreatePermission();
-                execute = objectPermissionDescriptor.getExecutePermission();
-            }
-            
-            read = getACL(read, request.getParameter("OperationRead"));
-            write = getACL(write, request.getParameter("OperationWrite"));
-            delete = getACL(delete, request.getParameter("OperationDelete"));
-            control = getACL(control, request.getParameter("OperationControl"));
-            create = getACL(create, request.getParameter("OperationCreate"));
-            execute = getACL(execute, request.getParameter("OperationExecute"));
-        }
-        
-        private AccessControlDescriptor.Action getACL( AccessControlDescriptor.Action aclValue, String argument ){
-
-    		AccessControlDescriptor.Action aclType = aclValue;
-    		
-    		if( argument != null ){
-    			if( argument.equals("Allow"))
-    				aclType = AccessControlDescriptor.Action.PERMIT;
-    			else if( argument.equals("Deny"))
-    				aclType = AccessControlDescriptor.Action.DENY;
-    			else if( argument.equals("Undefined"))
-    				aclType = AccessControlDescriptor.Action.UNSPECIFIED;
-    		}
-    		
-    		return aclType;
-        }
-	}
-	
 	@Override
 	protected boolean process(HttpServletRequest request,
 			HttpServletResponse response, RequestContext context,
@@ -160,6 +126,7 @@ public class AccessControlView extends View {
 		
 		try{
 			// 0 -- Check permissions
+			//TODO Check rights
 			
 			// 1 -- Get the object and user information
 			AccessControl accessControl = new AccessControl(Application.getApplication());

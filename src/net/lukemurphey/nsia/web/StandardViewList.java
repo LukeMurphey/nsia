@@ -1,5 +1,6 @@
 package net.lukemurphey.nsia.web;
 
+import net.lukemurphey.nsia.web.views.AccessControlEditView;
 import net.lukemurphey.nsia.web.views.AccessControlView;
 import net.lukemurphey.nsia.web.views.ActionEditView;
 import net.lukemurphey.nsia.web.views.ActionsListView;
@@ -111,6 +112,7 @@ public class StandardViewList {
 				view_list.registerView( new ActionsListView() );
 				view_list.registerView( new ActionEditView() );
 				view_list.registerView( new AccessControlView() );
+				view_list.registerView( new AccessControlEditView() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
