@@ -1,3 +1,10 @@
+<#macro getattrs attrs>
+	<#if attrs??>TEST
+		<#list attrs as attr>
+			${attr.name}=${attr.value}
+		</#list> 
+	</#if>
+</#macro>
 <#assign content>
     <table cellspacing="0" align="left" width="95%">
         <tr>
@@ -5,7 +12,7 @@
             <#list menu as menu_item>
                 
                 <#if menu_item.link??>
-                <br>&nbsp;&nbsp;&nbsp;<img alt="*" src="/media/img/Arrow" /><a href="${menu_item.link}">${menu_item.title}</a>
+                <br>&nbsp;&nbsp;&nbsp;<img alt="*" src="/media/img/Arrow" /><a href="${menu_item.link}" <@getattrs menu_item.attributes />>${menu_item.title}</a>
                 <#else>
                 <br>&nbsp;
                 <#if (menu_item_index > 0)><br>&nbsp;</#if>
