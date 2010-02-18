@@ -182,7 +182,7 @@ public class SiteGroupEditView extends View {
 			if( siteGroup != null ){
 				menu.add( new Link("Add Site Group", createURL("New")) );
 				menu.add( new Link("Edit Site Group", createURL("Edit", siteGroup.getGroupId())) );
-				menu.add( new Link("Edit ACLs", "ADDURL") );
+				menu.add( new Link("Edit ACLs", AccessControlView.getURL(siteGroup.getObjectId()), new Link.Attribute("onclick", "\"w=window.open('" + AccessControlView.getURL(siteGroup.getObjectId()) + "', 'AccessControl', 'height=400,width=780,screenX=' + (screen.availWidth - 700)/2 + ',screenY=' + (screen.availHeight - 300)/2 + ',scrollbars=yes,resizable=yes,toolbar=no');return false\"") ) );
 				menu.add( new Link("Delete Site Group", StandardViewList.getURL(SiteGroupDeleteView.VIEW_NAME, siteGroup.getGroupId())) );
 				menu.add( new Link("View Scan Policy", StandardViewList.getURL(DefinitionPolicyView.VIEW_NAME, siteGroup.getGroupId() ) ) );
 				
