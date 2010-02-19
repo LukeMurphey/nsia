@@ -135,7 +135,7 @@
                 <table>
                     <tr>
                         <td><img class="imagebutton" alt="delete" src="/media/img/16_Delete"></td>
-                        <td><a href="AccessControl?Action=Delete&Subject=user${permission.subjectID}&ObjectID=${permission.objectID}">Delete</a></td>
+                        <td><a href="<@url name="access_control_delete" args=[permission.objectID, "User", permission.subjectID] />">Delete</a></td>
                     </tr>
                 </table>
             </td>
@@ -144,7 +144,7 @@
                 <table>
                     <tr>
                         <td><img class="imagebutton" alt="delete" src="/media/img/16_Delete"></td>
-                        <td><a href="AccessControl?Action=Delete&Subject=group${permission.subjectID}&ObjectID=${permission.objectID}">Delete</a></td>
+                        <td><a href="<@url name="access_control_delete" args=[permission.objectID, "User", permission.subjectID] />">Delete</a></td>
                     </tr>
                 </table>
             </td>

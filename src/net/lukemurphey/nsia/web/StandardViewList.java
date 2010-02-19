@@ -1,5 +1,6 @@
 package net.lukemurphey.nsia.web;
 
+import net.lukemurphey.nsia.web.views.AccessControlDeleteView;
 import net.lukemurphey.nsia.web.views.AccessControlEditView;
 import net.lukemurphey.nsia.web.views.AccessControlView;
 import net.lukemurphey.nsia.web.views.ActionEditView;
@@ -113,6 +114,7 @@ public class StandardViewList {
 				view_list.registerView( new ActionEditView() );
 				view_list.registerView( new AccessControlView() );
 				view_list.registerView( new AccessControlEditView() );
+				view_list.registerView( new AccessControlDeleteView() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
