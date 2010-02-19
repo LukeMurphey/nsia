@@ -848,6 +848,19 @@ public class GroupManagement {
 		public State getGroupState(){
 			return groupState;
 		}
+		
+		/**
+		 * Indicates if the group is enabled.
+		 * @return
+		 */
+		public boolean isEnabled(){
+			if( groupState == State.ACTIVE ){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
 	}
 	
 }
