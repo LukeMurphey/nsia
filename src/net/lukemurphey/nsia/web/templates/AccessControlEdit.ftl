@@ -73,12 +73,12 @@
                             <#list groups as group>
                                 <tr>
                                     <td width="3">
-                                        <input type="radio" name="Subject" value="group${group.identifier?c}" <#if group.identifier = groupID>checked</#if><#if isEditing> disabled</#if>/>
+                                        <input type="radio" name="Subject" value="group${group.groupId?c}" <#if group.groupId = groupID>checked</#if><#if isEditing> disabled</#if>/>
                                     </td>
                                     <td width="3">
-                                        <img src="<#if group.enabled >/media/img/16_Group<#else>/media/img/16_GroupDisabled</#if>" alt="group${group.identifier?c}" />
+                                        <img src="<#if group.enabled >/media/img/16_Group<#else>/media/img/16_GroupDisabled</#if>" alt="group${group.groupId?c}" />
                                     </td>
-                                    <td>${group.name} (Group)<td>
+                                    <td>${group.groupName} (Group)<td>
                                 </tr>
                             </#list>
                             </table>
