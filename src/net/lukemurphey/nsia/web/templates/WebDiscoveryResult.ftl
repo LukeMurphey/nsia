@@ -55,7 +55,7 @@
             </#if>
          
             <#list definitionMatches as match>
-                <#assign returnURL>ScanResult?ResultID=${scanResult.scanResultID?c}</#assign>
+                <#assign returnURL><@url name="scan_result" args=[scanResult.scanResultID] /></#assign>
                 <#if ( siteGroup?? ) >
                     <tr class="Background1">
                         <td height="8px" class="Text_3"><a href="<@url name="scan_result" args=[scanResult.scanResultID] />?RuleFilter=${match.name?html}">${match.name?html}</a></td>
@@ -65,7 +65,7 @@
                 </#if>
                 
                 <#if (siteGroup.groupId >= 0) >
-                        <td class="Text_3" width="8"><a href="ExceptionManagement?Action=New&RuleID=${rule.ruleId?c}&SiteGroupID=${siteGroup.groupId?c}&DefinitionName=${match.name?html}&ReturnTo=${returnURL}"><img class="imagebutton" alt="Filter" src="/media/img/16_Filter"></a></td>
+                        <td class="Text_3" width="8"><a href="<@url name="exception_editor" args=[rule.ruleId]/>?DefinitionName=${match.name?html}&ReturnTo=${returnURL}"><img class="imagebutton" alt="Filter" src="/media/img/16_Filter"></a></td>
                 </#if>
                         <td height="8px" class="Text_3">${match.value?html}</td>
                    </tr>
@@ -144,14 +144,14 @@
                 <span class="Text_3"><@truncate_chars length=64>${finding.url?html}</@truncate_chars>&nbsp;&nbsp;&nbsp;</span>
                 <#assign matches = finding.definitionMatches />
                     <#if (matches?size > 0 )>
-                <div style="display: none;" id="finding${finding_index}">
+                <div style="display: none;" id="finding${finding_index?c}">
                         <#list matches as match >
-                    <p>&nbsp;&nbsp;&nbsp;<strong>${match.definitionName}:</strong>
+                    <p>&nbsp;&nbsp;&nbsp;<strong>${match.definitionName?html}:</strong>
                             <#if ( siteGroup.groupId > -1 )>
                             <#assign returnURL><@url name="scan_result" args=[finding.parentScanResultID] /></#assign>
-                            <a href="/ExceptionManagement?Action=New&RuleID=${rule.ruleId}&SiteGroupID=${siteGroup.groupId}&DefinitionName=${match.definitionName}&URL=" + encodedURL + "&ReturnTo=${returnURL}">&nbsp;(Create Exception)</a>
+                            <a href="<@url name="exception_editor" args=[rule.ruleId]/>?DefinitionName=${match.definitionName?html}&ReturnTo=${returnURL?html}&URL=${finding.url?html}">&nbsp;(Create Exception)</a>
                             </#if>
-                        <br>&nbsp;&nbsp;&nbsp;${match.message}
+                        <br>&nbsp;&nbsp;&nbsp;${match.message?html}
                         </#list>
                     </div>
                   <#else>
