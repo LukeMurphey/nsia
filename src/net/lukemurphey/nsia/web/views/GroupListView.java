@@ -69,10 +69,10 @@ public class GroupListView extends View {
 		
 		menu.add( new Link("User Management") );
 		menu.add( new Link("Add New User", UserEditView.getURL("New")) );
-		menu.add( new Link("View Logged in Users", "ADDURL") );
+		menu.add( new Link("View Logged in Users",UserSessionsView.getURL()) );
 		
 		menu.add( new Link("Group Management") );
-		menu.add( new Link("Add New Group", "ADDURL" ) );
+		menu.add( new Link("Add New Group",  GroupEditView.getURL() ) );
 		data.put("menu", menu);
 		
 		// 4 -- Get the breadcrumbs
