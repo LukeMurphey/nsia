@@ -18,6 +18,9 @@ import net.lukemurphey.nsia.web.views.DefragmentIndexesView;
 import net.lukemurphey.nsia.web.views.EndUserSessionView;
 import net.lukemurphey.nsia.web.views.EventLogEntryView;
 import net.lukemurphey.nsia.web.views.EventLogView;
+import net.lukemurphey.nsia.web.views.ExceptionDeleteView;
+import net.lukemurphey.nsia.web.views.ExceptionEditView;
+import net.lukemurphey.nsia.web.views.ExceptionListView;
 import net.lukemurphey.nsia.web.views.GroupDeleteView;
 import net.lukemurphey.nsia.web.views.GroupDisableView;
 import net.lukemurphey.nsia.web.views.GroupEditView;
@@ -115,6 +118,9 @@ public class StandardViewList {
 				view_list.registerView( new AccessControlView() );
 				view_list.registerView( new AccessControlEditView() );
 				view_list.registerView( new AccessControlDeleteView() );
+				view_list.registerView( new ExceptionListView() );
+				view_list.registerView( new ExceptionDeleteView() );
+				view_list.registerView( new ExceptionEditView() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
