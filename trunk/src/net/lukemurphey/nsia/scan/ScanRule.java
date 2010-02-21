@@ -246,7 +246,7 @@ public abstract class ScanRule implements HashtableSerialization{
 	 * @throws SQLException
 	 * @throws NoDatabaseConnectionException
 	 */
-	public static long getSiteGroupForRule( long ruleID ) throws SQLException, NoDatabaseConnectionException{
+	public static int getSiteGroupForRule( long ruleID ) throws SQLException, NoDatabaseConnectionException{
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -262,7 +262,7 @@ public abstract class ScanRule implements HashtableSerialization{
 			
 			if( resultSet.next() ){
 				
-				return resultSet.getLong("SiteGroupID");
+				return resultSet.getInt("SiteGroupID");
 			}
 			else{
 				return -1;
