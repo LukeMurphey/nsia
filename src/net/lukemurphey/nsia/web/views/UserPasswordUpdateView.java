@@ -232,6 +232,7 @@ public class UserPasswordUpdateView extends View {
 		Vector<Link> breadcrumbs = new Vector<Link>();
 		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 		breadcrumbs.add(  new Link("User Management", UsersView.getURL()) );
+		breadcrumbs.add(  new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
 		breadcrumbs.add(  new Link("Edit User", UserEditView.getURL("Edit", user.getUserID())) );
 		breadcrumbs.add(  new Link("Update Password", createURL( user.getUserID())) );
 		
