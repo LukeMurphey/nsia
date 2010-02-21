@@ -30,6 +30,7 @@ import net.lukemurphey.nsia.web.views.LicenseView;
 import net.lukemurphey.nsia.web.views.LoginView;
 import net.lukemurphey.nsia.web.views.LogoutView;
 import net.lukemurphey.nsia.web.views.MainDashboardView;
+import net.lukemurphey.nsia.web.views.RightsEditView;
 import net.lukemurphey.nsia.web.views.RuleEditView;
 import net.lukemurphey.nsia.web.views.ScanResultHistoryView;
 import net.lukemurphey.nsia.web.views.ScanResultView;
@@ -121,6 +122,7 @@ public class StandardViewList {
 				view_list.registerView( new ExceptionListView() );
 				view_list.registerView( new ExceptionDeleteView() );
 				view_list.registerView( new ExceptionEditView() );
+				view_list.registerView( new RightsEditView() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
