@@ -57,6 +57,20 @@ public class DefinitionPolicyManagement {
 		}
 	}
 	
+	public DefinitionPolicySet getPolicySetForRule( int ruleID ) throws NoDatabaseConnectionException, SQLException{
+		Connection connection = null;
+		
+		connection = application.getDatabaseConnection( Application.DatabaseAccessType.SCANNER );
+		
+		try{
+			return DefinitionPolicySet.getPolicySetForRule(connection, ruleID);
+		} finally {
+			
+			if (connection != null )
+				connection.close();
+		}
+	}
+	
 	public DefinitionPolicyDescriptor getPolicy( int policyID ) throws SQLException, MalformedURLException, NoDatabaseConnectionException{
 		Connection connection = null;
 		PreparedStatement statement = null;
