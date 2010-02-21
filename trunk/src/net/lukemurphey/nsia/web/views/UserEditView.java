@@ -274,7 +274,7 @@ public class UserEditView extends View {
 		breadcrumbs.add(  new Link("User Management", UsersView.getURL()) );
 		
 		if( user != null ){
-			breadcrumbs.add(  new Link("View User", UserView.getURL(user)) );
+			breadcrumbs.add(  new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
 			breadcrumbs.add(  new Link("Edit User", createURL("Edit", user.getUserID())) );
 			data.put("title", "User: " + user);
 		}

@@ -212,7 +212,7 @@ public class UserView extends View {
 		Vector<Link> breadcrumbs = new Vector<Link>();
 		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 		breadcrumbs.add(  new Link("User Management", UsersView.getURL()) );
-		breadcrumbs.add(  new Link("View User", createURL(user.getUserID())) );
+		breadcrumbs.add(  new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
 		data.put("breadcrumbs", breadcrumbs);
 		
 		//Get the dashboard headers
