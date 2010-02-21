@@ -809,7 +809,7 @@ public class AccessControl {
 			result = statement.executeQuery();
 			
 			if( !result.next() ){
-				throw new NotFoundException("No such right exists");
+				throw new NotFoundException("No such right exists (\"" + right + "\")");
 			}
 			
 			// 2 -- Get the access descriptor for the object ID
