@@ -9,7 +9,7 @@
     </#if>
     <link rel="shortcut icon" href="/media/img/16_appicon.ico" type="image/x-icon">
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-    <title>${title}</title>
+    <title>${title?html}</title>
     <style type="text/css">
         @import url('/media/css/Stylesheet.css');
     </style>
@@ -37,7 +37,7 @@
                 <tr>
                     <td class="AlignedBottom">
                         <table summary="UserOptions" class="Toolbar" valign="bottom" cellspacing="3">
-                            <tr><td>&nbsp;</td><td><div style="height: 24px; vertical-align: middle;"><div class="LightText"><#if session?? && session.userName??>Logged in as <u>${session.userName}</u></#if><#if upperbar_options??><#list upperbar_options as option>&nbsp;&nbsp;<a class="LightText" href="${option.link}">${option.title}</a>&nbsp;</#list></#if></div></td></tr>
+                            <tr><td>&nbsp;</td><td><div style="height: 24px; vertical-align: middle;"><div class="LightText"><#if session?? && session.userName??>Logged in as <u>${session.userName?html}</u></#if><#if upperbar_options??><#list upperbar_options as option>&nbsp;&nbsp;<a class="LightText" href="${option.link}">${option.title?html}</a>&nbsp;</#list></#if></div></td></tr>
                         </table>
                     </td></tr>
             </table>
@@ -67,7 +67,7 @@
 
     <tr>
         <td class="Footer" valign="middle" align="right" height="32">
-            <span class="Footer">Version <#if version??>${version}</#if>&nbsp;&nbsp;&nbsp;</span></td></tr>
+            <span class="Footer">Version <#if version??>${version?html}</#if>&nbsp;&nbsp;&nbsp;</span></td></tr>
     </table>
     &nbsp;
 </body>

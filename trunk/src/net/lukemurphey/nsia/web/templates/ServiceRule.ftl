@@ -23,7 +23,7 @@
             <#-- 1 -- Output scan frequency -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("ScanFrequencyValue"))>ValidationFailed<#else>Background1</#if>">
                 <td class="Text_3">Scan Frequency</td>
-                <td><input class="textInput" type="text" name="ScanFrequencyValue" value="${scanFrequencyValue}" />&nbsp;&nbsp;
+                <td><input class="textInput" type="text" name="ScanFrequencyValue" value="${scanFrequencyValue?c}" />&nbsp;&nbsp;
                     <select name="ScanFrequencyUnits">
                         <option value="86400"<#if scanFrequencyUnits == 84600> selected</#if>>Days</option>
                         <option value="3600"<#if scanFrequencyUnits == 3600> selected</#if>>Hours</option>
@@ -35,29 +35,29 @@
             <#-- 2 -- Output server address -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("Server"))>ValidationFailed<#else>Background1</#if>">
                 <td class="Text_3">Server Address</td>
-                <td><input class="textInput" size="40" type="text" name="Server" value="<#if request.getParameter("Server")??>${request.getParameter("Server")}<#elseif rule??>${rule.serverAddress}</#if>"></td>
+                <td><input class="textInput" size="40" type="text" name="Server" value="<#if request.getParameter("Server")??>${request.getParameter("Server")?html}<#elseif rule??>${rule.serverAddress?html}</#if>"></td>
             </tr>
             <#-- 3 -- Output ports to scan -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("PortsToScan"))>ValidationFailed<#else>Background1</#if>">
                 <td style="vertical-align: top;" class="Text_3">Ports to Scan</td>
-                <td><textarea id="cp1" class="codepress ports" wrap="virtual" rows="6" cols="48" name="PortsToScan"><#if request.getParameter("PortsToScan")??>${request.getParameter("PortsToScan")}<#elseif rule??><#list rule.portsToScan as port>${port}<@endline /></#list></#if></textarea>
-                    <input type="hidden" name="PortsToScan2" value="<#if request.getParameter("PortsToScan2")??>${request.getParameter("PortsToScan2")}<#elseif rule??><#list rule.portsToScan as port>${port}<@endline /></#list></#if>"></td>
+                <td><textarea id="cp1" class="codepress ports" wrap="virtual" rows="6" cols="48" name="PortsToScan"><#if request.getParameter("PortsToScan")??>${request.getParameter("PortsToScan")?html}<#elseif rule??><#list rule.portsToScan as port>${port?html}<@endline /></#list></#if></textarea>
+                    <input type="hidden" name="PortsToScan2" value="<#if request.getParameter("PortsToScan2")??>${request.getParameter("PortsToScan2")?html}<#elseif rule??><#list rule.portsToScan as port>${port?html}<@endline /></#list></#if>"></td>
             </tr>
             <#-- 4 -- Output ports expected open -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("PortsExpectedOpen"))>ValidationFailed<#else>Background1</#if>">
                 <td style="vertical-align: top;" class="Text_3">Ports Expected Open</td>
-                <td><textarea id="cp2" class="codepress ports" wrap="virtual" rows="6" cols="48" name="PortsExpectedOpen"><#if request.getParameter("PortsExpectedOpen")??>${request.getParameter("PortsExpectedOpen")}<#elseif rule??><#list rule.portsExpectedOpen as port>${port}<@endline /></#list></#if></textarea>
-                    <input type="hidden" name="PortsExpectedOpen2" value="<#if request.getParameter("PortsExpectedOpen2")??>${request.getParameter("PortsExpectedOpen2")}<#elseif rule??><#list rule.portsExpectedOpen as port>${port}<@endline /></#list></#if>"></td>
+                <td><textarea id="cp2" class="codepress ports" wrap="virtual" rows="6" cols="48" name="PortsExpectedOpen"><#if request.getParameter("PortsExpectedOpen")??>${request.getParameter("PortsExpectedOpen")?html}<#elseif rule??><#list rule.portsExpectedOpen as port>${port?html}<@endline /></#list></#if></textarea>
+                    <input type="hidden" name="PortsExpectedOpen2" value="<#if request.getParameter("PortsExpectedOpen2")??>${request.getParameter("PortsExpectedOpen2")?html}<#elseif rule??><#list rule.portsExpectedOpen as port>${port?html}<@endline /></#list></#if>"></td>
             </tr>
             <tr class="lastRow">
                 <td class="alignRight" colspan="99">
                 <#if !rule?? >
                     <input class="button" type="submit" value="Create Rule" name="Action">&nbsp;&nbsp;
-                    <input type="hidden" name="SiteGroupID" value="${siteGroupID}">
-                    <input type="hidden" name="RuleType" value="${request.getParameter("RuleType")}">
+                    <input type="hidden" name="SiteGroupID" value="${siteGroupID?c}">
+                    <input type="hidden" name="RuleType" value="${request.getParameter("RuleType")?html}">
                 <#else>
                     <input class="button" type="submit" value="Apply Changes" name="Action">&nbsp;&nbsp;
-                    <input type="hidden" name="RuleID" value="${rule.ruleId}">
+                    <input type="hidden" name="RuleID" value="${rule.ruleId?c}">
                 </#if>
                     <input class="button" type="submit" value="Cancel" name="Action">
                 </td>

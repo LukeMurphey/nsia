@@ -23,7 +23,7 @@
         </div>
         <p/>
         <input class="button" type="Submit" value="Apply" name="Apply" />
-        <input type="hidden" value="${tabIndex}" name="TabIndex">
+        <input type="hidden" value="${tabIndex?c}" name="TabIndex">
      </form>
 </#assign>
 <#include "BaseWithNav.ftl">

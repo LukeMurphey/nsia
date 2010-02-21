@@ -10,8 +10,8 @@
         <span class="Text_1">Exceptions</span><br />
         <#--Revision ${definition_set_version} (Last Updated ${updated?datetime})<br>-->&nbsp;<br/>
         <form method="get" action="<@url name="exception_delete" args=[ruleID] />">
-            <input type="hidden" name="SiteGroupID" value="${siteGroupID}">
-            <input type="hidden" name="RuleID" value="${ruleID}">
+            <input type="hidden" name="SiteGroupID" value="${siteGroupID?c}">
+            <input type="hidden" name="RuleID" value="${ruleID?c}">
             <table width="640" class="DataTable" summary="">
                 <thead>
                     <tr>
@@ -27,32 +27,32 @@
                 <#else>
                     <tr>
                         <td width="6">
-                            <input type="checkbox" name="ExceptionID" value="${filter.policyID}">
+                            <input type="checkbox" name="ExceptionID" value="${filter.policyID?c}">
                         </td>
                     <#if ( filter.policyType == CATEGORY )>
                         <td>Category</td>
-                        <td>${filter.definitionCategory}.*
+                        <td>${filter.definitionCategory?html}.*
                     <#elseif ( filter.policyType == SUBCATEGORY )>
                         <td>Sub-Category</td>
-                        <td>${filter.definitionCategory}.${filter.definitionSubCategory}.*
+                        <td>${filter.definitionCategory?html}.${filter.definitionSubCategory?html}.*
                     <#elseif ( filter.policyType == NAME )>
                         <td>Definition</td>
-                        <td>${filter.definitionCategory}.${filter.definitionSubCategory}.${filter.definitionName}
+                        <td>${filter.definitionCategory?html}.${filter.definitionSubCategory?html}.${filter.definitionName?html}
                     <#elseif ( filter.policyType == URL )>
                         <td>URL</td>
-                        <td>${filter.URL}
+                        <td>${filter.URL?html}
                     </#if>
                     
-                    <#if ( filter.URL?? )>for <a href="${filter.URL.toExternalForm()}" title="${filter.URL.toExternalForm()}"><@truncate_chars length=32> ${filter.URL.toExternalForm()}</@truncate_chars></a></#if>
+                    <#if ( filter.URL?? )>for <a href="${filter.URL.toExternalForm()?html}" title="${filter.URL.toExternalForm()?html}"><@truncate_chars length=32> ${filter.URL.toExternalForm()?html}</@truncate_chars></a></#if>
                         </td>
                         <td>
                             <table>
                                 <tr>
                                     <td class="imagebutton">
-                                        <a href="<@url name="exception_delete" args=[ruleID] />?ExceptionID=${filter.policyID}"><img alt="Delete" src="/media/img/16_Delete" /></a>
+                                        <a href="<@url name="exception_delete" args=[ruleID] />?ExceptionID=${filter.policyID?c}"><img alt="Delete" src="/media/img/16_Delete" /></a>
                                     </td>
                                     <td>
-                                        <a href="<@url name="exception_delete" args=[ruleID] />?ExceptionID=${filter.policyID}">Delete</a>
+                                        <a href="<@url name="exception_delete" args=[ruleID] />?ExceptionID=${filter.policyID?c}">Delete</a>
                                     </td>
                                 </tr>
                             </table>

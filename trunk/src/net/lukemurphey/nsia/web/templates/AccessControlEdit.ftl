@@ -67,7 +67,7 @@
                                     <td width="3">
                                         <img src="<#if user.enabled >/media/img/16_User<#else>/media/img/16_UserDisabled</#if>" alt="user${user.userID?c}" />
                                     </td>
-                                    <td>${user.userName} (User)<td>
+                                    <td>${user.userName?html} (User)<td>
                                 </tr>
                             </#list>
                             <#list groups as group>
@@ -78,7 +78,7 @@
                                     <td width="3">
                                         <img src="<#if group.enabled >/media/img/16_Group<#else>/media/img/16_GroupDisabled</#if>" alt="group${group.groupId?c}" />
                                     </td>
-                                    <td>${group.groupName} (Group)<td>
+                                    <td>${group.groupName?html} (Group)<td>
                                 </tr>
                             </#list>
                             </table>

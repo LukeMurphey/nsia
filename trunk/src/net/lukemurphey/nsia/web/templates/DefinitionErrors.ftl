@@ -22,13 +22,13 @@
                     <table>
                         <tr>
                             <td><img src="/media/img/16_script"</td>
-                            <td><a href="<@url name="definition" args=[error.definitionID] />">${error.definitionName}</a></td>
+                            <td><a href="<@url name="definition" args=[error.definitionID] />">${error.definitionName?html}</a></td>
                         </tr>
                     </table>
                 </td>
-                <td>${error.definitionVersion}</td>
-                <td>${error.definitionID}</td>
-                <td>${error.errorName}</td>
+                <td>${error.definitionVersion?c}</td>
+                <td>${error.definitionID?c}</td>
+                <td>${error.errorName?html}</td>
                 <td>${error.dateFirstOccurred}</td>
                 <td>${error.dateLastOccurred}</td>
             </tr>

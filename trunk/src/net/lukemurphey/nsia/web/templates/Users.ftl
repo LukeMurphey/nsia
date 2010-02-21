@@ -20,7 +20,7 @@
     <#list users as user>
     <tr class="Background1">
         <td>${user.userID}</td>
-        <td><a href="<@url name="user" args=[user.userID]/>">${user.userName}        
+        <td><a href="<@url name="user" args=[user.userID]/>">${user.userName?html}        
         <#-- 1 -- Output the icon associated with the account type -->
         <#if user.unrestricted && user.accountStatus != DISABLED >
         &nbsp;&nbsp;<img src="/media/img/16_Admin" alt="Unrestricted"></a>
@@ -34,7 +34,7 @@
         <#if user.bruteForceLocked><span class="WarnText">(account is locked)</span></#if></td>
         
         <#if user.fullname?? >
-        <td><a href="<@url name="user" args=[user.userID]/>">${user.fullname}</td>
+        <td><a href="<@url name="user" args=[user.userID]/>">${user.fullname?html}</td>
         <#else>
         <td>(Unspecified)</td>
         </#if>
@@ -59,7 +59,7 @@
         
         <#-- 5 -- Output the email address -->
         <#if user.emailAddress??>
-        <td class="Background1"><a href="mailto:${user.emailAddress}">${user.emailAddress}</a></td>
+        <td class="Background1"><a href="mailto:${user.emailAddress?html}">${user.emailAddress?html}</a></td>
         <#else>
         <td class="Background1">(None Specified)</td>
         </#if>

@@ -1,7 +1,7 @@
 <table border="0" cellpadding="0" cellspacing="8">
     <tr>
-        <td class="AlignedTop" rowspan="2"><img src="${icon}" alt="Warning" />&nbsp;&nbsp;</td>
-        <td class="Text_2"><#if warn??><span class="Text_1"><span class="WarnText">${title}</span></span><#else><span class="Text_1">${title}</span></#if><td>
+        <td class="AlignedTop" rowspan="2"><img src="${icon?html}" alt="Warning" />&nbsp;&nbsp;</td>
+        <td class="Text_2"><#if warn??><span class="Text_1"><span class="WarnText">${title?html}</span></span><#else><span class="Text_1">${title}</span></#if><td>
     </tr>
     <tr>
         <td>${message}<td>
@@ -13,7 +13,7 @@
     </tr>
     <tr>
         <td>&nbsp;</td>
-        <td><a href="${suggested.link}">[${suggested.title}]</a><td>
+        <td><a href="${suggested.link?html}">[${suggested.title?html}]</a><td>
     </tr>
     </#if>
     <#if progress??>
@@ -42,8 +42,8 @@
         <td>
         <#list buttons as button>
             <span style="float:left">
-                <form action="${button.link}" method="GET">
-                    <input class="button" type="submit" value="${button.title}" name="Selected" />
+                <form action="${button.link?html}" method="GET">
+                    <input class="button" type="submit" value="${button.title?html}" name="Selected" />
                 </form>
             </span>&nbsp;
         </#list>

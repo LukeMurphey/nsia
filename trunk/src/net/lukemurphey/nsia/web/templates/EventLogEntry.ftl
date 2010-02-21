@@ -24,20 +24,20 @@
 <div style="position: relative; left: 32px;">
     <table cellpadding="2">
         <tr><td class="Text_2">Event</td>
-            <td>${entry.message}</td>
+            <td>${entry.message?html}</td>
         </tr>
         <tr>
             <td class="Text_2">Severity</td>
-            <td>${entry.severity}</td>
+            <td>${entry.severity?html}</td>
         </tr>
         <tr>
             <td class="Text_2">Date</td>
-            <td>${entry.formattedDate}</td>
+            <td>${entry.formattedDate?date}</td>
         </tr>
         <#if entry.notes??>
         <tr>
             <td class="Text_2">Notes</td>
-            <td>${entry.notes}</td>
+            <td>${entry.notes?html}</td>
         </tr>
         </#if>
         </table><p>
@@ -49,9 +49,9 @@
                 <#if curPrevId?? && (curPrevId >= 0)>
                     <form method="post" action="<@url name="event_log_entry" args=[curPrevId] />">
                     <input class="button" type="Submit" name="Action" value="[Previous]" />
-                    <#if (severity >= 0)><input type="hidden" name="Severity" value="${severity}" /></#if>
-                    <#if ( contentFilter?? )><input type="hidden" name="Content" value="${contentFilter}" /></#if>
-                    <input type="hidden" name="PrevEntryID" value="${curPrevId}" />
+                    <#if (severity >= 0)><input type="hidden" name="Severity" value="${severity?html}" /></#if>
+                    <#if ( contentFilter?? )><input type="hidden" name="Content" value="${contentFilter?html}" /></#if>
+                    <input type="hidden" name="PrevEntryID" value="${curPrevId?c}" />
                     </form>
                 <#else>
                     <input disabled class="buttonDisabled" type="Submit" name="Action" value="[Previous]" />
@@ -61,9 +61,9 @@
                 <#if curNextId?? && (curNextId >= 0)>
                     <form method="post" action="<@url name="event_log_entry" args=[curNextId] />">
                     <input class="button" type="Submit" name="Action" value="[Next]" />
-                    <#if (severity >= 0)><input type="hidden" name="Severity" value="${severity}" /></#if>
-                    <#if ( contentFilter?? )><input type="hidden" name="Content" value="${contentFilter}" /></#if>
-                    <input type="hidden" name="EntryID" value="${curNextId}" />
+                    <#if (severity >= 0)><input type="hidden" name="Severity" value="${severity?html}" /></#if>
+                    <#if ( contentFilter?? )><input type="hidden" name="Content" value="${contentFilter?html}" /></#if>
+                    <input type="hidden" name="EntryID" value="${curNextId?c}" />
                     </form>
                 <#else>
                     <input disabled class="buttonDisabled" type="Submit" name="Action" value="[Next]" />

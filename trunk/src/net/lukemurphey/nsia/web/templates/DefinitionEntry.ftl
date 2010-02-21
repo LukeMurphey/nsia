@@ -93,7 +93,7 @@
     
 </#if>
 
-<span class="Text_2">${type} Definition</span><p>
+<span class="Text_2">${type?html} Definition</span><p>
 
 <script src="/media/misc/codepress/codepress.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -113,7 +113,7 @@
     <#else>
     <input type="hidden" name="Action" value="New">
     </#if>
-    <input type="hidden" name="Type" value="${type}">    
+    <input type="hidden" name="Type" value="${type?html}">    
     <input type="hidden" name="SignatureCode2" value="${code?html}">
             
     <#if definition?? && definition.official >

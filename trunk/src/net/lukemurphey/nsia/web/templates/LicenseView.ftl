@@ -5,7 +5,7 @@
     
     <#assign keyform>
         <p/>Once you have a valid license key, enter it below:<form method="POST" action="<@url name="license" />">
-        <input class="textInput" size="48" type="text" name="LicenseKey" value="${license_key}">
+        <input class="textInput" size="48" type="text" name="LicenseKey" value="${license_key?html}">
         <input type="Submit" class="button" value="Apply" name="Apply"></form>
     </#assign>
     
@@ -28,7 +28,7 @@
         <@getwarndialog title="Expired License" message=message />
     <#elseif license.status = ACTIVE>
         <#assign message>
-            The application license has been granted to ${license.licensee} and is valid until ${license.expirationDate?date}.<p/>If you need support, please go to <a href="http://ThreatFactor.com/Support/">ThreatFactor.com</a> now.<p/>
+            The application license has been granted to ${license.licensee?html} and is valid until ${license.expirationDate?date}.<p/>If you need support, please go to <a href="http://ThreatFactor.com/Support/">ThreatFactor.com</a> now.<p/>
             <form method="GET" action="<@url name="main_dashboard" />"><input type="Submit" class="button" value="OK" name="OK"></form>
         </#assign>
             

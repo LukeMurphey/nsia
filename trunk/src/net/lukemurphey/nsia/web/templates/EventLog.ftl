@@ -27,7 +27,7 @@
             <td>
                 <span class="Text_3">Content Filter:</span>
             </td>
-            <td>Display all entries that contain <input class="textInput" type="Text" name="Content" value="<#if contentfilter?? >${contentfilter}</#if>"></td>
+            <td>Display all entries that contain <input class="textInput" type="Text" name="Content" value="<#if contentfilter?? >${contentfilter?html}</#if>"></td>
         </tr>
         <tr class="Background3">
             <td colspan="99"><input class="button" type="Submit" name="Apply" value="Apply"></td>
@@ -75,12 +75,12 @@
                 <td>${entry.severity}</td>
             <#else>
                 <td class="StatBlueSmall"><span style="vertical-align: middle;"><img src="/16_Information" alt="Informational"></span></td>
-                <td>${entry.severity}</td>
+                <td>${entry.severity?html}</td>
             </#if>
-                <td>${entry.date}</td>
+                <td>${entry.date?date}</td>
                 <td><a href="<@url name="event_log_entry" args=[entry.entryID] /><#if (severity >= 0 || contentFilter?? )>?<#if (severity >= 0)>Severity=${severity}&</#if><#if (contentFilter??)>Content=${contentFilter}&</#if></#if>">[${entry.entryID}]</a></td>
-                <td><@truncate_chars length=70>${entry.message}</@truncate_chars></td>
-                <td><@truncate_chars length=40>${entry.notes}</@truncate_chars></td>
+                <td><@truncate_chars length=70>${entry.message?html}</@truncate_chars></td>
+                <td><@truncate_chars length=40>${entry.notes?html}</@truncate_chars></td>
             </tr>
         </#list>
         </table><p/>
@@ -99,11 +99,11 @@
             </#if>
             
             <#if contentfilter?? >
-                <input class="button" type="hidden" name ="Content" value="<#if contentfilter?? >${contentfilter}</#if>">
+                <input class="button" type="hidden" name ="Content" value="<#if contentfilter?? >${contentfilter?html}</#if>">
             </#if>
             
             <#if (severity?? && severity >= 0) >
-                <input class="button" type="hidden" name ="Severity" value="${severity}">
+                <input class="button" type="hidden" name ="Severity" value="${severity?html}">
             </#if>
             
             <#function increment x >

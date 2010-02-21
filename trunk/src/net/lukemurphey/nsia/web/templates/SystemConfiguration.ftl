@@ -6,12 +6,12 @@
 
 <#macro config_options options name> 
     <tr>
-        <td class="Text_2">${name}</td>
+        <td class="Text_2">${name?html}</td>
     </tr>
     <#list options as param>
 
     <#assign start_link>
-    <a name="${param.id}" href="${geturl("system_configuration")}?ParamID=${param.id}#${param.id}">
+    <a name="${param.id}" href="${geturl("system_configuration")}?ParamID=${param.id?c}#${param.id?c}">
     </#assign>
 
     <#if (selected?? && selected == param.id)>
@@ -20,19 +20,19 @@
             <table width="100%">
                 <tr>
                     <td width="1%">${start_link}<img alt="-" src="/media/img/9_TreeNodeOpen"></a></td>
-                    <td>${start_link}${param.name}</a></td>
+                    <td>${start_link}${param.name?html}</a></td>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
                     <td colspan="2">
                         <form method="post" action="/System/Configuration">
-                        <input type="hidden" name="ParamID" value="${param.id}">
+                        <input type="hidden" name="ParamID" value="${param.id?c}">
                <#if param.integer>
                         <input type="hidden" name="ParamSet" value="true">
-                        <input class="textInput" size="48" name="ParamValue" value="${param.value}">
+                        <input class="textInput" size="48" name="ParamValue" value="${param.value?html}">
                <#elseif param.text>
                         <input type="hidden" name="ParamSet" value="true">
-                        <input class="textInput" size="48" name="ParamValue" value="${param.value}">
+                        <input class="textInput" size="48" name="ParamValue" value="${param.value?html}">
                <#elseif param.bool>
                         <input type="hidden" name="ParamSet" value="true">
                         <table>
@@ -42,14 +42,14 @@
                             </tr>
                         </table>
                <#elseif param.multiline>
-                        <textarea cols="48" rows="5" name="ParamValue">${param.value}</textarea>
+                        <textarea cols="48" rows="5" name="ParamValue">${param.value?html}</textarea>
                <#elseif param.password>
-                        <input type="password" class="textInput" size="48" name="ParamValue" value="${param.value}">
+                        <input type="password" class="textInput" size="48" name="ParamValue" value="${param.value?html}">
                <#elseif param.select>
                         <select name="ParamValue">
                             <#if param.selectValues??>
                             <#list param.selectValues as v>
-                                <option value="${v.name}" <#if v.name == param.value>selected</#if>>${v.value}</option>
+                                <option value="${v.name}" <#if v.name == param.value>selected</#if>>${v.value?html}</option>
                             </#list>
                             </#if>
                         </select>
@@ -67,7 +67,7 @@
         <td>
             <table>
                 <tr>
-                    <td>${start_link}<img alt="-" src="/media/img/9_TreeNodeClosed"></a></td><td>${start_link}${param.name}</a></td>
+                    <td>${start_link}<img alt="-" src="/media/img/9_TreeNodeClosed"></a></td><td>${start_link}${param.name?html}</a></td>
                 </tr>
             </table>
         </td>

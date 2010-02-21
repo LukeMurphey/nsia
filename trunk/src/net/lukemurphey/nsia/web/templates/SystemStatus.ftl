@@ -5,7 +5,7 @@
         <tr>
             <td><img src="/media/img/16_Warning" alt="Warning"></td>
             <td class="WarnText">
-            ${message}
+            ${message?html}
             </td>
         </tr>
     </table>
@@ -16,7 +16,7 @@
         <tr>
             <td><img src="/media/img/16_Check" alt="OK"></td>
             <td>
-            ${message}
+            ${message?html}
             </td>
         </tr>
     </table>
@@ -27,7 +27,7 @@
         <tr>
             <td><img src="/media/img/16_Alert" alt="Alert"></td>
             <td class="WarnText">
-            ${message}
+            ${message?html}
             </td>
         </tr>
     </table>
@@ -38,7 +38,7 @@
         <tr>
             <td><img src="/media/img/16_Information" alt="Info"></td>
             <td>
-            ${message}
+            ${message?html}
             </td>
         </tr>
     </table>
@@ -48,7 +48,7 @@
     <tr>
         <td width="300" class="Background1">
             <div class="Text_3">
-            ${stat.title}
+            ${stat.title?html}
             </div>
         </td>
         <td class="Background1">

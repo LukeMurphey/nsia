@@ -9,16 +9,16 @@
         <table>
             <tr class="Background1">
                 <td width="150" class="Text_3">User ID</td>
-                <td>${user.userID}</td>
+                <td>${user.userID?c}</td>
             </tr>
             <tr class="Background1">
                 <td class="Text_3">Username</td>
-                <td>${user.userName} <#if user.bruteForceLocked><span class="WarnText">(account is locked due to authentication failures,</span> <a href="<@url name="user_unlock" args=[user.userID] />">Unlock now</a><span class="WarnText">)</span></#if></td>
+                <td>${user.userName?html} <#if user.bruteForceLocked><span class="WarnText">(account is locked due to authentication failures,</span> <a href="<@url name="user_unlock" args=[user.userID] />">Unlock now</a><span class="WarnText">)</span></#if></td>
             </tr>
             <#if user.fullname?? >
             <tr class="Background1">
                 <td class="Text_3">Full Name</td>
-                <td>${user.fullname}</td>
+                <td>${user.fullname?html}</td>
             </tr>
             <#else>
             <tr class="Background1">
@@ -30,7 +30,7 @@
             <#if user.emailAddress??>
             <tr class="Background1">
                 <td class="Text_3">Email Address</td>
-                <td><a href="mailto:${user.emailAddress}">${user.emailAddress}</a></td>
+                <td><a href="mailto:${user.emailAddress?html}">${user.emailAddress?html}</a></td>
             </tr>
             <#else>
             <tr class="Background1">
@@ -74,7 +74,7 @@
             <@getinfodialog title="No Groups Exist" message=message />
         <#else>
             <form method="POST" action="<@url name="user_edit_membership" args=[user.userID] />">
-                <input type="hidden" name="UserID" value="${user.userID}">
+                <input type="hidden" name="UserID" value="${user.userID?c}">
                 <input type="hidden" name="Action" value="SetGroup">
             
                 <table>
@@ -88,7 +88,7 @@
                     <tr class="Background1">
                         <td>
                             <input id="${group.ID}" type="checkbox" name="${group.ID}" <#if group.memberOf>checked</#if>>
-                            <label for="${group.ID}">${group.name}</label>
+                            <label for="${group.ID?c}">${group.name?html}</label>
                             <#if group.status = ACTIVE >
                                 &nbsp;&nbsp;<img alt="Enabled" src="/media/img/16_Group">
                             <#else>
@@ -96,14 +96,14 @@
                             </#if>
                          </td>
                          <td>
-                            <a href="GroupManagement?GroupID=${group.ID}">${group.ID} [View]</a>
+                            <a href="GroupManagement?GroupID=${group.ID?c}">${group.ID} [View]</a>
                          </td>
-                         <td><@truncate_chars length=32>${group.description}</@truncate_chars></td>
+                         <td><@truncate_chars length=32>${group.description?html}</@truncate_chars></td>
                     </tr>
                 </#list>
                 <tr class="Background3">
                     <td class="alignRight" colspan="3">
-                        <input type="hidden" name="IncludedGroups" value="${included_groups}">
+                        <input type="hidden" name="IncludedGroups" value="${included_groups?html}">
                         <input class="button" type="submit" value="Apply Changes">
                     </td>
                 </tr>

@@ -20,13 +20,13 @@
     <tbody>
     <#list tasks as task>
         <tr>
-            <td class="TitleText">${task.taskDescription}</td>
+            <td class="TitleText">${task.taskDescription?html}</td>
             <td>
                 <#if task.user?? >
                 <table>
                     <tr>
                         <td><img style="vertical-align: top;" alt="User" src="/media/img/<#if task.user.unrestricted>16_Admin<#else>16_User</#if>">
-                        <td>&nbsp;<a href="UserManagement?UserID=${task.user.id}">${task.user.username}</a></td>
+                        <td>&nbsp;<a href="<@url name="user" args=[task.user.id]/>">${task.user.username?html}</a></td>
                     </tr>
                 </table>
                 <#else>
@@ -37,13 +37,13 @@
                 </table>
                 </#if>
             </td>
-            <td>${task.statusDescription}</td>
+            <td>${task.statusDescription?html}</td>
             <td>
             <#if (task.progress < 0)>
                 <img style="margin-top: 3px;" src="/media/img/SmallProgressBarAnimation" alt="Progress Bar" />
             <#else>
                 <div style="position:relative; width:198px; height:12px; margin-top: 3px; padding:2px; background-image:url(/media/img/SmallProgressBarBlank);">
-                    <div style="position:relative; left:1px; width:${width(task.progress)}px; height:8px; padding:2px; background-image:url(/media/img/SmallProgressBar2); layer-background-image:url(/media/img/SmallProgressBar2);"></div>
+                    <div style="position:relative; left:1px; width:${width(task.progress)?c}px; height:8px; padding:2px; background-image:url(/media/img/SmallProgressBar2); layer-background-image:url(/media/img/SmallProgressBar2);"></div>
                 </div>
             </#if>
             </td>

@@ -9,7 +9,7 @@
     </#if>
     <link rel="shortcut icon" href="/media/img/16_appicon.ico" type="image/x-icon">
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-    <title>${title}</title>
+    <title>${title?html}</title>
     <style type="text/css">
         @import url('/media/css/Stylesheet.css');
     </style>

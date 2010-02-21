@@ -9,7 +9,7 @@
         <td width="40" align="center" class="StatRed"><img src="/media/img/22_Alert" alt="alert"></td>
     </#if>
         <td width="6"><input type="checkbox" name="DefinitionPolicy" value="${category.name?html}"></td>
-        <td>${category.name}</td>
+        <td>${category.name?html}</td>
         
     <#if category.enabled >
         <td>Enabled
@@ -27,7 +27,7 @@
 <#assign content>
 <span class="Text_1">Scan Policy Management</span>
 <#if (sitegroup??)>
-<br><span class="LightText">Viewing scan policy for Site Group ${sitegroup.groupName}</span>
+<br><span class="LightText">Viewing scan policy for Site Group ${sitegroup.groupName?html}</span>
 <#else>
 <br><span class="LightText">Viewing default scan policy</span>
 </#if>
@@ -35,7 +35,7 @@
 
 <form action="${request.thisURL}" method="post" action="ScanPolicy">
 <#if (sitegroup??)>
-    <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId}">
+    <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId?c}">
 </#if>
 <#if categories?size = 0 >
 

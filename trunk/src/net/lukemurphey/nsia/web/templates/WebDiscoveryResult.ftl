@@ -71,7 +71,7 @@
                    </tr>
             </#list>
             <#if (definitionMatches?size < 6)>
-                <tr class="Background1"><td height="${((6-definitionMatches?size)*22)}" colspan="3"></td></tr>
+                <tr class="Background1"><td height="${((6-definitionMatches?size)*22)?c}" colspan="3"></td></tr>
             </#if>
         </#if>
     </table>
@@ -83,7 +83,7 @@
             <td style="vertical-align:top" width="400px" rowspan="99" class="BackgroundLoading1">
             <#assign contentTypes=scanResult.discoveredContentTypes />
             <#if ( contentTypes?size >= 5 ) > 
-                <img alt="ContentTypes" src="/ContentTypeResults?ResultID=${scanResult.scanResultID?c}&H=${(25 + (contentTypes?size * 20))}"></td></tr>
+                <img alt="ContentTypes" src="/ContentTypeResults?ResultID=${scanResult.scanResultID?c}&H=${(25 + (contentTypes?size * 20))?c}"></td></tr>
             <#else>
                 <img alt="ContentTypes" src="/ContentTypeResults?ResultID=${scanResult.scanResultID?c}"></td>
             </#if>
@@ -92,7 +92,7 @@
         <tr class="Background1"><td colspan="99"><@infonote message="No resources scanned" /></td></tr>
         <#else>
             <#list contentTypesCount as contentType >
-            <#assign name><#if contentType.name??>${contentType.name}<#else>[Unknown]</#if></#assign>
+            <#assign name><#if contentType.name??>${contentType.name?html}<#else>[Unknown]</#if></#assign>
             <#if siteGroup??>
             <tr class="Background1">
                 <td height="8px" class="Text_3"><a href="<@url name="scan_result" args=[scanResult.scanResultID] />?ContentTypeFilter=${name?html}">
@@ -105,7 +105,7 @@
         </#if>
         
         <#if (contentTypesCount?size < 5) >
-            <tr class="Background1"><td height="${((5-contentTypesCount?size)*30)}px" colspan="2"></td></tr>
+            <tr class="Background1"><td height="${((5-contentTypesCount?size)*30)?c}px" colspan="2"></td></tr>
         </#if>
         </table>
     <#-- Render definitions matching list -->
@@ -139,8 +139,8 @@
             <td width="22" style="vertical-align: top;" class="StatYellowSmall"><img src="/media/img/22_Warning" alt="Warning"></td>
             </#if>
             <td title="${finding.url?html}" style="vertical-align:middle;">
-                <img style="display: none;" id="finding${finding_index}on" onclick="toggle('finding${finding_index}')" src="/media/img/9_TreeNodeOpen" alt="Node">
-                <img id="finding${finding_index}off" onclick="toggle('finding${finding_index}')" src="/media/img/9_TreeNodeClosed" alt="Node">&nbsp;
+                <img style="display: none;" id="finding${finding_index?c}on" onclick="toggle('finding${finding_index?c}')" src="/media/img/9_TreeNodeOpen" alt="Node">
+                <img id="finding${finding_index?c}off" onclick="toggle('finding${finding_index}')" src="/media/img/9_TreeNodeClosed" alt="Node">&nbsp;
                 <span class="Text_3"><@truncate_chars length=64>${finding.url?html}</@truncate_chars>&nbsp;&nbsp;&nbsp;</span>
                 <#assign matches = finding.definitionMatches />
                     <#if (matches?size > 0 )>
@@ -155,7 +155,7 @@
                         </#list>
                     </div>
                   <#else>
-                    <div style="display: none;" id="finding${finding_index}"><p>&nbsp;&nbsp;&nbsp;No Definitions Matched</div>
+                    <div style="display: none;" id="finding${finding_index?c}"><p>&nbsp;&nbsp;&nbsp;No Definitions Matched</div>
                   </#if>
               </td>
                 <#if ( scanResult.resultCode == SCAN_COMPLETED && scanResult.deviations == 0)>
