@@ -415,7 +415,8 @@ public class SiteGroupView extends View {
 			ViewNotFoundException {
 		
 		try{
-		
+			Shortcuts.addDashboardHeaders(request, response, data);
+			
 			// 1 -- Get the Site Group
 			SiteGroupDescriptor siteGroup = null;
 			
@@ -425,13 +426,16 @@ public class SiteGroupView extends View {
 					siteGroup = mgmr.getGroupDescriptor( Integer.valueOf( args[0]) );
 				} catch (NotFoundException e) {
 					Dialog.getDialog(response, context, data, "The SiteGroup ID provided is not valid", "SiteGroup ID Invalid", DialogType.WARNING);
+					return true;
 				}
 				catch (NumberFormatException e) {
 					Dialog.getDialog(response, context, data, "The SiteGroup ID provided is not valid", "SiteGroup ID Invalid", DialogType.WARNING);
+					return true;
 				}
 			}
 			else{
 				Dialog.getDialog(response, context, data, "The SiteGroup ID provided is not valid", "SiteGroup ID Invalid", DialogType.WARNING);
+				return true;
 			}
 			
 			// 2 -- Check permissions
