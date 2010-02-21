@@ -31,7 +31,7 @@
             <#else>
                 <td width="40" align="center" class="StatYellow"><img src="/media/img/22_Warning" alt="warning"></td>
             </#if>
-            <td align="center"><input type="checkbox" name="RuleID" value="${rule.ID}"></td>
+            <td align="center"><input type="checkbox" name="RuleID" value="${rule.ID?c}"></td>
             <#-- Output the deviation count -->
             <#if (!rule.status_description?? )>
                 <#if ( rule.deviations == -1 )>
@@ -92,7 +92,7 @@
             <tr>
                 <td width="4"></td>
                 <td><img src="/media/img/16_Add"></td>
-                <td><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroup.groupId}">[Add a new rule]</a></td>
+                <td><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroup.groupId?c}">[Add a new rule]</a></td>
             </tr>
         </table>
 </#if>

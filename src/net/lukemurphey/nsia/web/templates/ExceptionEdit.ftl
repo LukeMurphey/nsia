@@ -8,19 +8,19 @@
     <@getFormErrors form_errors=form_errors />
     </#if>
     <form action="<@url name="exception_editor" args=[ruleID] />" method="post">
-        <input type="hidden" name="SiteGroupID" value="${siteGroupID}" />
+        <input type="hidden" name="SiteGroupID" value="${siteGroupID?c}" />
         <#if ( definitionName?? )>
-            <input type="hidden" name="DefinitionName" value="${definitionName}" />
+            <input type="hidden" name="DefinitionName" value="${definitionName?html}" />
         <#else>
-            <input type="hidden" name="DefinitionID" value="${definitionID}" />
+            <input type="hidden" name="DefinitionID" value="${definitionID?c}" />
         </#if>
-        <input type="hidden" name="RuleID" value="${ruleID}" />
+        <input type="hidden" name="RuleID" value="${ruleID?c}" />
         <#if ( URL?? )>
-            <input type="hidden" name="URL" value="${URL}">
+            <input type="hidden" name="URL" value="${URL?html}">
         </#if>
         
         <#if ( ReturnTo?? )>
-            <input type="hidden" name="ReturnTo" value="${ReturnTo}" />
+            <input type="hidden" name="ReturnTo" value="${ReturnTo?html}" />
         </#if>
         <table>
             <tr>
@@ -28,7 +28,7 @@
                     <input type="radio" name="FilterType" value="Definition">
                 </td>
                 <td>
-                    <span class="Text_3">Filter out definition (${definition.fullName})</span>
+                    <span class="Text_3">Filter out definition (${definition.fullName?html})</span>
                 </td>
             </tr>
             <tr>
@@ -39,7 +39,7 @@
                     <input type="radio" name="FilterType" value="SubCategory">
                 </td>
                 <td>
-                    <span class="Text_3">Filter out entire sub-category (${definition.categoryName}.${definition.subCategoryName})</span>
+                    <span class="Text_3">Filter out entire sub-category (${definition.categoryName?html}.${definition.subCategoryName?html})</span>
                 </td>
             </tr>
             <tr>
@@ -50,7 +50,7 @@
                     <input type="radio" name="FilterType" value="Category">
                 </td>
                 <td>
-                    <span class="Text_3">Filter out category (${definition.categoryName})</span>
+                    <span class="Text_3">Filter out category (${definition.categoryName?html})</span>
                 </td>
             </tr>
             <tr>

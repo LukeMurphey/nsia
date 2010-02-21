@@ -29,9 +29,9 @@
 <#-- message -->
     <#macro actioncell action perm>
         <#if ( action = PERMIT )>
-            <td><table><tr><td><img src="/media/img/16_up" alt="${perm}"></td><td>Allow</td></tr></table></td>
+            <td><table><tr><td><img src="/media/img/16_up" alt="${perm?html}"></td><td>Allow</td></tr></table></td>
         <#elseif ( action = DENY )>
-            <td><table><tr><td><img src="/media/img/16_down" alt="${perm}"></td><td>Deny</td></tr></table></td>
+            <td><table><tr><td><img src="/media/img/16_down" alt="${perm?html}"></td><td>Deny</td></tr></table></td>
         <#else>
             <td>&nbsp;</td>
         </#if>
@@ -80,15 +80,15 @@
             </#if>
         </#if>
         <#if permission.group>
-                                <td>${permission.subject.name}</td>
+                                <td>${permission.subject.name?html}</td>
                             </tr>
                         </table>
-                    <td>Group ${permission.subjectID}</td>
+                    <td>Group ${permission.subjectID?c}</td>
         <#else>
-                                <td>${permission.subject.userName}</td>
+                                <td>${permission.subject.userName?html}</td>
                             </tr>
                         </table>
-                    <td>User ${permission.subjectID}</td>
+                    <td>User ${permission.subjectID?c}</td>
         </#if>
 
         <#-- Print read -->

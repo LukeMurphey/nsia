@@ -5,8 +5,8 @@
 <#assign content>
     <#macro rulerow name description sitegroupID ruletype>
         <div style="padding:5px;">
-            <div class="ToolIcon" style="float:left;"><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroupID}&RuleType=${ruletype}"><img src="/media/img/32_Add"></a></div>
-            <div style="position:relative; left:8px;"><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroupID}&RuleType=${ruletype}"><span class="Text_2">${name}</span></a><br>${description}</div>
+            <div class="ToolIcon" style="float:left;"><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroupID?c}&RuleType=${ruletype?html}"><img src="/media/img/32_Add"></a></div>
+            <div style="position:relative; left:8px;"><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroupID?c}&RuleType=${ruletype?html}"><span class="Text_2">${name?html}</span></a><br>${description?html}</div>
             <br>
         </div>
     </#macro>

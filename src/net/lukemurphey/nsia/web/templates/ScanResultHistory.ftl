@@ -8,12 +8,12 @@
         <@getinfodialog message="No scan results exist for the given rule yet." title="No Scan Results" />
     <#else>
         <span class="Text_1">Scan Results</span>
-        <#if results??><br><span class="LightText">Viewing ${min(count, results?size)} results</span><p></#if>
+        <#if results??><br><span class="LightText">Viewing ${min(count, results?size)?c} results</span><p></#if>
         
         <table width="660px" class="DataTable">
             <tbody>
                 <tr>
-                    <td class="BackgroundLoading1" height="120"><img src="/RuleScanHistory?RuleID=${ruleID}&S=${firstScanResultID}" alt="Rule History"></td>
+                    <td class="BackgroundLoading1" height="120"><img src="/RuleScanHistory?RuleID=${ruleID?c}&S=${firstScanResultID?c}" alt="Rule History"></td>
                 </tr>
             </tbody>
         </table>
@@ -37,7 +37,7 @@
                     <td class="Background1">${result.deviations} deviations&nbsp;&nbsp;</td>
                 <#else>
                     <td align="center" class="StatYellow"><img src="/media/img/22_Warning" alt="warning"></td>
-                    <td class="Background1">Scan did not complete successfully: ${result.resultCode.description}&nbsp;&nbsp;</td>
+                    <td class="Background1">Scan did not complete successfully: ${result.resultCode.description?html}&nbsp;&nbsp;</td>
                 </#if>
                 <#-- 2 -- Output the time that the resource was scanned  -->
                     <td class="Background1">${result.scanTime}&nbsp;&nbsp;</td>

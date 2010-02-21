@@ -4,9 +4,9 @@
     </tr>
     <tr>
         <td width="32" valign="top" rowspan="2"><img src="${icon}" alt="icon"></td>
-        <td class="Text_2">${title}</td>
+        <td class="Text_2">${title?html}</td>
     </tr>
     <tr>
-        <td>${message}<p></td>
+        <td>${message?html}<p></td>
     </tr>
 </table>

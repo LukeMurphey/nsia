@@ -8,7 +8,7 @@
 <#if (actions?? && actions?size > 0)>
     <span class="Text_1">Incident Response Actions</span>
     <#if ( isSiteGroup?? && isSiteGroup )>
-    <form method="post" action="Response"><input type="hidden" name="SiteGroupID" value="${siteGroup.groupId}">
+    <form method="post" action="Response"><input type="hidden" name="SiteGroupID" value="${siteGroup.groupId?c}">
     <#else>
     <form method="post" action="<@url name="sitegroup_actions" args=[siteGroup.groupId] />">
     </#if>
@@ -24,9 +24,9 @@
             <tbody>
             <#list actions as action>
                 <tr>
-                    <td width="2px"><input name="ActionID" value="${action.eventLogHookID}" type="checkbox"/></td>
-                    <td>${action.action.description}</td>
-                    <td>${action.action.configDescription}</td>
+                    <td width="2px"><input name="ActionID" value="${action.eventLogHookID?c}" type="checkbox"/></td>
+                    <td>${action.action.description?html}</td>
+                    <td>${action.action.configDescription?html}</td>
                     <td>
                         <table>
                             <tr>
@@ -44,7 +44,7 @@
        </table>
    </form>
 <#else>
-    <#assign message>No actions exist yet for the given site-group<br><a href="<@url name="sitegroup_action_editor" args=["New"] />?SiteGroupID=${siteGroup.groupId}">[create a new action now]</a></#assign>
+    <#assign message>No actions exist yet for the given site-group<br><a href="<@url name="sitegroup_action_editor" args=["New"] />?SiteGroupID=${siteGroup.groupId?c}">[create a new action now]</a></#assign>
     <@getinfodialog title="No Actions Exist" message=message />
 </#if>
 

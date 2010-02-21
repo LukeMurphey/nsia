@@ -1,7 +1,7 @@
 <#assign content>
     <p>&nbsp;
     <form action="${request.thisURL}" onsubmit="showHourglass('Authenticating...')" method="post">
-        <input type="hidden" name="ForwardTo" value="<#if request.getParameter("ForwardTo")??>${request.getParameter("ForwardTo")}<#else>${request.thisURL}</#if>" />
+        <input type="hidden" name="ForwardTo" value="<#if request.getParameter("ForwardTo")??>${request.getParameter("ForwardTo")?html}<#else>${request.thisURL}</#if>" />
         <table align="center">
             <tr>
                 <td colspan="99">&nbsp;</td>
@@ -17,7 +17,7 @@
                                     <#if (message.severity == success)><img src="/media/img/16_Info.png" /></#if>
                                     <#if (message.severity == warning)><img src="/media/img/16_Warning.png" /></#if>
                                 </td>
-                                <td>${message}</td>
+                                <td>${message?html}</td>
                             </tr>
                         </table>
                     </#if></td>

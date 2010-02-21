@@ -5,7 +5,7 @@
 
 <#assign content>
     <#macro summaryrow name value>
-        <tr class="Background1"><td class="Text_3">${name}</td><td class="Text_3">${value}</td></tr>
+        <tr class="Background1"><td class="Text_3">${name?html}</td><td class="Text_3">${value?html}</td></tr>
     </#macro>
         <#-- <span class="Text_1">Scan Result</span>
         <br><span class="LightText">Viewing service scan result</span><p> -->

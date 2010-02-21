@@ -3,14 +3,14 @@
 <#macro definitionselect name description link >
     <div style="padding:5px;">
         <div class="ToolIcon" style="float:left;">
-            <a href="${link}"><img src="/media/img/32_Add"></a>
+            <a href="${link?html}"><img src="/media/img/32_Add"></a>
         </div>
                 
         <div style="position:relative; left:8px;">
-            <a href="${link}">
-                <span class="Text_2">${name}</span>
+            <a href="${link?html}">
+                <span class="Text_2">${name?html}</span>
             </a>
-            <br />${description}
+            <br />${description?html}
         </div>
         <br />
     </div>

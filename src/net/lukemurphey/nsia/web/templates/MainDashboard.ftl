@@ -8,8 +8,8 @@
                 </td>
                 <td class="StatGray" style="border-left: 0px; border-right: 0px;" width="16">&nbsp;</td>
                 <td class="StatGray" style="border-left: 0px; border-right: 0px;">
-                    <#if link??><a href="${link}"></#if><span class="Text_3">${title}</span><#if link??></a></#if>
-                    <br>${message}</td>
+                    <#if link??><a href="${link}"></#if><span class="Text_3">${title?html}</span><#if link??></a></#if>
+                    <br>${message?html}</td>
                 <td width="16" class="${htmlclass}">&nbsp;</td>
             </tr>
          </table>
@@ -25,7 +25,7 @@
     <#assign htmlclass="StatRed" icon="/media/img/22_Alert">
 </#if>
 <#assign link><@url name="system_status" /></#assign>
-<@statusrow htmlclass=htmlclass icon=icon message="${system_status.longDescription}" title="Manager Status" link=link />
+<@statusrow htmlclass=htmlclass icon=icon message="${system_status.longDescription?html}" title="Manager Status" link=link />
 <div style="height: 16px"></div>
 
 <#if (sitegroups?? && (sitegroups?size > 0))>
@@ -47,7 +47,7 @@
         <#assign icon=icon + "Disabled" htmlclass="StatGrayDark">
     </#if>
     <#assign link><@url name="sitegroup_rules" args=[sitegroup.siteGroupId] /></#assign>
-    <@statusrow htmlclass=htmlclass icon=icon message=message title="${sitegroup.siteGroupDescriptor.groupName}" link=link />
+    <@statusrow htmlclass=htmlclass icon=icon message=message title="${sitegroup.siteGroupDescriptor.groupName?html}" link=link />
 </#list>
 
 <table>

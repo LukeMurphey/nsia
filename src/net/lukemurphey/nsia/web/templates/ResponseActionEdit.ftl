@@ -6,10 +6,10 @@
 
 <#assign content>
     <#if ( hook?? )>
-        <div class="Text_2">Edit Response Action</div>Response type: ${hook.action.description}<p/>
+        <div class="Text_2">Edit Response Action</div>Response type: ${hook.action.description?html}<p/>
         <#assign layout=hook.action.layoutWithValues />
     <#else>
-        <div class="Text_2">Add a New Response</div>Response type: ${extension.description}<p/>
+        <div class="Text_2">Add a New Response</div>Response type: ${extension.description?html}<p/>
         <#assign layout=extension.fieldLayout />
     </#if>
     <#if (form_errors??)>
@@ -23,13 +23,13 @@
                     <td class="alignRight" colspan="99">
                     <#if ( hook?? )>
                         <input type="hidden" name="Action" value="Edit">
-                        <input type="hidden" name="ActionID" value="${hook.eventLogHookID}">
+                        <input type="hidden" name="ActionID" value="${hook.eventLogHookID?c}">
                         <input type="submit" class="button" name="Edit" value="Apply Changes">
                     <#else>
                         <input type="hidden" name="Action" value="New">
-                        <input type="hidden" name="Extension" value="${extension.name}">
+                        <input type="hidden" name="Extension" value="${extension.name?html}">
                         <input type="submit" class="button" name="Create" value="Create Action">
-                        <input type="hidden" name="SiteGroupID" value="${siteGroup.groupId}">
+                        <input type="hidden" name="SiteGroupID" value="${siteGroup.groupId?c}">
                     </#if>
                         <input type="submit" class="button" value="Cancel" name="Cancel">
                     </td>

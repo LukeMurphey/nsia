@@ -13,7 +13,7 @@ else
                     <#if refresh_rate = "Disable">
                         <script language="JavaScript">setRefreshRate('Disable'); resetCountDown();</script>
                     <#else>
-                        <script language="JavaScript">setRefreshRate("${refresh_rate}"); resetCountDown();</script>
+                        <script language="JavaScript">setRefreshRate("${refresh_rate?html}"); resetCountDown();</script>
                     </#if>
                         <option value="15" <#if refresh_rate = "15">selected</#if>>15 seconds</option>
                         <option value="30" <#if refresh_rate = "30">selected</#if>>30 seconds</option>

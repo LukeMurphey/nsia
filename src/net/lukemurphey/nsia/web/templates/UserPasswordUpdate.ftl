@@ -11,7 +11,7 @@
     <table class="DataTable">
         <tr><#-- Output the username and user ID -->
             <td class="TitleText">User</td>
-            <td>${user.userName} (${user.userID})</td>
+            <td>${user.userName?html} (${user.userID})</td>
         </tr>
         <tr class="<#if (form_errors?? && form_errors.fieldHasError("YourPassword"))>ValidationFailed<#else>Background1</#if>"><#-- Existing password field -->
             <td class="TitleText">Your Current Password</td>

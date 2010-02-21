@@ -19,16 +19,16 @@
         </tr>
         <#list groups as group>
         <tr class="Background1">
-            <td>${group.groupId}</td>
-            <td><a href="GroupManagement?GroupID=${group.groupId}">
+            <td>${group.groupId?c}</td>
+            <td><a href="GroupManagement?GroupID=${group.groupId?c}">
                 <#if group.groupState = ACTIVE >
-                    <@iconlink url=geturl("group_editor", "Edit", group.groupId) imageURL="/media/img/16_Group" imageAlt="Enabled" text="${group.groupName}" />
+                    <@iconlink url=geturl("group_editor", "Edit", group.groupId) imageURL="/media/img/16_Group" imageAlt="Enabled" text="${group.groupName?html}" />
                 <#else>
-                    <@iconlink url=geturl("group_editor", "Edit", group.groupId) imageURL="/media/img/16_GroupDisabled" imageAlt="Disabled" text="${group.groupName}" />
+                    <@iconlink url=geturl("group_editor", "Edit", group.groupId) imageURL="/media/img/16_GroupDisabled" imageAlt="Disabled" text="${group.groupName?html}" />
                 </#if>
             </td>
             <td><#if group.groupState = ACTIVE >Enabled<#else>Disabled</#if>&nbsp;&nbsp;</td>
-            <td class="Background1"><#if (group.description?? & group.description?length > 0 )><@truncate_chars length=64>${group.description}</@truncate_chars><#else>(No Description Specified)</#if></td>
+            <td class="Background1"><#if (group.description?? & group.description?length > 0 )><@truncate_chars length=64>${group.description?html}</@truncate_chars><#else>(No Description Specified)</#if></td>
         </tr>
         </#list>
      </table>
