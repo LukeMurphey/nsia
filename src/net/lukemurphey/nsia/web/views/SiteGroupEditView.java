@@ -86,18 +86,18 @@ public class SiteGroupEditView extends View {
 						if( siteGroup == null ){
 							int siteGroupID = siteGroupManager.addGroup(name, description);
 							context.addMessage("Sitegroup created successfully", MessageSeverity.SUCCESS);
-							response.sendRedirect(StandardViewList.getURL(SiteGroupView.VIEW_NAME, siteGroupID));
+							response.sendRedirect( SiteGroupView.getURL( siteGroupID ));
 							return true;
 						}
 						else{
 							if( siteGroupManager.updateGroupInfo(siteGroup.getGroupId(), name, description) ){
 								context.addMessage("Sitegroup updated successfully", MessageSeverity.SUCCESS);
-								response.sendRedirect(StandardViewList.getURL(SiteGroupView.VIEW_NAME, siteGroup.getGroupId()));
+								response.sendRedirect( SiteGroupView.getURL( siteGroup.getGroupId() ));
 								return true;
 							}
 							else{
 								context.addMessage("Sitegroup could not be updated", MessageSeverity.WARNING);
-								response.sendRedirect(StandardViewList.getURL(SiteGroupView.VIEW_NAME, siteGroup.getGroupId()));
+								response.sendRedirect( SiteGroupView.getURL( siteGroup.getGroupId() ));
 								return true;
 							}
 						}
