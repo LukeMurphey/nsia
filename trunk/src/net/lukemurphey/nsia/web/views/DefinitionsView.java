@@ -37,6 +37,11 @@ public class DefinitionsView extends View {
 		super("Definitions", VIEW_NAME);
 	}
 	
+	public static String getURL() throws URLInvalidException{
+		DefinitionsView view = new DefinitionsView();
+		return view.createURL();
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 

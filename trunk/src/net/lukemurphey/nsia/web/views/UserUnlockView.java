@@ -34,6 +34,11 @@ public class UserUnlockView extends View {
 		super("User/Unlock", VIEW_NAME, Pattern.compile("[0-9]+"));
 	}
 
+	public static String getURL( UserDescriptor user ) throws URLInvalidException{
+		UserUnlockView view = new UserUnlockView();
+		return view.createURL(user.getUserID());
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request,
 			HttpServletResponse response, RequestContext context,

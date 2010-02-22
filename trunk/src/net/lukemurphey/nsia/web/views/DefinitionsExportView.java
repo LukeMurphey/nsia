@@ -27,6 +27,11 @@ public class DefinitionsExportView extends View {
 	public DefinitionsExportView() {
 		super("Definitions/Export", VIEW_NAME);
 	}
+	
+	public static String getURL() throws URLInvalidException{
+		DefinitionsExportView view = new DefinitionsExportView();
+		return view.createURL();
+	}
 
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {

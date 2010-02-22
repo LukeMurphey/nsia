@@ -80,6 +80,11 @@ public class SystemConfigurationView extends View {
 		super("System/Configuration", "system_configuration");
 	}
 
+	public static String getURL() throws URLInvalidException{
+		SystemConfigurationView view = new SystemConfigurationView();
+		return view.createURL();
+	}
+	
 	public enum ParameterType{
 		TEXT, MULTILINETEXT, BOOL, SELECT, INTEGER, PASSWORD;
 	}

@@ -45,6 +45,16 @@ public class DefinitionEntryView extends View {
 		super("Definition", VIEW_NAME, Pattern.compile("([0-9]*)|(New)", Pattern.CASE_INSENSITIVE));
 	}
 
+	public static String getURL() throws URLInvalidException{
+		DefinitionEntryView view = new DefinitionEntryView();
+		return view.createURL("New");
+	}
+	
+	public static String getURL( int definitionID ) throws URLInvalidException{
+		DefinitionEntryView view = new DefinitionEntryView();
+		return view.createURL(definitionID);
+	}
+	
 	protected Definition updateDefinition( HttpServletRequest request, RequestContext context, String code, int localID ) throws InvalidDefinitionException, UnpurposedDefinitionException, ViewFailedException, DisallowedOperationException, DuplicateEntryException{
 		
 		// 1 -- Parse the definition

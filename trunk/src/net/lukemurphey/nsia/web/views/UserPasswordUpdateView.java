@@ -206,7 +206,7 @@ public class UserPasswordUpdateView extends View {
 		
 		menu.add( new Link("User Management") );
 		menu.add( new Link("List Users", UsersView.getURL()) );
-		menu.add( new Link("Add New User", UserEditView.getURL("New")) );
+		menu.add( new Link("Add New User", UserEditView.getURL()) );
 		menu.add( new Link("View Logged in Users", UserSessionsView.getURL()) );
 		
 		if( user != null ){
@@ -230,11 +230,11 @@ public class UserPasswordUpdateView extends View {
 		
 		// 4 -- Get the breadcrumbs
 		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-		breadcrumbs.add(  new Link("User Management", UsersView.getURL()) );
-		breadcrumbs.add(  new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
-		breadcrumbs.add(  new Link("Edit User", UserEditView.getURL("Edit", user.getUserID())) );
-		breadcrumbs.add(  new Link("Update Password", createURL( user.getUserID())) );
+		breadcrumbs.add( new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+		breadcrumbs.add( new Link("User Management", UsersView.getURL()) );
+		breadcrumbs.add( new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
+		breadcrumbs.add( new Link("Edit User", UserEditView.getURL(user)) );
+		breadcrumbs.add( new Link("Update Password", createURL( user.getUserID())) );
 		
 		data.put("breadcrumbs", breadcrumbs);
 		data.put("title", "Update Password");

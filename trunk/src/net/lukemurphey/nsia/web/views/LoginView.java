@@ -31,6 +31,7 @@ import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
@@ -42,6 +43,11 @@ public class LoginView extends View {
 		super("Login", "login");
 	}
 
+	public static String getURL() throws URLInvalidException{
+		LoginView view = new LoginView();
+		return view.createURL();
+	}
+	
 	public class Message{
 		
 		private String message;

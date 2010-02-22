@@ -42,6 +42,11 @@ public class DefinitionsImportView extends View {
 		super("Definitions/Import", VIEW_NAME);
 	}
 
+	public static String getURL() throws URLInvalidException{
+		DefinitionsImportView view = new DefinitionsImportView();
+		return view.createURL();
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 

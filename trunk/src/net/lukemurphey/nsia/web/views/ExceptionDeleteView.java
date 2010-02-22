@@ -29,6 +29,11 @@ public class ExceptionDeleteView extends View {
 		super("Exception/Delete", VIEW_NAME, Pattern.compile("[0-9]?"));
 	}
 	
+	public static String getURL( int exceptionID ) throws URLInvalidException{
+		ExceptionDeleteView view = new ExceptionDeleteView();
+		return view.createURL(exceptionID);
+	}
+	
 	private int deleteExceptions( RequestContext context, Vector<Integer> exceptions ) throws SQLException, NoDatabaseConnectionException, NotFoundException{
 		
 		// 1 -- Delete the policies

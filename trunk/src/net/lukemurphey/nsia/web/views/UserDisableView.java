@@ -31,11 +31,9 @@ public class UserDisableView extends View {
 	}
 	
 	public static String getURL( UserDescriptor user ) throws URLInvalidException{
-		
 		UserDisableView view = new UserDisableView();
 		
 		return view.createURL(user.getUserID());
-		
 	}
 	
 	public boolean disableUser( RequestContext context, int userID ) throws ViewFailedException{

@@ -27,6 +27,11 @@ public class EndUserSessionView extends View {
 		super("User/Session/Terminate", VIEW_NAME, Pattern.compile("[0-9]+"));
 	}
 
+	public static String getURL( int sessionTrackingID ) throws URLInvalidException{
+		EndUserSessionView view = new EndUserSessionView();
+		return view.createURL(sessionTrackingID);
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request,
 			HttpServletResponse response, RequestContext context,

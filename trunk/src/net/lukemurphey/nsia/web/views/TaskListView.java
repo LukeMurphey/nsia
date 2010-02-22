@@ -32,6 +32,11 @@ public class TaskListView extends View {
 		super("System/Tasks", "task_list", Pattern.compile("[-A-Za-z_0-9]*", Pattern.CASE_INSENSITIVE));
 	}
 
+	public static String getURL( ) throws URLInvalidException{
+		TaskListView view = new TaskListView();
+		return view.createURL();
+	}
+	
 	public class TaskDescriptor{
 		
 		WorkerThread thread;
@@ -94,6 +99,7 @@ public class TaskListView extends View {
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		
 		// 1 -- Check the permissions
+		//TODO check permissions
 		
 		// 2 -- Get the threads
 		WorkerThreadDescriptor[] threads = Application.getApplication().getWorkerThreadQueue(true);

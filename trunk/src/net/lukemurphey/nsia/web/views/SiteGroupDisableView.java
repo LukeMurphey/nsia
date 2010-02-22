@@ -12,6 +12,7 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.SiteGroupManagement;
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
@@ -31,7 +32,11 @@ public class SiteGroupDisableView extends View {
 	public SiteGroupDisableView() {
 		super("SiteGroup/Disable", VIEW_NAME, Pattern.compile("[0-9]+"));
 	}
-
+	
+	public static String getURL( SiteGroupDescriptor siteGroup ) throws URLInvalidException{
+		SiteGroupDisableView view = new SiteGroupDisableView();
+		return view.createURL(siteGroup.getGroupId());
+	}
 
 	public boolean disableGroup( RequestContext context, int groupId ) throws ViewFailedException{
 		

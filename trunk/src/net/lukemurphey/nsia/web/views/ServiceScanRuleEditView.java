@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.scan.LineParseException;
 import net.lukemurphey.nsia.scan.NetworkPortRange;
 import net.lukemurphey.nsia.scan.ScanRule;
@@ -34,6 +35,16 @@ public class ServiceScanRuleEditView extends View {
 
 	public ServiceScanRuleEditView() {
 		super("Rule", VIEW_NAME, Pattern.compile("New|Edit", Pattern.CASE_INSENSITIVE), Pattern.compile("[0-9]*"));
+	}
+	
+	public static String getURL( int ruleID ) throws URLInvalidException{
+		ServiceScanRuleEditView view = new ServiceScanRuleEditView();
+		return view.createURL("Edit", ruleID );
+	}
+	
+	public static String getURL( SiteGroupDescriptor siteGroup ) throws URLInvalidException{
+		ServiceScanRuleEditView view = new ServiceScanRuleEditView();
+		return view.createURL("New" ) + "?SiteGroupID=" + siteGroup.getGroupId();
 	}
 
 	/**

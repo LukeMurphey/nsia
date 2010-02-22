@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.lukemurphey.nsia.AccessControl;
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
+import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
@@ -26,6 +28,16 @@ public class AccessControlDeleteView extends View {
 	public AccessControlDeleteView() {
 		//super("AccessControl/Delete", VIEW_NAME, Pattern.compile("[0-9]+"));
 		super("AccessControl/Delete", VIEW_NAME, Pattern.compile("[0-9]+"), Pattern.compile("(User|Group)?", Pattern.CASE_INSENSITIVE), Pattern.compile("[0-9]*"));
+	}
+	
+	public static String getURL( int ruleID, GroupDescriptor group ) throws URLInvalidException{
+		AccessControlDeleteView view = new AccessControlDeleteView();
+		return view.createURL( ruleID, "Group", group.getGroupId() );
+	}
+	
+	public static String getURL( int ruleID, UserDescriptor user ) throws URLInvalidException{
+		AccessControlDeleteView view = new AccessControlDeleteView();
+		return view.createURL( ruleID, "User", user.getUserID() );
 	}
 	
 	@Override

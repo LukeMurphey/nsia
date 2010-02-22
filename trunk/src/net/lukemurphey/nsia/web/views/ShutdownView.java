@@ -28,6 +28,11 @@ public class ShutdownView extends View {
 		super("System/Shutdown", "system_shutdown", Pattern.compile("(Confirmed)?", Pattern.CASE_INSENSITIVE));
 	}
 
+	public static String getURL() throws URLInvalidException{
+		ShutdownView view = new ShutdownView();
+		return view.createURL();
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		
