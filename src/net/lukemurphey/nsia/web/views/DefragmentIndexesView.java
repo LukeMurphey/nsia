@@ -31,6 +31,11 @@ public class DefragmentIndexesView extends View {
 		super("System/ReIndex", VIEW_NAME);
 	}
 
+	public static String getURL() throws URLInvalidException{
+		DefragmentIndexesView view = new DefragmentIndexesView();
+		return view.createURL();
+	}
+	
 	/**
 	 * Gets the backup worker thread if one exists.
 	 * @return

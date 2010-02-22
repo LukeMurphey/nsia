@@ -17,6 +17,7 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Wildcard;
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.scan.HttpSeekingScanRule;
 import net.lukemurphey.nsia.scan.ScanRule;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -40,6 +41,16 @@ public class WebDiscoveryRuleEditView extends View {
 		super("Rule", VIEW_NAME, Pattern.compile("New|Edit", Pattern.CASE_INSENSITIVE), Pattern.compile("[0-9]*"));
 	}
 
+	public static String getURL( SiteGroupDescriptor siteGroup ) throws URLInvalidException{
+		WebDiscoveryRuleEditView view = new WebDiscoveryRuleEditView();
+		return view.createURL("New") + "?SiteGroupID=" + siteGroup.getGroupId();
+	}
+	
+	public static String getURL( int ruleID ) throws URLInvalidException{
+		WebDiscoveryRuleEditView view = new WebDiscoveryRuleEditView();
+		return view.createURL("Edit", ruleID);
+	}
+	
 	private static URL[] parseURLs(String addresses) throws IOException, InputValidationException{
 		Vector<URL> urls = new Vector<URL>();
 	

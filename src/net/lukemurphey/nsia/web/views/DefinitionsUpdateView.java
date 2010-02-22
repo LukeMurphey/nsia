@@ -30,6 +30,11 @@ public class DefinitionsUpdateView extends View {
 		super("Definitions/Update", VIEW_NAME);
 	}
 
+	public static String getURL() throws URLInvalidException{
+		DefinitionsUpdateView view = new DefinitionsUpdateView();
+		return view.createURL();
+	}
+	
 	/**
 	 * Gets the definition update worker (if running)
 	 * @return

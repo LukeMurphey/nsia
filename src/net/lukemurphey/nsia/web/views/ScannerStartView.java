@@ -30,6 +30,11 @@ public class ScannerStartView extends View {
 		super("Scanner/Start", "scanner_start");
 	}
 
+	public static String getURL() throws URLInvalidException{
+		ScannerStartView view = new ScannerStartView();
+		return view.createURL();
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		

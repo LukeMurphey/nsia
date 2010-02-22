@@ -53,7 +53,12 @@ public class ExceptionEditView extends View {
 		super("Exception/New", VIEW_NAME, Pattern.compile("[0-9]"));
 	}
 
-public void addCategoryDescriptor( RequestContext context, SiteGroupDescriptor siteGroupDesc, int ruleID, String definitionCategory, DefinitionPolicyAction action) throws GeneralizedException, NoSessionException, NotFoundException, InsufficientPermissionException{
+	public static String getURL( int ruleID ) throws URLInvalidException{
+		ExceptionEditView view = new ExceptionEditView();
+		return view.createURL( ruleID );
+	}
+	
+	public void addCategoryDescriptor( RequestContext context, SiteGroupDescriptor siteGroupDesc, int ruleID, String definitionCategory, DefinitionPolicyAction action) throws GeneralizedException, NoSessionException, NotFoundException, InsufficientPermissionException{
 		
 		Connection connection = null;
 		

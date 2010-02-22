@@ -31,6 +31,11 @@ public class LicenseView extends View {
 	public LicenseView() {
 		super("License", VIEW_NAME);
 	}
+	
+	public static String getURL() throws URLInvalidException{
+		LicenseView view = new LicenseView();
+		return view.createURL();
+	}
 
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {

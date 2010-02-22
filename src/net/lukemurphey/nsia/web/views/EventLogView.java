@@ -33,6 +33,11 @@ public class EventLogView extends View {
 		super("System/Eventlog", "event_log");
 	}
 	
+	public static String getURL() throws URLInvalidException{
+		EventLogView view = new EventLogView();
+		return view.createURL();
+	}
+	
 	/**
 	 * Represents a set of log entries returned from a query.
 	 * @author Luke

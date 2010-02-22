@@ -37,6 +37,11 @@ public class SystemStatusView extends View {
 		super("System/Status", "system_status");
 	}
 
+	public static String getURL() throws URLInvalidException{
+		SystemStatusView view = new SystemStatusView();
+		return view.createURL();
+	}
+	
 	protected enum StatType{
 		INFO, CHECK, WARNING, ERROR;
 	}

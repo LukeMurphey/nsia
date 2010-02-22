@@ -39,6 +39,16 @@ public class SiteGroupEditView extends View {
 	public SiteGroupEditView() {
 		super("SiteGroup", VIEW_NAME, Pattern.compile("(New)|(Edit)", Pattern.CASE_INSENSITIVE), Pattern.compile("[0-9]*", Pattern.CASE_INSENSITIVE));
 	}
+	
+	public static String getURL() throws URLInvalidException{
+		SiteGroupEditView view = new SiteGroupEditView();
+		return view.createURL("New");
+	}
+	
+	public static String getURL( SiteGroupDescriptor siteGroup ) throws URLInvalidException{
+		SiteGroupEditView view = new SiteGroupEditView();
+		return view.createURL("Edit", siteGroup.getGroupId());
+	}
 
 	/**
 	 * Get a form that can validate the site group.

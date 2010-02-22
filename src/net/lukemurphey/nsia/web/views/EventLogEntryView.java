@@ -34,6 +34,11 @@ public class EventLogEntryView extends View {
 		super("System/Eventlog", "event_log_entry", Pattern.compile("[0-9]{1,16}") );
 	}
 
+	public static String getURL(int logEntryID ) throws URLInvalidException{
+		EventLogEntryView view = new EventLogEntryView();
+		return view.createURL( logEntryID );
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		

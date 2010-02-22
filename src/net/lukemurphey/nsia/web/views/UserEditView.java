@@ -46,10 +46,16 @@ public class UserEditView extends View {
 		super("User", VIEW_NAME, Pattern.compile("(New)|(Edit)", Pattern.CASE_INSENSITIVE), Pattern.compile("[0-9]*"));
 	}
 
-	public static String getURL( Object... args ) throws URLInvalidException{
+	public static String getURL( UserDescriptor user ) throws URLInvalidException{
 		UserEditView view = new UserEditView();
 		
-		return view.createURL(args);
+		return view.createURL("Edit", user.getUserID());
+	}
+	
+	public static String getURL( ) throws URLInvalidException{
+		UserEditView view = new UserEditView();
+		
+		return view.createURL("New");
 	}
 	
 	/**
@@ -247,7 +253,7 @@ public class UserEditView extends View {
 		
 		menu.add( new Link("User Management") );
 		menu.add( new Link("List Users", UsersView.getURL()) );
-		menu.add( new Link("Add New User", UserEditView.getURL("New")) );
+		menu.add( new Link("Add New User", UserEditView.getURL()) );
 		menu.add( new Link("View Logged in Users", UserSessionsView.getURL()) );
 		
 		if( user != null ){

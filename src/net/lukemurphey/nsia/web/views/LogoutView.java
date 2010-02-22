@@ -28,6 +28,11 @@ public class LogoutView extends View {
 		super("Logout", "logout");
 	}
 
+	public static String getURL() throws URLInvalidException{
+		LogoutView view = new LogoutView();
+		return view.createURL();
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, IOException, URLInvalidException, ViewNotFoundException {
 		

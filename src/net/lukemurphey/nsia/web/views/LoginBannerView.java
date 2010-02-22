@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.templates.TemplateLoader;
@@ -14,6 +15,11 @@ public class LoginBannerView extends View {
 
 	public LoginBannerView() {
 		super("Login/Banner", "login_banner");
+	}
+	
+	public static String getURL() throws URLInvalidException{
+		LoginBannerView view = new LoginBannerView();
+		return view.createURL();
 	}
 	
 	@Override

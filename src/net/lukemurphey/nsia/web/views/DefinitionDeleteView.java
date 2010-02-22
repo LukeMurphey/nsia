@@ -32,6 +32,11 @@ public class DefinitionDeleteView extends View{
 		super("Definition/Delete", VIEW_NAME, Pattern.compile("[0-9]+", Pattern.CASE_INSENSITIVE));
 	}
 
+	public static String getURL( int definitionID ) throws URLInvalidException{
+		DefinitionDeleteView view = new DefinitionDeleteView();
+		return view.createURL(definitionID);
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		

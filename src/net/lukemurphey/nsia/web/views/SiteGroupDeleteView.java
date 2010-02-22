@@ -12,6 +12,7 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.SiteGroupManagement;
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
@@ -32,7 +33,11 @@ public class SiteGroupDeleteView extends View {
 		super("SiteGroup/Delete", VIEW_NAME, Pattern.compile("[0-9]+"));
 	}
 
-
+	public static String getURL( SiteGroupDescriptor siteGroup ) throws URLInvalidException{
+		SiteGroupDeleteView view = new SiteGroupDeleteView();
+		return view.createURL(siteGroup.getGroupId());
+	}
+	
 	public boolean deleteGroup( RequestContext context, int groupId ) throws ViewFailedException{
 		
 		Application app = Application.getApplication();

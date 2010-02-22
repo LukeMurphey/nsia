@@ -51,7 +51,7 @@ public class MainDashboardView extends View {
 		//Menu
 		Vector<Link> menu = new Vector<Link>();
 		menu.add( new Link("System Administration") );
-		menu.add( new Link("System Status", StandardViewList.getURL("system_status")) );
+		menu.add( new Link("System Status", SystemStatusView.getURL() ) );
 		menu.add( new Link("System Configuration", StandardViewList.getURL("system_configuration")) );
 		menu.add( new Link("Event Logs", StandardViewList.getURL("event_log")) );
 		menu.add( new Link("Shutdown System", StandardViewList.getURL("system_shutdown")) );

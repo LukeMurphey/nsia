@@ -23,6 +23,11 @@ public class ServiceScanResultView extends View {
 		super("ScanResult", VIEW_NAME, Pattern.compile("[0-9]+"));
 	}
 	
+	public static String getURL( int scanResultID ) throws URLInvalidException{
+		ServiceScanResultView view = new ServiceScanResultView();
+		return view.createURL(scanResultID);
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request,
 			HttpServletResponse response, RequestContext context,

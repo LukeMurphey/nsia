@@ -52,6 +52,16 @@ public class DefinitionPolicyView extends View {
 		super("Definitions/Policy", VIEW_NAME, Pattern.compile("[0-9]*"));
 	}
 
+	public static String getURL( int siteGroupID ) throws URLInvalidException{
+		DefinitionPolicyView view = new DefinitionPolicyView();
+		return view.createURL(siteGroupID);
+	}
+	
+	public static String getURL( SiteGroupDescriptor siteGroup ) throws URLInvalidException{
+		DefinitionPolicyView view = new DefinitionPolicyView();
+		return view.createURL(siteGroup.getGroupId());
+	}
+	
 	private String getName( String name, String category, String subCategory ){
 		String completeName = "";
 		

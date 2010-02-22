@@ -29,6 +29,11 @@ public class BackupView extends View {
 		super("System/Backup", "system_backup");
 	}
 
+	public static String getURL() throws URLInvalidException{
+		BackupView view = new BackupView();
+		return view.createURL();
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		

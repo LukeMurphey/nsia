@@ -31,11 +31,9 @@ public class UserEnableView extends View {
 	}
 
 	public static String getURL( UserDescriptor user ) throws URLInvalidException{
-		
 		UserEnableView view = new UserEnableView();
 		
 		return view.createURL(user.getUserID());
-		
 	}
 	
 	public boolean enableUser( RequestContext context, int userID ) throws ViewFailedException{

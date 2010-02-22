@@ -26,6 +26,11 @@ public class TaskStopView extends View {
 		super("System/Task/Stop", "task_stop", Pattern.compile(".*", Pattern.CASE_INSENSITIVE));
 	}
 
+	public static String getURL( String taskName ) throws URLInvalidException{
+		TaskStopView view = new TaskStopView();
+		return view.createURL(taskName);
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 
