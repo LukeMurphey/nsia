@@ -263,7 +263,7 @@ public class Menu {
 		//menu.addAll(getSystemMenuItems(context));
 		menu.addAll(getDefinitionMenuItems(context, definition, null));
 		
-		return null;
+		return toArray(menu);
 	}
 	
 	public static Link[] getGenericMenu(RequestContext context ) throws URLInvalidException{
