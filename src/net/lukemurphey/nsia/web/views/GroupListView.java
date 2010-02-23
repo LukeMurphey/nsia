@@ -13,6 +13,7 @@ import net.lukemurphey.nsia.GroupManagement;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
@@ -63,17 +64,7 @@ public class GroupListView extends View {
 		data.put("INACTIVE", GroupManagement.State.INACTIVE);
 		
 		// 3 -- Get the menu
-		Vector<Link> menu = new Vector<Link>();
-		menu.add( new Link("Site Groups") );
-		menu.add( new Link("Add Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
-		
-		menu.add( new Link("User Management") );
-		menu.add( new Link("Add New User", UserEditView.getURL()) );
-		menu.add( new Link("View Logged in Users",UserSessionsView.getURL()) );
-		
-		menu.add( new Link("Group Management") );
-		menu.add( new Link("Add New Group",  GroupEditView.getURL() ) );
-		data.put("menu", menu);
+		data.put("menu", Menu.getGenericMenu(context));
 		
 		// 4 -- Get the breadcrumbs
 		Vector<Link> breadcrumbs = new Vector<Link>();

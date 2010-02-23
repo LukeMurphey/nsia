@@ -12,6 +12,7 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.scan.DefinitionErrorList;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
@@ -81,7 +82,7 @@ public class DefinitionErrorsView extends View {
 			menu.add( new Link("Export Custom Definitions", StandardViewList.getURL(DefinitionsExportView.VIEW_NAME) ));
 			menu.add( new Link("Edit Default Policy", StandardViewList.getURL(DefinitionPolicyView.VIEW_NAME) ));
 			
-			data.put("menu", menu);
+			data.put("menu", Menu.getDefinitionMenu(context));
 			
 			//	 3.3 -- Get the dashboard headers
 			Shortcuts.addDashboardHeaders(request, response, data);

@@ -16,6 +16,7 @@ import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupManagement;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
@@ -187,28 +188,7 @@ public class SiteGroupEditView extends View {
 			data.put("breadcrumbs", breadcrumbs);
 			
 			//	 3.2 -- Get the menu
-			Vector<Link> menu = new Vector<Link>();
-			menu.add( new Link("Site Groups") );
-			if( siteGroup != null ){
-				menu.add( new Link("Add Site Group", createURL("New")) );
-				menu.add( new Link("Edit Site Group", createURL("Edit", siteGroup.getGroupId())) );
-				menu.add( new Link("Edit ACLs", AccessControlView.getURL(siteGroup.getObjectId()), new Link.Attribute("onclick", "\"w=window.open('" + AccessControlView.getURL(siteGroup.getObjectId()) + "', 'AccessControl', 'height=400,width=780,screenX=' + (screen.availWidth - 700)/2 + ',screenY=' + (screen.availHeight - 300)/2 + ',scrollbars=yes,resizable=yes,toolbar=no');return false\"") ) );
-				menu.add( new Link("Delete Site Group", StandardViewList.getURL(SiteGroupDeleteView.VIEW_NAME, siteGroup.getGroupId())) );
-				menu.add( new Link("View Scan Policy", StandardViewList.getURL(DefinitionPolicyView.VIEW_NAME, siteGroup.getGroupId() ) ) );
-				
-				menu.add( new Link("Scan Rules") );
-				menu.add( new Link("Scan Now", "ADDURL") );
-				menu.add( new Link("Add New Rule", "ADDURL") );
-				
-				menu.add( new Link("Incident Response") );
-				menu.add( new Link("Add New Action", ActionEditView.getURL() + "?SiteGroupID=" + siteGroup.getGroupId() ) );
-				menu.add( new Link("List Actions", ActionsListView.getURL(siteGroup.getGroupId()) ) );
-			}
-			else{
-				menu.add( new Link("View Default Scan Policy", StandardViewList.getURL(DefinitionPolicyView.VIEW_NAME) ) ); 
-			}
-			
-			data.put("menu", menu);			
+			data.put("menu", Menu.getSiteGroupMenu(context, siteGroup));			
 			
 			//	 3.3 -- Render the page
 			Shortcuts.addDashboardHeaders(request, response, data);

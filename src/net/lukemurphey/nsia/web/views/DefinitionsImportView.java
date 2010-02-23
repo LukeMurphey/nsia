@@ -24,6 +24,7 @@ import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionArchiveException;
 import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
@@ -118,30 +119,8 @@ public class DefinitionsImportView extends View {
 		breadcrumbs.add(  new Link("Import Definitions", createURL()) );
 		data.put("breadcrumbs", breadcrumbs);
 		
-		//Add the Menu
-		Vector<Link> menu = new Vector<Link>();
-		menu.add( new Link("System Administration") );
-		menu.add( new Link("System Status", StandardViewList.getURL("system_status")) );
-		menu.add( new Link("System Configuration", StandardViewList.getURL("system_configuration")) );
-		menu.add( new Link("Event Logs", StandardViewList.getURL("event_log")) );
-		menu.add( new Link("Shutdown System", StandardViewList.getURL("system_shutdown")) );
-		menu.add( new Link("Create Backup", StandardViewList.getURL("system_backup")) );
-		
-		menu.add( new Link("Scanning Engine") );
-		if( Application.getApplication().getScannerController().scanningEnabled() ){
-			menu.add( new Link("Stop Scanner", StandardViewList.getURL("scanner_stop")) );
-		}
-		else{
-			menu.add( new Link("Start Scanner", StandardViewList.getURL("scanner_start")) );
-		}
-		menu.add( new Link("View Definitions", StandardViewList.getURL(DefinitionsView.VIEW_NAME)) );
-		
-		menu.add( new Link("Definitions") );
-		menu.add( new Link("Update Now", StandardViewList.getURL(DefinitionsUpdateView.VIEW_NAME)) );
-		menu.add( new Link("Create New Definition", StandardViewList.getURL(DefinitionEntryView.VIEW_NAME, "New")));
-		menu.add( new Link("Export Custom Definitions", StandardViewList.getURL(DefinitionsExportView.VIEW_NAME) ));
-		
-		data.put("menu", menu);
+		//Add the Menu		
+		data.put("menu", Menu.getDefinitionMenu(context));
 		
 		Shortcuts.addDashboardHeaders(request, response, data);
 		data.put("title", "Import Definitions");

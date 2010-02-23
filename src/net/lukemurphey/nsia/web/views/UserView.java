@@ -18,9 +18,9 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.UserManagement;
 import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
-import net.lukemurphey.nsia.UserManagement.AccountStatus;
 import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
@@ -182,31 +182,7 @@ public class UserView extends View {
 		data.put("groups", userGroups);
 		
 		// 3 -- Get the menu
-		Vector<Link> menu = new Vector<Link>();
-		menu.add( new Link("Site Groups") );
-		menu.add( new Link("View List", MainDashboardView.getURL() ) );
-		menu.add( new Link("Add Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
-		
-		menu.add( new Link("User Management") );
-		menu.add( new Link("List Users", UsersView.getURL()) );
-		menu.add( new Link("Add New User", UserEditView.getURL()) );
-		menu.add( new Link("View Logged in Users", "ADDURL") );
-		
-		if( user.getAccountStatus() == AccountStatus.DISABLED ){
-			menu.add( new Link("Enable User", UserEnableView.getURL(user) ) );
-		}
-		else{
-			menu.add( new Link("Disable User", UserDisableView.getURL(user) ) );
-		}
-			
-		menu.add( new Link("Delete User", "ADDURL") );
-		menu.add( new Link("Manage Rights", "ADDURL") );
-		menu.add( new Link("Update Password", "ADDURL") );
-		
-		menu.add( new Link("Group Management") );
-		menu.add( new Link("List Groups", "ADDURL" ) );
-		menu.add( new Link("Add New Group", "ADDURL" ) );
-		data.put("menu", menu);
+		data.put("menu", Menu.getUserMenu(context, user));
 		
 		// 4 -- Get the breadcrumbs
 		Vector<Link> breadcrumbs = new Vector<Link>();

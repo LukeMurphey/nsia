@@ -25,6 +25,7 @@ import net.lukemurphey.nsia.AccessControlDescriptor.Subject;
 import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
 import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
@@ -316,18 +317,7 @@ public class RightsEditView extends View {
 		data.put("rights", rights);
 		
 		// 4 -- Get the menu
-		Vector<Link> menu = new Vector<Link>();
-		menu.add( new Link("Site Groups") );
-		menu.add( new Link("Add Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
-		
-		menu.add( new Link("User Management") );
-		menu.add( new Link("Add New User", UserEditView.getURL()) );
-		menu.add( new Link("View Logged in Users", "ADDURL") );
-		
-		menu.add( new Link("Group Management") );
-		menu.add( new Link("List Groups", "ADDURL" ) );
-		menu.add( new Link("Add New Group", "ADDURL" ) );
-		data.put("menu", menu);
+		data.put("menu", Menu.getGenericMenu(context));
 		
 		// 4 -- Get the breadcrumbs
 		Vector<Link> breadcrumbs = new Vector<Link>();
