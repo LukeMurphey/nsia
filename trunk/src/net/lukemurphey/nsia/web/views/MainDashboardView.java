@@ -52,19 +52,19 @@ public class MainDashboardView extends View {
 		Vector<Link> menu = new Vector<Link>();
 		menu.add( new Link("System Administration") );
 		menu.add( new Link("System Status", SystemStatusView.getURL() ) );
-		menu.add( new Link("System Configuration", StandardViewList.getURL("system_configuration")) );
-		menu.add( new Link("Event Logs", StandardViewList.getURL("event_log")) );
-		menu.add( new Link("Shutdown System", StandardViewList.getURL("system_shutdown")) );
-		menu.add( new Link("Create Backup", StandardViewList.getURL("system_backup")) );
+		menu.add( new Link("System Configuration", SystemConfigurationView.getURL()) );
+		menu.add( new Link("Event Logs", EventLogView.getURL()) );
+		menu.add( new Link("Shutdown System", ShutdownView.getURL()) );
+		menu.add( new Link("Create Backup", BackupView.getURL()) );
 		
 		menu.add( new Link("Scanning Engine") );
 		if( Application.getApplication().getScannerController().scanningEnabled() ){
-			menu.add( new Link("Stop Scanner", StandardViewList.getURL("scanner_stop")) );
+			menu.add( new Link("Stop Scanner", ScannerStopView.getURL()) );
 		}
 		else{
-			menu.add( new Link("Start Scanner", StandardViewList.getURL("scanner_start")) );
+			menu.add( new Link("Start Scanner", ScannerStartView.getURL()) );
 		}
-		menu.add( new Link("View Definitions", StandardViewList.getURL(DefinitionsView.VIEW_NAME)) );
+		menu.add( new Link("View Definitions", DefinitionsView.getURL()) );
 		
 		data.put("menu", menu);
 		
