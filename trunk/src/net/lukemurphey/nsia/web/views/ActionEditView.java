@@ -212,6 +212,12 @@ public class ActionEditView extends View {
 				return true;
 			}
 			
+			//	 1.3 -- Process the cancel button if pressed
+			if( request.getParameter("Cancel") != null ){
+				response.sendRedirect( ActionsListView.getURL(siteGroup) );
+				return true;
+			}
+			
 			// 2 -- Add the menu	
 			data.put("menu", Menu.getSiteGroupMenu(context, siteGroup));
 			
