@@ -124,7 +124,7 @@ public class UserEnableView extends View {
 		enableUser(context, userID);
 		
 		context.addMessage("User successfully enabled", MessageSeverity.SUCCESS);
-		response.sendRedirect( UsersView.getURL() );//TODO Forward to user page
+		response.sendRedirect( UserView.getURL(userID) );
 		
 		return true;
 	}

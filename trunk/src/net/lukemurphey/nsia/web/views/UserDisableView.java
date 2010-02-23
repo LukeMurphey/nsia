@@ -123,8 +123,8 @@ public class UserDisableView extends View {
 		// 2 -- Disable the user
 		disableUser(context, userID);
 		
-		context.addMessage("User successfully disable", MessageSeverity.SUCCESS);
-		response.sendRedirect( UsersView.getURL() );//TODO Forward to user page
+		context.addMessage("User successfully disabled", MessageSeverity.SUCCESS);
+		response.sendRedirect( UserView.getURL(userID) );
 		
 		return true;
 	}
