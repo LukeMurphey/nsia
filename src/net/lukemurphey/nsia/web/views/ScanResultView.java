@@ -24,9 +24,9 @@ import net.lukemurphey.nsia.scan.ServiceScanRule;
 import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
 import net.lukemurphey.nsia.scan.ScanRule.ScanRuleLoadFailureException;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
-import net.lukemurphey.nsia.web.StandardViewList;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -101,14 +101,7 @@ public class ScanResultView extends View {
 			data.put("siteGroup", siteGroup);
 			
 			// 4 -- Get the menu
-			Vector<Link> menu = new Vector<Link>();
-			menu.add( new Link("Site Groups") );
-			//menu.add( new Link("Add Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
-			menu.add( new Link("Edit", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "Edit", siteGroupID)) );
-			menu.add( new Link("New", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
-			menu.add( new Link("Scan Now", "ADDURL") );
-			menu.add( new Link("View Exceptions", "ADDURL") );
-			data.put("menu", menu);
+			data.put("menu", Menu.getScanResultMenu(context, scanResultID));
 			
 			// 5 -- Get the breadcrumbs
 			Vector<Link> breadcrumbs = new Vector<Link>();

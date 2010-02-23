@@ -189,7 +189,7 @@ public class UserView extends View {
 		
 		menu.add( new Link("User Management") );
 		menu.add( new Link("List Users", UsersView.getURL()) );
-		menu.add( new Link("Add New User", UserEditView.getURL("New")) );
+		menu.add( new Link("Add New User", UserEditView.getURL()) );
 		menu.add( new Link("View Logged in Users", "ADDURL") );
 		
 		if( user.getAccountStatus() == AccountStatus.DISABLED ){
