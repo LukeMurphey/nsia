@@ -45,6 +45,12 @@ public class ExceptionListView extends View {
 		return view.createURL(ruleID);
 	}
 	
+	public static String getURL( long ruleID ) throws URLInvalidException{
+		ExceptionListView view = new ExceptionListView();
+		
+		return view.createURL(ruleID);
+	}
+	
 	@Override
 	protected boolean process(HttpServletRequest request,
 			HttpServletResponse response, RequestContext context,
@@ -120,7 +126,7 @@ public class ExceptionListView extends View {
 		menu.add( new Link("Add Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
 		
 		menu.add( new Link("User Management") );
-		menu.add( new Link("Add New User", UserEditView.getURL("New")) );
+		menu.add( new Link("Add New User", UserEditView.getURL()) );
 		menu.add( new Link("View Logged in Users",UserSessionsView.getURL()) );
 		
 		menu.add( new Link("Group Management") );
