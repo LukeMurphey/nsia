@@ -39,6 +39,12 @@ public class RuleEditView extends View {
 		super("Rule", VIEW_NAME, Pattern.compile("New|Edit", Pattern.CASE_INSENSITIVE), Pattern.compile("[0-9]*"));
 	}
 
+	public static String getURL( SiteGroupDescriptor siteGroup ) throws URLInvalidException{
+		RuleEditView view = new RuleEditView();
+		
+		return view.createURL("New") + "?SiteGroupID=" + siteGroup.getGroupId();
+	}
+	
 	public static String getURL( int ruleID ) throws URLInvalidException{
 		RuleEditView view = new RuleEditView();
 		
