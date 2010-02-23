@@ -32,9 +32,9 @@ import net.lukemurphey.nsia.scan.ScanRule;
 import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor.DefinitionPolicyAction;
 import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor.DefinitionPolicyType;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
-import net.lukemurphey.nsia.web.StandardViewList;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -688,17 +688,7 @@ public class ExceptionEditView extends View {
 		data.put("breadcrumbs", breadcrumbs);
 		
 		// 4 -- Create the menu
-		Vector<Link> menu = new Vector<Link>();
-		menu.add( new Link("Site Groups") );
-		menu.add( new Link("Add Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
-		
-		menu.add( new Link("User Management") );
-		menu.add( new Link("Add New User", UserEditView.getURL()) );
-		menu.add( new Link("View Logged in Users",UserSessionsView.getURL()) );
-		
-		menu.add( new Link("Group Management") );
-		menu.add( new Link("Add New Group",  GroupEditView.getURL() ) );
-		data.put("menu", menu);
+		data.put("menu", Menu.getGenericMenu(context));
 		
 		data.put("title", "Exceptions");
 		

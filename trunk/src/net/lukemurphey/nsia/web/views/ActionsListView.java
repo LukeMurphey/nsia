@@ -18,9 +18,9 @@ import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogHook;
 import net.lukemurphey.nsia.eventlog.SiteGroupStatusEventLogHook;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
-import net.lukemurphey.nsia.web.StandardViewList;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -113,21 +113,13 @@ public class ActionsListView extends View {
 			data.put("actions", hooks);
 			
 			// 4 -- Get the menu
-			Vector<Link> menu = new Vector<Link>();
-			menu.add( new Link("Site Groups") );
-			//menu.add( new Link("Add Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
-			menu.add( new Link("Edit", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "Edit", siteGroup.getGroupId())) );
-			menu.add( new Link("New", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
-			menu.add( new Link("Scan Now", "ADDURL") );
-			menu.add( new Link("View Exceptions", "ADDURL") );
-	
-			data.put("menu", menu);
+			data.put("menu", Menu.getSiteGroupMenu(context, siteGroup));
 			
 			// 5 -- Get the breadcrumbs
 			Vector<Link> breadcrumbs = new Vector<Link>();
-			breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
-			breadcrumbs.add(  new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroup.getGroupId())) );
-			breadcrumbs.add(  new Link("Actions", createURL( siteGroup.getGroupId() ) ) );
+			breadcrumbs.add( new Link("Main Dashboard", MainDashboardView.getURL()) );
+			breadcrumbs.add( new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroup.getGroupId())) );
+			breadcrumbs.add( new Link("Actions", createURL( siteGroup.getGroupId() ) ) );
 			
 			data.put("breadcrumbs", breadcrumbs);
 			data.put("title", "Incident Response Actions");

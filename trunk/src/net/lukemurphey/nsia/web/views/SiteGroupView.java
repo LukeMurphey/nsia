@@ -40,6 +40,7 @@ import net.lukemurphey.nsia.scan.ScanRuleLoader;
 import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
 import net.lukemurphey.nsia.scan.ScanRule.ScanRuleLoadFailureException;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
@@ -548,28 +549,7 @@ public class SiteGroupView extends View {
 			data.put("breadcrumbs", breadcrumbs);
 			
 			//	8.2 -- Get the menu
-			Vector<Link> menu = new Vector<Link>();
-			menu.add( new Link("Site Groups") );
-			menu.add( new Link("Add Site Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "New")) );
-			
-			if( siteGroup != null ){
-				menu.add( new Link("Edit Site Group", StandardViewList.getURL(SiteGroupEditView.VIEW_NAME, "Edit", siteGroup.getGroupId())) );
-				menu.add( new Link("Edit ACLs", AccessControlView.getURL(siteGroup.getObjectId()), new Link.Attribute("onclick", "\"w=window.open('" + AccessControlView.getURL(siteGroup.getObjectId()) + "', 'AccessControl', 'height=400,width=780,screenX=' + (screen.availWidth - 700)/2 + ',screenY=' + (screen.availHeight - 300)/2 + ',scrollbars=yes,resizable=yes,toolbar=no');return false\"") ) );
-				menu.add( new Link("Delete Site Group", StandardViewList.getURL(SiteGroupDeleteView.VIEW_NAME, siteGroup.getGroupId())) );
-				if( siteGroup.isEnabled() ){
-					menu.add( new Link("Disable Site Group", StandardViewList.getURL(SiteGroupDisableView.VIEW_NAME, siteGroup.getGroupId())) );
-				}
-				else{
-					menu.add( new Link("Enable Site Group", StandardViewList.getURL(SiteGroupEnableView.VIEW_NAME, siteGroup.getGroupId())) );
-				}
-				menu.add( new Link("Exceptions", "ADDURL") );
-			}
-			
-			menu.add( new Link("Incident Response") );
-			menu.add( new Link("Add New Action", ActionEditView.getURL() + "?SiteGroupID=" + siteGroup.getGroupId() ) );
-			menu.add( new Link("List Actions", ActionsListView.getURL(siteGroup.getGroupId()) ) );
-			
-			data.put("menu", menu);
+			data.put("menu", Menu.getSiteGroupMenu(context, siteGroup));
 			
 			//	8.3 -- Add the sitegroup
 			data.put("sitegroup", siteGroup);

@@ -15,6 +15,7 @@ import net.lukemurphey.nsia.Application.ApplicationStatusDescriptor;
 import net.lukemurphey.nsia.scan.ScanData;
 import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
@@ -49,24 +50,7 @@ public class MainDashboardView extends View {
 		data.put("breadcrumbs", breadcrumbs);
 		
 		//Menu
-		Vector<Link> menu = new Vector<Link>();
-		menu.add( new Link("System Administration") );
-		menu.add( new Link("System Status", SystemStatusView.getURL() ) );
-		menu.add( new Link("System Configuration", SystemConfigurationView.getURL()) );
-		menu.add( new Link("Event Logs", EventLogView.getURL()) );
-		menu.add( new Link("Shutdown System", ShutdownView.getURL()) );
-		menu.add( new Link("Create Backup", BackupView.getURL()) );
-		
-		menu.add( new Link("Scanning Engine") );
-		if( Application.getApplication().getScannerController().scanningEnabled() ){
-			menu.add( new Link("Stop Scanner", ScannerStopView.getURL()) );
-		}
-		else{
-			menu.add( new Link("Start Scanner", ScannerStartView.getURL()) );
-		}
-		menu.add( new Link("View Definitions", DefinitionsView.getURL()) );
-		
-		data.put("menu", menu);
+		data.put("menu", Menu.getSystemMenu(context));
 		
 		//Get the dashboard headers
 		Shortcuts.addDashboardHeaders(request, response, data, createURL());

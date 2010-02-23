@@ -17,6 +17,7 @@ import net.lukemurphey.nsia.WorkerThread;
 import net.lukemurphey.nsia.Application.WorkerThreadDescriptor;
 import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.web.Link;
+import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
@@ -112,24 +113,7 @@ public class TaskListView extends View {
 		
 		// 3 -- Populate the hashmap
 		Shortcuts.addDashboardHeaders(request, response, data, createURL());
-		
-		Vector<Link> menu = new Vector<Link>();
-		menu.add( new Link("System Administration") );
-		menu.add( new Link("System Status", StandardViewList.getURL("system_status")) );
-		menu.add( new Link("System Configuration", StandardViewList.getURL("system_configuration")) );
-		menu.add( new Link("Event Logs", StandardViewList.getURL("event_log")) );
-		menu.add( new Link("Shutdown System", StandardViewList.getURL("system_shutdown")) );
-		
-		menu.add( new Link("Scanning Engine") );
-		if( Application.getApplication().getScannerController().scanningEnabled() ){
-			menu.add( new Link("Stop Scanner", StandardViewList.getURL("scanner_stop")) );
-		}
-		else{
-			menu.add( new Link("Start Scanner", StandardViewList.getURL("scanner_start")) );
-		}
-		menu.add( new Link("View Definitions", StandardViewList.getURL(DefinitionsView.VIEW_NAME)) );
-		
-		data.put("menu", menu);
+		data.put("menu", Menu.getSystemMenu(context));
 		data.put("title", "Task List");
 		data.put("tasks", tasks);
 		
