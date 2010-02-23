@@ -37,9 +37,14 @@ public class ActionsListView extends View {
 		super("Actions/SiteGroup", VIEW_NAME, Pattern.compile("[0-9]+"));
 	}
 
-	public static String getURL( long ruleID ) throws URLInvalidException{
+	public static String getURL( SiteGroupDescriptor siteGroup ) throws URLInvalidException{
 		ActionsListView actionsList = new ActionsListView();
-		return actionsList.createURL(ruleID);
+		return actionsList.createURL(siteGroup.getGroupId());
+	}
+	
+	public static String getURL( long siteGroupID ) throws URLInvalidException{
+		ActionsListView actionsList = new ActionsListView();
+		return actionsList.createURL(siteGroupID);
 	}
 	
 	private long[] getHooks( HttpServletRequest request){
