@@ -39,6 +39,12 @@ public class UserView extends View {
 		super("User", VIEW_NAME, Pattern.compile("[0-9]+"));
 	}
 
+	public static String getURL( int userID ) throws URLInvalidException{
+		UserView v = new UserView();
+		
+		return v.createURL( userID );
+	}
+	
 	public static String getURL( UserDescriptor user ) throws URLInvalidException{
 		UserView v = new UserView();
 		
