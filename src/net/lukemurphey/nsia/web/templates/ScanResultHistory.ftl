@@ -8,7 +8,7 @@
         <@getinfodialog message="No scan results exist for the given rule yet." title="No Scan Results" />
     <#else>
         <span class="Text_1">Scan Results</span>
-        <#if results??><br><span class="LightText">Viewing ${min(count, results?size)?c} results</span><p></#if>
+        <#if results??><br><span class="LightText">Viewing ${min(count, results?size)} results</span><p></#if>
         
         <table width="660px" class="DataTable">
             <tbody>
