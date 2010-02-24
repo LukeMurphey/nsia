@@ -3,23 +3,23 @@
 <#include "GetDialog.ftl" />
 <div style="position:relative;" />
 <#if (entry.severity == emergency) >
-    <div style="position:absolute; left:0px;"><img src="/32_Alert" alt="Emergency"></div>
+    <div style="position:absolute; left:0px;"><img src="/media/img/32_Alert" alt="Emergency"></div>
 <#elseif (entry.severity == alert) >
-    <div style="position:absolute; left:0px;"><img src="/32_Alert" alt="Alert"></div>
+    <div style="position:absolute; left:0px;"><img src="/media/img/32_Alert" alt="Alert"></div>
 <#elseif (entry.severity == critical) >
-    <div style="position:absolute; left:0px;"><img src="/32_Alert" alt="Critical"></div>
+    <div style="position:absolute; left:0px;"><img src="/media/img/32_Alert" alt="Critical"></div>
 <#elseif (entry.severity == error) >
-    <div style="position:absolute; left:0px;"><img src="/32_Warning" alt="Error"></div>
+    <div style="position:absolute; left:0px;"><img src="/media/img/32_Warning" alt="Error"></div>
 <#elseif (entry.severity == warning) >
-    <div style="position:absolute; left:0px;"><img src="/32_Warning" alt="Warning"></div>
+    <div style="position:absolute; left:0px;"><img src="/media/img/32_Warning" alt="Warning"></div>
 <#elseif (entry.severity == notice) >
-    <div style="position:absolute; left:0px;"><img src="/32_Check" alt="Notice"></div>
+    <div style="position:absolute; left:0px;"><img src="/media/img/32_Check" alt="Notice"></div>
 <#elseif (entry.severity == informational) >
-    <div style="position:absolute; left:0px;"><img src="/32_Information" alt="Info"></div>
+    <div style="position:absolute; left:0px;"><img src="/media/img/32_Information" alt="Info"></div>
 <#elseif (entry.severity == debug) >
-    <div style="position:absolute; left:0px;"><img src="/32_Information" alt="Debug"></div>
+    <div style="position:absolute; left:0px;"><img src="/media/img/32_Information" alt="Debug"></div>
 <#else>
-    <div style="position:absolute; left:0px;"><img src="/32_Information" alt="Info"></div>
+    <div style="position:absolute; left:0px;"><img src="/media/img/32_Information" alt="Info"></div>
 </#if>
 <div style="position: relative; left: 32px;">
     <table cellpadding="2">

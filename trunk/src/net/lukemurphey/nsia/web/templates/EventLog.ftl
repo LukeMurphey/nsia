@@ -53,28 +53,28 @@
         <#list entries?reverse as entry >
             <tr class="Background1">
             <#if (entry.severity == emergency)>
-                <td class="StatRedSmall"><span style="vertical-align: middle;"><img src="/16_Alert" alt="Emergency"></span></td>
+                <td class="StatRedSmall"><span style="vertical-align: middle;"><img src="/media/img/16_Alert" alt="Emergency"></span></td>
                 <td>${entry.severity}</td>
             <#elseif (entry.severity == alert) />
-                <td class="StatRedSmall"><span style="vertical-align: middle;"><img src="/16_Alert" alt="Alert"></span></td>
+                <td class="StatRedSmall"><span style="vertical-align: middle;"><img src="/media/img/16_Alert" alt="Alert"></span></td>
                 <td>${entry.severity}</td>
             <#elseif (entry.severity == critical) />
-                <td class="StatRedSmall"><span style="vertical-align: middle;"><img src="/16_Alert" alt="Critical"></span></td>
+                <td class="StatRedSmall"><span style="vertical-align: middle;"><img src="/media/img/16_Alert" alt="Critical"></span></td>
                 <td>${entry.severity}</td>
             <#elseif (entry.severity == error) />
-                <td class="StatYellowSmall"><span style="vertical-align: middle;"><img src="/16_Warning" alt="Error"></span></td>
+                <td class="StatYellowSmall"><span style="vertical-align: middle;"><img src="/media/img/16_Warning" alt="Error"></span></td>
                 <td>${entry.severity}</td>
             <#elseif (entry.severity == warning) />
-                <td class="StatYellowSmall"><span style="vertical-align: middle;"><img src="/16_Warning" alt="Warning"></span></td>
+                <td class="StatYellowSmall"><span style="vertical-align: middle;"><img src="/media/img/16_Warning" alt="Warning"></span></td>
                 <td>${entry.severity}</td>
             <#elseif (entry.severity == notice) />
-                <td class="StatGreenSmall"><span style="vertical-align: middle;"><img src="/16_Check" alt="Notice"></span></td>
+                <td class="StatGreenSmall"><span style="vertical-align: middle;"><img src="/media/img/16_Check" alt="Notice"></span></td>
                 <td>${entry.severity}</td>
             <#elseif (entry.severity == informational) />
-                <td class="StatBlueSmall"><span style="vertical-align: middle;"><img src="/16_Information" alt="Informational"></span></td>
+                <td class="StatBlueSmall"><span style="vertical-align: middle;"><img src="/media/img/16_Information" alt="Informational"></span></td>
                 <td>${entry.severity}</td>
             <#else>
-                <td class="StatBlueSmall"><span style="vertical-align: middle;"><img src="/16_Information" alt="Informational"></span></td>
+                <td class="StatBlueSmall"><span style="vertical-align: middle;"><img src="/media/img/16_Information" alt="Informational"></span></td>
                 <td>${entry.severity?html}</td>
             </#if>
                 <td>${entry.date?date}</td>
