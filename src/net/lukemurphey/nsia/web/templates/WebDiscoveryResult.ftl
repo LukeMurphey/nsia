@@ -110,14 +110,20 @@
         </table>
     <#-- Render definitions matching list -->
     <table width="700" cellpadding="2">
+        <#if ( findings?size == 0)>
+            <#if scanRuleFilter?? || contentTypeFilter??>
+        <tr>
+            <td colspan="99"><#assign message>No resources match the provided filter.<p/><a href="${request.thisURL}">[Clear Filter]</a></#assign><@getinfodialog title="No Findings" message=message /><td>
+        </tr>
+            <#else>
+        <tr>
+            <td colspan="99"><@getinfodialog title="No Findings" message="No resources were scanned during the scan phase." /><td>
+        </tr>
+            </#if>
+        <#else>
         <tr class="Background0">
             <td colspan="4" class="Text_3">Scan Findings</td>
         </tr>
-        <#if ( findings?size == 0)>
-        <tr>
-            <td colspan="99"><@getinfodialog title="No Findings" message="No resources where scanned during the scan phase." /><td>
-        </tr>
-        <#else>
             <#list findings as finding>
             <#assign severity=finding.maxSeverity />
             <#if ( scanResult.resultCode == SCAN_COMPLETED && scanResult.deviations == 0 )>
