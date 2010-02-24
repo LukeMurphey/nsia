@@ -67,9 +67,7 @@ public class WebDiscoveryScanResultView extends View {
 		
 		//Filter the output
 		String scanRuleFilter = request.getParameter("RuleFilter");
-		String scanRuleFilterEscaped = null;
 		String contentTypeFilter = request.getParameter("ContentTypeFilter");
-		String contentTypeFilterEscaped = null;
 		
 		HttpDefinitionScanResult.SignatureScanResultFilter filter;
 		
@@ -142,8 +140,8 @@ public class WebDiscoveryScanResultView extends View {
 		data.put("definitionMatches", definitionMatches);
 		data.put("firstScanResultID", firstScanResultId);
 		data.put("lastScanResultID", lastScanResultId);
-		data.put("scanRuleFilterEscaped", scanRuleFilterEscaped);
-		data.put("contentTypeFilterEscaped", contentTypeFilterEscaped);
+		data.put("scanRuleFilter", scanRuleFilter);
+		data.put("contentTypeFilter", contentTypeFilter);
 		data.put("maxMinCount", maxMinCount);
 		data.put("findings", findings);
 		data.put("RESULTS_PER_PAGE", RESULTS_PER_PAGE);
