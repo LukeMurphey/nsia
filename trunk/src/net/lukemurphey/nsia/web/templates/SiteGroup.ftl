@@ -46,15 +46,10 @@
             <#else>
                 <td class="Background1">${rule.status_description}"&nbsp;&nbsp;</td>";
             </#if>
-                <#-- Output description -->
+            <#-- Output description -->
                 <td class="Background1">${rule.type}&nbsp;&nbsp;</td>
                 <td class="Background1">${rule.description}&nbsp;&nbsp;</td>
-            
-            <#-- Output the delete option button
-            /*output += "<td class="Background1"><table><tr><td><a href="SiteGroup?Action=DeleteRule&RuleID=${rule.ID}&SiteGroupID=" + siteGroupID +
-            "><img alt="delete" src="/16_Delete"></a></td><td><a href="SiteGroup?Action=DeleteRule&RuleID=${rule.ID}&SiteGroupID=" + siteGroupID +
-            ">Delete</a></td></tr></table></td></td>";*/  -->
-            
+
             <#-- Output the edit option button -->
                 <td class="Background1">
                     <table>
@@ -73,9 +68,6 @@
                         </tr>
                     </table>
                 </td>
-            <#-- Output the scan button
-            /*output += "<td class="Background1"><table><tr><td><a href="SiteGroup?Action=Scan&RuleID=${rule.ID}><img class="imagebutton" alt="scan" src="/16_Play"></a></td><td><a href="SiteGroup?Action=Scan&RuleID=" + ruleId +    
-            ">Scan</a></td></tr></table></td>"; -->
             </tr>
             </#list>
             <tr class="lastRow">
