@@ -50,7 +50,7 @@ public class ExceptionEditView extends View {
 	public static String VIEW_NAME = "exception_editor";
 	
 	public ExceptionEditView() {
-		super("Exception/New", VIEW_NAME, Pattern.compile("[0-9]"));
+		super("Exception/New", VIEW_NAME, Pattern.compile("[0-9]*"));
 	}
 
 	public static String getURL( int ruleID ) throws URLInvalidException{
