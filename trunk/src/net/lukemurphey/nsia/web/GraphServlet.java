@@ -103,7 +103,7 @@ public class GraphServlet extends HttpServlet {
 		ApplicationStateDataPoint[] metrics = Application.getApplication().getMetricsData();
 		
 		// 4.1 -- Graph displaying rules evaluated recently
-		if( request.getRequestURI().matches("/RulesEvalGraph.png") || request.getRequestURI().matches("/RulesEvalGraph") ){
+		if( request.getPathInfo().matches("/RulesEvalGraph.png") || request.getPathInfo().matches("/RulesEvalGraph") ){
 			if( lastRuleStatChartLocation == null || ( System.currentTimeMillis() - lastRuleStatChartGenerationTime ) > (chartCreationFrequency * 1000 ) ){
 				JFreeChart chart = generateRuleEvaluationGraph( metrics );
 				
@@ -130,7 +130,7 @@ public class GraphServlet extends HttpServlet {
 		}
 		
 		// 4.2 -- Graph displaying content-types found during a scan
-		if( request.getRequestURI().matches("/ContentTypeResults.png") || request.getRequestURI().matches("/ContentTypeResults") ){
+		if( request.getPathInfo().matches("/ContentTypeResults.png") || request.getPathInfo().matches("/ContentTypeResults") ){
 			int scanResultID = -1;
 			
 			String resultIDString = request.getParameter("ResultID");
@@ -175,7 +175,7 @@ public class GraphServlet extends HttpServlet {
 		}
 		
 		// 4.3 -- Graph displaying the severity of rules triggered during a scan
-		else if( request.getRequestURI().matches("/SeverityResults.png") || request.getRequestURI().matches("/SeverityResults") ){
+		else if( request.getPathInfo().matches("/SeverityResults.png") || request.getPathInfo().matches("/SeverityResults") ){
 			int scanResultID = -1;
 			
 			String resultIDString = request.getParameter("ResultID");
@@ -216,7 +216,7 @@ public class GraphServlet extends HttpServlet {
 			ServletUtilities.sendTempFile( severity, response );
 		}
 		// 4.4 -- Graph displaying rules evaluated recently
-		else if( request.getRequestURI().matches("/RuleScanHistory.png") || request.getRequestURI().matches("/RuleScanHistory") ){
+		else if( request.getPathInfo().matches("/RuleScanHistory.png") || request.getPathInfo().matches("/RuleScanHistory") ){
 			
 			int scanRuleID = -1;
 			
@@ -271,7 +271,7 @@ public class GraphServlet extends HttpServlet {
 		}
 		
 		// 4.5 -- Graph displaying deviations relative to service scan
-		else if( request.getRequestURI().matches("/ServiceScanDeviations.png") || request.getRequestURI().matches("/ServiceScanDeviations") ){
+		else if( request.getPathInfo().matches("/ServiceScanDeviations.png") || request.getPathInfo().matches("/ServiceScanDeviations") ){
 			int scanResultID = -1;
 			
 			String ruleIDString = request.getParameter("ResultID");
@@ -306,7 +306,7 @@ public class GraphServlet extends HttpServlet {
 		}
 		
 		// 4.6 -- Graph displaying a summary of a UDP scan
-		else if( request.getRequestURI().matches("/UDPSummary.png") || request.getRequestURI().matches("/UDPSummary") ){
+		else if( request.getPathInfo().matches("/UDPSummary.png") || request.getPathInfo().matches("/UDPSummary") ){
 			int scanResultID = -1;
 			
 			String ruleIDString = request.getParameter("ResultID");
@@ -341,7 +341,7 @@ public class GraphServlet extends HttpServlet {
 		}
 		
 		// 4.7 -- Graph displaying a summary of a TCP scan
-		else if( request.getRequestURI().matches("/TCPSummary.png") || request.getRequestURI().matches("/TCPSummary") ){
+		else if( request.getPathInfo().matches("/TCPSummary.png") || request.getPathInfo().matches("/TCPSummary") ){
 			int scanResultID = -1;
 			
 			String ruleIDString = request.getParameter("ResultID");
