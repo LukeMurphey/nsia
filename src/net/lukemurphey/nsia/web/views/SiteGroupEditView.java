@@ -15,6 +15,9 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupManagement;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -96,17 +99,57 @@ public class SiteGroupEditView extends View {
 					try{
 						if( siteGroup == null ){
 							int siteGroupID = siteGroupManager.addGroup(name, description);
-							context.addMessage("Sitegroup created successfully", MessageSeverity.SUCCESS);
+							
+							if( siteGroupID > -1 ){
+								
+								Application.getApplication().logEvent(EventLogMessage.Category.SITE_GROUP_ADDED,
+										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+										new EventLogField( FieldName.SITE_GROUP_NAME, name ),
+										new EventLogField( FieldName.SITE_GROUP_ID, siteGroupID ) );
+								
+								context.addMessage("Sitegroup created successfully", MessageSeverity.SUCCESS);
+							}
+							else{
+								
+								Application.getApplication().logEvent(EventLogMessage.Category.OPERATION_FAILED,
+										new EventLogField( FieldName.OPERATION, "Add new site group" ),
+										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+										new EventLogField( FieldName.SITE_GROUP_NAME, name ) );
+								
+								context.addMessage("Sitegroup was not created successfully", MessageSeverity.WARNING);
+							}
+							
+							
 							response.sendRedirect( SiteGroupView.getURL( siteGroupID ));
 							return true;
 						}
 						else{
 							if( siteGroupManager.updateGroupInfo(siteGroup.getGroupId(), name, description) ){
+
+								Application.getApplication().logEvent(EventLogMessage.Category.SITE_GROUP_MODIFIED,
+										new EventLogField( FieldName.SITE_GROUP_ID, siteGroup.getGroupId() ),
+										new EventLogField( FieldName.SITE_GROUP_NAME, siteGroup.getGroupName() ) ,
+										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() )
+										);
+
+								
 								context.addMessage("Sitegroup updated successfully", MessageSeverity.SUCCESS);
 								response.sendRedirect( SiteGroupView.getURL( siteGroup.getGroupId() ));
 								return true;
 							}
 							else{
+								
+								Application.getApplication().logEvent(EventLogMessage.Category.OPERATION_FAILED, new EventLogField[] {
+										new EventLogField( FieldName.OPERATION, "Update site group" ),
+										new EventLogField( FieldName.SITE_GROUP_ID, siteGroup.getGroupId() ),
+										new EventLogField( FieldName.SITE_GROUP_NAME, siteGroup.getGroupName() ) ,
+										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ) }
+										);
+								
 								context.addMessage("Sitegroup could not be updated", MessageSeverity.WARNING);
 								response.sendRedirect( SiteGroupView.getURL( siteGroup.getGroupId() ));
 								return true;

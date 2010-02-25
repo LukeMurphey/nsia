@@ -83,6 +83,7 @@ public class UserUnlockView extends View {
 			
 			Application.getApplication().logEvent(EventLogMessage.Category.USER_NAME_UNLOCKED,
 					new EventLogField( FieldName.TARGET_USER_NAME, user.getUserName()),
+					new EventLogField( FieldName.TARGET_USER_ID, user.getUserID()),
 					new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 					new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() )
 					);

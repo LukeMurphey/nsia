@@ -13,6 +13,9 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
 import net.lukemurphey.nsia.UserManagement.UserDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
@@ -26,7 +29,6 @@ public class AccessControlDeleteView extends View {
 	public static final String VIEW_NAME = "access_control_delete";
 	
 	public AccessControlDeleteView() {
-		//super("AccessControl/Delete", VIEW_NAME, Pattern.compile("[0-9]+"));
 		super("AccessControl/Delete", VIEW_NAME, Pattern.compile("[0-9]+"), Pattern.compile("(User|Group)?", Pattern.CASE_INSENSITIVE), Pattern.compile("[0-9]*"));
 	}
 	
@@ -50,6 +52,7 @@ public class AccessControlDeleteView extends View {
 		try{
 			// 0 -- Check permissions
 			//TODO Check rights
+			//checkControl( sessionIdentifier, objectId, "Remove permissions for user " + userId );
 			
 			// 1 -- Get the relevant fields
 			long objectId = -1;
@@ -80,12 +83,14 @@ public class AccessControlDeleteView extends View {
 			
 			if( "User".equalsIgnoreCase( args[1] ) ){
 				accessControl.deleteUserPermissions(subjectID, objectId);
+				Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.TARGET_USER_ID , subjectID ) );
 				context.addMessage("ACL successfully deleted", MessageSeverity.SUCCESS);
 				response.sendRedirect(AccessControlView.getURL(objectId));
 				return true;
 			}
 			else{
 				accessControl.deleteGroupPermissions(subjectID, objectId);
+				Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.GROUP_ID , subjectID ) );
 				context.addMessage("ACL successfully deleted", MessageSeverity.SUCCESS);
 				response.sendRedirect(AccessControlView.getURL(objectId));
 				return true;

@@ -17,6 +17,9 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.ObjectPermissionDescriptor;
 import net.lukemurphey.nsia.UserManagement;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
@@ -100,6 +103,21 @@ public class AccessControlEditView extends View {
 			
 	}
 	
+	private void processChange( AccessControl accessControl, ObjectPermissionDescriptor objectPermissionDesc, RequestContext context, HttpServletResponse response, long objectID ) throws IOException, URLInvalidException, NoDatabaseConnectionException, SQLException{
+		
+		long id = accessControl.setPermissions(objectPermissionDesc);
+		
+		if(id > 0 ){
+			Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET, new EventLogField( FieldName.OBJECT_ID,  id ) );
+		}
+		else{
+			Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET_FAILED );
+		}
+		
+		context.addMessage("Access control list entry successfully updated", MessageSeverity.SUCCESS);
+		response.sendRedirect( AccessControlView.getURL(objectID) );
+	}
+	
 	/**
 	 * Process changes to an existing permission descriptor or create a new one. 
 	 * @param request
@@ -148,20 +166,14 @@ public class AccessControlEditView extends View {
 					groupId = Integer.parseInt(subject.substring(5));
 					ObjectPermissionDescriptor objectPermissionDesc = new ObjectPermissionDescriptor(read, modify, create, execute, delete, control, AccessControlDescriptor.Subject.GROUP, groupId, objectID );
 					
-					accessControl.setPermissions(objectPermissionDesc);
-					
-					context.addMessage("Access control list entry successfully updated", MessageSeverity.SUCCESS);
-					response.sendRedirect( AccessControlView.getURL(objectID) );
+					processChange(accessControl, objectPermissionDesc, context, response, objectID);
 					return true;
 				}else if( subject.startsWith("user") ){
 					int userId;
 					userId = Integer.parseInt(subject.substring(4));
 					
 					ObjectPermissionDescriptor objectPermissionDesc = new ObjectPermissionDescriptor(read, modify, create, execute, delete, control, AccessControlDescriptor.Subject.USER, userId, objectID );
-					accessControl.setPermissions(objectPermissionDesc);
-					
-					context.addMessage("Access control list entry successfully updated", MessageSeverity.SUCCESS);
-					response.sendRedirect( AccessControlView.getURL(objectID) );
+					processChange(accessControl, objectPermissionDesc, context, response, objectID);
 					return true;
 				}
 				else{

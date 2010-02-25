@@ -11,7 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SessionManagement;
+import net.lukemurphey.nsia.UserManagement;
+import net.lukemurphey.nsia.SessionManagement.SessionInfo;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
@@ -53,9 +59,38 @@ public class EndUserSessionView extends View {
 		}
 		
 		SessionManagement sessionManagement = new SessionManagement(Application.getApplication());
+		SessionInfo sessionInfo = null;
 		
 		try {
-			sessionManagement.terminateSession(sessionTrackingNumber);
+			sessionInfo = sessionManagement.getSessionInfo(sessionTrackingNumber);
+			 
+			if( sessionManagement.terminateSession(sessionTrackingNumber) ){
+				//Get the user associated with the now terminated session
+				UserManagement.UserDescriptor userDescriptor;
+				UserManagement userManagement = new UserManagement(Application.getApplication());
+				
+				try{
+					userDescriptor = userManagement.getUserDescriptor(sessionInfo.getUserId());
+					
+					Application.getApplication().logEvent(EventLogMessage.Category.SESSION_ENDED,
+							new EventLogField( FieldName.TARGET_USER_NAME, userDescriptor.getUserName()),
+							new EventLogField( FieldName.TARGET_USER_ID, userDescriptor.getUserID() ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName()),
+							new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ) );
+				}
+				catch( NotFoundException e){
+					Application.getApplication().logEvent(EventLogMessage.Category.SESSION_ENDED, 
+							new EventLogField( FieldName.SOURCE_USER_NAME, sessionInfo.getUserName()),
+							new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
+				}
+
+			}
+			else{
+				Application.getApplication().logEvent(EventLogMessage.Category.SESSION_INVALID_TERMINATION_ATTEMPT,
+						new EventLogField( FieldName.SESSION_TRACKING_NUMBER, sessionTrackingNumber ),
+						new EventLogField( FieldName.SESSION_TRACKING_NUMBER, sessionTrackingNumber ));
+			}
+			
 			context.addMessage("Session successfully terminated", MessageSeverity.SUCCESS);
 			response.sendRedirect( UsersView.getURL() );
 		} catch (InputValidationException e) {

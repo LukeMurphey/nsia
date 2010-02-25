@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.DisallowedOperationException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.UserManagement;
@@ -36,7 +37,7 @@ public class UserDisableView extends View {
 		return view.createURL(user.getUserID());
 	}
 	
-	public boolean disableUser( RequestContext context, int userID ) throws ViewFailedException{
+	public boolean disableUser( RequestContext context, int userID ) throws ViewFailedException, DisallowedOperationException{
 		
 		Application app = Application.getApplication();
 		
@@ -48,6 +49,10 @@ public class UserDisableView extends View {
 			UserManagement userManagement = new UserManagement(Application.getApplication());
 			
 			// 1 -- Disable the account
+			if( context.getUser().getUserID() == userID ){
+				throw new DisallowedOperationException("Users are not allowed to disable their own account");
+			}
+			
 			if( userManagement.disableAccount( userID ) ){
 				
 				app.logEvent(EventLogMessage.Category.USER_DISABLED,
@@ -121,9 +126,13 @@ public class UserDisableView extends View {
 		}
 		
 		// 2 -- Disable the user
-		disableUser(context, userID);
+		try {
+			disableUser(context, userID);
+			context.addMessage("User successfully disabled", MessageSeverity.SUCCESS);
+		} catch (DisallowedOperationException e) {
+			context.addMessage("You cannot disable your own account", MessageSeverity.WARNING);
+		}
 		
-		context.addMessage("User successfully disabled", MessageSeverity.SUCCESS);
 		response.sendRedirect( UserView.getURL(userID) );
 		
 		return true;

@@ -24,6 +24,8 @@ import net.lukemurphey.nsia.AccessControlDescriptor.Action;
 import net.lukemurphey.nsia.AccessControlDescriptor.Subject;
 import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
 import net.lukemurphey.nsia.UserManagement.UserDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -113,19 +115,46 @@ public class RightsEditView extends View {
 		}
 	}
 	
-	private boolean setRight(HttpServletRequest request, String rightName, int subjectId, AccessControlDescriptor.Subject subjectType, AccessControl accessControl ) throws NoSessionException, GeneralizedException, ViewFailedException{
+	private boolean setRight(HttpServletRequest request, String rightName, int subjectId, AccessControlDescriptor.Subject subjectType, AccessControl accessControl, RequestContext context) throws NoSessionException, GeneralizedException, ViewFailedException{
 		
 		AccessControlDescriptor.Action right;
+		String allowed;
 		
-		if( request.getParameter(rightName) != null)
+		if( request.getParameter(rightName) != null){
 			right = AccessControlDescriptor.Action.PERMIT;
-		else
+			allowed = "allow";
+		}
+		else{
 			right = AccessControlDescriptor.Action.DENY;
+			allowed = "deny";
+		}
 		
 		RightDescriptor rightDescriptor = new RightDescriptor(right, subjectType, subjectId, rightName);
 		
 		try{
-			return accessControl.setRight(rightDescriptor);
+			if( accessControl.setRight(rightDescriptor) ){
+				if( rightDescriptor.getSubjectType() == AccessControlDescriptor.Subject.USER ){
+					Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
+							new EventLogField( EventLogField.FieldName.RIGHT, rightDescriptor.getRightName() ),
+							new EventLogField( EventLogField.FieldName.VALUE, allowed ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+							new EventLogField( EventLogField.FieldName.TARGET_USER_ID, rightDescriptor.getSubjectId() )} );
+					}
+				else{
+					Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
+							new EventLogField( EventLogField.FieldName.RIGHT, rightDescriptor.getRightName() ),
+							new EventLogField( EventLogField.FieldName.VALUE, allowed ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+							new EventLogField( EventLogField.FieldName.GROUP_ID, rightDescriptor.getSubjectId() )} );
+				}
+				
+				return true;
+			}
+			else{
+				return false;
+			}
 		}
 		catch(NoDatabaseConnectionException e){
 			throw new ViewFailedException(e);
@@ -140,44 +169,44 @@ public class RightsEditView extends View {
 		int setFailures = 0;
 		
 		if( tabIndex == Tab.USER_MANAGEMENT ){
-			if( !setRight( request, "Users.Add", subjectId, subjectType, accessControl) ) setFailures++;
-			if( !setRight( request, "Users.Edit", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Users.View", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Users.Rights.View", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Users.Delete", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Users.Unlock",  subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Users.UpdatePassword", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Users.UpdateOwnPassword", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Users.Sessions.Delete", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Users.Sessions.View", subjectId, subjectType, accessControl)) setFailures++;
+			if( !setRight( request, "Users.Add", subjectId, subjectType, accessControl, context) ) setFailures++;
+			if( !setRight( request, "Users.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Users.View", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Users.Rights.View", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Users.Delete", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Users.Unlock",  subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Users.UpdatePassword", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Users.UpdateOwnPassword", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Users.Sessions.Delete", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Users.Sessions.View", subjectId, subjectType, accessControl, context)) setFailures++;
 			
 			context.addMessage("Rights successfully updated", MessageSeverity.SUCCESS);
 		}
 		else if( tabIndex == Tab.GROUP_MANAGEMENT ){
-			if( !setRight( request, "Groups.Add", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Groups.View", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Groups.Edit", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Groups.Delete", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Groups.Membership.Edit", subjectId, subjectType, accessControl)) setFailures++;
+			if( !setRight( request, "Groups.Add", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Groups.View", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Groups.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Groups.Delete", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Groups.Membership.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
 			
 			context.addMessage("Rights successfully updated", MessageSeverity.SUCCESS);
 		}
 		else if( tabIndex == Tab.SITE_GROUP_MANAGEMENT ){
-			if( !setRight( request, "SiteGroups.View", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "SiteGroups.Add", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "SiteGroups.Delete", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "SiteGroups.Edit", subjectId, subjectType, accessControl)) setFailures++;
+			if( !setRight( request, "SiteGroups.View", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "SiteGroups.Add", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "SiteGroups.Delete", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "SiteGroups.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
 			
 			context.addMessage("Rights successfully updated", MessageSeverity.SUCCESS);
 		}
 		else if( tabIndex == Tab.SYSTEM_CONFIGURATION ){
-			if( !setRight( request, "System.Information.View", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "System.Configuration.Edit", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "Administration.ClearSqlWarnings", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "System.Firewall.View", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "System.Firewall.Edit", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "System.ControlScanner", subjectId, subjectType, accessControl)) setFailures++;
-			if( !setRight( request, "SiteGroups.ScanAllRules", subjectId, subjectType, accessControl)) setFailures++;
+			if( !setRight( request, "System.Information.View", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "System.Configuration.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "Administration.ClearSqlWarnings", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "System.Firewall.View", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "System.Firewall.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "System.ControlScanner", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "SiteGroups.ScanAllRules", subjectId, subjectType, accessControl, context)) setFailures++;
 			
 			context.addMessage("Rights successfully updated", MessageSeverity.SUCCESS);
 		}

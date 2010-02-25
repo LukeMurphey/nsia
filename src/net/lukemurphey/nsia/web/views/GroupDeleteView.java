@@ -12,6 +12,8 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.GroupManagement;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
@@ -63,11 +65,23 @@ public class GroupDeleteView extends View {
 			
 			try{
 				if( groupMgmt.deleteGroup(groupID) ){
+					
+					Application.getApplication().logEvent(EventLogMessage.Category.GROUP_DELETED, new EventLogField[]{
+							new EventLogField( EventLogField.FieldName.GROUP_ID, groupID ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
+					
 					context.addMessage("Group successfully deleted", MessageSeverity.SUCCESS);
-					response.sendRedirect(GroupListView.getURL()); //TODO Replace with view of site group 
+					response.sendRedirect(GroupListView.getURL());
 					return true;
 				}
 				else{
+					
+					Application.getApplication().logEvent(EventLogMessage.Category.GROUP_ID_INVALID, new EventLogField[]{
+							new EventLogField( EventLogField.FieldName.GROUP_ID, groupID ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
+					
 					Dialog.getDialog(response, context, data, "No group was found with the given ID", "Group Not Found", DialogType.WARNING);
 					return true;
 				}
