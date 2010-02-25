@@ -11,7 +11,7 @@
     <#list options as param>
 
     <#assign start_link>
-    <a name="${param.id}" href="${geturl("system_configuration")}?ParamID=${param.id?c}#${param.id?c}">
+    <a name="${param.id?html}" href="${geturl("system_configuration")}?ParamID=${param.id?html}#${param.id?html}">
     </#assign>
 
     <#if (selected?? && selected == param.id)>
@@ -26,7 +26,7 @@
                     <td>&nbsp;</td>
                     <td colspan="2">
                         <form method="post" action="/System/Configuration">
-                        <input type="hidden" name="ParamID" value="${param.id?c}">
+                        <input type="hidden" name="ParamID" value="${param.id?html}">
                <#if param.integer>
                         <input type="hidden" name="ParamSet" value="true">
                         <input class="textInput" size="48" name="ParamValue" value="${param.value?html}">

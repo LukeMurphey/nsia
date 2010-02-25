@@ -49,9 +49,9 @@
                 <td height="8px" colspan="3" class="Text_3">Definitions Matched</td>
         
             <#if ( definitionMatches?size >= 5) >
-                <td width="400px" rowspan="99" style="vertical-align:top" class="BackgroundLoading1"><img alt="ContentTypes" src="/SeverityResults?ResultID=${scanResult.scanResultID?c}&H="${(25 + (definitionMatches?size * 23))}"></td></tr>
+                <td width="400px" rowspan="99" style="vertical-align:top" class="BackgroundLoading1"><img alt="ContentTypes" src="/graph/SeverityResults?ResultID=${scanResult.scanResultID?c}&H="${(25 + (definitionMatches?size * 23))}"></td></tr>
             <#else>
-                <td width="400px" rowspan="99" style="vertical-align:top" class="BackgroundLoading1"><img alt="ContentTypes" src="/SeverityResults?ResultID=${scanResult.scanResultID?c}"></td></tr>
+                <td width="400px" rowspan="99" style="vertical-align:top" class="BackgroundLoading1"><img alt="ContentTypes" src="/graph/SeverityResults?ResultID=${scanResult.scanResultID?c}"></td></tr>
             </#if>
          
             <#list definitionMatches as match>
@@ -83,9 +83,9 @@
             <td style="vertical-align:top" width="400px" rowspan="99" class="BackgroundLoading1">
             <#assign contentTypes=scanResult.discoveredContentTypes />
             <#if ( contentTypes?size >= 5 ) > 
-                <img alt="ContentTypes" src="/ContentTypeResults?ResultID=${scanResult.scanResultID?c}&H=${(25 + (contentTypes?size * 20))?c}"></td></tr>
+                <img alt="ContentTypes" src="/graph/ContentTypeResults?ResultID=${scanResult.scanResultID?c}&H=${(25 + (contentTypes?size * 20))?c}"></td></tr>
             <#else>
-                <img alt="ContentTypes" src="/ContentTypeResults?ResultID=${scanResult.scanResultID?c}"></td>
+                <img alt="ContentTypes" src="/graph/ContentTypeResults?ResultID=${scanResult.scanResultID?c}"></td>
             </#if>
         </tr>
         <#if contentTypesCount?size == 0 >

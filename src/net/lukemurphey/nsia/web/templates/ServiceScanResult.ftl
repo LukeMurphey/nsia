@@ -30,7 +30,7 @@
         <#--   1.1 -- Print out graph -->
             <tr class="Background1">
                 <td width="125px">
-                    <img src="/ServiceScanDeviations?ResultID=${scanResult.scanResultID?c}&H=125"/>
+                    <img src="/graph/ServiceScanDeviations?ResultID=${scanResult.scanResultID?c}&H=125"/>
                 </td>
         <#--   1.2 -- Print out details -->
                 <td width="325px">
@@ -55,7 +55,7 @@
         <#--   2.1 -- Print out graph -->
             <tr class="Background1">
                 <td width="125px">
-                    <img src="/TCPSummary?ResultID=${scanResult.scanResultID?c}&H=125"/>
+                    <img src="/graph/TCPSummary?ResultID=${scanResult.scanResultID?c}&H=125"/>
                 </td>
         
         <#--   2.2 -- Print out details -->
@@ -83,7 +83,7 @@
         <#--   3.1 -- Print out graph -->
             <tr class="Background1">
                 <td width="125px">
-                    <img src="/UDPSummary?ResultID=${scanResult.scanResultID?c}&H=125"/>
+                    <img src="/graph/UDPSummary?ResultID=${scanResult.scanResultID?c}&H=125"/>
                 </td>
         
         <#--   3.2 -- Print out details -->
