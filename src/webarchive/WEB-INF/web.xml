@@ -35,90 +35,10 @@
 	 </servlet-mapping>
 
 	 <servlet>
-		 <servlet-class>net.lukemurphey.nsia.htmlInterface.GraphServlet</servlet-class>
+		 <servlet-class>net.lukemurphey.nsia.web.GraphServlet</servlet-class>
 		 <servlet-name>GraphServlet</servlet-name>
 		 <load-on-startup>1</load-on-startup>
 	 </servlet>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/StatusGraph.png</url-pattern>
-	 </servlet-mapping>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/RulesEvalGraph.png</url-pattern>
-	 </servlet-mapping>
-
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/StatusGraph</url-pattern>
-	 </servlet-mapping>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/RulesEvalGraph</url-pattern>
-	 </servlet-mapping>
-
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/RuleScanHistory</url-pattern>
-	 </servlet-mapping>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/RuleScanHistory.png</url-pattern>
-	 </servlet-mapping>
-
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/ContentTypeResults</url-pattern>
-	 </servlet-mapping>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/ContentTypeResults.png</url-pattern>
-	 </servlet-mapping>
-
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/SeverityResults</url-pattern>
-	 </servlet-mapping>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/SeverityResults.png</url-pattern>
-	 </servlet-mapping>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/ServiceScanDeviations</url-pattern>
-	 </servlet-mapping>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/ServiceScanDeviations.png</url-pattern>
-	 </servlet-mapping>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/UDPSummary</url-pattern>
-	 </servlet-mapping>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/UDPSummary.png</url-pattern>
-	 </servlet-mapping>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/TCPSummary</url-pattern>
-	 </servlet-mapping>
-	 
-	 <servlet-mapping>
-		 <servlet-name>GraphServlet</servlet-name>
-		 <url-pattern>/TCPSummary.png</url-pattern>
-	 </servlet-mapping>
 	 
 	 <servlet-mapping>
 		 <servlet-name>GraphServlet</servlet-name>
