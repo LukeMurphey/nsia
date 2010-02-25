@@ -50,7 +50,7 @@
             <td width="15%" colspan="2">&nbsp;</td>
         </tr>
     <#list permissions as permission>
-        <#if permission.group?? >
+        <#if permission.group >
             <#if permission.subject.enabled>
                 <tr class="Background1">
                     <td>
@@ -80,7 +80,7 @@
             </#if>
         </#if>
         <#if permission.group>
-                                <td>${permission.subject.name?html}</td>
+                                <td>${permission.subject.groupName?html}</td>
                             </tr>
                         </table>
                     <td>Group ${permission.subjectID?c}</td>
