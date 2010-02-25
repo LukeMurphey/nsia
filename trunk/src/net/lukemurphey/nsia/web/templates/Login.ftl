@@ -7,15 +7,15 @@
                 <td colspan="99">&nbsp;</td>
             </tr>
             <tr>
-                <td class="WarnText" width="300px" colspan="99">
+                <td class="<#if message?? && (message.severity == information || message.severity == success)>InfoText<#else>WarnText</#if>" width="300px" colspan="99">
                     <#if message??>
                         <table>
                             <tr>
                                 <td>
-                                    <#if (message.severity == information)><img src="/media/img/16_Alert.png" /></#if>
-                                    <#if (message.severity == alert)><img src="/media/img/16_Alert.png" /></#if>
-                                    <#if (message.severity == success)><img src="/media/img/16_Info.png" /></#if>
-                                    <#if (message.severity == warning)><img src="/media/img/16_Warning.png" /></#if>
+                                    <#if (message.severity == information)><img src="/media/img/16_Information" /></#if>
+                                    <#if (message.severity == alert)><img src="/media/img/16_Alert" /></#if>
+                                    <#if (message.severity == success)><img src="/media/img/16_Information" /></#if>
+                                    <#if (message.severity == warning)><img src="/media/img/16_Warning" /></#if>
                                 </td>
                                 <td>${message?html}</td>
                             </tr>
