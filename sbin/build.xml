@@ -22,8 +22,26 @@
         <jar destfile="bin/NSIA_No_Installer.zip"
             basedir="."
         	includesfile="sbin/include_list.txt"
+        	whenempty="create"
         />
     </target>
+	
+	<target name="clean" >
+	    <delete>
+	    	<fileset file="bin/NSIA_No_Installer.zip"/>
+	    	<fileset file="bin/nsia.jar"/>
+	    	<fileset file="lib/webConsole.war"/>
+	    </delete>
+	</target>
   
+	<target name="svnbinclean" >
+		<echo level="info">Remove svn-files...</echo>
+		<delete includeemptydirs="true" >
+		    <fileset dir="java-bin" defaultexcludes="false" >
+		        <include name="**/.svn/" />
+		    </fileset>
+		</delete>
+	</target>
+	
 	<target name="buildall" depends="webarchive,jar,zip"/>
 </project>
