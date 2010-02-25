@@ -1,0 +1,29 @@
+<project default="buildall">
+	<!-- <target name="compile">
+    <javac srcdir="." />
+  </target> -->
+  
+    <target name="jar" >
+        <jar destfile="bin/nsia.jar"
+        	basedir="java-bin/" 
+        	manifest="sbin/Manifest.txt"
+        	excludes="*.svn"
+        />
+    </target>
+	
+    <target name="webarchive" >
+	    <jar destfile="lib/webConsole.war"
+	        basedir="src/webarchive"
+	    	excludes="*.svn"
+	    />
+	</target>
+	
+    <target name="zip" >
+        <jar destfile="bin/NSIA_No_Installer.zip"
+            basedir="."
+        	includesfile="sbin/include_list.txt"
+        />
+    </target>
+  
+	<target name="buildall" depends="webarchive,jar,zip"/>
+</project>
