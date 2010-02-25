@@ -5,12 +5,12 @@
  <web-app>
 
 	 <servlet>
-		<servlet-class>net.lukemurphey.nsia.web.DefaultServlet</servlet-class>
-		<servlet-name>Default</servlet-name>
+		<servlet-class>net.lukemurphey.nsia.web.MediaServlet</servlet-class>
+		<servlet-name>Media</servlet-name>
 	 </servlet> 
 
 	 <servlet-mapping>
-		<servlet-name>Default</servlet-name>
+		<servlet-name>Media</servlet-name>
 		<url-pattern>/media/*</url-pattern>
 	 </servlet-mapping>
 
