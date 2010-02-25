@@ -72,12 +72,12 @@
 </#list>
     <tr>
         <td height="120px" colspan="2" class="BackgroundLoading1">
-            <span class="AlignCenter"><img src="/StatusGraph" alt="StatusGraph"></span>
+            <span class="AlignCenter"><img src="/graph/StatusGraph" alt="StatusGraph"></span>
         </td>
     </tr>
     <tr>
         <td height="120px" colspan="2" class="BackgroundLoading1">
-            <span class="AlignCenter"><img src="/RulesEvalGraph" alt="RuleStatGraph"></span>
+            <span class="AlignCenter"><img src="/graph/RulesEvalGraph" alt="RuleStatGraph"></span>
         </td>
     </tr>
 </table><p>
