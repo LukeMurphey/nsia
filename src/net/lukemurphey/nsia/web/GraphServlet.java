@@ -103,11 +103,6 @@ public class GraphServlet extends HttpServlet {
 		ApplicationStateDataPoint[] metrics = Application.getApplication().getMetricsData();
 		
 		// 4.1 -- Graph displaying rules evaluated recently
-		System.out.println( request.getServletPath() );
-		System.out.println( request.getContextPath() );
-		System.out.println( request.getPathTranslated() );
-		System.out.println( request.getPathInfo() );
-
 		if( request.getRequestURI().matches("/RulesEvalGraph.png") || request.getRequestURI().matches("/RulesEvalGraph") ){
 			if( lastRuleStatChartLocation == null || ( System.currentTimeMillis() - lastRuleStatChartGenerationTime ) > (chartCreationFrequency * 1000 ) ){
 				JFreeChart chart = generateRuleEvaluationGraph( metrics );
