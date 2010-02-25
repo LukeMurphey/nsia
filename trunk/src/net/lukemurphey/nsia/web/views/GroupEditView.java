@@ -15,6 +15,8 @@ import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -50,6 +52,12 @@ public class GroupEditView extends View {
 		GroupEditView view = new GroupEditView();
 		
 		return view.createURL("Edit", group.getGroupId());
+	}
+	
+	public static String getURL( int groupID ) throws URLInvalidException{
+		GroupEditView view = new GroupEditView();
+		
+		return view.createURL("Edit",groupID);
 	}
 	
 	/**
@@ -102,11 +110,25 @@ public class GroupEditView extends View {
 						// 3.3 -- Edit the existing group
 						else{
 							if( groupManager.updateGroupInfo(group.getGroupId(), name, description) ){
+								
+								Application.getApplication().logEvent(EventLogMessage.Category.GROUP_MODIFIED, new EventLogField[]{
+										new EventLogField( EventLogField.FieldName.GROUP_ID, group.getGroupId() ),
+										new EventLogField( EventLogField.FieldName.GROUP_NAME, group.getGroupName() ),
+										new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+										new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
+								
 								context.addMessage("Group updated successfully", MessageSeverity.SUCCESS);
 								response.sendRedirect( GroupEditView.getURL(group) );
 								return true;
 							}
 							else{
+								
+								Application.getApplication().logEvent(EventLogMessage.Category.OPERATION_FAILED, new EventLogField[]{
+										new EventLogField( EventLogField.FieldName.GROUP_ID, group.getGroupId() ),
+										new EventLogField( EventLogField.FieldName.GROUP_NAME, group.getGroupName() ),
+										new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+										new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
+								
 								context.addMessage("Group could not be updated", MessageSeverity.WARNING);
 								response.sendRedirect( GroupEditView.getURL(group) );
 								return true;

@@ -8,9 +8,12 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.DisallowedOperationException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
 import net.lukemurphey.nsia.web.Link;
@@ -68,6 +71,11 @@ public class DefinitionDeleteView extends View{
 			try{
 				DefinitionArchive archive = DefinitionArchive.getArchive();
 				archive.removeByID(definitionID);
+				
+				Application.getApplication().logEvent(EventLogMessage.Category.DEFINITIONS_DELETED, new EventLogField[]{
+						new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
+						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
 				
 				context.addMessage("Definition successfully deleted", MessageSeverity.INFORMATION);
 				response.sendRedirect( StandardViewList.getURL(DefinitionsView.VIEW_NAME) );

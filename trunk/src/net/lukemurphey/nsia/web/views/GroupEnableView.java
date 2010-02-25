@@ -12,6 +12,8 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.GroupManagement;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
@@ -64,10 +66,22 @@ public class GroupEnableView extends View {
 			try{
 				if( groupMgmt.enableGroup(groupID) ){
 					context.addMessage("Group successfully enabled", MessageSeverity.SUCCESS);
-					response.sendRedirect(GroupListView.getURL()); //TODO Replace with view of site group 
+					
+					Application.getApplication().logEvent(EventLogMessage.Category.GROUP_REENABLED, new EventLogField[]{
+							new EventLogField( EventLogField.FieldName.GROUP_ID, groupID ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
+					
+					response.sendRedirect(GroupEditView.getURL(groupID));
 					return true;
 				}
 				else{
+					
+					Application.getApplication().logEvent(EventLogMessage.Category.GROUP_ID_INVALID, new EventLogField[]{
+							new EventLogField( EventLogField.FieldName.GROUP_ID, groupID ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
+					
 					Dialog.getDialog(response, context, data, "No group was found with the given ID", "Group Not Found", DialogType.WARNING);
 					return true;
 				}

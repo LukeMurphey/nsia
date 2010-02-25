@@ -84,9 +84,22 @@ public class DefinitionEntryView extends View {
 	
 			if( localID >= 0 ){
 				archive.updateDefinition(definition);
+				
+				Application.getApplication().logEvent(EventLogMessage.Category.DEFINITIONS_UPDATED, new EventLogField[]{
+						new EventLogField( EventLogField.FieldName.DEFINITION_ID, definition.getID() ),
+						new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
+						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
+				
 			}
 			else{
-				archive.addDefinition(definition);
+				int definitionID = archive.addDefinition(definition);
+				
+				Application.getApplication().logEvent(EventLogMessage.Category.DEFINITIONS_ADDED, new EventLogField[]{
+						new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
+						new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
+						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
 			}
 		}
 		catch( NoDatabaseConnectionException e ){

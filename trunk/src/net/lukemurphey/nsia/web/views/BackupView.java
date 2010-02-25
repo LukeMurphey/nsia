@@ -125,7 +125,7 @@ public class BackupView extends View {
 	 * Start the backup task.
 	 * @return
 	 */
-	private WorkerThreadDescriptor startBackup(){
+	private WorkerThreadDescriptor startBackup( ){
 		
 		// 1 -- Start the backup
 		DatabaseBackup databaseBackup = new DatabaseBackup();

@@ -20,6 +20,8 @@ import net.lukemurphey.nsia.PasswordAuthenticationValidator;
 import net.lukemurphey.nsia.PasswordInvalidException;
 import net.lukemurphey.nsia.UserManagement;
 import net.lukemurphey.nsia.UserManagement.UserDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -111,6 +113,12 @@ public class UserPasswordUpdateView extends View {
 					// 4 -- Otherwise, update the password
 					String newPassword = request.getParameter("Password");
 					userManager.changePassword(user, newPassword);
+					
+					Application.getApplication().logEvent(EventLogMessage.Category.USER_PASSWORD_CHANGED, new EventLogField[]{
+							new EventLogField( EventLogField.FieldName.TARGET_USER_NAME, user.getUserName() ),
+							new EventLogField( EventLogField.FieldName.TARGET_USER_ID, user.getUserID() ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),
+							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getSessionInfo().getUserId() )} );
 				}
 			}
 		} catch (SQLException e) {
