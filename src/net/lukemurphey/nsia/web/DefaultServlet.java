@@ -8,7 +8,6 @@ import net.lukemurphey.nsia.GenericUtils;
 import net.lukemurphey.nsia.MimeType;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.htmlInterface.HtmlContentProvider;
-import net.lukemurphey.nsia.htmlInterface.WebConsoleServlet;
 
 import java.io.*;
 import java.net.*;
@@ -62,11 +61,8 @@ public class DefaultServlet extends HttpServlet {
 	
 			// 2 -- Determine if the file is actually a directory
 			if( zipEntry == null || zipEntry.isDirectory() ){
-				//If the file is actually a directory, then send the user to user to the main console servlet
-				RequestDispatcher requestDispatcher;
-				requestDispatcher = request.getRequestDispatcher("/Dashboard");
-				requestDispatcher.forward((ServletRequest)request, (ServletResponse)response);
-				
+				//Send the user to the error page if the file is actually a directory or the file was not found.
+				handleFileNotFound(inGet, request, response);
 				return;
 			}
 			
@@ -106,18 +102,16 @@ public class DefaultServlet extends HttpServlet {
 			outputStream.write(file);
 		
 		}catch(FileNotFoundException e){
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			
-			WebConsoleServlet consoleServlet = new WebConsoleServlet();
-			if( inGet )
-				consoleServlet.doGet(request, response);
-			else
-				consoleServlet.doPost(request, response);
-
+			handleFileNotFound(inGet, request, response);
 		}catch(Throwable t){
 			Application.getApplication().logExceptionEvent(EventLogMessage.Category.WEB_ERROR, t);
 		}
 		
+	}
+	
+	private void handleFileNotFound( boolean inGet, HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		response.getOutputStream().print("File not found");
 	}
 	
 	/**
