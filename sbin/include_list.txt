@@ -1,0 +1,13 @@
+bin/ThreatFactor NSIA.exe
+bin/ThreatFactor NSIA CLI.exe
+bin/ThreatFactor NSIA Service.exe
+bin/ThreatFactor NSIA
+bin/ThreatFactor NSIA GUI
+bin/nsia.jar
+bin/install.sh
+bin/install.bat
+etc/config.ini
+etc/mime.types
+lib/*.jar
+lib/*.war
+var/*.*
