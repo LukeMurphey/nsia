@@ -30,7 +30,7 @@ public class MainDashboardView extends View {
 	public static final String VIEW_NAME = "main_dashboard";
 	
 	public MainDashboardView() {
-		super("Dashboard", VIEW_NAME);
+		super("", VIEW_NAME);
 	}
 	
 	public static String getURL() throws URLInvalidException{
