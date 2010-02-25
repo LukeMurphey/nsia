@@ -77,7 +77,7 @@ public class LoginView extends View {
 		data.put("title", "Login");
 		
 		Vector<String> headers = new Vector<String>();
-		headers.add("<table><tr><td><img src=\"/16_Information.png\" alt=\"info\"/></td><td>Access is for authorized users only. Use of this system subject to monitoring.</td></tr></table>");
+		headers.add("<table><tr><td><img src=\"/media/img/16_Information.png\" alt=\"info\"/></td><td>Access is for authorized users only. Use of this system subject to monitoring.</td></tr></table>");
 		
 		data.put("dashboard_headers", headers);
 		data.put("show_splitter_border", false);
@@ -152,6 +152,10 @@ public class LoginView extends View {
 			else if( context.getSessionInfo().getSessionStatus() == SessionStatus.SESSION_LIFETIME_EXCEEDED ){
 				data.put("message", new Message("Your session has expired", MessageSeverity.INFORMATION));
 			}
+		}
+		
+		if( request.getParameter("LoggedOut") != null ){
+			data.put("message", new Message("You have been successfully logged out", MessageSeverity.INFORMATION));
 		}
 		
 		TemplateLoader.renderToResponse("Login.ftl", data, response);
