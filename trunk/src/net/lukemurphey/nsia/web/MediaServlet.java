@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 import java.util.zip.*;
 import java.net.JarURLConnection;
 
-public class DefaultServlet extends HttpServlet {
+public class MediaServlet extends HttpServlet {
 
 	private boolean cachingEnabled = true;
 	private static String JAR_FILENAME = null;
