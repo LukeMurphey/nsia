@@ -14,6 +14,7 @@
         <#if permission_denied_link??>
             <p /><a href="${permission_denied_link.link?html}">[${permission_denied_link.title?html}]</a>
         <#else>
+            <p /><a href="<@url name="main_dashboard" />">[Return to the Main Dashboard]</a>
         </#if>
     </#assign>
     
