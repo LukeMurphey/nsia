@@ -169,10 +169,12 @@ public class Menu {
 		
 	public static Vector<Link> getResponseActionsMenuItems( RequestContext context, SiteGroupDescriptor siteGroup ) throws URLInvalidException{
 		Vector<Link> menu = new Vector<Link>();
-		menu.add( new Link("Incident Response") );
-		menu.add( new Link("Add New Action", ActionEditView.getURL() + "?SiteGroupID=" + siteGroup.getGroupId() ) );
-		menu.add( new Link("List Actions", ActionsListView.getURL(siteGroup.getGroupId()) ) );
 		
+		if( siteGroup != null ){
+			menu.add( new Link("Incident Response") );
+			menu.add( new Link("Add New Action", ActionEditView.getURL() + "?SiteGroupID=" + siteGroup.getGroupId() ) );
+			menu.add( new Link("List Actions", ActionsListView.getURL(siteGroup.getGroupId()) ) );
+		}
 		return menu;
 	}
 		
