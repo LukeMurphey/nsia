@@ -148,15 +148,15 @@ public class Dialog {
 		Map<String, Object> data = new HashMap<String, Object>();
 		
 		if( type == DialogType.CRITICAL ){
-			data.put("icon", "/32_Alert");
+			data.put("icon", "/media/img/32_Alert");
 			data.put("warn", true);
 		}
 		else if( type == DialogType.WARNING ){
-			data.put("icon", "/32_Warning");
+			data.put("icon", "/media/img/32_Warning");
 			data.put("warn", true);
 		}
 		else{
-			data.put("icon", "/32_Information");
+			data.put("icon", "/media/img/32_Information");
 		}
 		
 		data.put("title", title);
@@ -183,13 +183,13 @@ public class Dialog {
 		Map<String, Object> data = new HashMap<String, Object>();
 		
 		if( type == DialogType.CRITICAL ){
-			data.put("icon", "/32_Alert");
+			data.put("icon", "/media/img/32_Alert");
 		}
 		else if( type == DialogType.WARNING ){
-			data.put("icon", "/32_Warning");
+			data.put("icon", "/media/img/32_Warning");
 		}
 		else{
-			data.put("icon", "/32_Information");
+			data.put("icon", "/media/img/32_Information");
 		}
 		
 		data.put("title", title);
