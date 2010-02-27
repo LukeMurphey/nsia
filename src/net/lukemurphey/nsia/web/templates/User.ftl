@@ -70,7 +70,7 @@
         </table>
      <#else>
         <#if groups?size == 0 >
-            <#assign message>No groups exist yet. Create a group first, then add the user to the specified group or groups. <p><a href="GroupManagement?Action=New">[Create Group Now]</a></#assign>
+            <#assign message>No groups exist yet. Create a group first, then add the user to the specified group or groups. <p><a href="<@url name="group_editor" args=["New"] />">[Create Group Now]</a></#assign>
             <@getinfodialog title="No Groups Exist" message=message />
         <#else>
             <form method="POST" action="<@url name="user_edit_membership" args=[user.userID] />">
@@ -96,7 +96,7 @@
                             </#if>
                          </td>
                          <td>
-                            <a href="GroupManagement?GroupID=${group.ID?c}">${group.ID} [View]</a>
+                            <a href="<@url name="group_editor" args=["Edit", group.ID] />">${group.ID} [View]</a>
                          </td>
                          <td><@truncate_chars length=32>${group.description?html}</@truncate_chars></td>
                     </tr>
