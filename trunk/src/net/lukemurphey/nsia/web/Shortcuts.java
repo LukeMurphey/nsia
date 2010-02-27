@@ -25,6 +25,7 @@ import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.web.templates.TemplateLoader;
 import net.lukemurphey.nsia.web.views.DashboardDefinitionErrorsPanel;
 import net.lukemurphey.nsia.web.views.DashboardLicensePanel;
 import net.lukemurphey.nsia.web.views.DashboardRefreshPanel;
@@ -50,6 +51,19 @@ public class Shortcuts {
 	
 	/**
 	 * Determine if the user can perform the given operation.
+	 * @param sessionInfo
+	 * @param rightName
+	 * @param annotation
+	 * @throws InsufficientPermissionException
+	 * @throws GeneralizedException
+	 * @throws NoSessionException
+	 */
+	public static void checkRight( SessionManagement.SessionInfo sessionInfo, String rightName, String annotation ) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+		checkRight( sessionInfo, rightName, false, null );
+	}
+	
+	/**
+	 * Determine if the user can perform the given operation.
 	 * @param sessionIdentifier
 	 * @param rightName
 	 * @param operationTitle
@@ -58,8 +72,8 @@ public class Shortcuts {
 	 * @throws GeneralizedException
 	 * @throws NoSessionException 
 	 */
-	public static void checkRight( SessionManagement.SessionInfo sessionInfo, String rightName, String annotation ) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
-		if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
+	public static void checkRight( SessionManagement.SessionInfo sessionInfo, String rightName, boolean checkSession, String annotation ) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+		if( checkSession && sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
 			throw new NoSessionException(sessionInfo.getSessionStatus());
 		}
 		
@@ -184,6 +198,19 @@ public class Shortcuts {
 	
 	/**
 	 * Determine if the user can perform the given operation.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param annotation
+	 * @throws InsufficientPermissionException
+	 * @throws GeneralizedException
+	 * @throws NoSessionException
+	 */
+	public static void checkCreate( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+		checkCreate(sessionInfo, objectId, false, annotation);
+	}
+	
+	/**
+	 * Determine if the user can perform the given operation.
 	 * @param sessionIdentifier
 	 * @param objectId
 	 * @param annotation
@@ -192,9 +219,9 @@ public class Shortcuts {
 	 * @throws GeneralizedException
 	 * @throws NoSessionException 
 	 */
-	public static void checkCreate( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation ) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+	public static void checkCreate( SessionManagement.SessionInfo sessionInfo, long objectId, boolean checkSession, String annotation ) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
 		
-		if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
+		if( checkSession && sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
 			throw new NoSessionException(sessionInfo.getSessionStatus());
 		}
 		
@@ -335,6 +362,19 @@ public class Shortcuts {
 	
 	/**
 	 * Determine if the user can perform the given operation.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param annotation
+	 * @throws InsufficientPermissionException
+	 * @throws GeneralizedException
+	 * @throws NoSessionException
+	 */
+	public static void checkExecute( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+		checkModify(sessionInfo, objectId, false, annotation);
+	}
+	
+	/**
+	 * Determine if the user can perform the given operation.
 	 * @param sessionIdentifier
 	 * @param objectId
 	 * @param annotation
@@ -343,9 +383,9 @@ public class Shortcuts {
 	 * @throws GeneralizedException
 	 * @throws NoSessionException 
 	 */
-	public static void checkExecute( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+	public static void checkExecute( SessionManagement.SessionInfo sessionInfo, long objectId, boolean checkSession, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
 		
-		if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
+		if( checkSession && sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
 			throw new NoSessionException(sessionInfo.getSessionStatus());
 		}
 		
@@ -482,6 +522,19 @@ public class Shortcuts {
 	
 	/**
 	 * Determine if the user can perform the given operation.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param annotation
+	 * @throws InsufficientPermissionException
+	 * @throws GeneralizedException
+	 * @throws NoSessionException
+	 */
+	public static void checkModify( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+		checkModify(sessionInfo, objectId, false, annotation);
+	}
+	
+	/**
+	 * Determine if the user can perform the given operation.
 	 * @param sessionIdentifier
 	 * @param objectId
 	 * @param annotation
@@ -490,9 +543,9 @@ public class Shortcuts {
 	 * @throws GeneralizedException
 	 * @throws NoSessionException 
 	 */
-	public static void checkModify( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+	public static void checkModify( SessionManagement.SessionInfo sessionInfo, long objectId, boolean checkSession, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
 		
-		if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
+		if( checkSession && sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
 			throw new NoSessionException(sessionInfo.getSessionStatus());
 		}
 		
@@ -632,6 +685,19 @@ public class Shortcuts {
 	
 	/**
 	 * Determine if the user can perform the given operation.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param annotation
+	 * @throws InsufficientPermissionException
+	 * @throws GeneralizedException
+	 * @throws NoSessionException
+	 */
+	public static void checkControl( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+		checkControl(sessionInfo, objectId, false, annotation);
+	}
+	
+	/**
+	 * Determine if the user can perform the given operation.
 	 * @param sessionIdentifier
 	 * @param objectId
 	 * @param annotation
@@ -640,9 +706,9 @@ public class Shortcuts {
 	 * @throws GeneralizedException
 	 * @throws NoSessionException 
 	 */
-	public static void checkControl( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+	public static void checkControl( SessionManagement.SessionInfo sessionInfo, long objectId, boolean checkSession, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
 		
-		if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
+		if( checkSession && sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
 			throw new NoSessionException(sessionInfo.getSessionStatus());
 		}
 		
@@ -777,6 +843,19 @@ public class Shortcuts {
 	
 	/**
 	 * Determine if the user can perform the given operation.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param annotation
+	 * @throws InsufficientPermissionException
+	 * @throws GeneralizedException
+	 * @throws NoSessionException
+	 */
+	public static void checkDelete( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+		checkDelete(sessionInfo, objectId, false, annotation);
+	}
+	
+	/**
+	 * Determine if the user can perform the given operation.
 	 * @param sessionIdentifier
 	 * @param objectId
 	 * @param annotation
@@ -785,9 +864,9 @@ public class Shortcuts {
 	 * @throws GeneralizedException
 	 * @throws NoSessionException 
 	 */
-	public static void checkDelete( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+	public static void checkDelete( SessionManagement.SessionInfo sessionInfo, long objectId, boolean checkSession, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
 		
-		if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
+		if( checkSession && sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
 			throw new NoSessionException(sessionInfo.getSessionStatus());
 		}
 		
@@ -920,6 +999,19 @@ public class Shortcuts {
 	
 	/**
 	 * Determine if the user can perform the given operation.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param annotation
+	 * @throws InsufficientPermissionException
+	 * @throws GeneralizedException
+	 * @throws NoSessionException
+	 */
+	public static void checkRead( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+		checkRead(sessionInfo, objectId, false, annotation);
+	}
+	
+	/**
+	 * Determine if the user can perform the given operation.
 	 * @param sessionIdentifier
 	 * @param objectId
 	 * @param annotation
@@ -928,9 +1020,9 @@ public class Shortcuts {
 	 * @throws GeneralizedException
 	 * @throws NoSessionException 
 	 */
-	public static void checkRead( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
+	public static void checkRead( SessionManagement.SessionInfo sessionInfo, long objectId, boolean checkSession, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
 		
-		if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
+		if( checkSession && sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
 			throw new NoSessionException(sessionInfo.getSessionStatus());
 		}
 		
@@ -1198,5 +1290,15 @@ public class Shortcuts {
 		}
 		
 		return tmp.toString();
+	}
+	
+	public static void getPermissionDeniedDialog( HttpServletResponse response, Map<String, Object> data, String message ) throws ViewFailedException{
+		getPermissionDeniedDialog(response, data, message, null);
+	}
+	
+	public static void getPermissionDeniedDialog( HttpServletResponse response, Map<String, Object> data, String message, Link link ) throws ViewFailedException{
+		data.put("permission_denied_message", message);
+		data.put("permission_denied_link", link );
+		TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);
 	}
 }
