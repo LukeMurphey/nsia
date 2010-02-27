@@ -207,7 +207,7 @@ public class ApiGroupManagement extends ApiHandler {
 		
 		//	 0.2 -- Make sure the user has permission
 		UserDescriptor userDescriptor = getUserInfo( sessionIdentifier );
-		checkRight( sessionIdentifier, "Users.Edit" );
+		checkRight( sessionIdentifier, "Groups.Edit" );
 		
 		try{
 			if( groupManagement.disableGroup( groupId ) ){
