@@ -83,6 +83,8 @@ public class Menu {
 		
 		menu.addAll(getUserMenuItems(context, null));
 		
+		menu.addAll(getGroupMenuItems(context, null));
+		
 		return toArray(menu);
 	}
 	
