@@ -54,7 +54,7 @@
                 <td class="Background1">
                     <table>
                         <tr>
-                            <td><a href="<@url name="rule_editor" args=["Edit", rule.ID] />"><img class="imagebutton" alt="configure" src="/16_Configure"></a></td>
+                            <td><a href="<@url name="rule_editor" args=["Edit", rule.ID] />"><img class="imagebutton" alt="configure" src="/media/img/16_Configure"></a></td>
                             <td><a href="<@url name="rule_editor" args=["Edit", rule.ID] />">Details</a></td>
                         </tr>
                     </table>
@@ -63,7 +63,7 @@
                 <td class="Background1">
                     <table>
                         <tr>
-                            <td><a href="<@url name="scan_result_history" args=[rule.ID]/>"><img class="imagebutton" alt="scan results" src="/16_BarChart"></a></td>
+                            <td><a href="<@url name="scan_result_history" args=[rule.ID]/>"><img class="imagebutton" alt="scan results" src="/media/img/16_BarChart"></a></td>
                             <td><a href="<@url name="scan_result_history" args=[rule.ID]/>">Scan History</a></td>
                         </tr>
                     </table>
