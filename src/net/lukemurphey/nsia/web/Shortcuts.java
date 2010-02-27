@@ -1292,13 +1292,22 @@ public class Shortcuts {
 		return tmp.toString();
 	}
 	
+	public static void getPermissionDeniedDialog( HttpServletResponse response, Map<String, Object> data, String message, boolean showSimple ) throws ViewFailedException{
+		getPermissionDeniedDialog(response, data, message, null, showSimple);
+	}
+	
 	public static void getPermissionDeniedDialog( HttpServletResponse response, Map<String, Object> data, String message ) throws ViewFailedException{
 		getPermissionDeniedDialog(response, data, message, null);
 	}
 	
 	public static void getPermissionDeniedDialog( HttpServletResponse response, Map<String, Object> data, String message, Link link ) throws ViewFailedException{
+		getPermissionDeniedDialog(response, data, message, link, false);
+	}
+	
+	public static void getPermissionDeniedDialog( HttpServletResponse response, Map<String, Object> data, String message, Link link, boolean showSimple ) throws ViewFailedException{
 		data.put("permission_denied_message", message);
 		data.put("permission_denied_link", link );
+		data.put("show_simple", showSimple );
 		TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);
 	}
 }
