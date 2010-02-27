@@ -385,7 +385,12 @@ public class DefinitionArchive {
 			throw new IllegalArgumentException("The definition to add cannot be null");
 		}
 		
-		//	 0.2 -- Make sure the definition does not have an ID field that is within the reserved range (the reserved range is for definitions from the official set only)
+		//	 0.2 -- Make sure a valid definition ID was provided
+		if( newDefinition.getID() <= 0 ){
+			throw new DisallowedOperationException("The definition must have a valid ID (greater than zero)");
+		}
+		
+		//	 0.3 -- Make sure the definition does not have an ID field that is within the reserved range (the reserved range is for definitions from the official set only)
 		if( newDefinition.isOfficial() == true ){
 			throw new DisallowedOperationException("A custom definition must have an ID field greater than 1,000,000; IDs less than 1000000 are reserved for definitions from the official set");
 		}
