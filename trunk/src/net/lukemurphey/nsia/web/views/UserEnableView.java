@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.UserManagement;
@@ -17,6 +18,7 @@ import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -41,10 +43,7 @@ public class UserEnableView extends View {
 		Application app = Application.getApplication();
 		
 		try{
-			// 0 -- Precondition check
-			
-			//	 0.1 -- Make sure the user has permission
-			//Shortcuts.checkRight( context.getSessionInfo(), "SiteGroups.Delete" ); //TODO Check permissions
+
 			UserManagement userManagement = new UserManagement(Application.getApplication());
 			
 			// 1 -- Enable the account
@@ -98,7 +97,7 @@ public class UserEnableView extends View {
 			String[] args, Map<String, Object> data)
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
-
+		
 		// 1 -- Make sure the argument for the user to enable is provided and is the correct type
 		int userID = -1;
 		
@@ -120,7 +119,18 @@ public class UserEnableView extends View {
 			}
 		}
 		
-		// 2 -- Enable the user
+		// 2 -- Check the user's permissions
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Edit", "Enable user ID " + userID) == false ){
+				context.addMessage("You do not have permission to enable users", MessageSeverity.WARNING);
+				response.sendRedirect( UserView.getURL(userID) );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		// 3 -- Enable the user
 		enableUser(context, userID);
 		
 		context.addMessage("User successfully enabled", MessageSeverity.SUCCESS);

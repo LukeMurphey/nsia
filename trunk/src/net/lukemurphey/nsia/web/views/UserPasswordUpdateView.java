@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.LocalPasswordAuthentication;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
@@ -31,6 +32,7 @@ import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
+import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
 import net.lukemurphey.nsia.web.forms.Field;
 import net.lukemurphey.nsia.web.forms.FieldError;
 import net.lukemurphey.nsia.web.forms.FieldErrors;
@@ -143,17 +145,6 @@ public class UserPasswordUpdateView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 		
-		// 0 -- Check permissions
-		//TODO Check rights
-		/*
-			if( sessionUserId == userId ){ // Wants to change their own password
-				checkRight( sessionIdentifier, "Users.UpdateOwnPassword" );
-			}
-			else{ // Wants to change someone else's password
-				checkRight( sessionIdentifier, "Users.UpdatePassword" );
-			} 
-		 */
-		
 		// 1 -- Get the user account if one exists
 		UserDescriptor user = null;
 		
@@ -191,6 +182,27 @@ public class UserPasswordUpdateView extends View {
 			}
 			
 			data.put("user", user);
+		}
+		
+		// 3 -- Check permissions
+		try{
+			if( context.getUser().getUserID() == user.getUserID() ){ // Wants to change their own password
+				if( Shortcuts.hasRight( context.getSessionInfo(), "Users.UpdateOwnPassword" ) == false ){
+					context.addMessage("You do not have permission to update your password", MessageSeverity.WARNING);
+					response.sendRedirect( UserView.getURL(user) );
+					return true;
+				}
+			}
+			else{ // Wants to change someone else's password
+				if( Shortcuts.hasRight( context.getSessionInfo(), "Users.UpdatePassword" ) == false ){
+					context.addMessage("You do not have permission to update user passwords", MessageSeverity.WARNING);
+					response.sendRedirect( UserView.getURL(user) );
+					return true;
+				}
+			} 
+		}
+		catch(GeneralizedException e){
+			throw new ViewFailedException(e);
 		}
 		
 		// 2 -- Process the data as necessary

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.SiteGroupManagement;
@@ -17,7 +18,7 @@ import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.RequestContext;
-import net.lukemurphey.nsia.web.StandardViewList;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -38,7 +39,7 @@ public class SiteGroupDeleteView extends View {
 		return view.createURL(siteGroup.getGroupId());
 	}
 	
-	public boolean deleteGroup( RequestContext context, int groupId ) throws ViewFailedException{
+	public boolean deleteGroup( RequestContext context, int groupId ) throws ViewFailedException, GeneralizedException{
 		
 		Application app = Application.getApplication();
 		
@@ -46,7 +47,11 @@ public class SiteGroupDeleteView extends View {
 			// 0 -- Precondition check
 			
 			//	 0.1 -- Make sure the user has permission
-			//Shortcuts.checkRight( context.getSessionInfo(), "SiteGroups.Delete" );
+			if( Shortcuts.hasRight(context.getSessionInfo(), "SiteGroups.Delete") == false ){
+				context.addMessage("You do not have permission to delete this site group", MessageSeverity.WARNING);
+				return false;
+			}
+			
 			SiteGroupManagement siteGroupManagement = new SiteGroupManagement(Application.getApplication());
 			
 			// 1 -- Perform the delete
@@ -79,19 +84,7 @@ public class SiteGroupDeleteView extends View {
 		}catch (InputValidationException e) {
 			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
 			throw new ViewFailedException(e);
-		} /*catch (NotFoundException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (InsufficientPermissionException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (GeneralizedException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (NoSessionException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		}*/
+		}
 	}
 	
 	@Override
@@ -123,10 +116,20 @@ public class SiteGroupDeleteView extends View {
 		}
 		
 		// 2 -- Delete the group
-		deleteGroup(context, siteGroupID);
+		try {
+			if( deleteGroup(context, siteGroupID) ){
+				context.addMessage("Site group successfully deleted", MessageSeverity.SUCCESS);
+			}
+			else{
+				response.sendRedirect( SiteGroupView.getURL(siteGroupID) );
+
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
 		
-		context.addMessage("Site group successfully deleted", MessageSeverity.SUCCESS);
-		response.sendRedirect( StandardViewList.getURL(MainDashboardView.VIEW_NAME) );
+		response.sendRedirect( MainDashboardView.getURL() );
 		
 		return true;
 	}

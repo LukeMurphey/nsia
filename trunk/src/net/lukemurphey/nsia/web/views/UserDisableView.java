@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.DisallowedOperationException;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.UserManagement;
@@ -18,6 +19,7 @@ import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -82,19 +84,7 @@ public class UserDisableView extends View {
 		}catch (InputValidationException e) {
 			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
 			throw new ViewFailedException(e);
-		} /*catch (NotFoundException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (InsufficientPermissionException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (GeneralizedException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (NoSessionException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		}*/
+		}
 	}
 	
 	@Override
@@ -125,7 +115,18 @@ public class UserDisableView extends View {
 			}
 		}
 		
-		// 2 -- Disable the user
+		// 2 -- Check the user's permissions
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Edit", "Disable user ID " + userID) == false ){
+				context.addMessage("You do not have permission to disable user accounts", MessageSeverity.WARNING);
+				response.sendRedirect( UserView.getURL(userID) );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		// 3 -- Disable the user
 		try {
 			disableUser(context, userID);
 			context.addMessage("User successfully disabled", MessageSeverity.SUCCESS);

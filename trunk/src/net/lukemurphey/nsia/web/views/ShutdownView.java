@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.GeneralizedException;
-import net.lukemurphey.nsia.InsufficientPermissionException;
-import net.lukemurphey.nsia.NoSessionException;
 import net.lukemurphey.nsia.Application.ShutdownRequestSource;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -20,6 +18,7 @@ import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
+import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
 import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
 public class ShutdownView extends View {
@@ -38,19 +37,18 @@ public class ShutdownView extends View {
 		
 		// 1 -- Make sure the user did not press cancel
 		if( request.getParameter("Selected") != null && request.getParameter("Selected").equalsIgnoreCase("Cancel") ){
-			response.sendRedirect(StandardViewList.getURL("main_dashboard"));
+			response.sendRedirect(MainDashboardView.getURL());
 			return true;
 		}
 		
 		// 2 -- Check permissions
 		try {
-			Shortcuts.checkRight(context.getSessionInfo(), "System.Shutdown");
-		} catch (InsufficientPermissionException e) {
-			Dialog.getDialog(response, context, data, "You do not have permission to shutdown the system.", "Insufficient Permission", DialogType.WARNING);
-			return true;
+			if( Shortcuts.hasRight(context.getSessionInfo(), "System.Shutdown") == false ){
+				context.addMessage("You do not have permission to shutdown the system", MessageSeverity.WARNING);
+				response.sendRedirect(SystemStatusView.getURL());
+				return true;
+			}
 		} catch (GeneralizedException e) {
-			throw new ViewFailedException(e);
-		} catch (NoSessionException e) {
 			throw new ViewFailedException(e);
 		}
 		

@@ -8,10 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.WorkerThread;
 import net.lukemurphey.nsia.Application.WorkerThreadDescriptor;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
@@ -35,7 +37,15 @@ public class TaskStopView extends View {
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 
 		// 1 -- Make sure the user has permission
-		//TODO check permissions
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit", "Stop background task") == false ){
+				context.addMessage("You do not have permission to stop running tasks.", MessageSeverity.WARNING);
+				response.sendRedirect( TaskListView.getURL() );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
 		
 		// 2 -- Find the task
 		String name;

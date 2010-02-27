@@ -122,9 +122,6 @@ public class UserView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 
-		// 0 -- Check permissions
-		//TODO check rights
-		
 		// 1 -- Get the user
 		int userID;
 		
@@ -156,9 +153,35 @@ public class UserView extends View {
 			return true;
 		}
 		
+		// 2 -- Prepare the content
+		
+		// Get the menu
+		data.put("menu", Menu.getUserMenu(context, user));
+		
+		// Get the breadcrumbs
+		Vector<Link> breadcrumbs = new Vector<Link>();
+		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+		breadcrumbs.add(  new Link("User Management", UsersView.getURL()) );
+		breadcrumbs.add(  new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
+		data.put("breadcrumbs", breadcrumbs);
+		
+		//Get the dashboard headers
+		Shortcuts.addDashboardHeaders(request, response, data);
+		data.put("title", "User: " + user);
+		
+		// 3 -- Check rights
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Users.View", "View user ID " + user.getUserID() + ") " + user.getUserName() ) == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view users");
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
 		data.put("user", user);
 		
-		// 2 -- Get the user group membership
+		// 4 -- Get the user group membership
 		UserGroupInfo[] userGroups = null;
 		try{
 			boolean can_enum_groups = Shortcuts.hasRight( context.getSessionInfo(), "Groups.View");
@@ -184,25 +207,9 @@ public class UserView extends View {
 			}
 		}
 		
+		// 5 -- Render the page
 		data.put("included_groups", included_groups);
 		data.put("groups", userGroups);
-		
-		// 3 -- Get the menu
-		data.put("menu", Menu.getUserMenu(context, user));
-		
-		// 4 -- Get the breadcrumbs
-		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-		breadcrumbs.add(  new Link("User Management", UsersView.getURL()) );
-		breadcrumbs.add(  new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
-		data.put("breadcrumbs", breadcrumbs);
-		
-		//Get the dashboard headers
-		Shortcuts.addDashboardHeaders(request, response, data);
-		data.put("title", "User: " + user);
-		
-		//checkRight( sessionIdentifier, "Groups.View");
-		data.put("can_enum_groups", true);//TODO change and add permissions
 		
 		TemplateLoader.renderToResponse("User.ftl", data, response);
 		

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
@@ -19,6 +20,7 @@ import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -45,10 +47,6 @@ public class UserUnlockView extends View {
 			String[] args, Map<String, Object> data)
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
-
-		// 0 -- CHeck permissions
-		//checkRight( sessionIdentifier, "Users.Unlock");
-		//TODO Check rights
 		
 		// 1 -- Get the user
 		int userID;
@@ -77,7 +75,18 @@ public class UserUnlockView extends View {
 		
 		data.put("user", user);
 		
-		// 2 -- Clear the authentication failed count for the user
+		// 2 -- Check the user's permissions
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Unlock") == false ){
+				context.addMessage("You do not have permission to unlock user accounts", MessageSeverity.WARNING);
+				response.sendRedirect( UserView.getURL(userID) );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		// 3 -- Clear the authentication failed count for the user
 		try {
 			userMgmt.clearAuthFailedCount(user);
 			

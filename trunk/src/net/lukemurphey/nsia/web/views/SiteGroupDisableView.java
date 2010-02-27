@@ -9,14 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupManagement;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
@@ -38,7 +43,7 @@ public class SiteGroupDisableView extends View {
 		return view.createURL(siteGroup.getGroupId());
 	}
 
-	public boolean disableGroup( RequestContext context, int groupId ) throws ViewFailedException{
+	public boolean disableGroup( RequestContext context, int groupId ) throws ViewFailedException, InsufficientPermissionException, GeneralizedException, NoSessionException, NotFoundException{
 		
 		Application app = Application.getApplication();
 		
@@ -46,10 +51,13 @@ public class SiteGroupDisableView extends View {
 			// 0 -- Precondition check
 			
 			//	 0.1 -- Make sure the user has permission
-			//Shortcuts.checkRight( context.getSessionInfo(), "SiteGroups.Delete" );
+			SiteGroupDescriptor siteGroup;
 			SiteGroupManagement siteGroupManagement = new SiteGroupManagement(Application.getApplication());
+			siteGroup = siteGroupManagement.getGroupDescriptor(groupId);
 			
-			// 1 -- Perform the delete
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroup.getObjectId(), "Disable site group");
+			
+			// 1 -- Disable the group
 			if( siteGroupManagement.disableGroup( groupId ) ){
 				
 				app.logEvent(EventLogMessage.Category.SITE_GROUP_DISABLED,
@@ -79,19 +87,7 @@ public class SiteGroupDisableView extends View {
 		}catch (InputValidationException e) {
 			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
 			throw new ViewFailedException(e);
-		} /*catch (NotFoundException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (InsufficientPermissionException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (GeneralizedException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (NoSessionException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		}*/
+		}
 	}
 	
 	@Override
@@ -123,11 +119,21 @@ public class SiteGroupDisableView extends View {
 		}
 		
 		// 2 -- Disable the group
-		disableGroup(context, siteGroupID);
+		try {
+			disableGroup(context, siteGroupID);
+			context.addMessage("Site group successfully disabled", MessageSeverity.SUCCESS);
+		} catch (InsufficientPermissionException e) {
+			context.addMessage("You do not have permission to disable this site group", MessageSeverity.WARNING);
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		} catch (NoSessionException e) {
+			throw new ViewFailedException(e);
+		} catch (NotFoundException e) {
+			Dialog.getDialog(response, context, data, "No Site-Group exists with the given identifier", "Site-Group Not Found", DialogType.WARNING);
+			return true;
+		}
 		
-		context.addMessage("Site group successfully disabled", MessageSeverity.SUCCESS);
 		response.sendRedirect( StandardViewList.getURL(SiteGroupView.VIEW_NAME, siteGroupID) );
-		
 		return true;
 	}
 

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.DisallowedOperationException;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.eventlog.EventLogField;
@@ -63,7 +64,15 @@ public class DefinitionDeleteView extends View{
 		}
 		
 		// 2 -- Check rights
-		//TODO check rights
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit", "Delete definition") == false ){
+				context.addMessage("You do not have permission to delete definitions", MessageSeverity.WARNING);
+				response.sendRedirect( DefinitionsView.getURL() );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
 		
 		// 3 -- Delete the definition
 		if( "Delete".equalsIgnoreCase(request.getParameter("Selected")) ){

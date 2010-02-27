@@ -27,7 +27,6 @@ import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
 import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
 import net.lukemurphey.nsia.web.templates.TemplateLoader;
-import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
 public class SystemConfigurationView extends View {
 
@@ -379,29 +378,11 @@ public class SystemConfigurationView extends View {
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		
 		try{
-			// 1 -- Check rights
-			boolean hasPermission;
 			
-			try{
-				hasPermission = Shortcuts.hasRight(context.getSessionInfo(), "System.Configuration.View");
-			} catch (GeneralizedException e) {
-				throw new ViewFailedException(e);
-			}
-			
-			// 2 -- Process any changes requested
-			if( hasPermission && request.getMethod().equalsIgnoreCase("POST") ){
-				try {
-					processChanges(request, response, context, data);
-				} catch (FieldValidationFailedException e) {
-					context.getSessionMessages().addMessage(context.getSessionInfo(), e.getMessage(), MessageSeverity.WARNING);
-					data.put("validation_failed", true);
-				}
-			}
-			
-			// 3 -- Prepare the view
+			// 1 -- Prepare the view
 			data.put("title", "System Configuration");
 			
-			//Breadcrumbs
+			//	 1.1 -- Breadcrumbs
 			Vector<Link> breadcrumbs = new Vector<Link>();
 			breadcrumbs.add( new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 			breadcrumbs.add( new Link("System Status", StandardViewList.getURL("system_status")) );
@@ -409,99 +390,115 @@ public class SystemConfigurationView extends View {
 			
 			data.put("breadcrumbs", breadcrumbs);
 			
-			//Menu
+			//	 1.2 -- Menu
 			data.put("menu", Menu.getSystemMenu(context));
 			
 			//Get the dashboard headers
 			Shortcuts.addDashboardHeaders(request, response, data);
 			
-			if( hasPermission ){
-				ApplicationConfiguration appConfig = Application.getApplication().getApplicationConfiguration();
-				
-				// 4 -- Add the authentication configuration options
-				Vector<Parameter> authentication_options = new Vector<Parameter>();
-				authentication_options.add( new Parameter("Period to Aggregate Login Attempts", appConfig.getAuthenticationAttemptAggregationCount(), ParameterTitles.AUTH_LOGIN_AGGREGATION.getName(), ParameterType.INTEGER) );
-				authentication_options.add( new Parameter("Limit of Failed Authentication Attempts", appConfig.getAuthenticationAttemptLimit(), ParameterTitles.AUTH_LOGIN_FAILURE_LIMIT.getName(), ParameterType.INTEGER) );
-				authentication_options.add( new Parameter("Login Banner", appConfig.getLoginBanner(), ParameterTitles.AUTH_LOGIN_BANNER.getName(), ParameterType.MULTILINETEXT) );
-				authentication_options.add( new Parameter("Password Hash Iterations", appConfig.getHashIterations(),ParameterTitles.AUTH_PASSWORD_HASH_ITERATIONS.getName(), ParameterType.INTEGER) );
-				data.put("authentication_options", authentication_options);
-				
-				// 5 -- Add the Session configuration options
-				Vector<Parameter> session_options = new Vector<Parameter>();
-				session_options.add( new Parameter("Session Inactivity Threshold", appConfig.getSessionInactivityThreshold(), ParameterTitles.SESSION_INACTIVITY_THRESHOLD.getName(), ParameterType.INTEGER) );
-				session_options.add( new Parameter("Maximum Session Identifier Lifetime", appConfig.getSessionLifetime(), ParameterTitles.SESSION_IDENTIFIER_LIFETIME.getName(), ParameterType.INTEGER) );
-				session_options.add( new Parameter("Session Identifier Lifetime", appConfig.getSessionIdentifierLifetime(), ParameterTitles.SESSION_IDENTIFIER_LIFETIME.getName(), ParameterType.INTEGER) );
-				data.put("session_options", session_options);
-				
-				// 6 -- Add the Server configuration options
-				Vector<Parameter> server_options = new Vector<Parameter>();
-				server_options.add( new Parameter("Manager Port", appConfig.getServerPort(), ParameterTitles.SERVER_PORT.getName(), ParameterType.INTEGER) );
-				server_options.add( new Parameter("Enable Web Access", "true", ParameterTitles.SERVER_SSL_ENABLED.getName(), ParameterType.BOOL) );
-				server_options.add( new Parameter("Enable SSL", appConfig.isSslEnabled(), ParameterTitles.SERVER_SSL_ENABLED.getName(), ParameterType.BOOL) );
-				server_options.add( new Parameter("SSL Password", appConfig.getSslPassword(), ParameterTitles.SERVER_SSL_PASSWORD.getName(), ParameterType.PASSWORD) );
-				server_options.add( new Parameter("SSL Key Password", appConfig.getSslKeyPassword(), ParameterTitles.SERVER_SSL_KEY_PASSWORD.getName(), ParameterType.PASSWORD) );
-				server_options.add( new Parameter("Auto-Update Definitions", appConfig.getAutoDefinitionUpdating(), ParameterTitles.SERVER_AUTO_UPDATE_DEFINITIONS.getName(), ParameterType.BOOL) );
-				data.put("server_options", server_options);
-				
-				// 7 -- Add the Logging configuration options
-				Vector<Parameter> logging_options = new Vector<Parameter>();
-				logging_options.add( new Parameter("Syslog Server Address", appConfig.getLogServerAddress(), ParameterTitles.LOG_SERVER.getName(), ParameterType.TEXT) );
-				logging_options.add( new Parameter("Syslog Server Port", appConfig.getLogServerPort(), ParameterTitles.LOG_SERVER_PORT.getName(), ParameterType.INTEGER) );
-				logging_options.add( new Parameter("Logging Enabled", appConfig.getLogServerEnabled(), ParameterTitles.LOG_ENABLED.getName(), ParameterType.BOOL) );
-				
-				SelectParamValue[] log_formats = new SelectParamValue[3];
-				log_formats[0] = new SelectParamValue("Native", "Native");
-				log_formats[1] = new SelectParamValue("Common Event Format", "Common Event Format (ArcSight)");
-				log_formats[2] = new SelectParamValue("Common Event Expression", "Common Event Expression (Splunk)");
-				
-				logging_options.add( new Parameter("Log Format", appConfig.getLogFormat(), ParameterTitles.LOG_FORMAT.getName(), log_formats) );
-				
-				SelectParamValue[] log_transport = new SelectParamValue[2];
-				log_transport[0] = new SelectParamValue("UDP", "UDP");
-				log_transport[1] = new SelectParamValue("TCP", "TCP");
-				
-				logging_options.add( new Parameter("Transport Protocol", appConfig.getLogFormat(), ParameterTitles.LOG_TRANSPORT.getName(), log_transport) );
-				data.put("logging_options", logging_options);
-				
-				Vector<Parameter> license_options = new Vector<Parameter>();
-				license_options.add( new Parameter("License Key", appConfig.getLicenseKey(), ParameterTitles.LICENSE_KEY.getName(), ParameterType.TEXT) );
-				data.put("license_options", license_options);
-				
-				// 8 -- Add the email configuration options
-				Vector<Parameter> email_options = new Vector<Parameter>();
-				
-				EmailAddress email;
-				try {
-					email = appConfig.getEmailFromAddress();
-					
-					if( email == null ){
-						email_options.add( new Parameter("From Address", "", ParameterTitles.EMAIL_FROM_ADDRESS.getName(), ParameterType.TEXT) );
-					}
-					else{
-						email_options.add( new Parameter("From Address", appConfig.getEmailFromAddress().toString(), ParameterTitles.EMAIL_FROM_ADDRESS.getName(), ParameterType.TEXT) );
-					}
-					
-				} catch (InvalidLocalPartException e) {
-					throw new ViewFailedException(e);
-				}
-				
-				email_options.add( new Parameter("SMTP Server", appConfig.getEmailSMTPServer(), ParameterTitles.EMAIL_SMTP_SERVER.getName(), ParameterType.TEXT) );
-				email_options.add( new Parameter("SMTP Username", appConfig.getEmailUsername(), ParameterTitles.EMAIL_USERNAME.getName(), ParameterType.TEXT) );
-				email_options.add( new Parameter("SMTP Password", appConfig.getEmailPassword(), ParameterTitles.EMAIL_PASSWORD.getName(), ParameterType.PASSWORD) );
-				email_options.add( new Parameter("SMTP Port", appConfig.getEmailSMTPPort(), ParameterTitles.EMAIL_SMTP_PORT.getName(), ParameterType.INTEGER) );
-				data.put("email_options", email_options);
-				
-				if( request.getParameter("ParamID") != null ){
-					data.put("selected", request.getParameter("ParamID"));
-				}
-				
-				TemplateLoader.renderToResponse("SystemConfiguration.ftl", data, response);
-			}
-			else{
-				Dialog.getDialog(response, context, data, "You do not have permission to view and edit the system configuration", "Permission Denied", DialogType.WARNING);
-				
+			// 2 -- Check rights
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the system configuration");
+				return true;
 			}
 			
+			// 3 -- Process any changes requested
+			if( request.getMethod().equalsIgnoreCase("POST") ){
+				
+				if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit") == false ){
+					Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to change the system configuration");
+					return true;
+				}
+				
+				try {
+					processChanges(request, response, context, data);
+				} catch (FieldValidationFailedException e) {
+					context.getSessionMessages().addMessage(context.getSessionInfo(), e.getMessage(), MessageSeverity.WARNING);
+					data.put("validation_failed", true);
+				}
+			}
+
+			ApplicationConfiguration appConfig = Application.getApplication().getApplicationConfiguration();
+
+			// 4 -- Add the authentication configuration options
+			Vector<Parameter> authentication_options = new Vector<Parameter>();
+			authentication_options.add( new Parameter("Period to Aggregate Login Attempts", appConfig.getAuthenticationAttemptAggregationCount(), ParameterTitles.AUTH_LOGIN_AGGREGATION.getName(), ParameterType.INTEGER) );
+			authentication_options.add( new Parameter("Limit of Failed Authentication Attempts", appConfig.getAuthenticationAttemptLimit(), ParameterTitles.AUTH_LOGIN_FAILURE_LIMIT.getName(), ParameterType.INTEGER) );
+			authentication_options.add( new Parameter("Login Banner", appConfig.getLoginBanner(), ParameterTitles.AUTH_LOGIN_BANNER.getName(), ParameterType.MULTILINETEXT) );
+			authentication_options.add( new Parameter("Password Hash Iterations", appConfig.getHashIterations(),ParameterTitles.AUTH_PASSWORD_HASH_ITERATIONS.getName(), ParameterType.INTEGER) );
+			data.put("authentication_options", authentication_options);
+
+			// 5 -- Add the Session configuration options
+			Vector<Parameter> session_options = new Vector<Parameter>();
+			session_options.add( new Parameter("Session Inactivity Threshold", appConfig.getSessionInactivityThreshold(), ParameterTitles.SESSION_INACTIVITY_THRESHOLD.getName(), ParameterType.INTEGER) );
+			session_options.add( new Parameter("Maximum Session Identifier Lifetime", appConfig.getSessionLifetime(), ParameterTitles.SESSION_IDENTIFIER_LIFETIME.getName(), ParameterType.INTEGER) );
+			session_options.add( new Parameter("Session Identifier Lifetime", appConfig.getSessionIdentifierLifetime(), ParameterTitles.SESSION_IDENTIFIER_LIFETIME.getName(), ParameterType.INTEGER) );
+			data.put("session_options", session_options);
+
+			// 6 -- Add the Server configuration options
+			Vector<Parameter> server_options = new Vector<Parameter>();
+			server_options.add( new Parameter("Manager Port", appConfig.getServerPort(), ParameterTitles.SERVER_PORT.getName(), ParameterType.INTEGER) );
+			server_options.add( new Parameter("Enable Web Access", "true", ParameterTitles.SERVER_SSL_ENABLED.getName(), ParameterType.BOOL) );
+			server_options.add( new Parameter("Enable SSL", appConfig.isSslEnabled(), ParameterTitles.SERVER_SSL_ENABLED.getName(), ParameterType.BOOL) );
+			server_options.add( new Parameter("SSL Password", appConfig.getSslPassword(), ParameterTitles.SERVER_SSL_PASSWORD.getName(), ParameterType.PASSWORD) );
+			server_options.add( new Parameter("SSL Key Password", appConfig.getSslKeyPassword(), ParameterTitles.SERVER_SSL_KEY_PASSWORD.getName(), ParameterType.PASSWORD) );
+			server_options.add( new Parameter("Auto-Update Definitions", appConfig.getAutoDefinitionUpdating(), ParameterTitles.SERVER_AUTO_UPDATE_DEFINITIONS.getName(), ParameterType.BOOL) );
+			data.put("server_options", server_options);
+
+			// 7 -- Add the Logging configuration options
+			Vector<Parameter> logging_options = new Vector<Parameter>();
+			logging_options.add( new Parameter("Syslog Server Address", appConfig.getLogServerAddress(), ParameterTitles.LOG_SERVER.getName(), ParameterType.TEXT) );
+			logging_options.add( new Parameter("Syslog Server Port", appConfig.getLogServerPort(), ParameterTitles.LOG_SERVER_PORT.getName(), ParameterType.INTEGER) );
+			logging_options.add( new Parameter("Logging Enabled", appConfig.getLogServerEnabled(), ParameterTitles.LOG_ENABLED.getName(), ParameterType.BOOL) );
+
+			SelectParamValue[] log_formats = new SelectParamValue[3];
+			log_formats[0] = new SelectParamValue("Native", "Native");
+			log_formats[1] = new SelectParamValue("Common Event Format", "Common Event Format (ArcSight)");
+			log_formats[2] = new SelectParamValue("Common Event Expression", "Common Event Expression (Splunk)");
+
+			logging_options.add( new Parameter("Log Format", appConfig.getLogFormat(), ParameterTitles.LOG_FORMAT.getName(), log_formats) );
+
+			SelectParamValue[] log_transport = new SelectParamValue[2];
+			log_transport[0] = new SelectParamValue("UDP", "UDP");
+			log_transport[1] = new SelectParamValue("TCP", "TCP");
+
+			logging_options.add( new Parameter("Transport Protocol", appConfig.getLogFormat(), ParameterTitles.LOG_TRANSPORT.getName(), log_transport) );
+			data.put("logging_options", logging_options);
+
+			Vector<Parameter> license_options = new Vector<Parameter>();
+			license_options.add( new Parameter("License Key", appConfig.getLicenseKey(), ParameterTitles.LICENSE_KEY.getName(), ParameterType.TEXT) );
+			data.put("license_options", license_options);
+
+			// 8 -- Add the email configuration options
+			Vector<Parameter> email_options = new Vector<Parameter>();
+
+			EmailAddress email;
+			try {
+				email = appConfig.getEmailFromAddress();
+
+				if( email == null ){
+					email_options.add( new Parameter("From Address", "", ParameterTitles.EMAIL_FROM_ADDRESS.getName(), ParameterType.TEXT) );
+				}
+				else{
+					email_options.add( new Parameter("From Address", appConfig.getEmailFromAddress().toString(), ParameterTitles.EMAIL_FROM_ADDRESS.getName(), ParameterType.TEXT) );
+				}
+
+			} catch (InvalidLocalPartException e) {
+				throw new ViewFailedException(e);
+			}
+
+			email_options.add( new Parameter("SMTP Server", appConfig.getEmailSMTPServer(), ParameterTitles.EMAIL_SMTP_SERVER.getName(), ParameterType.TEXT) );
+			email_options.add( new Parameter("SMTP Username", appConfig.getEmailUsername(), ParameterTitles.EMAIL_USERNAME.getName(), ParameterType.TEXT) );
+			email_options.add( new Parameter("SMTP Password", appConfig.getEmailPassword(), ParameterTitles.EMAIL_PASSWORD.getName(), ParameterType.PASSWORD) );
+			email_options.add( new Parameter("SMTP Port", appConfig.getEmailSMTPPort(), ParameterTitles.EMAIL_SMTP_PORT.getName(), ParameterType.INTEGER) );
+			data.put("email_options", email_options);
+
+			if( request.getParameter("ParamID") != null ){
+				data.put("selected", request.getParameter("ParamID"));
+			}
+
+			TemplateLoader.renderToResponse("SystemConfiguration.ftl", data, response);
+
 			return true;
 		}
 		catch( InputValidationException e ){
@@ -509,6 +506,8 @@ public class SystemConfigurationView extends View {
 		} catch (NoDatabaseConnectionException e) {
 			throw new ViewFailedException(e);
 		} catch (SQLException e) {
+			throw new ViewFailedException(e);
+		} catch (GeneralizedException e) {
 			throw new ViewFailedException(e);
 		}
 	}

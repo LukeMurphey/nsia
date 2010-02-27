@@ -392,11 +392,7 @@ public class DefinitionPolicyView extends View {
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		
 		try{
-			// 1 -- Check rights
-			//TODO check rights
-			
-			
-			// 2 -- Get the site group ID (if getting the policy for a site group)
+			// 1 -- Get the site group ID (if getting the policy for a site group)
 			int siteGroupID = -1;
 			SiteGroupDescriptor siteGroup = null;
 			
@@ -416,47 +412,10 @@ public class DefinitionPolicyView extends View {
 				}
 			}
 			
-			
-			// 3 -- Perform the changes
-			if( "POST".equalsIgnoreCase( request.getMethod() ) ){ 
-				try {
-					processChanges(request, context, siteGroup);
-				} catch (GeneralizedException e) {
-					throw new ViewFailedException(e);
-				}
-			}
-			
-			
-			// 4 --  Get the descriptors that outline the categories
-			
-			//	 4.1 -- Get the policy set
-			DefinitionPolicyManagement policyManagement = new DefinitionPolicyManagement(Application.getApplication());
-			DefinitionPolicySet policySet;
-			
-			if( siteGroupID > -1 ){
-				policySet = policyManagement.getPolicySet( siteGroupID );
-			}
-			else{
-				policySet = policyManagement.getPolicySet();
-			}
-			
-			//	 4.2 -- Get the categories
-			DefinitionArchive archive = DefinitionArchive.getArchive();
-			DefinitionSet definitionSet = archive.getDefinitionSet();
-			DefinitionCategory[] categories = definitionSet.getListOfSubCategories();
-	
-			//	 4.3 -- Get the category descriptors
-			Vector<CategoryDescriptor> descriptors = new Vector<CategoryDescriptor>();
-			
-			for (DefinitionCategory category : categories) {
-				descriptors.add( getDescriptor(policySet, siteGroupID, category) );
-			}
-	
-
-			// 5 -- Prepare the page to be rendered
+			// 2 -- Prepare the page to be rendered
 			data.put("title", "Definition Policy");
 			
-			//	 5.1 -- Get the breadcrumbs
+			//	 2.1 -- Get the breadcrumbs
 			Vector<Link> breadcrumbs = new Vector<Link>();
 			breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 			
@@ -472,12 +431,84 @@ public class DefinitionPolicyView extends View {
 			
 			data.put("breadcrumbs", breadcrumbs);
 			
-			//	 5.2 -- Get the menu			
+			//	 2.2 -- Get the menu			
 			data.put("menu", Menu.getDefinitionMenu(context));
 			
-			//	 5.3 -- Get the dashboard headers
+			//	 2.3 -- Get the dashboard headers
 			Shortcuts.addDashboardHeaders(request, response, data);
 			
+			// 3 -- Check rights
+			try{
+				if( siteGroup != null ){
+					if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId(), "Get scan policy for site group ID " + siteGroup.getGroupId() + "(" + siteGroup.getGroupName() + ")") == false ){
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the scan policy for this site group");
+						return true;
+					}
+				}
+				else{
+					if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View", "Get global scan policy") == false ){
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the default scan policy");
+						return true;
+					}
+				}
+			}
+			catch(GeneralizedException e ){
+				throw new ViewFailedException(e);
+			}
+			
+			// 4 -- Perform the changes
+			if( "POST".equalsIgnoreCase( request.getMethod() ) ){
+				
+				try{
+					if( siteGroup != null ){
+						if( Shortcuts.canModify( context.getSessionInfo(), siteGroup.getObjectId(), "Update scan policy for site group ID " + siteGroup.getGroupId() + "(" + siteGroup.getGroupName() + ")") == false ){
+							Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit the scan policy for this site group");
+							return true;
+						}
+					}
+					else{
+						if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit", "Update global scan policy") == false ){
+							Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit the default scan policy");
+							return true;
+						}
+					}
+				}
+				catch(GeneralizedException e ){
+					throw new ViewFailedException(e);
+				}
+				
+				try {
+					processChanges(request, context, siteGroup);
+				} catch (GeneralizedException e) {
+					throw new ViewFailedException(e);
+				}
+			}
+			
+			
+			// 5 --  Get the descriptors that outline the categories
+			
+			//	 5.1 -- Get the policy set
+			DefinitionPolicyManagement policyManagement = new DefinitionPolicyManagement(Application.getApplication());
+			DefinitionPolicySet policySet;
+			
+			if( siteGroupID > -1 ){
+				policySet = policyManagement.getPolicySet( siteGroupID );
+			}
+			else{
+				policySet = policyManagement.getPolicySet();
+			}
+			
+			//	 5.2 -- Get the categories
+			DefinitionArchive archive = DefinitionArchive.getArchive();
+			DefinitionSet definitionSet = archive.getDefinitionSet();
+			DefinitionCategory[] categories = definitionSet.getListOfSubCategories();
+	
+			//	 5.3 -- Get the category descriptors
+			Vector<CategoryDescriptor> descriptors = new Vector<CategoryDescriptor>();
+			
+			for (DefinitionCategory category : categories) {
+				descriptors.add( getDescriptor(policySet, siteGroupID, category) );
+			}
 			
 			// 6 -- Render the page
 			data.put("categories", descriptors);

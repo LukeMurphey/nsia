@@ -136,11 +136,36 @@ public class EventLogView extends View {
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		
-		// 1 -- Get the filter
+		// 1 -- Prepare the view
+		data.put("title", "Event Log");
+		
+		//Breadcrumbs
+		Vector<Link> breadcrumbs = new Vector<Link>();
+		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+		breadcrumbs.add(  new Link("Event Log", createURL()) );
+		data.put("breadcrumbs", breadcrumbs);
+		
+		//Menu
+		data.put("menu", Menu.getSystemMenu(context));
+		
+		//Get the dashboard headers
+		Shortcuts.addDashboardHeaders(request, response, data);
+		
+		// 2 -- Check permissions
+		/*try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the system configuration");
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}*/
+		
+		// 3 -- Get the filter
 		int startEntry = -1;
 		boolean getEventsAfterID = false;
 		
-		//	 1.1 -- Determine if the user clicked the "Next" button
+		//	 3.1 -- Determine if the user clicked the "Next" button
 		if( request.getParameter("Action") != null && request.getParameter("Action").equalsIgnoreCase("[Previous]")){
 			getEventsAfterID = false;
 			
@@ -153,7 +178,7 @@ public class EventLogView extends View {
 			}
 		}
 		
-		//	 1.2 -- Determine if the user clicked the "Next" button
+		//	 3.2 -- Determine if the user clicked the "Next" button
 		else if( request.getParameter("Action") != null && request.getParameter("Action").equalsIgnoreCase("[Next]")){
 			getEventsAfterID = true;
 			
@@ -165,7 +190,7 @@ public class EventLogView extends View {
 			}
 		}
 		
-		//	 1.3 -- Get the severity filter
+		//	 3.3 -- Get the severity filter
 		int severity = -1;
 		if( request.getParameter("Severity") != null ){
 			try{
@@ -177,15 +202,14 @@ public class EventLogView extends View {
 			}
 		}
 		
-		//	 1.4 -- Get the content filter
+		//	 3.4 -- Get the content filter
 		String contentFilter = null;
 		if( request.getParameter("Content") != null ){
 			contentFilter = request.getParameter("Content");
 		}
 		
 		
-		// 2 -- Add the necessary options
-		data.put("title", "Event Log");
+		// 4 -- Add the necessary options
 		data.put("severity", severity);
 		data.put("contentfilter", contentFilter);		
 		data.put("emergency", EventLogSeverity.EMERGENCY);
@@ -196,17 +220,7 @@ public class EventLogView extends View {
 		data.put("notice", EventLogSeverity.NOTICE);
 		data.put("informational", EventLogSeverity.INFORMATIONAL);
 		data.put("debug", EventLogSeverity.DEBUG);
-		
-		//Breadcrumbs
-		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-		breadcrumbs.add(  new Link("Event Log", createURL()) );
-		data.put("breadcrumbs", breadcrumbs);
-		
-		//Menu
-		data.put("menu", Menu.getSystemMenu(context));
-		
-		//Get the dashboard headers
+
 		Shortcuts.addDashboardHeaders(request, response, data, createURL());
 		
 		LogEntries entries = getLogEntries( severity, contentFilter, startEntry, getEventsAfterID);

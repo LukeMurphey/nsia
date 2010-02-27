@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupManagement;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
@@ -209,14 +212,9 @@ public class SiteGroupEditView extends View {
 				}
 			}
 			
-			// 2 -- Perform any actions requested
-			if( performActions(request, response, context, args, data, siteGroup) ){
-				return true;
-			}
+			// 2 -- Setup the views
 			
-			// 3 -- Show the edit/new dialog
-			
-			//	 3.1 -- Get the breadcrumbs
+			//	 2.1 -- Get the breadcrumbs
 			Vector<Link> breadcrumbs = new Vector<Link>();
 			breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 			if( siteGroup == null ){
@@ -230,11 +228,44 @@ public class SiteGroupEditView extends View {
 			}
 			data.put("breadcrumbs", breadcrumbs);
 			
-			//	 3.2 -- Get the menu
+			//	 2.2 -- Get the menu
 			data.put("menu", Menu.getSiteGroupMenu(context, siteGroup));			
 			
-			//	 3.3 -- Render the page
+			//	 2.3 -- Add the headers
 			Shortcuts.addDashboardHeaders(request, response, data);
+			
+			// 3 -- Check permissions
+			try{
+				if( siteGroup == null ){//Creating a new site group...
+					Shortcuts.checkRight( context.getSessionInfo(), "SiteGroups.Add" );
+				}
+				else{ //Editing an existing site group
+					Shortcuts.checkModify(context.getSessionInfo(), siteGroup.getObjectId());
+				}
+			}
+			catch( NoSessionException e ){
+				throw new ViewFailedException(e);
+			} catch (GeneralizedException e) {
+				throw new ViewFailedException(e);
+			} catch (InsufficientPermissionException e) {
+				if( siteGroup == null ){
+					data.put("permission_denied_message", "You do not have permission to create new site groups.");
+					TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);
+				}
+				else{
+					data.put("permission_denied_message", "You do not have permission to edit this site group.");
+					data.put("permission_denied_link", new Link("View Site Group", SiteGroupView.getURL(siteGroup)) );
+					TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);
+				}
+				
+				return true;
+			}
+			
+			// 4 -- Perform any actions requested
+			if( performActions(request, response, context, args, data, siteGroup) ){
+				return true;
+			}
+			
 			TemplateLoader.renderToResponse("SiteGroupEdit.ftl", data, response);
 			
 			return true;
