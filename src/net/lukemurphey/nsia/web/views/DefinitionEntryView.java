@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.DisallowedOperationException;
 import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
@@ -131,16 +132,13 @@ public class DefinitionEntryView extends View {
 
 		try{
 			
-			// Redirect if the user pressed cancel
+			// 1 -- Redirect if the user pressed cancel
 			if( request.getParameter("Cancel") != null ){
 				response.sendRedirect( StandardViewList.getURL("definitions_list") );
 				return true;
 			}
 			
-			// 1 -- Check rights
-			//TODO check rights
-			
-			// 2 -- Get the definition
+			// 4 -- Get the definition
 			Definition definition = null;
 			String code = null;
 			String type = null;
@@ -178,6 +176,45 @@ public class DefinitionEntryView extends View {
 				else{
 					code = TemplateLoader.renderToString("DefaultScriptDefinition.ftl", t_data);
 				}
+			}
+			
+			// 2 -- Prepare the page to be rendered
+			data.put("title", "Definition");
+			
+			//	 2.1 -- Get the breadcrumbs
+			Vector<Link> breadcrumbs = new Vector<Link>();
+			breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+			breadcrumbs.add(  new Link("Definitions", StandardViewList.getURL("definitions_list")) );
+			if( definition != null ){
+				breadcrumbs.add(  new Link("View Definition", createURL(definition.getID())) );
+			}
+			else{
+				breadcrumbs.add(  new Link("New Definition", createURL("New")) );
+			}
+			data.put("breadcrumbs", breadcrumbs);
+			
+			//	 2.2 -- Get the menu
+			data.put("menu", Menu.getDefinitionMenu(context, definition));
+			
+			//	 2.3 -- Get the dashboard headers
+			Shortcuts.addDashboardHeaders(request, response, data);
+			
+			// 3 -- Check rights
+			try {
+				if( definition != null ){
+					if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view definitions");
+						return true;
+					}
+				}
+				else{
+					if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit") == false ){
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to create definitions");
+						return true;
+					}
+				}
+			} catch (GeneralizedException e) {
+				throw new ViewFailedException(e);
 			}
 			
 			// 3 -- Process any changes requested
@@ -231,33 +268,11 @@ public class DefinitionEntryView extends View {
 				} catch(UnpurposedDefinitionException e){
 					context.addMessage(e.getMessage(), MessageSeverity.WARNING);
 				} catch (DisallowedOperationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					context.addMessage(e.getMessage(), MessageSeverity.WARNING);
 				} catch (DuplicateEntryException e) {
 					context.addMessage(e.getMessage(), MessageSeverity.WARNING);
 				}
 			}
-			
-			// 4 -- Prepare the page to be rendered
-			data.put("title", "Definition");
-			
-			//	 4.1 -- Get the breadcrumbs
-			Vector<Link> breadcrumbs = new Vector<Link>();
-			breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-			breadcrumbs.add(  new Link("Definitions", StandardViewList.getURL("definitions_list")) );
-			if( definition != null ){
-				breadcrumbs.add(  new Link("View Definition", createURL(definition.getID())) );
-			}
-			else{
-				breadcrumbs.add(  new Link("New Definition", createURL("New")) );
-			}
-			data.put("breadcrumbs", breadcrumbs);
-			
-			//	 4.2 -- Get the menu
-			data.put("menu", Menu.getDefinitionMenu(context, definition));
-			
-			//	 4.3 -- Get the dashboard headers
-			Shortcuts.addDashboardHeaders(request, response, data);
 			
 			// 5 -- Render the page
 			data.put("definition", definition);

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.ReindexerWorker;
 import net.lukemurphey.nsia.WorkerThread;
 import net.lukemurphey.nsia.Application.WorkerThreadDescriptor;
@@ -20,6 +21,7 @@ import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
+import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
 import net.lukemurphey.nsia.web.templates.TemplateLoader;
 import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
@@ -83,7 +85,15 @@ public class DefragmentIndexesView extends View {
 		}
 		
 		// 2 -- Check rights
-		//checkRight( context.getSessionInfo(), "System.Configuration.View");
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit") == false ){
+				context.addMessage("You do not have permission to defragment the database indexes", MessageSeverity.WARNING);
+				response.sendRedirect( SystemStatusView.getURL() );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
 		
 		// 3 -- Get the indexer worker if it is already running
 		WorkerThreadDescriptor worker = getWorkerThread( false );

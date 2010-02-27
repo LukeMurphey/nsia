@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.DefinitionUpdateWorker;
 import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.Application.WorkerThreadDescriptor;
 import net.lukemurphey.nsia.WorkerThread.State;
 import net.lukemurphey.nsia.web.Link;
@@ -19,6 +20,7 @@ import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
+import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
 import net.lukemurphey.nsia.web.templates.TemplateLoader;
 import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
@@ -87,8 +89,15 @@ public class DefinitionsUpdateView extends View {
 		}
 		
 		// 2 -- Check rights
-		//TODO Check rights
-		//checkRight( sessionIdentifier, "System.Configuration.Edit");
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit") == false ){
+				context.addMessage("You do not have permission to update the definitions", MessageSeverity.WARNING);
+				response.sendRedirect( DefinitionsView.getURL() );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
 		
 		// 3 -- Determine if the update is already occurring
 		DefinitionUpdateWorker worker = getWorkerIfRunning();

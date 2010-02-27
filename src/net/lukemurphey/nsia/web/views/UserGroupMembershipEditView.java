@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.GroupManagement;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
@@ -17,6 +18,7 @@ import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -45,9 +47,6 @@ public class UserGroupMembershipEditView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 
-		// 0 -- Permissions check
-		//TODO Check rights
-		
 		// 1 -- Get the user
 		int userID;
 		UserManagement userMgmt = new UserManagement(Application.getApplication());
@@ -68,7 +67,18 @@ public class UserGroupMembershipEditView extends View {
 			throw new ViewFailedException(e);
 		}
 		
-		// 2 -- Get the groups included into the list and add or remove from the account as necessary
+		// 2 -- Check permissions
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.Membership.Edit", "Edit group membership for user ID " + user.getUserID() + " (" + user.getUserName() + ")") == false ){
+				context.addMessage("You do not have permission to update the group membership for user accounts", MessageSeverity.WARNING);
+				response.sendRedirect( UserView.getURL(user) );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		// 3 -- Get the groups included into the list and add or remove from the account as necessary
 		String includedGroupString = request.getParameter("IncludedGroups");
 		String[] includedGroups = includedGroupString.split(",");
 		GroupManagement groupManager = new GroupManagement(Application.getApplication());
@@ -87,9 +97,6 @@ public class UserGroupMembershipEditView extends View {
 			// Determine if the associated check was marked (indicating the command to add membership) or unmarked (no membership); then adjust as necessary
 			try{
 				if( groupId >= 0 ){
-					
-					//TODO Check rights
-					//checkRight( sessionIdentifier, "Groups.Membership.Edit" );
 					
 					if( request.getParameter( includedGroups[c] ) != null ){
 						groupManager.addUserToGroup( userID, groupId );
@@ -125,7 +132,7 @@ public class UserGroupMembershipEditView extends View {
 			context.addMessage("Group membership updated", MessageSeverity.SUCCESS);
 		}
 		
-		// 3 -- Redirect to the user view
+		// 4 -- Redirect to the user view
 		response.sendRedirect( UserView.getURL(user) );
 		return true;
 	}

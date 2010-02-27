@@ -9,14 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
+import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupManagement;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
@@ -42,7 +47,7 @@ public class SiteGroupEnableView extends View {
 		return view.createURL(siteGroupID);
 	}
 
-	public boolean enableGroup( RequestContext context, int groupId ) throws ViewFailedException{
+	public boolean enableGroup( RequestContext context, int groupId ) throws ViewFailedException, NotFoundException, InsufficientPermissionException, GeneralizedException, NoSessionException{
 		
 		Application app = Application.getApplication();
 		
@@ -50,10 +55,13 @@ public class SiteGroupEnableView extends View {
 			// 0 -- Precondition check
 			
 			//	 0.1 -- Make sure the user has permission
-			//Shortcuts.checkRight( context.getSessionInfo(), "SiteGroups.Delete" ); //TODO Check permissions
+			SiteGroupDescriptor siteGroup;
 			SiteGroupManagement siteGroupManagement = new SiteGroupManagement(Application.getApplication());
+			siteGroup = siteGroupManagement.getGroupDescriptor(groupId);
 			
-			// 1 -- Perform the delete
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroup.getObjectId(), "Enable site group");
+			
+			// 1 -- Enable the group
 			if( siteGroupManagement.enableGroup( groupId ) ){
 				
 				app.logEvent(EventLogMessage.Category.SITE_GROUP_REENABLED,
@@ -127,9 +135,21 @@ public class SiteGroupEnableView extends View {
 		}
 		
 		// 2 -- Enable the group
-		enableGroup(context, siteGroupID);
+		try {
+			enableGroup(context, siteGroupID);
+			context.addMessage("Site group successfully enabled", MessageSeverity.SUCCESS);
+		} catch (InsufficientPermissionException e) {
+			context.addMessage("You do not have permission to enable this site group", MessageSeverity.WARNING);
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		} catch (NoSessionException e) {
+			throw new ViewFailedException(e);
+		} catch (NotFoundException e) {
+			Dialog.getDialog(response, context, data, "No Site-Group exists with the given identifier", "Site-Group Not Found", DialogType.WARNING);
+			return true;
+		}
 		
-		context.addMessage("Site group successfully enabled", MessageSeverity.SUCCESS);
+		
 		response.sendRedirect( StandardViewList.getURL(SiteGroupView.VIEW_NAME, siteGroupID) );
 		
 		return true;

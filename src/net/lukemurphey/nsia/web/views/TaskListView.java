@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.UserManagement;
@@ -99,10 +100,30 @@ public class TaskListView extends View {
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		
-		// 1 -- Check the permissions
-		//TODO check permissions
+		// 1 -- Populate the page content
+		Shortcuts.addDashboardHeaders(request, response, data, createURL());
+		data.put("menu", Menu.getSystemMenu(context));
+		data.put("title", "Task List");
 		
-		// 2 -- Get the threads
+		//Breadcrumbs
+		Vector<Link> breadcrumbs = new Vector<Link>();
+		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+		breadcrumbs.add(  new Link("System Status", StandardViewList.getURL("system_status")) );
+		breadcrumbs.add(  new Link("Task List", StandardViewList.getURL("task_list")) );
+		data.put("breadcrumbs", breadcrumbs);
+		
+		// 2 -- Check the permissions
+		try{
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Information.View") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission view the running tasks");
+				return true;
+			}
+		}
+		catch(GeneralizedException e){
+			throw new ViewFailedException(e);
+		}
+		
+		// 3 -- Get the threads
 		WorkerThreadDescriptor[] threads = Application.getApplication().getWorkerThreadQueue(true);
 		
 		TaskDescriptor[] tasks = new TaskDescriptor[threads.length];
@@ -111,18 +132,7 @@ public class TaskListView extends View {
 			tasks[c] = new TaskDescriptor(threads[c].getWorkerThread(), threads[c].getUserID(), threads[c].getUniqueName());
 		}
 		
-		// 3 -- Populate the hashmap
-		Shortcuts.addDashboardHeaders(request, response, data, createURL());
-		data.put("menu", Menu.getSystemMenu(context));
-		data.put("title", "Task List");
 		data.put("tasks", tasks);
-		
-		//Breadcrumbs
-		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-		breadcrumbs.add(  new Link("System Status", StandardViewList.getURL("system_status")) );
-		breadcrumbs.add(  new Link("Task List", StandardViewList.getURL("task_list")) );
-		data.put("breadcrumbs", breadcrumbs);
 		
 		// 4 -- Render the task list
 		TemplateLoader.renderToResponse("TaskList.ftl", data, response);

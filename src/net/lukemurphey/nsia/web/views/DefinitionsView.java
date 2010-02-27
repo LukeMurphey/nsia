@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.xmlrpc.XmlRpcException;
 
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.scan.Definition;
@@ -46,11 +47,34 @@ public class DefinitionsView extends View {
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 
 		try{
-			// 1 -- Make sure the user has permission
-			//checkRight( context.getSessionInfo(), "System.Configuration.View");
+			
+			// 1 -- Get the page content
+			data.put("title", "Definitions");
+			
+			//Add the Breadcrumbs
+			Vector<Link> breadcrumbs = new Vector<Link>();
+			breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+			breadcrumbs.add(  new Link("Definitions", createURL()) );
+			data.put("breadcrumbs", breadcrumbs);
+			
+			//Add the Menu			
+			data.put("menu", Menu.getDefinitionMenu(context));
+			
+			//Get the dashboard headers
+			Shortcuts.addDashboardHeaders(request, response, data);
+			
+			// 2 -- Make sure the user has permission
+			try{
+				if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
+					Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the definitions");
+					return true;
+				}
+			} catch (GeneralizedException e) {
+				throw new ViewFailedException(e);
+			}
 			
 			
-			// 2 -- Determine what the user has requested (from the parameters)
+			// 3 -- Determine what the user has requested (from the parameters)
 			boolean endRequested = false;
 			int page = 1;
 			
@@ -75,7 +99,7 @@ public class DefinitionsView extends View {
 			boolean notFilter = request.getParameter("Not") != null;
 			
 			
-			// 3 -- Get the definitions
+			// 4 -- Get the definitions
 			Vector<Definition> definitionsList = new Vector<Definition>();
 			
 			DefinitionArchive archive = DefinitionArchive.getArchive();
@@ -141,7 +165,7 @@ public class DefinitionsView extends View {
 			}
 			
 			
-			// 4 -- Get information about the definition set
+			// 5 -- Get information about the definition set
 			DefinitionSet definitionSet = archive.getDefinitionSet();
 			
 			data.put("updated", definitionSet.getDefinitionSetDate());
@@ -159,7 +183,7 @@ public class DefinitionsView extends View {
 			data.put("definitions", definitionsList);
 			
 			
-			// 5 -- Get the data for the pagination
+			// 6 -- Get the data for the pagination
 			int startPage;
 	        int totalPages = (int)Math.ceil( (double)definitionsMatching / DEFINITIONS_PER_PAGE );
 	        int currentPage = page - 1;
@@ -187,21 +211,7 @@ public class DefinitionsView extends View {
 				data.put("needs_end_marker", true);
 			}
 			
-			// 6 -- Render the resulting page
-			data.put("title", "Definitions");
-			
-			//Add the Breadcrumbs
-			Vector<Link> breadcrumbs = new Vector<Link>();
-			breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-			breadcrumbs.add(  new Link("Definitions", createURL()) );
-			data.put("breadcrumbs", breadcrumbs);
-			
-			//Add the Menu			
-			data.put("menu", Menu.getDefinitionMenu(context));
-			
-			//Get the dashboard headers
-			Shortcuts.addDashboardHeaders(request, response, data);
-			
+			// 7 -- Render the resulting page
 			TemplateLoader.renderToResponse("DefinitionsList.ftl", data, response);
 			
 			return true;

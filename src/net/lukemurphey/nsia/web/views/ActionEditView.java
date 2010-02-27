@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
@@ -154,9 +155,6 @@ public class ActionEditView extends View {
 
 		try{
 			
-			// 0 -- Check permissions
-			//TODO Check rights
-			
 			// 1 -- Get the site group or rule
 			
 			//	 1.1 -- Get the rule
@@ -217,7 +215,7 @@ public class ActionEditView extends View {
 				response.sendRedirect( ActionsListView.getURL(siteGroup) );
 				return true;
 			}
-			
+
 			// 2 -- Add the menu	
 			data.put("menu", Menu.getSiteGroupMenu(context, siteGroup));
 			
@@ -239,7 +237,19 @@ public class ActionEditView extends View {
 			data.put("breadcrumbs", breadcrumbs);
 			Shortcuts.addDashboardHeaders(request, response, data);
 			
-			// 4 -- Get the extension type
+			// 4 -- Check permissions
+			try {
+				if( Shortcuts.canModify(context.getSessionInfo(), siteGroup.getObjectId()) == false ){
+					data.put("permission_denied_message", "You do not permission to edit this site group.");
+					data.put("permission_denied_link", new Link("View Site Group", SiteGroupView.getURL(siteGroup)) );
+					TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);
+					return true;
+				}
+			} catch (GeneralizedException e) {
+				throw new ViewFailedException(e);
+			}
+			
+			// 5 -- Get the extension type
 			String actionType = request.getParameter("Extension");
 			
 			ExtensionManager extensionManager = ExtensionManager.getExtensionManager();

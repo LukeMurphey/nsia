@@ -64,6 +64,10 @@ public class SiteGroupView extends View {
 		super("SiteGroup", VIEW_NAME, Pattern.compile("[0-9]+", Pattern.CASE_INSENSITIVE));
 	}
 
+	public static String getURL( SiteGroupDescriptor siteGroup ) throws URLInvalidException{
+		return getURL(siteGroup.getGroupId());
+	}
+	
 	public static String getURL( int siteGroupID ) throws URLInvalidException{
 		SiteGroupView view = new SiteGroupView();
 		
@@ -176,8 +180,9 @@ public class SiteGroupView extends View {
 				if( scanResults[c].getRuleID() == scanRules[d].getRuleId()){
 					scanRuleAvailable = true;
 					relatedRule = scanRules[d];
-					if(scanRules[d].isScanDataObsolete())
+					if(scanRules[d].isScanDataObsolete()){
 						scanResultObsoleted = true;
+					}
 				}
 			}
 
@@ -439,10 +444,35 @@ public class SiteGroupView extends View {
 				return true;
 			}
 			
-			// 2 -- Check permissions
-			//TODO check permissions 
+			// 2 -- Prepare the view
+			data.put("title", "Site Groups");
 			
-			// 3 -- Determine if the site group is being scanned (show the dialog if it is)
+			// 	2.1 -- Get the breadcrumbs
+			Vector<Link> breadcrumbs = new Vector<Link>();
+			breadcrumbs.add( new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+			
+			if( siteGroup != null ){
+				breadcrumbs.add( new Link("Site Group: " + siteGroup.getGroupName(), createURL( siteGroup.getGroupId() )) );
+			}
+			
+			data.put("breadcrumbs", breadcrumbs);
+			
+			//	2.2 -- Get the menu
+			data.put("menu", Menu.getSiteGroupMenu(context, siteGroup));
+			
+			// 3 -- Check permissions
+			try {
+				if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId()) == false ){
+					data.put("permission_denied_message", "You do not permission to view this site group.");
+					//data.put("permission_denied_link", new Link("View Site Group", SiteGroupView.getURL(siteGroup)) );
+					TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);
+					return true;
+				}
+			} catch (GeneralizedException e) {
+				throw new ViewFailedException(e);
+			}
+			
+			// 4 -- Determine if the site group is being scanned (show the dialog if it is)
 			WorkerThreadDescriptor worker = null;
 			
 			if( siteGroup != null ){
@@ -450,15 +480,15 @@ public class SiteGroupView extends View {
 				worker = Application.getApplication().getWorkerThread( threadName );
 			}
 
-			// 4 -- Determine if just the progress dialog should be shown (e.g. AJAX request) 
+			// 5 -- Determine if just the progress dialog should be shown (e.g. AJAX request) 
 			boolean isAjax = (request.getParameter("AJAX") != null);
 			
-			// 5 -- Invoke the action
+			// 6 -- Invoke the action
 			boolean startedNow = false;
 			
 			if( !isAjax ){
 				
-				// 5.1 -- Start the scanner if requested and not already running
+				// 6.1 -- Start the scanner if requested and not already running
 				if( "Scan".equalsIgnoreCase( request.getParameter("Action") ) ) {
 					//Shortcuts.checkRight( context.getSessionInfo(), "System.Configuration.Edit"); //TODO Check permissions
 					startedNow = true;
@@ -469,46 +499,46 @@ public class SiteGroupView extends View {
 					}
 				}
 				
-				// 5.2 -- Cancel the running scan
+				// 6.2 -- Cancel the running scan
 				if( "CancelScan".equalsIgnoreCase( request.getParameter("Action") ) ) {
 					worker.getWorkerThread().terminate();
 				}
 				
-				// 5.3 -- Delete the rules selected
+				// 6.3 -- Delete the rules selected
 				if( "Delete".equalsIgnoreCase( request.getParameter("Action") ) ) {
 					deleteRules(context, getRules(request));
 				}
 				
-				// 5.4 -- Baseline the rules selected
+				// 6.4 -- Baseline the rules selected
 				if( "Baseline".equalsIgnoreCase( request.getParameter("Action") ) ) {
 					baselineRules(context, getRules(request));
 				}
 			}
 			
-			// 6 -- Post the progress dialog if a backup is underway
+			// 7 -- Post the progress dialog if a backup is underway
 			
-			//	 6.1 -- Post a dialog indicating that the backup is complete if the task is done
+			//	 7.1 -- Post a dialog indicating that the backup is complete if the task is done
 			if( isAjax && worker == null ){
 				response.getWriter().print( Dialog.getProgressDialog("Scanning complete", "Scanning", 100, new Link("OK", createURL(siteGroup.getGroupId()))) );
 				return true;
 			}
 			
-			//   6.2 -- Post a dialog indicating the task is complete
+			//   7.2 -- Post a dialog indicating the task is complete
 			else if( isAjax && (worker == null || worker.getWorkerThread().getStatus() == State.STOPPED) ){
 				response.getWriter().print( Dialog.getProgressDialog(worker.getWorkerThread().getStatusDescription(), worker.getWorkerThread().getTaskDescription(), 100, new Link("OK", createURL(siteGroup.getGroupId()))) );
 				return true;
 			}
 			
-			//	 6.3 -- Post the progress dialog otherwise
+			//	 7.3 -- Post the progress dialog otherwise
 			else if( isAjax ){
 				response.getWriter().print( Dialog.getProgressDialog(worker.getWorkerThread().getStatusDescription(), worker.getWorkerThread().getTaskDescription(), worker.getWorkerThread().getProgress()) );
 				return true;
 			}
 			
-			//	 6.4 -- Add the dashboard headers
+			//	 7.4 -- Add the dashboard headers
 			Shortcuts.addDashboardHeaders(request, response, data);
 			
-			//	 6.5 -- Post the progress dialog
+			//	 7.5 -- Post the progress dialog
 			if( worker != null && (startedNow || worker.getWorkerThread().getStatus() == State.STARTING || worker.getWorkerThread().getStatus() == State.STARTED ) ){
 				data.put("ajaxurl", createURL(siteGroup.getGroupId()) + "?AJAX=True");
 				data.put("title", "Scanning");
@@ -520,7 +550,7 @@ public class SiteGroupView extends View {
 			}
 			
 
-			// 7 -- Get a description of the scan results
+			// 8 -- Get a description of the scan results
 			RuleResult result;
 			try{
 				result = getResults(siteGroup);
@@ -536,22 +566,9 @@ public class SiteGroupView extends View {
 				throw new ViewFailedException(e);
 			}
 			
-			// 8 -- Prepare the view for the SiteGroup
-			
-			// 	8.1 -- Get the breadcrumbs
-			Vector<Link> breadcrumbs = new Vector<Link>();
-			breadcrumbs.add( new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-			
-			if( siteGroup != null ){
-				breadcrumbs.add( new Link("Site Group: " + siteGroup.getGroupName(), createURL( siteGroup.getGroupId() )) );
-			}
-			
-			data.put("breadcrumbs", breadcrumbs);
-			
-			//	8.2 -- Get the menu
-			data.put("menu", Menu.getSiteGroupMenu(context, siteGroup));
-			
-			//	8.3 -- Add the sitegroup
+			// 9 -- Prepare the view for the SiteGroup
+
+			//	9.1 -- Add the sitegroup
 			data.put("sitegroup", siteGroup);
 			if( result != null ){
 				data.put("scanrules", result.scanRules);
@@ -559,9 +576,7 @@ public class SiteGroupView extends View {
 				data.put("rules", result.ruleStatuses);
 			}
 			
-			//	8.4 -- Render the page
-			data.put("title", "Site Groups");
-			
+			//	9.2 -- Render the page
 			data.put("STAT_GREEN", RuleState.STAT_GREEN);
 			data.put("STAT_BLUE", RuleState.STAT_BLUE);
 			data.put("STAT_YELLOW", RuleState.STAT_YELLOW);

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.UserManagement;
 import net.lukemurphey.nsia.UserManagement.UserDescriptor;
@@ -45,11 +46,32 @@ public class UsersView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 
-		// 1 -- Check permissions
-		//TODO Check permissions
-		//checkRight( sessionIdentifier, "Users.View" );
+		// 1 -- Get the page content
 		
-		// 2 -- Get the users
+		// 	 1.1 -- Get the menu
+		data.put("menu", Menu.getUserMenu(context));
+		
+		// 	 1.2 -- Get the breadcrumbs
+		Vector<Link> breadcrumbs = new Vector<Link>();
+		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+		breadcrumbs.add(  new Link("User Management", createURL()) );
+		data.put("breadcrumbs", breadcrumbs);
+		
+		//	 1.3 -- Get the dashboard headers
+		Shortcuts.addDashboardHeaders(request, response, data);
+		data.put("title", "Users");
+		
+		// 2 -- Check rights
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Users.View", "List all users") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the users");
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		// 3 -- Get the users
 		UserDescriptor[] users;
 		try {
 			UserManagement userManagement = new UserManagement(Application.getApplication());
@@ -69,19 +91,6 @@ public class UsersView extends View {
 		data.put("DISABLED", UserManagement.AccountStatus.DISABLED);
 		data.put("INVALID_USER", UserManagement.AccountStatus.INVALID_USER);
 		data.put("VALID_USER", UserManagement.AccountStatus.VALID_USER);
-		
-		// 3 -- Get the menu
-		data.put("menu", Menu.getUserMenu(context));
-		
-		// 4 -- Get the breadcrumbs
-		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-		breadcrumbs.add(  new Link("User Management", createURL()) );
-		data.put("breadcrumbs", breadcrumbs);
-		
-		//Get the dashboard headers
-		Shortcuts.addDashboardHeaders(request, response, data);
-		data.put("title", "Users");
 		
 		TemplateLoader.renderToResponse("Users.ftl", data, response);
 		

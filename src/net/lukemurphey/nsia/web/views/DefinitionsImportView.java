@@ -16,6 +16,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.eventlog.EventLogField;
@@ -52,8 +53,15 @@ public class DefinitionsImportView extends View {
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 
 		// 1 -- Check rights
-		//TODO check rights
-		//checkRight( sessionIdentifier, "System.Configuration.Edit");
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit", "Import definitions") == false ){
+				context.addMessage("You do not have permission to import definitions", MessageSeverity.WARNING);
+				response.sendRedirect( DefinitionsView.getURL() );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
 		
 		// 2 -- Import the definitions (if a file was provided)
 		if( request.getMethod().equalsIgnoreCase("POST") ){

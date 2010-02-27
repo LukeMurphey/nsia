@@ -13,9 +13,7 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.ApplicationConfiguration;
 import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
-import net.lukemurphey.nsia.InsufficientPermissionException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
-import net.lukemurphey.nsia.NoSessionException;
 import net.lukemurphey.nsia.Application.ApplicationStatusDescriptor;
 import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLog;
@@ -30,7 +28,6 @@ import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
 import net.lukemurphey.nsia.web.templates.TemplateLoader;
-import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
 public class SystemStatusView extends View {
 
@@ -87,14 +84,27 @@ public class SystemStatusView extends View {
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 		
+		//Get the Breadcrumbs
+		Vector<Link> breadcrumbs = new Vector<Link>();
+		breadcrumbs.add( new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+		breadcrumbs.add( new Link("System Status", StandardViewList.getURL("system_status")) );
+		
+		data.put("breadcrumbs", breadcrumbs);
+		
+		//Menu
+		data.put("menu", Menu.getSystemMenu(context));
+		data.put("title", "System Status");
+		
+		//Get the dashboard headers
+		Shortcuts.addDashboardHeaders(request, response, data);
+		
 		// 1 -- Check permissions
 		try {
-			Shortcuts.checkRight( context.getSessionInfo(), "System.Configuration.View");
-		} catch (InsufficientPermissionException e) {
-			Dialog.getDialog(response, context, data, "You do not have permission to view the system confogiration", "Permission Denied", DialogType.INFORMATION, new Link("Return to Dashboard", StandardViewList.getURL("main_dashboard")));
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the system status");
+				return true;
+			}
 		} catch (GeneralizedException e) {
-			throw new ViewFailedException(e);
-		} catch (NoSessionException e) {
 			throw new ViewFailedException(e);
 		}
 		
@@ -284,19 +294,7 @@ public class SystemStatusView extends View {
 		
 		data.put("configuration_stats", configuration_stats);
 		
-		// 6 -- Create the menu and breadcrumbs
-		//Breadcrumbs
-		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add( new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-		breadcrumbs.add( new Link("System Status", StandardViewList.getURL("system_status")) );
-		
-		data.put("breadcrumbs", breadcrumbs);
-		
-		//Menu
-		data.put("menu", Menu.getSystemMenu(context));
-		data.put("title", "System Status");
-		
-		//Get the dashboard headers
+		// 6 -- Get the dashboard headers
 		Shortcuts.addDashboardHeaders(request, response, data, createURL());
 		
 		TemplateLoader.renderToResponse("SystemStatus.ftl", data, response);

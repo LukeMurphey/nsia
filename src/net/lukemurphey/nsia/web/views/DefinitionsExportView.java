@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.eventlog.EventLogField;
@@ -15,10 +16,12 @@ import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
+import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
 
 public class DefinitionsExportView extends View {
 
@@ -37,9 +40,15 @@ public class DefinitionsExportView extends View {
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 
 		// 1 -- Check rights
-		/*if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
-			Dialog.getDialog(response, context, data, "You do not have permission export definitions", "Permission Denied", DialogType.INFORMATION, new Link("Return to Dashboard", StandardViewList.getURL("main_dashboard")));
-		}*/
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View", "Export definitions") == false ){
+				context.addMessage("You do not have permission to export definitions", MessageSeverity.WARNING);
+				response.sendRedirect( DefinitionsView.getURL() );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
 		
 		// 2 -- Export the definitions
 		Application.getApplication().logEvent(EventLogMessage.Category.DEFINITIONS_EXPORTED, new EventLogField[]{

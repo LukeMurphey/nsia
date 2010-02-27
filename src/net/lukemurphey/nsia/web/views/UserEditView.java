@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.DisallowedOperationException;
 import net.lukemurphey.nsia.EmailAddress;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.InvalidLocalPartException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
@@ -26,7 +27,6 @@ import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
-import net.lukemurphey.nsia.web.StandardViewList;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -255,9 +255,6 @@ public class UserEditView extends View {
 			String[] args, Map<String, Object> data)
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
-
-		// 0 -- Check permissions
-		//TODO Check rights
 		
 		// 1 -- Get the user account if one exists
 		UserDescriptor user = null;
@@ -298,22 +295,14 @@ public class UserEditView extends View {
 			data.put("user", user);
 		}
 		
-		// 2 -- Process the data as necessary
-		try {
-			if( performActions(request, response, context, args, data, user) ){
-				return true; //Method set a redirect, just let it handle the result
-			}
-		} catch (DisallowedOperationException e) {
-			context.addMessage(e.getMessage(), MessageSeverity.WARNING);
-		}
-		
-		
-		// 3 -- Get the menu
+		// 2 -- Prepare the page content
+
+		// Get the menu
 		data.put("menu", Menu.getUserMenu(context, user));
 		
-		// 4 -- Get the breadcrumbs
+		// Get the breadcrumbs
 		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+		breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
 		breadcrumbs.add(  new Link("User Management", UsersView.getURL()) );
 		
 		if( user != null ){
@@ -329,6 +318,39 @@ public class UserEditView extends View {
 		
 		//Get the dashboard headers
 		Shortcuts.addDashboardHeaders(request, response, data);
+		
+		// 3 -- Check the user's rights
+		try {
+			if( user == null ){
+				if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Add" ) == false ){
+					Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to create users");
+					return true;
+				}
+			}
+			else{
+				if( context.getUser().getUserID() == user.getUserID() && Shortcuts.hasRight( context.getSessionInfo(), "Users.UpdateOwnPassword" ) == false ){ //TODO Replace with a more appropriate right name
+					Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit your account");
+					return true;
+				}
+				else if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Edit" ) == false ){
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit users");
+						return true;
+				}
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		
+		// 2 -- Process the data as necessary
+		try {
+			if( performActions(request, response, context, args, data, user) ){
+				return true; //Method set a redirect, just let it handle the result
+			}
+		} catch (DisallowedOperationException e) {
+			context.addMessage(e.getMessage(), MessageSeverity.WARNING);
+		}
+		
 		
 		TemplateLoader.renderToResponse("UserEdit.ftl", data, response);
 		
