@@ -28,4 +28,4 @@
     
     <@getwarndialog title=title message=message />
 </#assign>
-<#include "BaseWithNav.ftl">
+<#if show_simple><#include "Basic.ftl"><#else><#include "BaseWithNav.ftl"></#if>
