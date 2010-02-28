@@ -120,6 +120,7 @@ public class SiteGroupEnableView extends View {
 		if( args.length <= 0 ){
 			//Show a dialog indicating that the site group ID provided was not provided
 			Dialog.getDialog(response, context, data, "The Site Group ID was not provided.", "SiteGroup ID Invalid", DialogType.WARNING);
+			return true;
 		}
 		
 		//	 1.2 -- Make sure the ID is the correct format

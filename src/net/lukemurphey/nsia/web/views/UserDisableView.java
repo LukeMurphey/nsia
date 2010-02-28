@@ -101,6 +101,7 @@ public class UserDisableView extends View {
 		if( args.length <= 0 ){
 			//Show a dialog indicating that the user ID provided was not provided
 			Dialog.getDialog(response, context, data, "The User ID was not provided.", "User ID Invalid", DialogType.WARNING);
+			return true;
 		}
 		
 		//	 1.2 -- Make sure the ID is the correct format

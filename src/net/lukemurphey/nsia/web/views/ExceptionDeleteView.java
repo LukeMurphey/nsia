@@ -125,6 +125,7 @@ public class ExceptionDeleteView extends View {
 		}
 		catch( NotFoundException e ){
 			Dialog.getDialog(response, context, data, "Exception could not be deleted because it could not be found", "Exception Not Found", DialogType.WARNING);
+			return true;
 		} catch (SQLException e) {
 			throw new ViewFailedException(e);
 		} catch (NoDatabaseConnectionException e) {
