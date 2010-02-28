@@ -4,7 +4,7 @@
 <#include "Shortcuts.ftl">
 
 <#assign content>
-<form action="<@url name="access_control_editor" args=[objectID?c, "New"] />" method="get">
+
     <table cellpadding="7" cellspacing="0" width="100%" align="center">
         <tr>
             <td colspan="99" class="TopBottomBorder2">&nbsp;</td>
@@ -26,6 +26,17 @@
         </tr>
         </#if>
     </table>
+<#if permission_denied_message??>
+    <div style="margin-left:64px; margin-top:32px">
+    <#assign message>
+        ${permission_denied_message?html}
+        <p />
+        <input onClick="javascript:window.close();" class="button" type="Submit" value="Close" />
+    </#assign>
+    <@getwarndialog title="Permission Denied" message=message />
+    </div>
+<#else>
+<form action="<@url name="access_control_editor" args=[objectID?c, "New"] />" method="get">
 <#-- message -->
     <#macro actioncell action perm>
         <#if ( action = PERMIT )>
@@ -165,5 +176,7 @@
         		<input onClick="javascript:window.close();" class="button" type="Submit" value="Close">
         	</td>
        	</tr>
+    </table>
+</#if>
 </#assign>
 <#include "Basic.ftl">
