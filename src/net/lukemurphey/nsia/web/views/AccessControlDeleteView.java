@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.AccessControl;
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
 import net.lukemurphey.nsia.UserManagement.UserDescriptor;
@@ -17,11 +18,13 @@ import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
 import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
+import net.lukemurphey.nsia.web.templates.TemplateLoader;
 import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
 public class AccessControlDeleteView extends View {
@@ -50,9 +53,6 @@ public class AccessControlDeleteView extends View {
 			ViewNotFoundException {
 		
 		try{
-			// 0 -- Check permissions
-			//TODO Check rights
-			//checkControl( sessionIdentifier, objectId, "Remove permissions for user " + userId );
 			
 			// 1 -- Get the relevant fields
 			long objectId = -1;
@@ -78,7 +78,15 @@ public class AccessControlDeleteView extends View {
 				}
 			}
 		        
-			// 2 -- Delete the entry
+			// 2 -- Check permissions
+	        if( Shortcuts.canControl(context.getSessionInfo(), objectId, "Remove permissions for object ID " + objectId) == false ){
+	        	data.put("title", "Access Control Entry Delete");
+	        	data.put("permission_denied_message", "You do not have permission to edit the access control list" );
+	        	TemplateLoader.renderToResponse("AccessControl.ftl", data, response);
+	        	return true;
+	        }
+			
+			// 3 -- Delete the entry
 			AccessControl accessControl = new AccessControl(Application.getApplication());
 			
 			if( "User".equalsIgnoreCase( args[1] ) ){
@@ -100,6 +108,9 @@ public class AccessControlDeleteView extends View {
 			throw new ViewFailedException(e);
 		}
 		catch(NoDatabaseConnectionException e){
+			throw new ViewFailedException(e);
+		}
+		catch(GeneralizedException e){
 			throw new ViewFailedException(e);
 		}
 	}

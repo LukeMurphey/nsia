@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
@@ -57,10 +58,6 @@ public class ExceptionListView extends View {
 			String[] args, Map<String, Object> data)
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
-		
-		
-		// 0 -- Check permissions
-		//TODO Check rights
 		
 		// 1 -- Get the exceptions
 		Shortcuts.addDashboardHeaders(request, response, data);
@@ -122,8 +119,19 @@ public class ExceptionListView extends View {
 		
 		// 4 -- Create the menu
 		data.put("menu", Menu.getGenericMenu(context));
-		
 		data.put("title", "Exceptions");
+		
+		// 5 -- Check permissions
+		try {
+			if( Shortcuts.canRead(context.getSessionInfo(), siteGroup.getObjectId(), "View exceptions for site-group ID " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the exceptions associated with this site-group");
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		// 6 -- Render the page
 		data.put("INCLUDE", DefinitionPolicyAction.INCLUDE);
 		data.put("EXCLUDE", DefinitionPolicyAction.EXCLUDE);
 		data.put("CATEGORY", DefinitionPolicyDescriptor.DefinitionPolicyType.CATEGORY);

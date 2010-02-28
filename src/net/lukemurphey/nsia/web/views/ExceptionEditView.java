@@ -63,7 +63,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Set " + action.name().toLowerCase() + " policy for " + definitionCategory + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and rule ID " + ruleID );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Set " + action.name().toLowerCase() + " policy for " + definitionCategory + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and rule ID " + ruleID );
 			
 			DefinitionPolicyDescriptor filter = DefinitionPolicyDescriptor.createCategoryPolicy(siteGroupDesc.getGroupId(), ruleID, definitionCategory, action);
 			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
@@ -93,7 +93,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Set " + action.name().toLowerCase() + " policy for " + definitionCategory + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() +" and rule ID " + ruleID );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Set " + action.name().toLowerCase() + " policy for " + definitionCategory + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() +" and rule ID " + ruleID );
 			
 			DefinitionPolicyDescriptor filter = DefinitionPolicyDescriptor.createCategoryPolicy(siteGroupDesc.getGroupId(), ruleID, definitionCategory, url, action);
 			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
@@ -123,7 +123,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Set " + action.name().toLowerCase() + " policy for " + definitionCategory + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Set " + action.name().toLowerCase() + " policy for " + definitionCategory + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() );
 			
 			DefinitionPolicyDescriptor filter = DefinitionPolicyDescriptor.createCategoryPolicy(siteGroupDesc.getGroupId(), definitionCategory, url, action);
 			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
@@ -153,7 +153,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Set " + action.name().toLowerCase() + " policy for " + definitionCategory + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ")" );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Set " + action.name().toLowerCase() + " policy for " + definitionCategory + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ")" );
 			
 			DefinitionPolicyDescriptor filter = DefinitionPolicyDescriptor.createCategoryPolicy(siteGroupDesc.getGroupId(), definitionCategory, action);
 			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
@@ -183,7 +183,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkRight(sessionIdentifier, "System.Configuration.View", "Set " + action.name().toLowerCase() + " policy for " + categoryName + "." + subCategoryName + ".* at global level" );
+			Shortcuts.checkRight(context.getSessionInfo(), "System.Configuration.View", "Set " + action.name().toLowerCase() + " policy for " + categoryName + "." + subCategoryName + ".* at global level" );
 			
 			DefinitionPolicyDescriptor filter = DefinitionPolicyDescriptor.createSubCategoryPolicy(categoryName, subCategoryName, action );
 			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
@@ -213,7 +213,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Add " + action.name().toLowerCase() + " policy for " + categoryName + "." + subCategoryName + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ")" );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add " + action.name().toLowerCase() + " policy for " + categoryName + "." + subCategoryName + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ")" );
 			
 			DefinitionPolicyDescriptor filter = DefinitionPolicyDescriptor.createSubCategoryPolicy(siteGroupDesc.getGroupId(), categoryName, subCategoryName, action );
 			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
@@ -243,7 +243,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Add exception for " + categoryName + "." + subCategoryName + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() + " and rule ID " + ruleID );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add exception for " + categoryName + "." + subCategoryName + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() + " and rule ID " + ruleID );
 			
 			DefinitionPolicyDescriptor filter = DefinitionPolicyDescriptor.createSubCategoryPolicy(siteGroupDesc.getGroupId(), ruleID, categoryName, subCategoryName, url, action );
 			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
@@ -273,7 +273,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Add exception for " + categoryName + "." + subCategoryName + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and rule ID " + ruleID );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add exception for " + categoryName + "." + subCategoryName + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and rule ID " + ruleID );
 			
 			DefinitionPolicyDescriptor filter = DefinitionPolicyDescriptor.createSubCategoryPolicy(siteGroupDesc.getGroupId(), ruleID, categoryName, subCategoryName, action );
 			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
@@ -303,7 +303,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Add exception for " + categoryName + "." + subCategoryName + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add exception for " + categoryName + "." + subCategoryName + ".* for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() );
 			
 			DefinitionPolicyDescriptor filter = DefinitionPolicyDescriptor.createSubCategoryPolicy(siteGroupDesc.getGroupId(), categoryName, subCategoryName, url, action );
 			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
@@ -333,7 +333,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and " + ruleID );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ") and " + ruleID );
 			
 			String[] sigName = Definition.parseName(rulename);
 			
@@ -367,7 +367,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ")" );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for " + siteGroupDesc.getGroupName() + " (" + siteGroupDesc.getGroupId() + ")" );
 			
 			String[] sigName = Definition.parseName(rulename);
 			
@@ -400,7 +400,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			//checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for site group \"" + siteGroupDesc.getGroupName() + "\" (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() + " and rule ID " + ruleID );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for site group \"" + siteGroupDesc.getGroupName() + "\" (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() + " and rule ID " + ruleID );
 			
 			String[] sigName = Definition.parseName(rulename);
 			
@@ -434,7 +434,7 @@ public class ExceptionEditView extends View {
 		
 		try{
 			
-			////checkModify(sessionIdentifier, siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for site group \"" + siteGroupDesc.getGroupName() + "\" (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for site group \"" + siteGroupDesc.getGroupName() + "\" (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() );
 			
 			String[] sigName = Definition.parseName(rulename);
 			
@@ -540,7 +540,6 @@ public class ExceptionEditView extends View {
 				FieldErrors fieldErrors = new FieldErrors();
 				fieldErrors.put(new FieldError("DefinitionName", "", "Definition name is invalid"));
 				data.put("form_errors", fieldErrors);
-				//context.addMessage("Exception was not successfully created (definition name is invalid)", MessageSeverity.WARNING);
 				return false;
 			}
 			
@@ -589,9 +588,6 @@ public class ExceptionEditView extends View {
 			String[] args, Map<String, Object> data)
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
-		
-		// 0 -- Check permissions
-		//TODO Check rights
 		
 		// 1 -- Get the exceptions
 		Shortcuts.addDashboardHeaders(request, response, data);
@@ -663,7 +659,41 @@ public class ExceptionEditView extends View {
 		data.put("URL", request.getParameter("URL"));
 		data.put("definitionName", definitionName);
 		
-		// 4 -- Perform any changes
+		// 4 -- Create the breadcrumbs
+		Vector<Link> breadcrumbs = new Vector<Link>();
+		breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
+		breadcrumbs.add(  new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroup.getGroupId())) );
+		breadcrumbs.add(  new Link("Edit Rule", RuleEditView.getURL(ruleID)) );
+		breadcrumbs.add(  new Link("Scan History", ScanResultHistoryView.getURL(ruleID)) );
+		breadcrumbs.add(  new Link("Exceptions", createURL(ruleID)) );
+		data.put("breadcrumbs", breadcrumbs);
+		
+		// 5 -- Create the menu
+		data.put("menu", Menu.getScanRuleMenu(context, siteGroup, ruleID));
+		
+		data.put("title", "Exceptions");
+		
+		// 6 -- Check rights
+		try {
+			if( Shortcuts.canModify(context.getSessionInfo(), siteGroup.getGroupId(), "Create exception") == false ){
+				
+				String returnTo = request.getParameter("ReturnTo");
+				Link link = null;
+				
+				if( returnTo != null ){
+					link = new Link("Return to previous page", returnTo);
+				}
+				else{
+					link = new Link("Return to Scan Result", ScanResultHistoryView.getURL(ruleID));
+				}
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit this site-group", link);
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		// 7 -- Perform any changes
 		try {
 			if( "POST".equalsIgnoreCase(request.getMethod()) && createException(request, response, context, args, data, request.getParameter("URL"), definition, siteGroup, ruleID) ){
 				return true;
@@ -675,22 +705,10 @@ public class ExceptionEditView extends View {
 		} catch (NotFoundException e) {
 			throw new ViewFailedException(e);
 		} catch (InsufficientPermissionException e) {
-			// TODO Handle permission exceptions
+			Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to create exceptions for this site group");
+			return true;
 		}
-		
-		// 3 -- Create the breadcrumbs
-		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
-		breadcrumbs.add(  new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroup.getGroupId())) );
-		breadcrumbs.add(  new Link("Edit Rule", RuleEditView.getURL(ruleID)) );
-		breadcrumbs.add(  new Link("Scan History", ScanResultHistoryView.getURL(ruleID)) );
-		breadcrumbs.add(  new Link("Exceptions", createURL(ruleID)) );
-		data.put("breadcrumbs", breadcrumbs);
-		
-		// 4 -- Create the menu
-		data.put("menu", Menu.getGenericMenu(context));
-		
-		data.put("title", "Exceptions");
+
 		
 		// 5 -- Render the page
 		TemplateLoader.renderToResponse("ExceptionEdit.ftl", data, response);

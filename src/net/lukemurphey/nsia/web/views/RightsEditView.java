@@ -262,138 +262,144 @@ public class RightsEditView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 		
-		// 0 -- Check permissions
-		//TODO check rights
-		
-		// 1 -- Determine which tab is displayed
-		Tab tabIndex = Tab.USER_MANAGEMENT;
-		
-		if( request.getParameter("TabIndex") != null ){
+		try{
+			
+			// 1 -- Get the user/group involved
+			boolean isUser = true;
+			Subject subjectType = Subject.USER;
+			int subjectID;
+			
 			try{
-				tabIndex = Tab.getFromOrdinal( Integer.valueOf( request.getParameter("TabIndex")));
+				subjectID = Integer.valueOf( args[1] );
 			}
-			catch(NumberFormatException e){
-				//Ignore, the error and just show the user management tab
+			catch(NumberFormatException e ){
+				Dialog.getDialog(response, context, data, "The identifier for the user or group is not a valid number.", "User or Group ID Invalid", DialogType.WARNING);
+				return true;
 			}
-		}
-		
-		data.put("tabIndex", tabIndex.ordinal());
-		data.put("USER_MANAGEMENT", Tab.USER_MANAGEMENT.ordinal());
-		data.put("GROUP_MANAGEMENT", Tab.GROUP_MANAGEMENT.ordinal());
-		data.put("SYSTEM_CONFIGURATION", Tab.SYSTEM_CONFIGURATION.ordinal());
-		data.put("SITE_GROUP_MANAGEMENT", Tab.SITE_GROUP_MANAGEMENT.ordinal());
-		
-		// 2 -- Enumerate the rights
-		AccessControl accessControl = new AccessControl(Application.getApplication());
-		boolean isUser = true;
-		Subject subjectType = Subject.USER;
-		int subjectID;
-		Shortcuts.addDashboardHeaders(request, response, data);
-		
-		try{
-			subjectID = Integer.valueOf( args[1] );
-		}
-		catch(NumberFormatException e ){
-			Dialog.getDialog(response, context, data, "The identifier for the user or group is not a valid number.", "User or Group ID Invalid", DialogType.WARNING);
-			return true;
-		}
-		
-		if( "Group".equalsIgnoreCase( args[0] ) ){
-			isUser = false;
-			subjectType = Subject.GROUP;
-		}
-		
-		Vector<Right> rights = null;
-		
-		try{
+			
+			if( "Group".equalsIgnoreCase( args[0] ) ){
+				isUser = false;
+				subjectType = Subject.GROUP;
+			}
+			
+			// 2 -- Prepare the page content
+			Shortcuts.addDashboardHeaders(request, response, data);
+			
+			//	 2.1 -- Get the menu
+			data.put("menu", Menu.getGenericMenu(context));
+			
+			//	 2.2  -- Get the breadcrumbs
+			Vector<Link> breadcrumbs = new Vector<Link>();
+			breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+			
+			if( isUser ){
+				UserManagement userMgmt = new UserManagement(Application.getApplication());
+				UserDescriptor user;
+				try {
+					user = userMgmt.getUserDescriptor(subjectID);
+				} catch (NotFoundException e) {
+					throw new ViewFailedException(e);
+				}
+				data.put("user", user);
+				breadcrumbs.add( new Link("User Management", UsersView.getURL()) );
+				breadcrumbs.add( new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
+				breadcrumbs.add( new Link("Rights", RightsEditView.getURL(user) ) );
+			}
+			else{
+				GroupManagement groupMgmt = new GroupManagement(Application.getApplication());
+				GroupDescriptor group;
+				group = groupMgmt.getGroupDescriptor(subjectID);
+				data.put("group", group);
+				breadcrumbs.add( new Link("Group Management", GroupListView.getURL() ) );
+				breadcrumbs.add( new Link("Edit Group: " + group.getGroupName(), GroupEditView.getURL(group)) );
+				breadcrumbs.add( new Link("Rights", RightsEditView.getURL(group) ) );
+			}
+			
+			data.put("breadcrumbs", breadcrumbs);
+			data.put("title", "Rights Management");
+			
+			// 3 -- Check permissions
+			if( isUser && Shortcuts.hasRight( context.getSessionInfo(), "Users.View", "View rights for user ID " + subjectID) == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view user rights");
+				return true;
+			}
+			else if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.View", "View rights for group ID " + subjectID) == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view group rights");
+				return true;	
+			}
+			
+			// 4 -- Determine which tab is displayed
+			Tab tabIndex = Tab.USER_MANAGEMENT;
+			
+			if( request.getParameter("TabIndex") != null ){
+				try{
+					tabIndex = Tab.getFromOrdinal( Integer.valueOf( request.getParameter("TabIndex")));
+				}
+				catch(NumberFormatException e){
+					//Ignore, the error and just show the user management tab
+				}
+			}
+			
+			data.put("tabIndex", tabIndex.ordinal());
+			data.put("USER_MANAGEMENT", Tab.USER_MANAGEMENT.ordinal());
+			data.put("GROUP_MANAGEMENT", Tab.GROUP_MANAGEMENT.ordinal());
+			data.put("SYSTEM_CONFIGURATION", Tab.SYSTEM_CONFIGURATION.ordinal());
+			data.put("SITE_GROUP_MANAGEMENT", Tab.SITE_GROUP_MANAGEMENT.ordinal());
+			
+			// 5 -- Enumerate the rights
+			AccessControl accessControl = new AccessControl(Application.getApplication());
+			Vector<Right> rights = null;
+			
 			if( isUser ){
 				rights = getRights(tabIndex, subjectID, Subject.USER, accessControl);
 			}
 			else{
 				rights = getRights(tabIndex, subjectID, Subject.GROUP, accessControl);
 			}
-		}
-		catch(NotFoundException e ){
-			throw new ViewFailedException(e);
-			//Dialog.getDialog(response, context, data, "The identifier for the user or group is not a valid number.", "User or Group ID Invalid", DialogType.WARNING);
-			//return true;
+			
+			// 6 -- Set the rights if requested
+			if( "POST".equalsIgnoreCase( request.getMethod() ) ){
+				
+					if( isUser && Shortcuts.hasRight( context.getSessionInfo(), "Users.Edit", "Edit rights for user ID " + subjectID) == false ){
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit user rights");
+						return true;
+					}
+					else if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.Edit", "Edit rights for group ID " + subjectID) == false ){
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit group rights");
+						return true;	
+					}
+				
+					setRights(context, request, response, tabIndex, subjectID, subjectType);
+					
+					if( subjectType == Subject.GROUP ){
+						response.sendRedirect( createURL( "Group", subjectID) + "?TabIndex=" + tabIndex.ordinal() );
+					}
+					else{
+						response.sendRedirect( createURL( "User", subjectID) + "?TabIndex=" + tabIndex.ordinal() );
+					}
+					
+					return true; //Return since we submitted a redirect to the HTTP response
+			}
+			
+			data.put("rights", rights);
+					
+			// 7 -- Render the page
+			data.put("isUser", isUser);
+			TemplateLoader.renderToResponse("RightsEditView.ftl", data, response);
+			
 		} catch (SQLException e) {
 			throw new ViewFailedException(e);
 		} catch (NoDatabaseConnectionException e) {
 			throw new ViewFailedException(e);
+		} catch (InputValidationException e) {
+			throw new ViewFailedException(e);
+		} catch (NotFoundException e) {
+			Dialog.getDialog(response, context, data, e.getMessage(), "Not Found", DialogType.WARNING);
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		} catch (NoSessionException e) {
+			throw new ViewFailedException(e);
 		}
-		
-		// 3 -- Set the rights if requested
-		if( "POST".equalsIgnoreCase( request.getMethod() ) ){
-			try {
-				setRights(context, request, response, tabIndex, subjectID, subjectType);
-				
-				if( subjectType == Subject.GROUP ){
-					response.sendRedirect( createURL( "Group", subjectID) + "?TabIndex=" + tabIndex.ordinal() );
-				}
-				else{
-					response.sendRedirect( createURL( "User", subjectID) + "?TabIndex=" + tabIndex.ordinal() );
-				}
-				
-				return true; //Return since we submitted a redirect to the HTTP response
-			} catch (NoSessionException e) {
-				throw new ViewFailedException(e);
-			} catch (GeneralizedException e) {
-				throw new ViewFailedException(e);
-			}
-		}
-		
-		data.put("rights", rights);
-		
-		// 4 -- Get the menu
-		data.put("menu", Menu.getGenericMenu(context));
-		
-		// 4 -- Get the breadcrumbs
-		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-		if( isUser ){
-			UserManagement userMgmt = new UserManagement(Application.getApplication());
-			UserDescriptor user;
-			try {
-				user = userMgmt.getUserDescriptor(subjectID);
-			} catch (SQLException e) {
-				throw new ViewFailedException(e);
-			} catch (NoDatabaseConnectionException e) {
-				throw new ViewFailedException(e);
-			} catch (NotFoundException e) {
-				throw new ViewFailedException(e);
-			}
-			data.put("user", user);
-			breadcrumbs.add( new Link("User Management", UsersView.getURL()) );
-			breadcrumbs.add( new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
-			breadcrumbs.add( new Link("Rights", RightsEditView.getURL(user) ) );
-		}
-		else{
-			GroupManagement groupMgmt = new GroupManagement(Application.getApplication());
-			GroupDescriptor group;
-			try {
-				group = groupMgmt.getGroupDescriptor(subjectID);
-			} catch (SQLException e) {
-				throw new ViewFailedException(e);
-			} catch (NoDatabaseConnectionException e) {
-				throw new ViewFailedException(e);
-			} catch (NotFoundException e) {
-				throw new ViewFailedException(e);
-			} catch (InputValidationException e) {
-				throw new ViewFailedException(e);
-			}
-			data.put("group", group);
-			breadcrumbs.add( new Link("Edit Group: " + group.getGroupName(), GroupEditView.getURL(group)) );
-			breadcrumbs.add( new Link("Group Management", GroupListView.getURL() ) );
-			breadcrumbs.add( new Link("Rights", RightsEditView.getURL(group) ) );
-		}
-		
-		data.put("isUser", isUser);
-		data.put("breadcrumbs", breadcrumbs);
-		data.put("title", "Rights Management");
-		
-		// 5 -- Render the page
-		TemplateLoader.renderToResponse("RightsEditView.ftl", data, response);
 		return true;
 	}
 

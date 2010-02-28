@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
@@ -69,9 +70,6 @@ public class RuleEditView extends View {
 		SiteGroupDescriptor siteGroup = null;
 		
 		try {
-
-			// 0 -- Check permissions
-			//TODO Check rights
 
 			// 1 -- Get the rule if it exists
 			if( args.length >= 2 ){
@@ -141,11 +139,50 @@ public class RuleEditView extends View {
 				Dialog.getDialog(response, context, data, "The SiteGroup ID provided is not valid", "SiteGroup ID Invalid", DialogType.WARNING);
 				return true;
 			}
+
+			// 3 -- Get the menu
+			if( rule != null ){
+				data.put("menu", Menu.getScanRuleMenu(context, siteGroup, rule.getRuleId()) );
+			}
+			else{
+				data.put("menu", Menu.getSiteGroupMenu(context, siteGroup) );
+			}
+
+			// 4 -- Get the breadcrumbs
+			Vector<Link> breadcrumbs = new Vector<Link>();
+			breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
+			breadcrumbs.add(  new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroupID)) );
+
+			if( rule != null ){
+				breadcrumbs.add( new Link("Edit Rule", createURL("Edit", rule.getRuleId())) );
+				data.put("title", "Rule: " + rule.getRuleType());
+			}
+			else{
+				breadcrumbs.add(  new Link("New Rule", createURL("New") + "?SiteGroupID=" + siteGroupID) );
+				data.put("title", "New Rule");
+			}
+			data.put("breadcrumbs", breadcrumbs);
+
+			//Get the dashboard headers
+			Shortcuts.addDashboardHeaders(request, response, data);
+			
+			if( "Cancel".equalsIgnoreCase( request.getParameter("Action") ) ){
+				response.sendRedirect( SiteGroupView.getURL(siteGroupID) );
+				return true;
+			}
+			
+			// 5 -- Check permissions
+			if( Shortcuts.canModify( context.getSessionInfo(), siteGroup.getObjectId()) == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to edit rules for this site group");
+				return true;
+			}
 		} catch (SQLException e) {
 			throw new ViewFailedException(e);
 		} catch (NoDatabaseConnectionException e) {
 			throw new ViewFailedException(e);
 		} catch (InputValidationException e) {
+			throw new ViewFailedException(e);
+		} catch (GeneralizedException e) {
 			throw new ViewFailedException(e);
 		}
 		
@@ -194,37 +231,11 @@ public class RuleEditView extends View {
 		
 		data.put("scanFrequencyUnits", scanFrequencyUnits);
 		data.put("scanFrequencyValue", scanFrequencyValue);
-
-		// 3 -- Get the menu
-		data.put("menu", Menu.getSiteGroupMenu(context, siteGroup));
-
-		// 4 -- Get the breadcrumbs
-		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
-		breadcrumbs.add(  new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroupID)) );
-
-		if( rule != null ){
-			breadcrumbs.add( new Link("Edit Rule", createURL("Edit", rule.getRuleId())) );
-			data.put("title", "Rule: " + rule.getRuleType());
-		}
-		else{
-			breadcrumbs.add(  new Link("New Rule", createURL("New") + "?SiteGroupID=" + siteGroupID) );
-			data.put("title", "New Rule");
-		}
-		data.put("breadcrumbs", breadcrumbs);
-
-		//Get the dashboard headers
-		Shortcuts.addDashboardHeaders(request, response, data);
 		
-		if( "Cancel".equalsIgnoreCase( request.getParameter("Action") ) ){
-			response.sendRedirect( SiteGroupView.getURL(siteGroupID) );
-			return true;
-		}
-		
-		// 5 -- Get the view associated with the rule
+		// 6 -- Get the view associated with the rule
 		String ruleType = HttpSeekingScanRule.RULE_TYPE;
 		
-		//	 5.1 -- Get the rule type
+		//	 6.1 -- Get the rule type
 		if( rule != null ){
 			ruleType = rule.getRuleType();
 		}
@@ -232,13 +243,13 @@ public class RuleEditView extends View {
 			ruleType = request.getParameter("RuleType");
 		}
 		
-		//	 5.2 -- Show the selection form if no rule type was specified
+		//	 6.2 -- Show the selection form if no rule type was specified
 		if( ruleType == null ){
 			TemplateLoader.renderToResponse("SelectRule.ftl", data, response);
 			return true;
 		}
 		
-		//	 5.3 -- Show the view associated with the rule
+		//	 6.3 -- Show the view associated with the rule
 		if( ruleType.equals( HttpSeekingScanRule.RULE_TYPE ) ){
 			WebDiscoveryRuleEditView view = new WebDiscoveryRuleEditView();
 			return view.process(request, response, context, args, data);

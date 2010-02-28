@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.lukemurphey.nsia.AccessControl;
 import net.lukemurphey.nsia.AccessControlDescriptor;
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.GroupManagement;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
@@ -21,6 +22,7 @@ import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -200,8 +202,7 @@ public class AccessControlEditView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 		try{
-			// 0 -- Check permissions
-			//TODO Check rights
+			data.put("title", "Access Control");
 			
 			// 1 -- Get the object and user information
 			AccessControl accessControl = new AccessControl(Application.getApplication());
@@ -223,8 +224,15 @@ public class AccessControlEditView extends View {
 				return true;
 			}
 			
-			//	 1.3 -- Process changes (if requesting)
-			else if( "POST".equalsIgnoreCase( request.getMethod() ) ){
+	        // 2 -- Check permissions
+	        if( Shortcuts.canControl(context.getSessionInfo(), objectId) == false ){
+	        	data.put("permission_denied_message", "You do not have permission to edit the access control list" );
+	        	TemplateLoader.renderToResponse("AccessControl.ftl", data, response);
+	        	return true;
+	        }
+			
+			// 3 -- Process changes (if requesting)
+			if( "POST".equalsIgnoreCase( request.getMethod() ) ){
 				if( processChanges(request, response, context, args, data, objectId) ){
 					return true;
 				}
@@ -280,7 +288,6 @@ public class AccessControlEditView extends View {
 	        data.put("users", userMgmt.getUserDescriptors());
 			
 	        // 3 -- Render the page
-	        data.put("title", "Access Control");
 	        data.put("isEditing", isEditing);
 	        data.put("objectID", objectId);
 	        data.put("GROUP", AccessControlDescriptor.Subject.GROUP);
@@ -316,6 +323,9 @@ public class AccessControlEditView extends View {
 			throw new ViewFailedException(e);
 		}
 		catch(InputValidationException e){
+			throw new ViewFailedException(e);
+		}
+		catch(GeneralizedException e){
 			throw new ViewFailedException(e);
 		}
 	}

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.SessionManagement;
@@ -45,6 +46,7 @@ public class UserSessionsView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 
+		// 1 -- Get the sessions
 		SessionManagement sessionManagement = new SessionManagement(Application.getApplication());
 		SessionInfo[] sessions = null;
 		
@@ -61,10 +63,10 @@ public class UserSessionsView extends View {
 		data.put("title", "User Sessions");
 		data.put("sessions", sessions);
 		
-		// 3 -- Get the menu
+		// 2 -- Get the menu
 		data.put("menu", Menu.getGenericMenu(context));
 		
-		// 4 -- Get the breadcrumbs
+		// 3 -- Get the breadcrumbs
 		Vector<Link> breadcrumbs = new Vector<Link>();
 		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 		breadcrumbs.add(  new Link("User Management", UsersView.getURL()) );
@@ -74,6 +76,16 @@ public class UserSessionsView extends View {
 		
 		//Get the dashboard headers
 		Shortcuts.addDashboardHeaders(request, response, data);
+		
+		// 4 -- Check permissions
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Sessions.View") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view user sessions");
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
 		
 		TemplateLoader.renderToResponse("UserSessions.ftl", data, response);
 		

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
@@ -60,9 +61,6 @@ public class ScanResultHistoryView extends View {
 		
 		try{
 			
-			// 0 -- Check permissions
-			//TODO Check rights
-			
 			// 1 -- Get the rule
 			int ruleID = Integer.valueOf( args[0] );
 			
@@ -80,7 +78,27 @@ public class ScanResultHistoryView extends View {
 				return true;	
 			}
 			
-			// 3 -- Get the search parameters
+			// 3 -- Get the menu
+			data.put("menu", Menu.getScanRuleMenu(context, siteGroup, ruleID));
+			
+			// 4 -- Get the breadcrumbs
+			Vector<Link> breadcrumbs = new Vector<Link>();
+			breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
+			breadcrumbs.add(  new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroupID)) );
+			breadcrumbs.add(  new Link("Edit Rule", RuleEditView.getURL(ruleID)) );
+			breadcrumbs.add(  new Link("Scan History", ScanResultHistoryView.getURL(ruleID)) );
+			data.put("breadcrumbs", breadcrumbs);
+			
+			data.put("title", "Scan Rule History");
+			Shortcuts.addDashboardHeaders(request, response, data);
+			
+			// 5 -- Check rights
+			if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId()) == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site group");
+				return true;
+			}
+			
+			// 6 -- Get the search parameters
 			long firstScanResultId = -1;
 			long lastScanResultId = -1;
 			long startEntry = -1;
@@ -151,19 +169,6 @@ public class ScanResultHistoryView extends View {
 			data.put("SCAN_FAILED", ScanResultCode.SCAN_FAILED);
 			data.put("UNREADY", ScanResultCode.UNREADY);
 			
-			// 5 -- Get the menu
-			data.put("menu", Menu.getScanRuleMenu(context, siteGroup, ruleID));
-			
-			// 6 -- Get the breadcrumbs
-			Vector<Link> breadcrumbs = new Vector<Link>();
-			breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
-			breadcrumbs.add(  new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroupID)) );
-			breadcrumbs.add(  new Link("Edit Rule", RuleEditView.getURL(ruleID)) );
-			breadcrumbs.add(  new Link("Scan History", ScanResultHistoryView.getURL(ruleID)) );
-			data.put("breadcrumbs", breadcrumbs);
-			
-			data.put("title", "Scan Rule History");
-			Shortcuts.addDashboardHeaders(request, response, data);
 			TemplateLoader.renderToResponse("ScanResultHistory.ftl", data, response);
 		
 		} catch(NoDatabaseConnectionException e){
@@ -173,6 +178,8 @@ public class ScanResultHistoryView extends View {
 		} catch(ScanResultLoadFailureException e){
 			throw new ViewFailedException(e);
 		} catch(InputValidationException e){
+			throw new ViewFailedException(e);
+		} catch(GeneralizedException e){
 			throw new ViewFailedException(e);
 		}
 		

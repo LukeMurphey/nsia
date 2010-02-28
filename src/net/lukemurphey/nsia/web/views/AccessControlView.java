@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.lukemurphey.nsia.AccessControl;
 import net.lukemurphey.nsia.AccessControlDescriptor;
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.GroupManagement;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
@@ -19,6 +20,7 @@ import net.lukemurphey.nsia.ObjectPermissionDescriptor;
 import net.lukemurphey.nsia.UserManagement;
 import net.lukemurphey.nsia.AccessControlDescriptor.Action;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -125,8 +127,7 @@ public class AccessControlView extends View {
 			ViewNotFoundException {
 		
 		try{
-			// 0 -- Check permissions
-			//TODO Check rights
+			data.put("title", "Access Control");
 			
 			// 1 -- Get the object and user information
 			AccessControl accessControl = new AccessControl(Application.getApplication());
@@ -150,15 +151,19 @@ public class AccessControlView extends View {
 	        boolean isEditing = false;
 	        
 	        //   1.3 -- Get the existing ACL entry (if so requested)
+	        boolean isUser = false;
+	        
 	        if( subject != null){
 	            isEditing = true;
 	            try{
 	                if( subject.startsWith("group") ){
+	                	isUser = false;
 	                    groupId = Integer.parseInt(subject.substring(5));
 	                    objectPermissionDescriptor = accessControl.getGroupPermissions( groupId, objectId);
 	                    
 	                }
 	                else if( subject.startsWith("user") ){
+	                	isUser = true;
 	                    userId = Integer.parseInt(subject.substring(4));
 	                    objectPermissionDescriptor = accessControl.getUserPermissions( userId, objectId, false);
 	                }
@@ -173,7 +178,14 @@ public class AccessControlView extends View {
 	            //throw new InvalidHtmlParameterException("Invalid Parameter", "The object identifier is invalid", "Console" );
 	        }
 	        
-	        // 2 -- If just viewing, then get all of the permission descriptors for the object
+	        // 2 -- Check permissions
+	        if( Shortcuts.canControl(context.getSessionInfo(), objectId) == false ){
+	        	data.put("permission_denied_message", "You do not have permission to view the access control list" );
+	        	TemplateLoader.renderToResponse("AccessControl.ftl", data, response);
+	        	return true;
+	        }
+	        
+	        // 3 -- If just viewing, then get all of the permission descriptors for the object
 	        if( isEditing == false ){
 	        	ObjectPermissionDescriptor[] descriptors = accessControl.getAllAclEntries(objectId);
 	        	PermissionDescriptor[] subject_descriptors = new PermissionDescriptor[descriptors.length];
@@ -185,8 +197,7 @@ public class AccessControlView extends View {
 	        	data.put("permissions", subject_descriptors);
 	        }
 			
-	        // 3 -- Render the page
-	        data.put("title", "Access Control");
+	        // 4 -- Render the page
 	        data.put("objectID", objectId);
 	        data.put("GROUP", AccessControlDescriptor.Subject.GROUP);
 	        data.put("USER", AccessControlDescriptor.Subject.USER);
@@ -207,6 +218,9 @@ public class AccessControlView extends View {
 			throw new ViewFailedException(e);
 		}
 		catch(InputValidationException e){
+			throw new ViewFailedException(e);
+		}
+		catch(GeneralizedException e){
 			throw new ViewFailedException(e);
 		}
 	}
