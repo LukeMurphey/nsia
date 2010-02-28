@@ -45,7 +45,7 @@ public final class Application {
 	
 	public static final int VERSION_MAJOR = 0;
 	public static final int VERSION_MINOR = 8;
-	public static final int VERSION_REVISION = 91;
+	public static final int VERSION_REVISION = 92;
 	public static final String VERSION_STATUS = null;
 	public static final String DATABASE_LOCATION = "../var/database";
 	
