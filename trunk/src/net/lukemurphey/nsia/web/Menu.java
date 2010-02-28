@@ -9,6 +9,7 @@ import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.UserManagement.AccountStatus;
 import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.scan.Definition;
+import net.lukemurphey.nsia.scan.ScanRule;
 import net.lukemurphey.nsia.web.views.AccessControlView;
 import net.lukemurphey.nsia.web.views.ActionEditView;
 import net.lukemurphey.nsia.web.views.ActionsListView;
@@ -201,7 +202,7 @@ public class Menu {
 		return toArray(menu);
 	}
 	
-	public static Vector<Link> getScanRuleMenuItems( RequestContext context, SiteGroupDescriptor siteGroup, int ruleID ) throws URLInvalidException{
+	public static Vector<Link> getScanRuleMenuItems( RequestContext context, SiteGroupDescriptor siteGroup, long ruleID ) throws URLInvalidException{
 		Vector<Link> menu = new Vector<Link>();
 		
 		menu.add( new Link("Scan Rule") );
@@ -216,27 +217,28 @@ public class Menu {
 		return menu;
 	}
 	
-	public static Link[] getScanRuleMenu( RequestContext context, SiteGroupDescriptor siteGroup, int ruleID ) throws URLInvalidException{
+	public static Link[] getScanRuleMenu( RequestContext context, SiteGroupDescriptor siteGroup, long ruleID ) throws URLInvalidException{
 		Vector<Link> menu = new Vector<Link>();
 		menu.addAll( getSiteGroupMenuItems(context, siteGroup) );
-		
 		menu.addAll( getScanRuleMenuItems(context, siteGroup, ruleID ) );
-		
 		menu.addAll( getResponseActionsMenuItems(context, siteGroup) ) ;
-		
-		menu.add( new Link("Incident Response") );
-		menu.add( new Link("Add New Action", ActionEditView.getURL() + "?SiteGroupID=" + siteGroup.getGroupId() ) );
-		menu.add( new Link("List Actions", ActionsListView.getURL(siteGroup.getGroupId()) ) );
 		
 		return toArray(menu);
 	}
 	
 	public static Link[] getScanResultMenu( RequestContext context, int scanResultID ) throws URLInvalidException{
+		return getScanResultMenu(context, scanResultID);
+	}
+	
+	public static Link[] getScanResultMenu( RequestContext context, int scanResultID, SiteGroupDescriptor siteGroup, ScanRule rule ) throws URLInvalidException{
 		Vector<Link> menu = new Vector<Link>();
 		
 		menu.addAll( getSiteGroupMenuItems(context, null) );
 		menu.addAll( getUserMenuItems(context, null) );
 		menu.addAll( getGroupMenuItems(context, null) );
+		if( siteGroup != null && rule != null ){
+			menu.addAll( getScanRuleMenuItems(context, siteGroup, rule.getRuleId()) );
+		}
 		
 		return toArray(menu);
 	}
