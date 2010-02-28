@@ -107,6 +107,7 @@ public class WebDiscoveryScanResultView extends View {
 		}
 		catch(NumberFormatException e){
 			Dialog.getDialog(response, context, data, "The result identifier provided is invalid", "Invalid Parameter", DialogType.WARNING);
+			return true;
 		}
 		
 		
