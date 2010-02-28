@@ -1,6 +1,7 @@
 package net.lukemurphey.nsia.web;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,11 +26,13 @@ public class WebConsoleServlet extends HttpServlet {
 	
 	private static ViewList view_list = new ViewList();
 	private SessionMessages session_messages = new SessionMessages();
+	private Vector<Middleware> middleware = new Vector<Middleware>();
 	
 	public static final String SERVER_STRING = "ThreatFactor NSIA 1.0";
 	
 	public WebConsoleServlet(){
 		view_list = StandardViewList.getViewList();
+		middleware.addAll(StandardMiddlewareList.getMiddleware());
 	}
 	
 	public void doRequest(HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -63,16 +66,6 @@ public class WebConsoleServlet extends HttpServlet {
 				session_info = session_mgmt.getSessionInfo(sessionID);
 				
 				context = new RequestContext( session_info, session_messages );
-				/*if( session_info.getSessionStatus() == SessionStatus.SESSION_ACTIVE ){
-					context = new RequestContext( session_info, session_messages );
-				}*/
-				
-				//TODO Update session ID as needed
-				/*if( session_mgmt.isSessionIdentiferExpired(session_info.getSessionCreated() ) ){
-						
-				}*/
-					
-				//response.addCookie(new Cookie("SessionID", session_info.getSessionIdentifier()));
 			}
 			
 			//	 1.3 -- Construct an empty request context if one was not already created
@@ -87,8 +80,12 @@ public class WebConsoleServlet extends HttpServlet {
 				
 			}
 			
+			// 2 -- Execute the middleware
+			for ( Middleware m : middleware ) {
+				m.process(request, response, context);
+			}
 			
-			// 2 -- Process the request via the associated view. Stop on the first view that returns true (indicates that it will handle providing the content).
+			// 3 -- Process the request via the associated view. Stop on the first view that returns true (indicates that it will handle providing the content).
 			boolean handled = false;
 			
 			for (View view : view_list.getViews()) {
@@ -104,7 +101,7 @@ public class WebConsoleServlet extends HttpServlet {
 				}
 			}
 			
-			// 3 -- View was not found
+			// 4 -- View was not found
 			if( handled == false ){
 				response.resetBuffer();
 				response.setStatus(404);
