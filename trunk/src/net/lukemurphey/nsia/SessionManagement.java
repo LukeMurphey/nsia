@@ -205,6 +205,48 @@ public class SessionManagement {
 	}
 	
 	/**
+	 * This is the function operates resets session activity as if .  
+	 * @param sessionIdentifier
+	 * @return
+	 * @throws InputValidationException 
+	 * @throws NoDatabaseConnectionException 
+	 * @throws SQLException 
+	 */
+	public synchronized void resetSessionActivity( String sessionIdentifier ) throws InputValidationException, NoDatabaseConnectionException, SQLException{
+		
+		// 0 -- Precondition check
+		if( sessionIdentifier == null )
+			return;
+		
+		Matcher matcher = sessionIdentifierRegex.matcher(sessionIdentifier);
+		if( !matcher.matches() ){
+			throw new InputValidationException("Malformed session identifier", "Session Identifier", sessionIdentifier);
+		}
+		
+		// 1 -- Determine if the session is valid
+		Connection conn = null;
+		PreparedStatement statement = null;
+		Timestamp lastActivity = new Timestamp(System.currentTimeMillis());
+		
+		try{
+			conn = appRes.getDatabaseConnection(Application.DatabaseAccessType.SESSION);
+			statement = conn.prepareStatement("Update Sessions set LastActivity = ? where SessionID = ? and Status = ?");
+			statement.setTimestamp(1, lastActivity);
+			statement.setString(2, sessionIdentifier);
+			statement.setInt(3, SessionStatus.SESSION_ACTIVE.getStatusId() ); //Status
+			statement.executeUpdate();
+			
+		} finally {
+			
+			if (statement != null )
+				statement.close();
+			
+			if (conn != null )
+				conn.close();
+		}
+	}
+	
+	/**
 	 * This is the function operates identically to the <i>refreshSessionIdentifier( String sessionIdentifier, boolean resetActivity )</i> method
 	 * except that the <>resetActivity</i> argument is automatically false.  
 	 * @param sessionIdentifier
