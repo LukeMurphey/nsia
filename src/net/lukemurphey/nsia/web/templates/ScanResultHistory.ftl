@@ -37,7 +37,7 @@
                     <td class="Background1">${result.deviations} deviations&nbsp;&nbsp;</td>
                 <#else>
                     <td align="center" class="StatYellow"><img src="/media/img/22_Warning" alt="warning"></td>
-                    <td class="Background1">Scan did not complete successfully: ${result.resultCode.description?html}&nbsp;&nbsp;</td>
+                    <td class="Background1">${result.resultCode.description?html}&nbsp;&nbsp;</td>
                 </#if>
                 <#-- 2 -- Output the time that the resource was scanned  -->
                     <td class="Background1">${result.scanTime}&nbsp;&nbsp;</td>
