@@ -67,8 +67,14 @@ public class EventLogEntryView extends View {
 		//	 1.3 -- Create the resulting filter
 		EventLogFilter filter = new EventLogFilter(1);
 		int entryID = Integer.valueOf( args[0] );
-		filter.setContentFilter(contentFilter);
-		filter.setSeverityFilter( EventLogSeverity.getSeverityBySyslogID( severity ) );
+		
+		if( contentFilter != null ){
+			filter.setContentFilter(contentFilter);
+		}
+		
+		if( severity > -1 ){
+			filter.setSeverityFilter( EventLogSeverity.getSeverityBySyslogID( severity ) );
+		}
 		
 		// 2 -- Add the necessary options
 		data.put("title", "Event Log");
