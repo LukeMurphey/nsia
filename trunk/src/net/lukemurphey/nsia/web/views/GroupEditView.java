@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.GroupManagement;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
@@ -157,9 +158,6 @@ public class GroupEditView extends View {
 			String[] args, Map<String, Object> data)
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
-
-		// 0 -- Check permissions
-		//TODO Check rights
 		
 		// 1 -- Get the group if one exists
 		GroupDescriptor group = null;
@@ -202,16 +200,12 @@ public class GroupEditView extends View {
 			data.put("group", group);
 		}
 		
-		// 2 -- Process the data as necessary
-		if( performActions(request, response, context, args, data, group) ){
-			return true; //Method set a redirect, just let it handle the result
-		}
+		// 2 -- Get the page content
 		
-		
-		// 3 -- Get the menu
+		//	 2.1 -- Get the menu
 		data.put("menu", Menu.getGroupMenuItems(context, group));
 		
-		// 4 -- Get the breadcrumbs
+		//	 2.2 -- Get the breadcrumbs
 		Vector<Link> breadcrumbs = new Vector<Link>();
 		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 		breadcrumbs.add(  new Link("Group Management", GroupListView.getURL()) );
@@ -226,8 +220,27 @@ public class GroupEditView extends View {
 		}
 		data.put("breadcrumbs", breadcrumbs);
 		
-		//Get the dashboard headers
+		//	 2.3 -- Get the dashboard headers
 		Shortcuts.addDashboardHeaders(request, response, data);
+		
+		// 3 -- Check rights
+		try {
+			if( group == null && Shortcuts.hasRight( context.getSessionInfo(), "Groups.Add") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to create groups");
+				return true;
+			}
+			else if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.Edit") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit groups");
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		// 2 -- Process the data as necessary
+		if( performActions(request, response, context, args, data, group) ){
+			return true; //Method set a redirect, just let it handle the result
+		}
 		
 		TemplateLoader.renderToResponse("GroupEdit.ftl", data, response);
 		

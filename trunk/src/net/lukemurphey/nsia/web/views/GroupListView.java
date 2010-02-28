@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.GroupManagement;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
@@ -44,10 +45,32 @@ public class GroupListView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 
-		// 0 -- Check permissions
-		//TODO Check rights
+		// 1 -- Get the page content
 		
-		// 1 -- Get the groups
+		//	 1.1 -- Get the menu
+		data.put("menu", Menu.getGenericMenu(context));
+		
+		//	 1.2 -- Get the breadcrumbs
+		Vector<Link> breadcrumbs = new Vector<Link>();
+		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
+		breadcrumbs.add(  new Link("Group Management", createURL()) );
+		data.put("breadcrumbs", breadcrumbs);
+		
+		//	 1.3 -- Get the dashboard headers
+		Shortcuts.addDashboardHeaders(request, response, data);
+		data.put("title", "Groups");
+		
+		// 2 -- Check permissions
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.View") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the user groups");
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		// 3 -- Get the groups
 		GroupManagement groupMgmt = new GroupManagement(Application.getApplication());
 		
 		try {
@@ -62,19 +85,6 @@ public class GroupListView extends View {
 		
 		data.put("ACTIVE", GroupManagement.State.ACTIVE);
 		data.put("INACTIVE", GroupManagement.State.INACTIVE);
-		
-		// 3 -- Get the menu
-		data.put("menu", Menu.getGenericMenu(context));
-		
-		// 4 -- Get the breadcrumbs
-		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-		breadcrumbs.add(  new Link("Group Management", createURL()) );
-		data.put("breadcrumbs", breadcrumbs);
-		
-		//Get the dashboard headers
-		Shortcuts.addDashboardHeaders(request, response, data);
-		data.put("title", "Groups");
 		
 		TemplateLoader.renderToResponse("GroupList.ftl", data, response);
 		

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.DatabaseBackup;
 import net.lukemurphey.nsia.DuplicateEntryException;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.WorkerThread;
 import net.lukemurphey.nsia.Application.WorkerThreadDescriptor;
 import net.lukemurphey.nsia.WorkerThread.State;
@@ -20,6 +21,7 @@ import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
+import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
 import net.lukemurphey.nsia.web.templates.TemplateLoader;
 import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
@@ -44,7 +46,15 @@ public class BackupView extends View {
 		}
 		
 		// 2 -- Determine if the user has permission
-		//TODO: check for permission
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit") == false ){
+				context.addMessage("You do not have permission to perform database backups", MessageSeverity.WARNING);
+				response.sendRedirect( SystemStatusView.getURL() );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
 		
 		// 3 -- Determine if a backup is underway
 		WorkerThreadDescriptor backupWorker = getWorkerThread( false );

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
@@ -54,8 +55,6 @@ public class ScanResultView extends View {
 			ViewNotFoundException {
 		
 		try{
-			// 0 -- Check permissions
-			//TODO check rights
 			
 			// 1 -- Get the scan result
 			ScanResult scanResult;
@@ -101,7 +100,7 @@ public class ScanResultView extends View {
 			data.put("siteGroup", siteGroup);
 			
 			// 4 -- Get the menu
-			data.put("menu", Menu.getScanResultMenu(context, scanResultID));
+			data.put("menu", Menu.getScanResultMenu(context, scanResultID, siteGroup, rule));
 			
 			// 5 -- Get the breadcrumbs
 			Vector<Link> breadcrumbs = new Vector<Link>();
@@ -115,7 +114,13 @@ public class ScanResultView extends View {
 			data.put("title", "Scan Result");
 			Shortcuts.addDashboardHeaders(request, response, data);
 
-			// 6 -- Render the view
+			// 6 -- Check permissions
+			if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId()) == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site group");
+				return true;
+			}
+			
+			// 7 -- Render the view
 			if( rule.getRuleType().equalsIgnoreCase(HttpSeekingScanRule.RULE_TYPE) ){
 				WebDiscoveryScanResultView view = new WebDiscoveryScanResultView();
 				return view.process(request, response, context, args, data);
@@ -145,6 +150,9 @@ public class ScanResultView extends View {
 			throw new ViewFailedException(e);
 		}
 		catch(InputValidationException e){
+			throw new ViewFailedException(e);
+		}
+		catch(GeneralizedException e){
 			throw new ViewFailedException(e);
 		}
 	}

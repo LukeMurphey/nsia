@@ -463,9 +463,7 @@ public class SiteGroupView extends View {
 			// 3 -- Check permissions
 			try {
 				if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId()) == false ){
-					data.put("permission_denied_message", "You do not permission to view this site group.");
-					//data.put("permission_denied_link", new Link("View Site Group", SiteGroupView.getURL(siteGroup)) );
-					TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);
+					Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site group");
 					return true;
 				}
 			} catch (GeneralizedException e) {

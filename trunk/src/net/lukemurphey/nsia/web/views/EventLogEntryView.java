@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.eventlog.EventLogSeverity;
@@ -121,7 +122,17 @@ public class EventLogEntryView extends View {
 		//Get the dashboard headers
 		Shortcuts.addDashboardHeaders(request, response, data);
 		
-		// 3 -- Get the log entry and related information
+		// 3 -- Check rights
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Information.View") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the event logs");
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		// 4 -- Get the log entry and related information
 		try {
 			data.put("entry", logViewer.getEntry(entryID));
 		} catch (SQLException e) {

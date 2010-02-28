@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.eventlog.EventLogSeverity;
 import net.lukemurphey.nsia.eventlog.EventLogViewer;
@@ -152,14 +153,14 @@ public class EventLogView extends View {
 		Shortcuts.addDashboardHeaders(request, response, data);
 		
 		// 2 -- Check permissions
-		/*try {
-			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
-				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the system configuration");
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Information.View") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the event logs");
 				return true;
 			}
 		} catch (GeneralizedException e) {
 			throw new ViewFailedException(e);
-		}*/
+		}
 		
 		// 3 -- Get the filter
 		int startEntry = -1;

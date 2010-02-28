@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.GroupManagement;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -43,13 +45,21 @@ public class GroupEnableView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 
-		// 0 -- Check permissions
-		//TODO Check rights
+		// 1 -- Check permissions
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.Edit", "Enable user group") == false ){
+				context.addMessage("You do not have permission to enable groups", MessageSeverity.WARNING);
+				response.sendRedirect( GroupListView.getURL() );
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
 		
-		// 1 -- Get the group if one exists
+		// 2 -- Get the group if one exists
 		if( args.length >= 1 ){
 			
-			// 1.1 -- Get the group ID
+			// 2.1 -- Get the group ID
 			int groupID;
 			
 			try{
@@ -60,7 +70,7 @@ public class GroupEnableView extends View {
 				return true;
 			}
 			
-			// 1.2 -- Enable the group
+			// 2.2 -- Enable the group
 			GroupManagement groupMgmt = new GroupManagement(Application.getApplication());
 			
 			try{

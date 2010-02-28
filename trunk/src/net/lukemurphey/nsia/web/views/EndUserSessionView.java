@@ -9,21 +9,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SessionManagement;
+import net.lukemurphey.nsia.SessionStatus;
 import net.lukemurphey.nsia.UserManagement;
 import net.lukemurphey.nsia.SessionManagement.SessionInfo;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.RequestContext;
+import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
 import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
+import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
 public class EndUserSessionView extends View {
 
@@ -45,45 +50,72 @@ public class EndUserSessionView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 		
-		// 0 -- Check permissions
-		//checkRight( sessionIdentifer, "Users.Sessions.Delete");
-		//TODO Check rights
-		
-		// 1 -- Terminate the session
-		int sessionTrackingNumber;
-		
-		try{
-			sessionTrackingNumber = Integer.valueOf( args[0] );
-		}catch(NumberFormatException e){
-			throw new ViewFailedException(e);
-		}
-		
-		SessionManagement sessionManagement = new SessionManagement(Application.getApplication());
-		SessionInfo sessionInfo = null;
-		
 		try {
+			
+			// 1 -- Get the session tracking number
+			int sessionTrackingNumber;
+			
+			try{
+				sessionTrackingNumber = Integer.valueOf( args[0] );
+			}catch(NumberFormatException e){
+				throw new ViewFailedException(e);
+			}
+			
+			// 2 -- Get the user and session information
+			SessionManagement sessionManagement = new SessionManagement(Application.getApplication());
+			SessionInfo sessionInfo = null;
+			UserManagement.UserDescriptor userDescriptor;
+			
+			sessionInfo = sessionManagement.getSessionInfo(sessionTrackingNumber);
+			
+			if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_NULL ){
+				//Get the user associated with the session
+				UserManagement userManagement = new UserManagement(Application.getApplication());
+				try {
+					userDescriptor = userManagement.getUserDescriptor(sessionInfo.getUserId());
+				} catch (NotFoundException e1) {
+					throw new ViewFailedException(e1);
+				}
+			}
+			else{
+				userDescriptor = null;
+			}
+			
+			// 3 -- Get the page content
+			try {
+
+				String annotation = null;
+				
+				if( userDescriptor != null ){
+					annotation = "Terminate session for user ID " + userDescriptor.getUserID() + " (" + userDescriptor.getUserName() + ")";
+				}
+				
+				if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Sessions.Delete", annotation) == false ){
+					context.addMessage("You do not have permission to end user sessions", MessageSeverity.WARNING);
+					response.sendRedirect( UserSessionsView.getURL() );
+					return true;
+				}
+			} catch (GeneralizedException e) {
+				throw new ViewFailedException(e);
+			}
+			
+			// 4 -- Post a message if the session is invalid
+			if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_NULL ){
+				Dialog.getDialog("No session exists with the given identifier", "Session Tracking Number Invalid", DialogType.WARNING, new Link("Return to the session list", UserSessionsView.getURL()));
+				return true;
+			}
+			
+			// 5 -- Terminate the session			
 			sessionInfo = sessionManagement.getSessionInfo(sessionTrackingNumber);
 			 
 			if( sessionManagement.terminateSession(sessionTrackingNumber) ){
-				//Get the user associated with the now terminated session
-				UserManagement.UserDescriptor userDescriptor;
-				UserManagement userManagement = new UserManagement(Application.getApplication());
 				
-				try{
-					userDescriptor = userManagement.getUserDescriptor(sessionInfo.getUserId());
-					
-					Application.getApplication().logEvent(EventLogMessage.Category.SESSION_ENDED,
-							new EventLogField( FieldName.TARGET_USER_NAME, userDescriptor.getUserName()),
-							new EventLogField( FieldName.TARGET_USER_ID, userDescriptor.getUserID() ),
-							new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName()),
-							new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ) );
-				}
-				catch( NotFoundException e){
-					Application.getApplication().logEvent(EventLogMessage.Category.SESSION_ENDED, 
-							new EventLogField( FieldName.SOURCE_USER_NAME, sessionInfo.getUserName()),
-							new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
-				}
-
+				//Log that the session was terminated
+				Application.getApplication().logEvent(EventLogMessage.Category.SESSION_ENDED,
+						new EventLogField( FieldName.TARGET_USER_NAME, userDescriptor.getUserName()),
+						new EventLogField( FieldName.TARGET_USER_ID, userDescriptor.getUserID() ),
+						new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName()),
+						new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ) );
 			}
 			else{
 				Application.getApplication().logEvent(EventLogMessage.Category.SESSION_INVALID_TERMINATION_ATTEMPT,
@@ -93,6 +125,7 @@ public class EndUserSessionView extends View {
 			
 			context.addMessage("Session successfully terminated", MessageSeverity.SUCCESS);
 			response.sendRedirect( UsersView.getURL() );
+			
 		} catch (InputValidationException e) {
 			throw new ViewFailedException(e);
 		} catch (SQLException e) {
