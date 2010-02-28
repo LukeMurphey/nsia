@@ -143,16 +143,10 @@ public class DefragmentIndexesView extends View {
 			return true;
 		}
 		
-		// 6 -- Post the option to begin a backup if a backup is not underway
+		// 6 -- Post the option to begin a defrag if not already underway
 		else{
 			Dialog.getOptionDialog(response, context, data, "Are you sure you want to re-index the database?", "Reindex Database", DialogType.INFORMATION, new Link( "Reindex", createURL()), new Link( "Cancel", createURL()) );
 		}
-		
-		
-		// 5 -- Show the status of the indexer if it is running
-		
-		// 6 -- Show the form to request starting the indexer
-		
 		
 		return true;
 	}
