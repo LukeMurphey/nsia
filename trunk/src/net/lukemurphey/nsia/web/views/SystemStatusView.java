@@ -22,7 +22,6 @@ import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
-import net.lukemurphey.nsia.web.StandardViewList;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -86,8 +85,8 @@ public class SystemStatusView extends View {
 		
 		//Get the Breadcrumbs
 		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add( new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
-		breadcrumbs.add( new Link("System Status", StandardViewList.getURL("system_status")) );
+		breadcrumbs.add( new Link("Main Dashboard", MainDashboardView.getURL()) );
+		breadcrumbs.add( new Link("System Status", SystemStatusView.getURL()) );
 		
 		data.put("breadcrumbs", breadcrumbs);
 		
