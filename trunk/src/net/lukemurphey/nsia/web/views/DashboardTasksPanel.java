@@ -18,7 +18,7 @@ import net.lukemurphey.nsia.web.templates.TemplateLoader;
 public class DashboardTasksPanel extends View {
 
 	public DashboardTasksPanel() {
-		super("DashboardPanel/Tasks", "7");
+		super("DashboardPanel/Tasks", "dashboard_panel_tasks");
 	}
 
 	@Override
