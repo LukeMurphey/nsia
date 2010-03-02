@@ -31,6 +31,7 @@ import net.lukemurphey.nsia.web.views.DashboardLicensePanel;
 import net.lukemurphey.nsia.web.views.DashboardRefreshPanel;
 import net.lukemurphey.nsia.web.views.DashboardStatusPanel;
 import net.lukemurphey.nsia.web.views.DashboardTasksPanel;
+import net.lukemurphey.nsia.web.views.DashboardVersonPanel;
 
 public class Shortcuts {
 	
@@ -1182,7 +1183,15 @@ public class Shortcuts {
 			panels.add( license_warning );
 		}
 		
-		// 6 -- Populate the data
+		// 5 -- Get the license warning
+		DashboardVersonPanel version_panel = new DashboardVersonPanel();
+		String version_warning = version_panel.getPanel(request, data, Application.getApplication());
+		
+		if( version_warning != null ){
+			panels.add( version_warning );
+		}
+		
+		// 7 -- Populate the data
 		data.put("dashboard_headers", panels);
 	}
 	
