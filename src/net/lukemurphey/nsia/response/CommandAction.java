@@ -9,8 +9,6 @@ import net.lukemurphey.nsia.extension.ArgumentFieldsInvalidException;
 import net.lukemurphey.nsia.extension.FieldLayout;
 import net.lukemurphey.nsia.extension.FieldText;
 import net.lukemurphey.nsia.extension.FileFieldValidator;
-import net.lukemurphey.nsia.extension.PrototypeField;
-import net.lukemurphey.nsia.extension.FieldValidator.FieldValidatorResult;
 
 public class CommandAction extends Action{
 
@@ -70,47 +68,7 @@ public class CommandAction extends Action{
 		return values;
 	}
 	
-	@Override
-	public void configure( Hashtable<String, String> arguments ) throws ArgumentFieldsInvalidException{
-		
-		// 1 -- Get a list of the fields that must be configured
-		FieldLayout layout = getLayout();
-		PrototypeField[] fields = layout.getFields();
-		
-		// 2 -- Loop through each field and validate it, then set it
-		for(PrototypeField field : fields){
-			String value = arguments.get(field.getName());
-			
-			// 2.1 -- Stop if the field was not included
-			if( value == null ){
-				throw new ArgumentFieldsInvalidException("The " + field.getName() + " field was not provided", field);
-			}
-			
-			// 2.2 -- If the field was included, then make sure it is valid
-			else{
-				FieldValidatorResult result = field.validate(value);
-				
-				if( result.validated() == false ){
-					if( result.getMessage() == null ){
-						throw new ArgumentFieldsInvalidException("The " + field.getName() + " field is invalid", field);
-					}
-					else{
-						throw new ArgumentFieldsInvalidException(result.getMessage(), field);
-					}
-				}
-				
-				// 2.3 -- Store the value since it validated
-				setField(field.getName(), value);
-			}
-		}
-	}
-	
-	/**
-	 * Set the field that is associated with the given name.
-	 * @param name
-	 * @param value
-	 */
-	private void setField(String name, String value){
+	protected void setField(String name, String value){
 		
 		if( "Command".equals(name) ){
 			this.command = value;

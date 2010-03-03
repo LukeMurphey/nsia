@@ -75,20 +75,13 @@ public class LogFileAction extends Action {
 		layout.setFieldsValues(this.getValues());
 		return layout;
 	}
-
 	
-	/**
-	 * Set the field that is associated with the given name.
-	 * @param name
-	 * @param value
-	 */
-	private void setField(String name, String value){
+	protected void setField(String name, String value){
 		
 		if( "File".equals(name) ){
 			this.file = new File(value);
 		}
 		else if( "Message".equals(name) ){
-			
 			this.template = value;
 		}
 	}
