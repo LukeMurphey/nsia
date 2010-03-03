@@ -10,12 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.SessionManagement;
-import net.lukemurphey.nsia.SessionStatus;
 import net.lukemurphey.nsia.SessionManagement.SessionInfo;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.web.middleware.Middleware;
 import net.lukemurphey.nsia.web.views.Dialog;
-import net.lukemurphey.nsia.web.views.LoginView;
 import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
 import javax.servlet.http.Cookie;
@@ -67,22 +66,12 @@ public class WebConsoleServlet extends HttpServlet {
 				
 				context = new RequestContext( session_info, session_messages );
 			}
-			
-			//	 1.3 -- Construct an empty request context if one was not already created
-			if( context == null || context.getSessionInfo().getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
-				//context = new RequestContext(session_messages);
-				
-				//Show the login form since the user has failed to login yet
-				View view = new LoginView();
-				response.setStatus(401); //Set the HTTP response code to 401 so that it can be programmatically determined that authentication is necessary to complete the request
-				view.process(request, response, context, true);
-				return;
-				
-			}
-			
+						
 			// 2 -- Execute the middleware
 			for ( Middleware m : middleware ) {
-				m.process(request, response, context);
+				if( m.process(request, response, context) ){
+					return; //Middleware handled the view, no reason to continue
+				}
 			}
 			
 			// 3 -- Process the request via the associated view. Stop on the first view that returns true (indicates that it will handle providing the content).

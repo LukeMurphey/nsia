@@ -1,4 +1,4 @@
-package net.lukemurphey.nsia.web;
+package net.lukemurphey.nsia.web.middleware;
 
 public class MiddlewareException extends Exception {
 

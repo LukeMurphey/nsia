@@ -77,7 +77,7 @@ public class LoginView extends View {
 		data.put("title", "Login");
 		
 		Vector<String> headers = new Vector<String>();
-		headers.add("<table><tr><td><img src=\"/media/img/16_Information.png\" alt=\"info\"/></td><td>Access is for authorized users only. Use of this system subject to monitoring.</td></tr></table>");
+		headers.add(DashboardPreLoginPanel.getPanel(request, data));
 		
 		data.put("dashboard_headers", headers);
 		data.put("show_splitter_border", false);
