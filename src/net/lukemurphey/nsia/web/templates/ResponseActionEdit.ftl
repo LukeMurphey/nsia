@@ -18,7 +18,7 @@
     <form method="post" action="<#if hook??><@url name="sitegroup_action_editor" args=["Edit", hook.eventLogHookID] /><#else><@url name="sitegroup_action_editor" args=["New"] /></#if>">
         <table class="DataTable" summary="Actions">
             <tbody>
-                <@formtable fields=layout />
+                <@formtable fields=layout request=request />
                 <tr class="Background3">
                     <td class="alignRight" colspan="99">
                     <#if ( hook?? )>
