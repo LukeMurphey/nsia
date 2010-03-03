@@ -11,7 +11,6 @@ import net.lukemurphey.nsia.extension.FieldLayout;
 import net.lukemurphey.nsia.extension.FieldText;
 import net.lukemurphey.nsia.extension.FieldValidator;
 import net.lukemurphey.nsia.extension.MessageValidator;
-import net.lukemurphey.nsia.extension.PrototypeField;
 
 import java.net.UnknownHostException;
 import java.util.*;
@@ -79,10 +78,10 @@ public class EmailAction extends Action {
 		layout.addField( new FieldText("ToAddress", "Destination Address", 1, 1, new EmailAddressValidator()) );
 		
 		// 2 -- Add the subject
-		layout.addField( new FieldText("Subject", "Subject", 1, 1, new MessageValidator()) );
+		layout.addField( new FieldText("Subject", "Subject", 1, 1, new MessageValidator("subject")) );
 		
 		// 3 -- Add the body
-		layout.addField( new FieldText("Body", "Body", 1, 5, new MessageValidator()) );
+		layout.addField( new FieldText("Body", "Body", 1, 5, new MessageValidator("body")) );
 		
 		// 4 -- Return the resulting layout
 		return layout;
@@ -94,37 +93,6 @@ public class EmailAction extends Action {
 		layout.setFieldsValues(this.getValues());
 		return layout;
 	}
-
-	@Override
-	public void configure( Hashtable<String, String> arguments ) throws ArgumentFieldsInvalidException{
-		
-		// 1 -- Validate the fields
-		for(PrototypeField field : getLayout().getFields()){
-			field.validate(arguments.get(field.getName()));
-		}
-		
-		// 2 -- Update the action with the field data
-		try {
-			toAddress = EmailAddress.getByAddress( arguments.get("ToAddress") );
-		}
-		catch (UnknownHostException e)
-		{
-			throw new ArgumentFieldsInvalidException(e.getMessage(), new FieldText("ToAddress", "Destination Address", 1, 1, new EmailAddressValidator()) );
-		}
-		catch (InvalidLocalPartException e)
-		{
-			throw new ArgumentFieldsInvalidException(e.getMessage(), new FieldText("ToAddress", "Destination Address", 1, 1, new EmailAddressValidator()) );
-		}
-		catch (IllegalArgumentException e)
-		{
-			throw new ArgumentFieldsInvalidException(e.getMessage(), new FieldText("ToAddress", "Destination Address", 1, 1, new EmailAddressValidator()) );
-		}
-		
-		body = arguments.get("Body");
-		subject = arguments.get("Subject");
-		
-	}
-	
 	
 	@Override
 	public String getConfigDescription() {
@@ -146,9 +114,33 @@ public class EmailAction extends Action {
 			values.put("ToAddress", toAddress.toString());
 		}
 		
-		values.put("Subject", subject);
-		values.put("Body", body);
+		if( subject != null ){
+			values.put("Subject", subject);
+		}
+		
+		if( body != null ){
+			values.put("Body", body);
+		}
 		
 		return values;
+	}
+
+	@Override
+	protected void setField(String name, String value) {
+		if( "Subject".equals(name) ){
+			this.subject = value;
+		}
+		else if( "Body".equals(name) ){
+			this.body = value;
+		}
+		else if( "ToAddress".equals(name) ){
+			try {
+				this.toAddress = EmailAddress.getByAddress(value);
+			} catch (UnknownHostException e) {
+				this.toAddress = null;
+			} catch (InvalidLocalPartException e) {
+				this.toAddress = null;
+			}
+		}
 	}
 }

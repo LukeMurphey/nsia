@@ -29,13 +29,10 @@ public class SSHCommandAction extends Action {
 	private String commands = null;
 	public static final String USER_DESCRIPTION = "Run a command via an SSH session";
 	
-	protected SSHCommandAction( Hashtable<String, String> arguments ) {
+	protected SSHCommandAction( Hashtable<String, String> arguments ) throws ArgumentFieldsInvalidException {
 		super("SSH Command", USER_DESCRIPTION);
 		
-		this.hostname = arguments.get("Hostname");
-		this.username = arguments.get("Username");
-		this.password = arguments.get("Password");
-		this.commands = arguments.get("Commands");
+		configure(arguments);
 		
 	}
 	
@@ -90,10 +87,21 @@ public class SSHCommandAction extends Action {
 	public Hashtable<String, String> getValues(){
 		Hashtable<String, String> values = new Hashtable<String, String>();
 		
-		values.put("Hostname", this.hostname);
-		values.put("Username", this.username);
-		values.put("Password", this.password);
-		values.put("Commands", this.commands);
+		if( this.hostname != null ){
+			values.put("Hostname", this.hostname);
+		}
+		
+		if( this.username != null ){
+			values.put("Username", this.username);
+		}
+		
+		if( this.password != null ){
+			values.put("Password", this.password);
+		}
+		
+		if( this.commands != null ){
+			values.put("Commands", this.commands);
+		}
 		
 		return values;
 	}
@@ -130,16 +138,16 @@ public class SSHCommandAction extends Action {
 		FieldLayout layout = new FieldLayout(1);
 		
 		// 1 -- Add the hostname field
-		layout.addField( new FieldText("Hostname", "Hostname", 1, 1, new MessageValidator()) );
+		layout.addField( new FieldText("Hostname", "Hostname", 1, 1, new MessageValidator("hostname")) );
 		
 		// 2 -- Add the username field
-		layout.addField( new FieldText("Username", "Login Name", 1, 1, new MessageValidator()) );
+		layout.addField( new FieldText("Username", "Login Name", 1, 1, new MessageValidator("login name")) );
 		
 		// 3 -- Add the password field
-		layout.addField( new FieldPassword("Password", "Password", 1, new MessageValidator()) );
+		layout.addField( new FieldPassword("Password", "Password", 1, new MessageValidator("password")) );
 		
 		// 4 -- Add the commands list field
-		layout.addField( new FieldText("Commands", "Commands", 1, 10, new MessageValidator()) );
+		layout.addField( new FieldText("Commands", "Commands", 1, 10, new MessageValidator("commands")) );
 		
 		// 3 -- Return the resulting layout
 		return layout;
@@ -219,17 +227,33 @@ public class SSHCommandAction extends Action {
 		}
 	}
 	
-	@Override
+	/*@Override
 	public void configure( Hashtable<String, String> arguments ) throws ArgumentFieldsInvalidException{
 		this.hostname = arguments.get("Hostname");
 		this.username = arguments.get("Username");
 		this.password = arguments.get("Password");
 		this.commands = arguments.get("Commands");
-	}
+	}*/
 	
 	@Override
 	public String getConfigDescription() {
 		return username + "@" + hostname;
+	}
+
+	@Override
+	protected void setField(String name, String value) {
+		if( "Hostname".equals(name) ){
+			this.hostname = value;
+		}
+		else if( "Username".equals(name) ){
+			this.username = value;
+		}
+		else if( "Password".equals(name) ){
+			this.password = value;
+		}
+		else if( "Commands".equals(name) ){
+			this.commands = value;
+		}
 	}
 
 }
