@@ -1,4 +1,4 @@
-package net.lukemurphey.nsia.web;
+package net.lukemurphey.nsia.web.middleware;
 
 import java.sql.SQLException;
 
@@ -11,11 +11,12 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.SessionManagement;
 import net.lukemurphey.nsia.SessionStatus;
 import net.lukemurphey.nsia.SessionManagement.SessionInfo;
+import net.lukemurphey.nsia.web.RequestContext;
 
 public class SessionActivityMiddleware extends Middleware {
 
 	@Override
-	protected void process(HttpServletRequest request, HttpServletResponse response, RequestContext context) throws MiddlewareException {
+	public boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context) throws MiddlewareException {
 		
 		// 1 -- Determine if the context is related to a session
 		SessionInfo sessionInfo = context.getSessionInfo();
@@ -24,7 +25,7 @@ public class SessionActivityMiddleware extends Middleware {
 
 			// 2 -- Determine if the call was due to a script refreshing a view
 			if( request.getParameter("refreshRate") != null ){
-				return;
+				return false;
 			}
 			
 			// 3 -- Reset session activity
@@ -40,5 +41,7 @@ public class SessionActivityMiddleware extends Middleware {
 				throw new MiddlewareException("Exception thrown when reset session activity", e);
 			}
 		}
+		
+		return false;
 	}
 }
