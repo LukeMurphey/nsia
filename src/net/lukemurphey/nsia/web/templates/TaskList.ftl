@@ -50,8 +50,8 @@
             <td>
                 <table>
                     <tr>
-                        <td><a href="<@url name="system_task_stop" args=[task.uniqueName] />"&nbsp;<img src="/media/img/16_Delete"></a></td>
-                        <td><a href="<@url name="system_task_stop" args=[task.uniqueName] />">Stop</a></td>
+                        <td><a href="<@url name="task_stop" args=[task.uniqueName] />"&nbsp;<img src="/media/img/16_Delete"></a></td>
+                        <td><a href="<@url name="task_stop" args=[task.uniqueName] />">Stop</a></td>
                     </tr>
                 </table>
             </td>
