@@ -44,7 +44,7 @@
        </table>
    </form>
 <#else>
-    <#assign message>No actions exist yet for the given site-group<br><a href="<@url name="sitegroup_action_editor" args=["New"] />?SiteGroupID=${siteGroup.groupId?c}">[create a new action now]</a></#assign>
+    <#assign message>No actions exist yet for the given site-group<p/><a href="<@url name="sitegroup_action_editor" args=["New"] />?SiteGroupID=${siteGroup.groupId?c}">[Create a new action now]</a></#assign>
     <@getinfodialog title="No Actions Exist" message=message />
 </#if>
 
