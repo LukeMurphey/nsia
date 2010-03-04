@@ -860,7 +860,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			}
 			
 			this.recursionLevels = resultSet.getInt("RecursionDepth");
-			this.restrictToDomain = new Wildcard( resultSet.getString("Domain") );
+			this.restrictToDomain = new Wildcard( resultSet.getString("Domain"), true );
 			this.scanCountLimit = resultSet.getInt("ResourceScanLimit");
 			this.scanExternalLinks = resultSet.getBoolean("ScanFirstExternal");
 			
