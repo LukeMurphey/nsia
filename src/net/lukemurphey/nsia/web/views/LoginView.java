@@ -74,6 +74,26 @@ public class LoginView extends View {
 	@Override
 	public boolean process( HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data ) throws ViewFailedException {
 		
+		//If the user is already logged in, then don't bother showing the view
+		if( context.getSessionInfo().getSessionStatus() == SessionStatus.SESSION_ACTIVE ){
+			try{
+				if( request.getParameter("ReturnTo") != null ){
+					response.sendRedirect( request.getParameter("ReturnTo") );
+					return true;
+				}
+				else{
+					response.sendRedirect( MainDashboardView.getURL() );
+					return true;
+				}
+			}
+			catch( IOException e ){
+				throw new ViewFailedException(e);
+			}
+			catch( URLInvalidException e ){
+				throw new ViewFailedException(e);
+			}
+		}
+		
 		data.put("title", "Login");
 		
 		Vector<String> headers = new Vector<String>();
