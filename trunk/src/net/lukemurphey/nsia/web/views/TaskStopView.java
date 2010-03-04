@@ -87,8 +87,8 @@ public class TaskStopView extends View {
 		WorkerThreadDescriptor worker = null;
 		
 		for( int c = 0; c < workerThreads.length; c++){
-			if( workerThreads[c].getWorkerThread().getTaskDescription().equalsIgnoreCase(name)){
-				if( workerThreads[c].getWorkerThread().getStatus() == WorkerThread.State.STARTED ||  workerThreads[c].getWorkerThread().getStatus() == WorkerThread.State.INITIALIZED){
+			if( workerThreads[c].getUniqueName().equalsIgnoreCase(name)){
+				if( workerThreads[c].getWorkerThread().getStatus() == WorkerThread.State.STARTED || workerThreads[c].getWorkerThread().getStatus() == WorkerThread.State.INITIALIZED){
 					worker = workerThreads[c];
 				}
 			}
