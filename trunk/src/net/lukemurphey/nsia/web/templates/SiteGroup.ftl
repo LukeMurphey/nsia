@@ -33,7 +33,7 @@
             </#if>
             <td align="center"><input type="checkbox" name="RuleID" value="${rule.ID?c}"></td>
             <#-- Output the deviation count -->
-            <#if (!rule.status_description?? )>
+            <#if (!rule.statusDescription?? )>
                 <#if ( rule.deviations == -1 )>
                     <td class="Background1">Not scanned yet&nbsp;&nbsp;</td>
                 <#elseif ( rule.status == STAT_YELLOW )>
@@ -44,7 +44,7 @@
                     <td class="Background1">${rule.deviations} deviations&nbsp;&nbsp;</td>
                 </#if>
             <#else>
-                <td class="Background1">${rule.status_description}"&nbsp;&nbsp;</td>";
+                <td class="Background1">${rule.statusDescription}&nbsp;&nbsp;</td>
             </#if>
             <#-- Output description -->
                 <td class="Background1">${rule.type}&nbsp;&nbsp;</td>
