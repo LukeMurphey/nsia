@@ -4,8 +4,9 @@
     <#return 194 * progress * 0.01>
 </#function>
 <#assign content>
-<div class="SectionHeader">Background Tasks</div>
+
 <#if (tasks?size > 0)>
+<div class="SectionHeader">Background Tasks</div>
 <p>
 <table class="DataTable">
     <thead>
@@ -22,7 +23,7 @@
         <tr>
             <td class="TitleText">${task.taskDescription?html}</td>
             <td>
-                <#if task.user?? >
+                <#if task.user?? && task.user.id?? >
                 <table>
                     <tr>
                         <td><img style="vertical-align: top;" alt="User" src="/media/img/<#if task.user.unrestricted>16_Admin<#else>16_User</#if>">
