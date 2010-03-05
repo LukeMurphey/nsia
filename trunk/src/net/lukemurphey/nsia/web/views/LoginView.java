@@ -75,7 +75,7 @@ public class LoginView extends View {
 	public boolean process( HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data ) throws ViewFailedException {
 		
 		//If the user is already logged in, then don't bother showing the view
-		if( context.getSessionInfo().getSessionStatus() == SessionStatus.SESSION_ACTIVE ){
+		if( context!= null && context.getSessionInfo() != null && context.getSessionInfo().getSessionStatus() == SessionStatus.SESSION_ACTIVE ){
 			try{
 				if( request.getParameter("ReturnTo") != null ){
 					response.sendRedirect( request.getParameter("ReturnTo") );
