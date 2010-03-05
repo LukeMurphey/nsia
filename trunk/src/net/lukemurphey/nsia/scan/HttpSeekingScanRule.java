@@ -490,7 +490,6 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 				}
 			}
 		}
-		
 	}
 	
 	private class ScanRunner extends Thread{
@@ -776,8 +775,11 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 				}
 			}
 			
+			if( terminate == true ){
+				resultCode = ScanResultCode.SCAN_TERMINATED;
+			}
 			// Return a scan failed code if no resources are scanned
-			if( findings.size() == 0 ){
+			else if( findings.size() == 0 ){
 				resultCode = ScanResultCode.SCAN_FAILED;
 			}
 			
@@ -786,8 +788,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 				logSignatureScanResult(findings.get(c).deviations, findings.get(c).getUrl());
 			}
 			
-			
-			// 4 -- Indicate that the scan is completed and exit
+			// 5 -- Indicate that the scan is completed and exit
 			inScan = false;
 			
 			if( resultCode != null){
