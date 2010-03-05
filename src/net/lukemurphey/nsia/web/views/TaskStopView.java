@@ -36,6 +36,8 @@ public class TaskStopView extends View {
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 
+		Shortcuts.addDashboardHeaders(request, response, data);
+		
 		// 1 -- Make sure the user has permission
 		try {
 			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit", "Stop background task") == false ){
