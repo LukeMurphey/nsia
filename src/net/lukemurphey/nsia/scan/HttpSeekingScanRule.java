@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -211,6 +212,9 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	//This field prevents the scanner from discovering URLs within resources that returned a 404 error. This prevents endless recursion caused by broken relative references.
 	private boolean stopRecursingOn404 = true;
 	
+	//This contains the list of thread in process. These are retained so that the rule can be terminated
+	Vector<ScanRunner> runningThreads = new Vector<ScanRunner>();
+	
 	public static final String RULE_TYPE = "HTTP/Autodiscovery";
 	
 	public static final int SUBCATEGORY_EXCEPTION_THRESHOLD = 5;
@@ -357,9 +361,6 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		// This vector contains the records that are pending
 		Vector<ScanRecord> pending = new Vector<ScanRecord>();
 		
-		//This contains the list of thread in process
-		Vector<ScanRunner> runningThreads = new Vector<ScanRunner>();
-		
 		//List of URLS that have been or are being processed
 		Vector<String> urls = new Vector<String>();
 		
@@ -391,7 +392,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 					it.remove();
 					HttpSignatureScanResultWithParser result = runner.getResult();
 					
-					if( result != null ){
+					if( terminate == false && result != null ){
 						findings.add(result.getScanResult());
 						resourcesScanned++;
 						
@@ -418,7 +419,6 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 								
 								// The URL appears to be unique, add it to the list
 								if( found == false ){
-									//System.out.println( str + " from " + result.getScanResult().getUrl() ); //DEBUG
 									
 									urls.add(str);
 									
@@ -457,7 +457,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 				ScanRecord record = pending.remove(0); //Remove the URL from the pending list
 				ScanRunner runner = new ScanRunner( record, sigs, record.getLevel(), client );
 				runningThreads.add(runner);
-				//System.out.println( "Scanning: " + record.getURL().toString() ); //DEBUG
+
 				runner.setUncaughtExceptionHandler(new ScanThreadExceptionHandler(record.getURL()));
 				runner.setPriority(	Thread.MIN_PRIORITY );
 				runner.start();
@@ -473,7 +473,8 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 				if( runner.done() ){
 					it.remove();
 					HttpSignatureScanResultWithParser result = runner.getResult();
-					if( result != null ){
+
+					if( terminate == false && result != null ){
 						findings.add(result.getScanResult());
 						result = null;
 						resourcesScanned++;
@@ -560,6 +561,10 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			finally{
 				done = true;
 			}
+		}
+		
+		public void terminate(){
+			rule.terminate();
 		}
 		
 		public boolean done(){
@@ -672,8 +677,6 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 					
 					URL newURL = new URL(parentUrl, currentItem.trim());
 					
-					//System.out.println( parentUrl + " + " + currentItem + " = " + newURL.toString() ); //DEBUG
-					
 					if(  newURL.getHost() != null && hostnameIsValid(newURL.getHost()) ){ //This check was added because the scanner kept trying to scan "http://:". Unable to determine the exact root cause but it seems to be related to  
 						//Add the entry to the list of URLs
 						if (	// Don't add the URL unless it is either...
@@ -775,7 +778,6 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			
 			// Return a scan failed code if no resources are scanned
 			if( findings.size() == 0 ){
-				System.out.println("No resources scanned"); // Debug
 				resultCode = ScanResultCode.SCAN_FAILED;
 			}
 			
@@ -1472,8 +1474,20 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		return true;
 	}
 
+	/**
+	 * Terminates this rule. Note that partial scan results will be returned (any results from active threads will be ignored).
+	 */
 	public void terminate() {
 		terminate = true;
+		CopyOnWriteArrayList<ScanRunner> threads = new CopyOnWriteArrayList<ScanRunner>(runningThreads);
+		
+		if( threads.size() > 0 ){
+			Iterator<ScanRunner> it = threads.iterator();
+			while ( it.hasNext() ){
+				ScanRunner runner = it.next();
+				runner.terminate();
+			}
+		}
 	}
 
 	public HttpSeekingScanResult getResult(){
