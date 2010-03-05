@@ -19,8 +19,8 @@
             <input type="hidden" name="URL" value="${URL?html}">
         </#if>
         
-        <#if ( ReturnTo?? )>
-            <input type="hidden" name="ReturnTo" value="${ReturnTo?html}" />
+        <#if ( request.getParameter("ReturnTo")?? )>
+            <input type="hidden" name="ReturnTo" value="${request.getParameter("ReturnTo")?html}" />
         </#if>
         <table>
             <tr>
