@@ -14,6 +14,7 @@ public class ScanResultCode {
 	public static final ScanResultCode SCAN_FAILED = new ScanResultCode(2, "Scan failed to complete");
 	public static final ScanResultCode READY = new ScanResultCode(3, "Ready");
 	public static final ScanResultCode PENDING = new ScanResultCode(4, "Not Scanned Yet");
+	public static final ScanResultCode SCAN_TERMINATED = new ScanResultCode(5, "Scan terminated");
 	
 	/**
 	 * Constructor is private since this an enumerated type.
@@ -68,6 +69,8 @@ public class ScanResultCode {
 			return READY;
 		else if( id == SCAN_FAILED.getId() )
 			return SCAN_FAILED;
+		else if( id == SCAN_TERMINATED.getId() )
+			return SCAN_TERMINATED;
 		else
 			return null;
 	}
