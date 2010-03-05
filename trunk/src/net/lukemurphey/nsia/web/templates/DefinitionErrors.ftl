@@ -22,7 +22,7 @@
                     <table>
                         <tr>
                             <td><img src="/media/img/16_script"</td>
-                            <td><a href="<@url name="definition" args=[error.definitionID] />">${error.definitionName?html}</a></td>
+                            <td><#if (error.definitionID > 0)><a href="<@url name="definition" args=[error.definitionID] />">${error.definitionName?html}</a><#else>${error.definitionName?html}</#if></td>
                         </tr>
                     </table>
                 </td>
