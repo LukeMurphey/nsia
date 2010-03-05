@@ -256,6 +256,38 @@ public class DefinitionPolicySet {
 	}
 	
 	/**
+	 * Get the number of policies that exclude definitions.
+	 * @return
+	 */
+	public int getExcludePolicyCount(){
+		return getPolicyTypeCount( DefinitionPolicyAction.EXCLUDE );
+	}
+	
+	/**
+	 * Get the number of policies that include definitions.
+	 * @return
+	 */
+	public int getIncludePolicyCount(){
+		return getPolicyTypeCount( DefinitionPolicyAction.INCLUDE );
+	}
+	
+	/**
+	 * Count the number of policies for the given policy action type.
+	 * @param action
+	 * @return
+	 */
+	public int getPolicyTypeCount( DefinitionPolicyAction action ){
+		int c = 0;
+		for (DefinitionPolicyDescriptor policy : definitionPolicies) {
+			if( policy.getAction() == action ){
+				c++;
+			}
+		}
+		
+		return c;
+	}
+	
+	/**
 	 * Gets the policy that matches the parameters given.
 	 * @param siteGroupId
 	 * @param ruleId
