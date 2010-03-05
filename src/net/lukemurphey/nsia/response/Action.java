@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +16,7 @@ import java.sql.SQLException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -22,12 +25,17 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
 import net.lukemurphey.nsia.extension.ArgumentFieldsInvalidException;
 import net.lukemurphey.nsia.extension.FieldLayout;
 import net.lukemurphey.nsia.extension.PrototypeField;
 import net.lukemurphey.nsia.extension.FieldValidator.FieldValidatorResult;
 
 import org.apache.commons.lang.StringUtils;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 public abstract class Action implements Serializable  {
 	
@@ -81,6 +89,45 @@ public abstract class Action implements Serializable  {
 			vars.add( new MessageVariable( "$Message", logMessage.getMessageName() ) );
 			
 			return vars;
+		}
+		
+		public static Vector<MessageVariable> getMessageVariablesFreemarker(EventLogMessage logMessage){
+			Vector<MessageVariable> vars = new Vector<MessageVariable>();
+			
+			for(EventLogField field : logMessage.getFields()){
+				vars.add( new MessageVariable( "${" + field.getName().getSimpleNameFormat() + "}", field.getDescription() )  );
+			}
+			
+			vars.add( new MessageVariable( "${Category}", logMessage.getCategory().getName()) );
+			vars.add( new MessageVariable( "${CategoryID}", Integer.toString( logMessage.getCategory().ordinal()) ) );
+			vars.add( new MessageVariable( "${SeverityID}", Integer.toString( logMessage.getSeverity().getSyslogEquivalent()) ) );
+			vars.add( new MessageVariable( "${Severity}", logMessage.getSeverity().toString() ) );
+			vars.add( new MessageVariable( "${Date}", logMessage.getDate().toString() ) );
+			vars.add( new MessageVariable( "${Message}", logMessage.getMessageName() ) );
+			
+			return vars;
+		}
+		
+		public String processMessageTemplate( String templateStr, HashMap<String, Object> vars){
+			StringReader reader = new StringReader(templateStr);
+			Configuration cfg = new Configuration();
+			cfg.setStrictSyntaxMode(false);
+			cfg.setTagSyntax(Configuration.AUTO_DETECT_TAG_SYNTAX);
+			
+			try {
+				Template template = new Template("email_template", reader, cfg);
+				StringWriter writer = new StringWriter();
+				template.process(vars, writer);
+				
+				writer.flush();
+				return writer.getBuffer().toString();
+			} catch (IOException e) {
+				Application.getApplication().logExceptionEvent(new EventLogMessage(Category.RESPONSE_ACTION_FAILED), e);
+			} catch (TemplateException e) {
+				Application.getApplication().logExceptionEvent(new EventLogMessage(Category.RESPONSE_ACTION_FAILED), e);
+			}
+			
+			return null;
 		}
 		
 		public static String processMessageTemplate( String template, Vector<MessageVariable> vars){
