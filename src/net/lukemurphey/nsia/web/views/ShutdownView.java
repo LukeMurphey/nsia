@@ -73,7 +73,7 @@ public class ShutdownView extends View {
 		}
 		else{
 			// Render the request dialog
-			Dialog.getOptionDialog(response, context, data, "Are you sure you want to shutdown the manager?", "System Shutdown", DialogType.INFORMATION, new Link("Shutdown", createURL("Confirmed")), new Link("Cancel", StandardViewList.getURL("main_dashboard")));
+			Dialog.getOptionDialog(response, context, data, "Are you sure you want to shutdown NSIA?", "System Shutdown", DialogType.INFORMATION, new Link("Shutdown", createURL("Confirmed")), new Link("Cancel", StandardViewList.getURL("main_dashboard")));
 		}
 		
 		return true;
