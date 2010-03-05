@@ -271,7 +271,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 				if( sig != null && (signatureExceptions == null || signatureExceptions.isFiltered(siteGroupID, scanRuleId, sig, url) == false) ){
 					
 					if( parentResult != null ){
-						sig = sig.createNewWithMessage("; from " + parentResult.getSpecimenDescription());
+						sig = sig.createNewWithMessage("; referenced from " + parentResult.getSpecimenDescription());
 						
 						// Notify the parent record that it contains a broken record
 						if(		sig.localId == MetaDefinition.CONNECTION_FAILED.localId
