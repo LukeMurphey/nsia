@@ -489,6 +489,17 @@ public class ExceptionEditView extends View {
 			String[] args, Map<String, Object> data,
 			String url, Definition definition, SiteGroupDescriptor siteGroup, int ruleID) throws GeneralizedException, NoSessionException, NotFoundException, InsufficientPermissionException, IOException, URLInvalidException{
 		
+		if( request.getParameter("Cancel") != null ){
+			if( request.getParameter("ReturnTo") != null ){
+				response.sendRedirect(request.getParameter("ReturnTo"));
+				return true;
+			}
+			else{
+				response.sendRedirect( RuleEditView.getURL(ruleID) );
+				return true;
+			}
+		}
+		
 		// 1 -- Get the relevant fields
 		DefinitionPolicyType filterType = DefinitionPolicyType.NAME;
 		String filterTypeString = request.getParameter("FilterType");
