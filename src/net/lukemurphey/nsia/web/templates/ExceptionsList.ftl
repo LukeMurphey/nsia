@@ -3,7 +3,7 @@
 <#include "Forms.ftl">
 <#include "Shortcuts.ftl">
 <#assign content>
-    <#if (!policies?? || policies?size == 0 )>
+    <#if (!policies?? || policies?size == 0 || policies.excludePolicyCount == 0 )>
         <#assign message>No exceptions exist yet.</#assign>
         <@getinfodialog message=message title="No Exceptions Exist" />
     <#else>
