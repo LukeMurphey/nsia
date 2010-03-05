@@ -29,7 +29,7 @@ public class SiteGroupScanResult {
 				// Count the deviations
 				if( results[c].getDeviations() > 0){
 					
-					if( results[c].getResultCode().equals(ScanResultCode.SCAN_COMPLETED) == false){
+					if( results[c].getResultCode() == null || results[c].getResultCode().equals(ScanResultCode.SCAN_COMPLETED) == false){
 						incompleteRules++;
 					}
 					
@@ -39,7 +39,7 @@ public class SiteGroupScanResult {
 				
 				// Determine the overall status
 				resultCode = ScanResultCode.SCAN_COMPLETED;//Assume scans completed unless otherwise noted
-				if( results[c].getResultCode().equals(ScanResultCode.SCAN_COMPLETED) == false ){
+				if( results[c].getResultCode() == null || results[c].getResultCode().equals(ScanResultCode.SCAN_COMPLETED) == false ){
 					resultCode = ScanResultCode.SCAN_FAILED;
 					incompleteRules++;
 				}
