@@ -40,6 +40,9 @@ public class HttpDefinitionScanRule extends ScanRule{
 	private static MultiThreadedHttpConnectionManager connectionManager = null;
 	private HttpClient httpClient = null;
 	private boolean waitToLogCompletion = false;
+	private HttpMethod httpMethod = null;
+	private boolean terminated = false;
+	private Object httpMethodMutex = new Object();
 	
 	HttpDefinitionScanRule(Application applicationResources, DefinitionSet signatureSet, URL url) {
 		super(applicationResources);
@@ -76,6 +79,8 @@ public class HttpDefinitionScanRule extends ScanRule{
 			connectionManager = new MultiThreadedHttpConnectionManager();
 			HttpConnectionManagerParams params = new HttpConnectionManagerParams();
 			params.setMaxTotalConnections(100);
+			params.setConnectionTimeout( 60 * 1000); //Seconds to wait until a connection is established
+			params.setSoTimeout( 60 * 1000); //Seconds to timeout if no data is received within the timeframe given
 			connectionManager.setParams(params);
 		}
 		
@@ -164,23 +169,23 @@ public class HttpDefinitionScanRule extends ScanRule{
 		// 1 -- Initialize the HTTP client
 		HostConfiguration hostConfig = new HostConfiguration();
 		hostConfig.setHost(url.getHost(), url.getPort(), url.getProtocol());
-
-		HttpMethod httpMethod = null;
 		
 		// 2 -- Perform the GET
 		try{
-			httpMethod = new GetMethod( escapeURL( url.getPath() ) );
-	
-			httpMethod.setFollowRedirects(true);
-			//httpMethod.setRequestHeader("Accept", "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
-	
 			HttpClient httpClient;
-			
-			if(client == null){
-				httpClient = new HttpClient();
-			}
-			else{
-				httpClient = client;
+			synchronized(httpMethodMutex){
+
+				httpMethod = new GetMethod( escapeURL( url.getPath() ) );
+		
+				httpMethod.setFollowRedirects(true);
+				//httpMethod.setRequestHeader("Accept", "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
+		
+				if(client == null){
+					httpClient = new HttpClient();
+				}
+				else{
+					httpClient = client;
+				}
 			}
 			
 			httpClient.executeMethod( hostConfig, httpMethod );
@@ -229,6 +234,11 @@ public class HttpDefinitionScanRule extends ScanRule{
 				catch(IllegalArgumentException e){
 					logScanResult( ScanResultCode.SCAN_FAILED, 0, HttpSeekingScanRule.RULE_TYPE, url.toString(), "URI is invalid" );
 					return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_FAILED, new java.sql.Timestamp(System.currentTimeMillis()), url, new DefinitionMatch( MetaDefinition.INVALID_URI ), this.scanRuleId ), null );
+				}
+				
+				// Don't bother performing any analysis on the results if the scan was terminated
+				if( terminated ){
+					return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_COMPLETED, new java.sql.Timestamp(System.currentTimeMillis()), url, this.scanRuleId ), null );
 				}
 
 				//	 2.1 -- Get the parser
@@ -414,6 +424,15 @@ public class HttpDefinitionScanRule extends ScanRule{
 		return false;
 	}
 
+	public void terminate(){
+		terminated = true;
+		if( httpMethod != null){
+			synchronized(httpMethodMutex){
+				httpMethod.abort();
+			}
+		}
+	}
+	
 	@Override
 	public ScanResult loadScanResult(long scanResultId) throws NotFoundException, NoDatabaseConnectionException, SQLException, ScanResultLoadFailureException {
 		
