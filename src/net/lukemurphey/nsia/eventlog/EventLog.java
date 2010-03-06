@@ -748,6 +748,12 @@ public class EventLog {
 			buffer.append("\n... (" + (stack_trace.length-iterations) +" more omitted)");
 		}
 		
+		//Get the cause (if exists)
+		if( t.getCause() != null ){
+			buffer.append("\n\nCaused by:");
+			buffer.append( getStackTrace(t.getCause(), max_size) );
+		}
+		
 		return buffer.toString();
     }
 	
