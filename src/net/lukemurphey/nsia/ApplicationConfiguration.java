@@ -125,7 +125,7 @@ public class ApplicationConfiguration {
 	}
 	
 	public String getKeystore() throws NoDatabaseConnectionException, SQLException, InputValidationException{
-		return appParams.getParameter( "Administration.SSLKeystore", "./keystore");
+		return appParams.getParameter( "Administration.SSLKeystore", "../etc/keystore");
 	}
 	
 	public String getSslPassword() throws NoDatabaseConnectionException, SQLException, InputValidationException{
