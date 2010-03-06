@@ -61,7 +61,13 @@ public class DefinitionSupport {
 	    				String ruleCode = readFileAsString( args[0] + "/" + filename );
 
 	    				ScriptDefinition definition = ScriptDefinition.parse(ruleCode);
-	    				definitions.add(definition);
+	    				
+	    				if( definition.getID() <= 0 ){
+	    					System.err.println( "Definition in " + filename + " does not have a valid ID (" + definition.getFullName() + ")");
+	    				}
+	    				else{
+	    					definitions.add(definition);
+	    				}
 	    			}
 	    		}
 	    		catch(IOException e){
@@ -90,7 +96,17 @@ public class DefinitionSupport {
 	    				PatternDefinition[] sigs = PatternDefinition.parseAll(ruleCode);
 	    				
 	    				for( int c = 0; c < sigs.length; c++){
-	    					definitions.add(sigs[c]);
+	    					
+	    					PatternDefinition definition = sigs[c];
+	    					
+	    					if( definition.getID() <= 0 ){
+		    					System.err.println( "Definition in " + filename + " does not have a valid ID (" + definition.getFullName() + ")");
+		    				}
+		    				else{
+		    					definitions.add(definition);
+		    				}
+	    					
+	    					
 	    				}
 	    			}
 	    		}
