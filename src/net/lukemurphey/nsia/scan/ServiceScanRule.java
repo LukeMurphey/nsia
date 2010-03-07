@@ -22,7 +22,6 @@ import net.lukemurphey.nsia.WorkerThread;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.scan.NetworkPortRange.Protocol;
 import net.lukemurphey.nsia.scan.NetworkPortRange.SocketState;
-import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -100,13 +99,6 @@ public class ServiceScanRule extends ScanRule implements WorkerThread {
 		public NetworkPortRange.SocketState state;
 		public ConnectFuture connectFuture;
 		
-		public PortScanResult(int port, NetworkPortRange.Protocol protocol, ConnectFuture connectFuture){
-			this.port = port;
-			this.protocol = protocol;
-			
-			this.connectFuture = connectFuture;
-		}
-		
 		public PortScanResult(int port, NetworkPortRange.Protocol protocol){
 			this.port = port;
 			this.protocol = protocol;
@@ -114,9 +106,6 @@ public class ServiceScanRule extends ScanRule implements WorkerThread {
 			this.connectFuture = null;
 		}
 		
-		public void setState( NetworkPortRange.SocketState state ){
-			this.state = state;
-		}
 	}
 	
 	//This object contains the scan results generated during an asynchronous scan
