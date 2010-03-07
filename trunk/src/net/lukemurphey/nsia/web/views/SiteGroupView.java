@@ -37,6 +37,7 @@ import net.lukemurphey.nsia.scan.ScanResult;
 import net.lukemurphey.nsia.scan.ScanResultCode;
 import net.lukemurphey.nsia.scan.ScanRule;
 import net.lukemurphey.nsia.scan.ScanRuleLoader;
+import net.lukemurphey.nsia.scan.ServiceScanRule;
 import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
 import net.lukemurphey.nsia.scan.ScanRule.ScanRuleLoadFailureException;
 import net.lukemurphey.nsia.web.Link;
@@ -306,6 +307,11 @@ public class SiteGroupView extends View {
 			if( rule instanceof HttpSeekingScanRule ){
 				HttpSeekingScanRule httpRule = (HttpSeekingScanRule) rule;
 				httpRule.baseline();
+				rulesBaselined++;
+			}
+			else if( rule instanceof ServiceScanRule ){
+				ServiceScanRule serviceRule = (ServiceScanRule) rule;
+				serviceRule.baseline();
 				rulesBaselined++;
 			}
 			

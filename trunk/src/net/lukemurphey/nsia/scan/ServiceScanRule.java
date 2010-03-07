@@ -15,12 +15,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.WorkerThread;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.scan.NetworkPortRange.Protocol;
 import net.lukemurphey.nsia.scan.NetworkPortRange.SocketState;
+import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -34,6 +36,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 import java.sql.*;
+
+import javax.script.ScriptException;
 
 public class ServiceScanRule extends ScanRule implements WorkerThread {
 
@@ -638,7 +642,6 @@ public class ServiceScanRule extends ScanRule implements WorkerThread {
 					setResult(cf, NetworkPortRange.SocketState.CLOSED);
 				}
 				else {
-					e.printStackTrace();
 					setResult(cf, NetworkPortRange.SocketState.NO_RESPONSE);
 				}
 			}
@@ -655,7 +658,6 @@ public class ServiceScanRule extends ScanRule implements WorkerThread {
 		// 1 -- Set the object
 		for (PortScanResult scanResult : this.currentScanResults) {
 			if( scanResult.port == port && scanResult.protocol == protocol ){
-				//System.out.println("Setting state to: " + state + " for " + scanResult.port);
 				scanResult.state = state;
 				scanResult.connectFuture = null; //Allow the connection future to be garbage collected
 				currentPort++;
@@ -897,6 +899,102 @@ public class ServiceScanRule extends ScanRule implements WorkerThread {
 		System.arraycopy(portsToScan, 0, this.portsToBeScanned, 0, portsToBeScanned.length);
 	}
 
+	public synchronized boolean baseline() throws SQLException, NoDatabaseConnectionException, DefinitionSetLoadException, InputValidationException, ScriptException, IOException{
+		Connection conn = null;
+		
+		try{
+			// 0 -- Precondition check
+			if( this.scanRuleId < 0 ){
+				return false;
+			}
+			
+			conn = this.appRes.getDatabaseConnection(DatabaseAccessType.SCANNER);
+			
+			
+			// 1 -- Load the most current scan result
+			ServiceScanResult result = (ServiceScanResult)ScanResultLoader.getLastScanResult(this.scanRuleId);
+			
+			
+			// 2 -- Get the ports that should be added or removed to the expected list
+			NetworkPortRange[] diff = result.getDifferences();
+			
+			Vector<NetworkPortRange> newExpectedOpen = new Vector<NetworkPortRange>();
+			for (NetworkPortRange networkPortRange : this.portsExpectedOpen) {
+				newExpectedOpen.add(networkPortRange);
+			}
+			
+			Vector<NetworkPortRange> toRemoveFromExpectedOpen = new Vector<NetworkPortRange>();
+			Vector<NetworkPortRange> toAddToExpectedOpen = new Vector<NetworkPortRange>();
+			
+			for (NetworkPortRange networkPortRange : diff) {
+				
+				// Port was found closed but was expected to be open
+				if( networkPortRange.getState() == SocketState.CLOSED || networkPortRange.getState() == SocketState.NO_RESPONSE ){
+					toRemoveFromExpectedOpen.add( networkPortRange );
+				}
+				else if( networkPortRange.getState() == SocketState.OPEN ){ // Port was found open but was expected to be closed
+					toAddToExpectedOpen.add( networkPortRange );
+				}
+			}
+			
+			
+			// 3 -- Create updated port ranges
+			NetworkPortRange[] expectedOpen = result.getPortsExpectedOpen();
+			Vector<NetworkPortRange> expectedOpenNew = new Vector<NetworkPortRange>();
+			
+			// Create a copy of the existing list
+			for (NetworkPortRange networkPortRange : expectedOpen) {
+				expectedOpenNew.add(networkPortRange);
+			}
+			
+			// Add in the new ports
+			for (NetworkPortRange networkPortRange : toAddToExpectedOpen) {
+				expectedOpenNew.add(networkPortRange);
+			}
+			
+			// Remove the ports no longer necessary
+			Vector<NetworkPortRange> expectedOpenNew2 = new Vector<NetworkPortRange>();
+			//expectedOpenNew2.addAll( expectedOpenNew );
+			
+			for (NetworkPortRange removeRange : toRemoveFromExpectedOpen) {
+				for (NetworkPortRange existingRange : expectedOpenNew) {
+					if( existingRange.overlapsWith(removeRange, true) ){
+						NetworkPortRange[] ranges = NetworkPortRange.removeFromRange(existingRange, removeRange);
+						
+						for (NetworkPortRange splitRange : ranges) {
+							expectedOpenNew2.add( splitRange );
+						}
+						
+					}
+					else{
+						expectedOpenNew2.add( existingRange );
+					}
+				}
+			}
+			
+			// 4 -- Update the rule
+			NetworkPortRange portsExceptionOpenFile[] = new NetworkPortRange[expectedOpenNew2.size()];
+			expectedOpenNew2.toArray(portsExceptionOpenFile);
+			
+			this.portsExpectedOpen = portsExceptionOpenFile;
+			this.saveToDatabase();
+			
+			// 5 -- Set the scan data as obsolete
+			ScanRule.setScanDataObsolete(this.scanRuleId);
+			
+		}
+		catch(ScanResultLoadFailureException e){
+			return false;
+		}
+		finally{
+			if( conn != null ){
+				conn.close();
+			}
+		}
+		
+		return true;
+	}
+	
 	public void setPortsExpectedOpen(NetworkPortRange[] portsExpectedOpen) {
 		
 		// 0 -- Precondition check
