@@ -91,6 +91,36 @@ public class NetworkPortRange{
 	public NetworkPortRange( int startPort, Protocol protocol){
 		this( startPort, startPort, protocol, SocketState.UNDEFINED);
 	}
+	
+	public boolean overlapsWith( NetworkPortRange range ){
+		return overlapsWith(range, false);
+	}
+	
+	public boolean overlapsWith( NetworkPortRange range, boolean ignoreState ){
+		
+		if( range.protocol != protocol || (ignoreState == false && range.state != state) ){
+			return false;
+		}
+		
+		/*
+		 *  this : [\\\\\\]
+		 *  range:    [\\\\\\]
+		 */
+		if( range.startPort <= endPort && range.startPort >= startPort ){
+			return true;
+		}
+		/*
+		 *  this :    [\\\\\\]
+		 *  range: [\\\\\\]
+		 */
+		else if( range.startPort <= startPort && range.endPort >= startPort ){
+			return true;
+		}
+		// Reject if the above two conditions did not match.
+		else{
+			return false;
+		}
+	}
 
 	@Override
 	public String toString(){
@@ -131,6 +161,99 @@ public class NetworkPortRange{
 	
 	public Protocol getProtocol(){
 		return protocol;
+	}
+	
+	/**
+	 * Takes a range and removes the parts that overlap with the rage provided as the second parameter.
+	 * @param range
+	 * @param subtractRange
+	 * @return
+	 */
+	public static NetworkPortRange[] removeFromRange(NetworkPortRange range, NetworkPortRange subtractRange ){
+		NetworkPortRange first = null;
+		NetworkPortRange second = null;
+		
+		// If subtract range starts before the source range
+		/*     [//////]
+		 *                [/////////]
+		 */
+		if( range.getEndPort() < subtractRange.getStartPort() ){
+			NetworkPortRange[] result = new NetworkPortRange[1];
+			result[0] = range;
+			return result;
+		}
+		
+		// If subtract range starts after the source range
+		/*              [///////]
+		 *  [/////////]
+		 */
+		else if( range.getStartPort() > subtractRange.getEndPort() ){
+			NetworkPortRange[] result = new NetworkPortRange[1];
+			result[0] = range;
+			return result;
+		}
+		
+		// If subtract range starts in the middle of the source range
+		/*     [////...
+		 *   [///////////////]
+		 */
+		else if( subtractRange.getStartPort() <= range.getStartPort() && subtractRange.getEndPort() >= range.getEndPort() ){
+			first = null;
+			second = null;
+		}
+		
+		// If subtract range starts in the middle of the source range
+		/*     [////...
+		 *         [/////////]
+		 */
+		else if( range.getEndPort() >= subtractRange.getStartPort() ){
+			
+			// The first part of the range is null if the subtraction range removes the start of the range
+			if(  subtractRange.getStartPort() <= range.getStartPort() ){
+				first = null;
+			}
+			else if( range.getEndPort() >= subtractRange.getStartPort() ){
+				first = new NetworkPortRange( range.getStartPort(), (subtractRange.getStartPort() - 1), range.protocol );
+			}
+			
+			// If subtract range starts in the middle and ends in the middle of the source range
+			/*     [////........./////]
+			 *         [/////////]
+			 */
+			if( range.getEndPort() > (  subtractRange.getEndPort() ) ){
+				second =  new NetworkPortRange( subtractRange.getEndPort() + 1, range.getEndPort(), range.protocol);
+			}
+		}
+		
+		// If subtract range starts in the middle of the source range
+		/*                 ...///]
+		 *         [/////////]
+		 */
+		else {//if( range.getEndPort() < subtractRange.getStartPort() ){
+			first = new NetworkPortRange( subtractRange.getStartPort() + 1, range.getEndPort(), range.protocol );
+		}
+
+		if( first == null && second != null ){
+			NetworkPortRange[] result = new NetworkPortRange[1];
+			result[0] = second;
+			return result;
+		}
+		else if( first != null && second != null ){
+			NetworkPortRange[] result = new NetworkPortRange[2];
+			result[0] = first;
+			result[1] = second;
+			return result;
+		}
+		else if( first != null && second == null ){
+			NetworkPortRange[] result = new NetworkPortRange[1];
+			result[0] = first;
+			return result;
+		}
+		else{
+			NetworkPortRange[] result = new NetworkPortRange[0];
+			return result;
+		}
+		
 	}
 	
 	public static String convertToString( NetworkPortRange[] ports ){
