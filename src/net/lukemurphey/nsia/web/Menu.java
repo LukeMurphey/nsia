@@ -137,6 +137,7 @@ public class Menu {
 				menu.add( new Link("Disable Group", GroupDisableView.getURL(group) ) );
 			}
 			
+			menu.add( new Link("Edit Rights", RightsEditView.getURL(group) ) );
 			menu.add( new Link("Delete Group", GroupDeleteView.getURL(group)) );
 		}
 		
