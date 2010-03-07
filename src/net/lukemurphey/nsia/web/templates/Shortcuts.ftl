@@ -12,6 +12,9 @@
     <table><tr><td><img src="/media/img/16_Warning" alt="Warning"></td>
     <td class="WarnText">${message?html}<td></tr></table>
 </#macro>
+<#macro newlinebr str >
+${str?replace("\n", "<br/>")}
+</#macro>
 <#macro message htmlclass icon message >
 <table>
 	<tr>
