@@ -495,31 +495,10 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	private class ScanRunner extends Thread{
 		
 		private HttpSignatureScanResultWithParser result;
-		private Exception exceptionThrown = null;
 		private HttpDefinitionScanRule rule;
 		private HttpDefinitionScanResult parentScanResult = null;
 		private boolean done= false;
 		private int level = 0;
-		
-		public ScanRunner(ScanRecord record, DefinitionSet signatureSet, int level){
-			this.rule = new HttpDefinitionScanRule(appRes, signatureSet, record.url);
-			this.level = level;
-			this.rule.setCallback( callback );
-			
-			if( record.parentScanResult != null ){
-				this.parentScanResult = record.parentScanResult;
-			}
-			
-			this.setName("HTTP Seeking Scan Rule: " + record.url.toString());
-		}
-		
-		public ScanRunner(HttpDefinitionScanRule rule, int level){
-			this.rule = rule;
-			this.level = level;
-			this.rule.setCallback( callback );
-			
-			this.setName("HTTP Seeking Scan Rule: " + rule.getSpecimenDescription());
-		}
 		
 		public ScanRunner(ScanRecord record, DefinitionSet signatureSet, int level, HttpClient client){
 			this.rule = new HttpDefinitionScanRule(appRes, signatureSet, record.url, client);
@@ -569,47 +548,23 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		public boolean done(){
 			return done;
 		}
-		
-		public Exception getException(){
-			return exceptionThrown;
-		}
-		
-		public HttpDefinitionScanRule getRule(){
-			return rule;
-		}
 	}
 	
 	private class ScanRecord{
 		private URL url;
 		private HttpDefinitionScanResult parentScanResult;
-		private HttpDefinitionScanResult scanResult;
 		private int currentLevel;
 		
 		public ScanRecord( URL url, HttpDefinitionScanResult parentScanResult, int currentLevel ){
 			this.url = url;
 			this.parentScanResult = parentScanResult;
 			this.currentLevel = currentLevel;
-			this.scanResult = null;
 		}
 		
 		public ScanRecord( URL url ){
 			this.url = url;
 			this.parentScanResult = null;
 			this.currentLevel = 0;
-			this.scanResult = null;
-		}
-		
-		public boolean isScanResultSet(){
-			if ( parentScanResult == null ){
-				return false;
-			}
-			else{
-				return true;
-			}
-		}
-		
-		public void setScanResult(HttpDefinitionScanResult scanResult){
-			this.scanResult = scanResult;
 		}
 		
 		public URL getURL(){
@@ -618,14 +573,6 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		
 		public int getLevel(){
 			return currentLevel;
-		}
-		
-		public HttpDefinitionScanResult getScanResult(){
-			return scanResult;
-		}
-		
-		public HttpDefinitionScanResult getParentScanResult(){
-			return parentScanResult;
 		}
 	}
 	
