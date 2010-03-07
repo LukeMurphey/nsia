@@ -1,6 +1,8 @@
-<#assign content>
+<#include "Shortcuts.ftl">
 <#include "GetURLFunction.ftl" />
 <#include "GetDialog.ftl" />
+
+<#assign content>
 <div style="position:relative;" />
 <#if (entry.severity == emergency) >
     <div style="position:absolute; left:0px;"><img src="/media/img/32_Alert" alt="Emergency"></div>
@@ -37,7 +39,7 @@
         <#if entry.notes??>
         <tr>
             <td class="Text_2">Notes</td>
-            <td>${entry.notes?html}</td>
+            <td><@newlinebr str=entry.notes?html /></td>
         </tr>
         </#if>
         </table><p>
