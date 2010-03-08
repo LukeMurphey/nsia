@@ -3,7 +3,7 @@
 <#include "Forms.ftl">
 <#assign content>
     <span class="Text_1"><#if isUser>User<#else>Group</#if> Rights Management</span><p />
-    <#assign rightsurl><#if isUser><@url name="rights_editor" args=["User", user.userID] /><#else><@url name="rights_editor" args=["Group", group.groupID] /></#if></#assign>
+    <#assign rightsurl><#if isUser><@url name="rights_editor" args=["User", user.userID] /><#else><@url name="rights_editor" args=["Group", group.groupId] /></#if></#assign>
     <ul id="NavigationTabs">
         <li class="Tab1"><a href="${rightsurl}?TabIndex=${USER_MANAGEMENT}">User Management</a></li>
         <li class="Tab2"><a href="${rightsurl}?TabIndex=${GROUP_MANAGEMENT}">Group Management</a></li>
