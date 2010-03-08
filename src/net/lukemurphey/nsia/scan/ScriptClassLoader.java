@@ -35,10 +35,10 @@ public class ScriptClassLoader extends ClassLoader {
 			if( SHORTCUTS == null ){
 				Hashtable<String, String> temp = new Hashtable<String, String>();
 				
-				temp.put("ThreatScript.Result", "net.lukemurphey.nsia.scanRules.Result");
+				temp.put("ThreatScript.Result", "net.lukemurphey.nsia.scan.Result");
 				temp.put("HTTP.URL", "java.net.URL");
 				temp.put("HTTP.TagNameFilter", "org.htmlparser.filters.TagNameFilter");
-				temp.put("ThreatScript.DataAnalysis", "net.lukemurphey.nsia.scanRules.ScriptSignatureUtils");
+				temp.put("ThreatScript.DataAnalysis", "net.lukemurphey.nsia.scan.ScriptSignatureUtils");
 				
 				SHORTCUTS = temp;
 			}
