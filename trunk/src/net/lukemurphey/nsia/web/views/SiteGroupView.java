@@ -494,12 +494,17 @@ public class SiteGroupView extends View {
 				
 				// 6.1 -- Start the scanner if requested and not already running
 				if( "Scan".equalsIgnoreCase( request.getParameter("Action") ) ) {
-					//Shortcuts.checkRight( context.getSessionInfo(), "System.Configuration.Edit"); //TODO Check permissions
-					startedNow = true;
-					try {
-						worker = scanRules(context, getRules(request), true);
-					} catch (DuplicateEntryException e) {
-						//Ignore, the scanner thread was already started
+					if( request.getParameterValues("RuleID") == null ){
+						context.addMessage("No rules were selected", MessageSeverity.WARNING);
+					}
+					else{
+						//Shortcuts.checkRight( context.getSessionInfo(), "System.Configuration.Edit"); //TODO Check permissions
+						startedNow = true;
+						try {
+							worker = scanRules(context, getRules(request), true);
+						} catch (DuplicateEntryException e) {
+							//Ignore, the scanner thread was already started
+						}
 					}
 				}
 				
@@ -510,12 +515,22 @@ public class SiteGroupView extends View {
 				
 				// 6.3 -- Delete the rules selected
 				if( "Delete".equalsIgnoreCase( request.getParameter("Action") ) ) {
-					deleteRules(context, getRules(request));
+					if( request.getParameterValues("RuleID") == null ){
+						context.addMessage("No rules were selected", MessageSeverity.WARNING);
+					}
+					else{
+						deleteRules(context, getRules(request));
+					}
 				}
 				
 				// 6.4 -- Baseline the rules selected
 				if( "Baseline".equalsIgnoreCase( request.getParameter("Action") ) ) {
-					baselineRules(context, getRules(request));
+					if( request.getParameterValues("RuleID") == null ){
+						context.addMessage("No rules were selected", MessageSeverity.WARNING);
+					}
+					else{
+						baselineRules(context, getRules(request));
+					}
 				}
 			}
 			
