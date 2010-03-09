@@ -2,6 +2,7 @@ package net.lukemurphey.nsia.web.views;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -214,6 +215,43 @@ public class RightsEditView extends View {
 		return setFailures;
 	}
 	
+	
+	public class RightsCategory{
+		private Vector<Right> rights = new Vector<Right>();
+		private String name;
+		private int index;
+		
+		public RightsCategory( String name, Vector<Right> rights, int index ){
+			this.name = name;
+			this.rights.addAll( rights );
+			this.index = index;
+		}
+		
+		public Collection<Right> getRights(){
+			return rights;
+		}
+		
+		public String getName(){
+			return name;
+		}
+		
+		public int getIndex(){
+			return index;
+		}
+	}
+	
+	private Vector<RightsCategory> getRightsCategories( int subjectId, AccessControlDescriptor.Subject subjectType, AccessControl accessControl ) throws SQLException, NoDatabaseConnectionException, NotFoundException{
+		
+		Vector<RightsCategory> rights = new Vector<RightsCategory>();
+		
+		rights.add( new RightsCategory("User Management", getRights(Tab.USER_MANAGEMENT, subjectId, subjectType, accessControl), Tab.USER_MANAGEMENT.ordinal()  ));
+		rights.add( new RightsCategory("Group Management", getRights(Tab.GROUP_MANAGEMENT, subjectId, subjectType, accessControl), Tab.GROUP_MANAGEMENT.ordinal() ) );
+		rights.add( new RightsCategory("Site-Group Management", getRights(Tab.SITE_GROUP_MANAGEMENT, subjectId, subjectType, accessControl),  Tab.SITE_GROUP_MANAGEMENT.ordinal() ) );
+		rights.add( new RightsCategory("System Administration", getRights(Tab.SYSTEM_CONFIGURATION, subjectId, subjectType, accessControl), Tab.SYSTEM_CONFIGURATION.ordinal() ) );
+		
+		return rights;
+	}
+	
 	private Vector<Right> getRights( Tab tabIndex, int subjectId, AccessControlDescriptor.Subject subjectType, AccessControl accessControl ) throws SQLException, NoDatabaseConnectionException, NotFoundException{
 		Vector<Right> rights = new Vector<Right>();
 		
@@ -352,9 +390,11 @@ public class RightsEditView extends View {
 			
 			if( isUser ){
 				rights = getRights(tabIndex, subjectID, Subject.USER, accessControl);
+				data.put("categories", getRightsCategories(subjectID, Subject.USER, accessControl) );
 			}
 			else{
 				rights = getRights(tabIndex, subjectID, Subject.GROUP, accessControl);
+				data.put("categories", getRightsCategories(subjectID, Subject.USER, accessControl) );
 			}
 			
 			// 6 -- Set the rights if requested
@@ -385,6 +425,7 @@ public class RightsEditView extends View {
 					
 			// 7 -- Render the page
 			data.put("isUser", isUser);
+			
 			TemplateLoader.renderToResponse("RightsEditView.ftl", data, response);
 			
 		} catch (SQLException e) {
