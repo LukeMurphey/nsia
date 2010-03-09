@@ -50,7 +50,7 @@
     <@statusrow htmlclass=htmlclass icon=icon message=message title="${sitegroup.siteGroupDescriptor.groupName?html}" link=link />
 </#list>
 
-<table>
+<table style="margin-bottom: 16px">
     <tr>
         <td width="4"></td>
         <td><img src="/media/img/16_Add"></td>
