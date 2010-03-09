@@ -44,7 +44,7 @@ public class LoginBannerMiddleware extends Middleware {
 			throw new MiddlewareException(e1);
 		}
 		
-		if( banner == null ){ //No banner to show, just continue
+		if( banner == null || banner.trim().length() == 0 ){ //No banner to show, just continue
 			return false;
 		}
 		
