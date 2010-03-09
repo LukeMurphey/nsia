@@ -168,8 +168,9 @@ public class RightsEditView extends View {
 		AccessControl accessControl = new AccessControl(Application.getApplication());
 		
 		int setFailures = 0;
+		boolean setPerformed = false;
 		
-		if( tabIndex == Tab.USER_MANAGEMENT ){
+		if( tabIndex == Tab.USER_MANAGEMENT || tabIndex == null ){
 			if( !setRight( request, "Users.Add", subjectId, subjectType, accessControl, context) ) setFailures++;
 			if( !setRight( request, "Users.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "Users.View", subjectId, subjectType, accessControl, context)) setFailures++;
@@ -181,26 +182,29 @@ public class RightsEditView extends View {
 			if( !setRight( request, "Users.Sessions.Delete", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "Users.Sessions.View", subjectId, subjectType, accessControl, context)) setFailures++;
 			
-			context.addMessage("Rights successfully updated", MessageSeverity.SUCCESS);
+			setPerformed = true;
 		}
-		else if( tabIndex == Tab.GROUP_MANAGEMENT ){
+		
+		if( tabIndex == Tab.GROUP_MANAGEMENT || tabIndex == null ){
 			if( !setRight( request, "Groups.Add", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "Groups.View", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "Groups.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "Groups.Delete", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "Groups.Membership.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
 			
-			context.addMessage("Rights successfully updated", MessageSeverity.SUCCESS);
+			setPerformed = true;
 		}
-		else if( tabIndex == Tab.SITE_GROUP_MANAGEMENT ){
+		
+		if( tabIndex == Tab.SITE_GROUP_MANAGEMENT || tabIndex == null ){
 			if( !setRight( request, "SiteGroups.View", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "SiteGroups.Add", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "SiteGroups.Delete", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "SiteGroups.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
 			
-			context.addMessage("Rights successfully updated", MessageSeverity.SUCCESS);
+			setPerformed = true;
 		}
-		else if( tabIndex == Tab.SYSTEM_CONFIGURATION ){
+		
+		if( tabIndex == Tab.SYSTEM_CONFIGURATION || tabIndex == null ){
 			if( !setRight( request, "System.Information.View", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "System.Configuration.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "Administration.ClearSqlWarnings", subjectId, subjectType, accessControl, context)) setFailures++;
@@ -209,6 +213,10 @@ public class RightsEditView extends View {
 			if( !setRight( request, "System.ControlScanner", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "SiteGroups.ScanAllRules", subjectId, subjectType, accessControl, context)) setFailures++;
 			
+			setPerformed = true;
+		}
+		
+		if( setPerformed ){
 			context.addMessage("Rights successfully updated", MessageSeverity.SUCCESS);
 		}
 		
@@ -367,7 +375,7 @@ public class RightsEditView extends View {
 			}
 			
 			// 4 -- Determine which tab is displayed
-			Tab tabIndex = Tab.USER_MANAGEMENT;
+			Tab tabIndex = null;
 			
 			if( request.getParameter("TabIndex") != null ){
 				try{
@@ -378,7 +386,9 @@ public class RightsEditView extends View {
 				}
 			}
 			
-			data.put("tabIndex", tabIndex.ordinal());
+			if( tabIndex != null ){
+				data.put("tabIndex", tabIndex.ordinal());
+			}
 			data.put("USER_MANAGEMENT", Tab.USER_MANAGEMENT.ordinal());
 			data.put("GROUP_MANAGEMENT", Tab.GROUP_MANAGEMENT.ordinal());
 			data.put("SYSTEM_CONFIGURATION", Tab.SYSTEM_CONFIGURATION.ordinal());
@@ -394,7 +404,7 @@ public class RightsEditView extends View {
 			}
 			else{
 				rights = getRights(tabIndex, subjectID, Subject.GROUP, accessControl);
-				data.put("categories", getRightsCategories(subjectID, Subject.USER, accessControl) );
+				data.put("categories", getRightsCategories(subjectID, Subject.GROUP, accessControl) );
 			}
 			
 			// 6 -- Set the rights if requested
@@ -412,10 +422,10 @@ public class RightsEditView extends View {
 					setRights(context, request, response, tabIndex, subjectID, subjectType);
 					
 					if( subjectType == Subject.GROUP ){
-						response.sendRedirect( createURL( "Group", subjectID) + "?TabIndex=" + tabIndex.ordinal() );
+						response.sendRedirect( createURL( "Group", subjectID));// + "?TabIndex=" + tabIndex.ordinal() );
 					}
 					else{
-						response.sendRedirect( createURL( "User", subjectID) + "?TabIndex=" + tabIndex.ordinal() );
+						response.sendRedirect( createURL( "User", subjectID) );// + "?TabIndex=" + tabIndex.ordinal() );
 					}
 					
 					return true; //Return since we submitted a redirect to the HTTP response
