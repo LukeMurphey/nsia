@@ -30,9 +30,9 @@
         </#list>
         </div>
     </#list>
-    
     <input class="button" style="margin-left: 32px;margin-bottom: 16px" type="Submit" value="Apply" name="Apply" />
-    <input type="hidden" value="${tabIndex?c}" name="TabIndex">
+    </div>
+
     
     </div>
     <#-- <div id="tabs-1">
