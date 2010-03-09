@@ -8,15 +8,18 @@
         </#list>
     </#if>
     <link rel="shortcut icon" href="/media/img/16_appicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/media/css/custom-theme/jquery-ui-1.7.2.custom.css" type="text/css" media="all" /> 
+    <!-- <link rel="stylesheet" href="/media/css/custom-theme/jquery-ui-1.7.2.custom.css" type="text/css" media="all" /> -->
+    <link rel="stylesheet" href="/media/css/custom-theme/jquery-ui-1.8rc3.custom.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="/media/css/Stylesheet.css" type="text/css" media="all" />
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
     <title>${title?html}</title>
-    <style type="text/css">
-        @import url('/media/css/Stylesheet.css');
-    </style>
     <script type="text/javascript" language="javascript" src="/media/js/RefreshScript.js"></script>
+    <!--
     <script type="text/javascript" language="javascript" src="/media/js/jquery-1.3.2.min.js"></script>
-    <script type="text/javascript" language="javascript" src="/media/js/jquery-ui-1.7.2.custom.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/media/js/jquery-ui-1.7.2.custom.min.js"></script> -->
+    <script type="text/javascript" language="javascript" src="/media/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/media/js/jquery-ui-1.8rc3.custom.min.js"></script>
+    
 </head>
 
 <body face="Arial, sans-serif">
