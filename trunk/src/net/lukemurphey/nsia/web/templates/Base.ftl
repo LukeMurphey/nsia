@@ -37,7 +37,7 @@
                 <tr>
                     <td class="AlignedBottom">
                         <table summary="UserOptions" class="Toolbar" valign="bottom" cellspacing="3">
-                            <tr><td>&nbsp;</td><td><div style="height: 24px; vertical-align: middle;"><div class="LightText"><#if session?? && session.userName??>Logged in as <u>${session.userName?html}</u></#if><#if upperbar_options??><#list upperbar_options as option>&nbsp;&nbsp;<a class="LightText" href="${option.link}">${option.title?html}</a>&nbsp;</#list></#if></div></td></tr>
+                            <tr><td>&nbsp;</td><td><div style="height: 24px; vertical-align: middle;"><div class="LightText"><#if session?? && session.userName?? && context??>Logged in as <u>${session.userName?html}</u></#if><#if upperbar_options??><#list upperbar_options as option>&nbsp;&nbsp;<a class="LightText" href="${option.link}">${option.title?html}</a>&nbsp;</#list></#if></div></td></tr>
                         </table>
                     </td></tr>
             </table>
