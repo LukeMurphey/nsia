@@ -37,7 +37,7 @@ public class RequestContext {
 	}
 	
 	public UserDescriptor getUser(){
-		if( user == null ){
+		if( user == null && session_info.getUserId() > 0 ){
 			
 			//user = getUserInfo(session_info.getUserId());
 			// TODO handle excessive error handling
