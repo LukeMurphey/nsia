@@ -6,7 +6,7 @@
 <form action="<@url name="event_log" />" method="get">
     <table>
         <tr class="Background0">
-            <td colspan="99"><span class="Text_3">Log Entry Filter</span></td>
+            <td colspan="2"><span class="Text_3">Log Entry Filter</span></td>
         </tr>
         <tr class="Background1">
             <td><span class="Text_3">Severity Filter:</span></td><td>Display all entries that are at least as severe as
@@ -30,10 +30,10 @@
             <td>Display all entries that contain <input class="textInput" type="Text" name="Content" value="<#if contentfilter?? >${contentfilter?html}</#if>"></td>
         </tr>
         <tr class="Background3">
-            <td colspan="99"><input class="button" type="Submit" name="Apply" value="Apply"></td>
+            <td colspan="2"><input class="button" type="Submit" name="Apply" value="Apply"></td>
         </tr>
         <tr>
-            <td colspan="99" style="height:10px"></td>
+            <td colspan="2" style="height:10px"></td>
         </tr>
         <#if (entries?size == 0)>
             <#if (severity <= -1 && contentFilter??)>

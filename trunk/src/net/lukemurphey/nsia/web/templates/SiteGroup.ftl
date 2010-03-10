@@ -71,7 +71,7 @@
             </tr>
             </#list>
             <tr class="lastRow">
-                 <td colspan="99">
+                 <td colspan="7">
                      <input onClick="showHourglass('Scanning...'); pauseCountdown();" class="button" type="submit" name="Action" value="Scan">
                      <input onClick="pauseCountdown();" class="button" type="submit" name="Action" value="Delete">
                      <input onClick="pauseCountdown();" class="button" type="submit" name="Action" value="Baseline">

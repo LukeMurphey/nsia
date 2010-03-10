@@ -43,7 +43,7 @@
     <table class="DataTable" width="80%" summary="Definition categories">
         <thead>
             <tr>
-                <td colspan="99">Category</td>
+                <td colspan="4">Category</td>
             </tr>
         </thead>
     <#list categories as category>
@@ -52,7 +52,7 @@
 </#if>
 
         <tr class="lastRow">
-            <td colspan="99">
+            <td colspan="4">
                 <input type="submit" class="button" name="Action" value="Disable">&nbsp;<input type="submit" class="button" name="Action" value="Enable">
             
         <#if sitegroup??>
