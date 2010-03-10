@@ -4,7 +4,7 @@
 <#include "Shortcuts.ftl">
 <#assign content>
     <div><span class="Text_1">Service Scan Rule</span>
-    <br><span class="LightText">Monitors a server to identify when new ports are opened or when existing ports are closed</span>
+    <br><span class="LightText">Monitors a server to identify when new ports are opened or when existing ports are closed</span><p>
     <#if (form_errors??)>
     <@getFormErrors form_errors=form_errors />
     </#if>
@@ -50,7 +50,7 @@
                     <input type="hidden" name="PortsExpectedOpen2" value="<#if request.getParameter("PortsExpectedOpen2")??>${request.getParameter("PortsExpectedOpen2")?html}<#elseif rule??><#list rule.portsExpectedOpen as port>${port?html}<@endline /></#list></#if>"></td>
             </tr>
             <tr class="lastRow">
-                <td class="alignRight" colspan="99">
+                <td class="alignRight" colspan="2">
                 <#if !rule?? >
                     <input class="button" type="submit" value="Create Rule" name="Action">&nbsp;&nbsp;
                     <input type="hidden" name="SiteGroupID" value="${siteGroupID?c}">
