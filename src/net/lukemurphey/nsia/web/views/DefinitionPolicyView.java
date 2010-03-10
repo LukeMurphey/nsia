@@ -420,13 +420,12 @@ public class DefinitionPolicyView extends View {
 			breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 			
 			if( siteGroupID > -1 ){
-				breadcrumbs.add(  new Link("SiteGroups", "") ); //TODO Add SiteGroup links
-				breadcrumbs.add(  new Link("SiteGroup", "") );
-				breadcrumbs.add(  new Link("Definition Policy", createURL(siteGroupID)) );
+				breadcrumbs.add( new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroupID)) );
+				breadcrumbs.add( new Link("Definition Policy", createURL(siteGroupID)) );
 			}
 			else{
-				breadcrumbs.add(  new Link("Definitions", StandardViewList.getURL("definitions_list")) );
-				breadcrumbs.add(  new Link("Default Definition Policy", createURL()) );
+				breadcrumbs.add( new Link("Definitions", StandardViewList.getURL("definitions_list")) );
+				breadcrumbs.add( new Link("Default Definition Policy", createURL()) );
 			}
 			
 			data.put("breadcrumbs", breadcrumbs);
