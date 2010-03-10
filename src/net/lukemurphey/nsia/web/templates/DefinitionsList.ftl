@@ -14,17 +14,23 @@
 <#else>
     <#if updated?? >
     <span class="Text_1">Definitions</span><br />
-    Revision ${definition_set_version?html} (Last Updated ${updated?datetime})<br>&nbsp;<br/>
+    Revision ${definition_set_version?html} (Last Updated ${updated?datetime})
     <#else>
     <span class="Text_1">Definitions</span><br/>
-    ${definitions?size} definitions total (Last Update Undefined)<br>&nbsp;<br/>
+    ${definitions?size} definitions total (Last Update Undefined)
     </#if>
     
     <#if newer_definitions_available >
-        <#assign message>
-            Newer definitions are available (version ${latest_definitions?html}<a href="<@url name="definitions_list" />">[Update Now]</a><p/>
-        </#assign>
-        <@getinfodialog title="Current Definitions Obsolete" message=message />
+    <table>
+        <tr> 
+            <td style="vertical-align:top"><img src="/media/img/16_Warning" /></td>
+            <td><span class="WarnText">Newer definitions available,</span> <a href="<@url name="definitions_update" />">[Update to version ${latest_definitions?html}]</a></td>
+        </tr>
+    </table>
+    <br>
+    
+    <#else>
+    <br>&nbsp;<br/>
     </#if>
     
     <form method="get" action="<@url name="definitions_list" />"><input class="button" type="Submit" value="Filter">
