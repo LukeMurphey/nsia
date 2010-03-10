@@ -4,10 +4,10 @@
         <input type="hidden" name="ForwardTo" value="<#if request.getParameter("ForwardTo")??>${request.getParameter("ForwardTo")?html}<#else>${request.thisURL}</#if>" />
         <table align="center">
             <tr>
-                <td colspan="99">&nbsp;</td>
+                <td colspan="2">&nbsp;</td>
             </tr>
             <tr>
-                <td class="<#if message?? && (message.severity == information || message.severity == success)>InfoText<#else>WarnText</#if>" width="300px" colspan="99">
+                <td class="<#if message?? && (message.severity == information || message.severity == success)>InfoText<#else>WarnText</#if>" width="300px" colspan="2">
                     <#if message??>
                         <table>
                             <tr>
@@ -34,7 +34,7 @@
                 <td align="right" colspan="2"><input class="button" type="submit" value="Login"><input type="hidden" value="null" name="BannerCheck"></td>
             </tr>
             <tr>
-                <td colspan="99">&nbsp;</td></tr>
+                <td colspan="2">&nbsp;</td></tr>
          </table>
      </form>
 </#assign>
