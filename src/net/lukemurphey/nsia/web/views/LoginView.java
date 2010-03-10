@@ -111,6 +111,7 @@ public class LoginView extends View {
 		if( request.getMethod().equalsIgnoreCase("POST")){
 			String username = request.getParameter("Username");
 			String password = request.getParameter("Password");
+			data.put("username", username);
 			
 			ClientData clientData;
 			
@@ -171,6 +172,11 @@ public class LoginView extends View {
 			}
 			else if( context.getSessionInfo().getSessionStatus() == SessionStatus.SESSION_LIFETIME_EXCEEDED ){
 				data.put("message", new Message("Your session has expired", MessageSeverity.INFORMATION));
+			}
+			
+			// Insert the username so that the login field is populated
+			if( context.getUser() != null ){
+				data.put("username", context.getUser().getUserName());
 			}
 		}
 		
