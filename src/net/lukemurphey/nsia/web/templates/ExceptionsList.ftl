@@ -61,7 +61,7 @@
                 </#if>
             </#list>
                     <tr class="lastRow">
-                        <td colspan="99">
+                        <td colspan="4">
                             <input type="submit" class="button" name="Action" value="Delete">
                         </td>
                     </tr>

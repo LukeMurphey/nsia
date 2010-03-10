@@ -20,7 +20,7 @@
             <tbody>
                 <@formtable fields=layout request=request />
                 <tr class="Background3">
-                    <td class="alignRight" colspan="99">
+                    <td class="alignRight" colspan="2">
                     <#if ( hook?? )>
                         <input type="hidden" name="Action" value="Edit">
                         <input type="hidden" name="ActionID" value="${hook.eventLogHookID?c}">

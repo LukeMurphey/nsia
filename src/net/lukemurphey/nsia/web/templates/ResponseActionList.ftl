@@ -38,7 +38,7 @@
                  </tr>
             </#list>
                 <tr>
-                    <td colspan="99"><input class="button" name="Action" value="Delete" type="submit"></td>
+                    <td colspan="4"><input class="button" name="Action" value="Delete" type="submit"></td>
                 </tr>
             </tbody>
        </table>
