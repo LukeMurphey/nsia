@@ -24,7 +24,7 @@
             </tr>
             <tr>
                 <td class="Text_2">Login:</td>
-                <td><input class="textInput" size="30" name="Username" type="text"></td>
+                <td><input class="textInput" size="30" name="Username" type="text" <#if username??>value="${username?html}"</#if>></td>
             </tr>
             <tr>
                 <td class="Text_2">Password:</td>
