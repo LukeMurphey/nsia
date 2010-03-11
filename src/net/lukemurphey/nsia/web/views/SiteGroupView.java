@@ -276,17 +276,25 @@ public class SiteGroupView extends View {
 	 * @throws SQLException
 	 * @throws NoDatabaseConnectionException
 	 * @throws NotFoundException
+	 * @throws InputValidationException 
+	 * @throws NoSessionException 
+	 * @throws GeneralizedException 
+	 * @throws InsufficientPermissionException 
+	 * @throws ScanRuleLoadFailureException 
 	 */
-	private int deleteRules( RequestContext context, long[] rules ) throws SQLException, NoDatabaseConnectionException, NotFoundException{
+	private int deleteRules( RequestContext context, long[] rules ) throws SQLException, NoDatabaseConnectionException, NotFoundException, InputValidationException, InsufficientPermissionException, GeneralizedException, NoSessionException, ScanRuleLoadFailureException{
 		
 		// 1 -- Delete the rules
 		int rulesDeleted = 0;
 		
-		for (long ruleId : rules) {
+		for (long ruleID : rules) {
 			
-			//int groupId = ScanRule.getAssociatedSiteGroup( ruleId );
+			SiteGroupDescriptor siteGroup = ScanRule.getAssociatedSiteGroup(ruleID);
 			
-			ScanRule.deleteRule(ruleId);
+			ScanRule scanRule = ScanRuleLoader.getScanRule(ruleID);
+			Shortcuts.checkDelete(context.getSessionInfo(), siteGroup.getObjectId(), "Delete rule " + ruleID +  " (" + scanRule.getRuleType() + "\\" + scanRule.getSpecimenDescription() + ") for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")");
+			
+			ScanRule.deleteRule(ruleID);
 			rulesDeleted++;
 		}
 		
@@ -296,7 +304,7 @@ public class SiteGroupView extends View {
 		
 	}
 	
-	private void baselineRules( RequestContext context, long[] rules ) throws SQLException, NoDatabaseConnectionException, DefinitionSetLoadException, InputValidationException, ScriptException, IOException, NotFoundException, ScanRuleLoadFailureException{
+	private void baselineRules( RequestContext context, long[] rules) throws SQLException, NoDatabaseConnectionException, DefinitionSetLoadException, InputValidationException, ScriptException, IOException, NotFoundException, ScanRuleLoadFailureException, InsufficientPermissionException, GeneralizedException, NoSessionException{
 
 		int rulesBaselined = 0;
 		//ScanData scanData = new ScanData(Application.getApplication());
@@ -304,6 +312,11 @@ public class SiteGroupView extends View {
 		for (long ruleID : rules) {
 			
 			ScanRule rule = ScanRuleLoader.getScanRule( ruleID );
+			SiteGroupDescriptor siteGroup = ScanRule.getAssociatedSiteGroup(ruleID);
+			
+			ScanRule scanRule = ScanRuleLoader.getScanRule(ruleID);
+			Shortcuts.checkExecute(context.getSessionInfo(), siteGroup.getObjectId(), "Scan rule " + ruleID + " (" + scanRule.getRuleType() + "\\" + scanRule.getSpecimenDescription() + ") for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")");
+			
 			if( rule instanceof HttpSeekingScanRule ){
 				HttpSeekingScanRule httpRule = (HttpSeekingScanRule) rule;
 				httpRule.baseline();
@@ -315,6 +328,7 @@ public class SiteGroupView extends View {
 				rulesBaselined++;
 			}
 			
+			//Shortcuts.checkExecute(context.getSessionInfo(), ruleObjectID, "Scan rule " + ruleID);
 			//context.addMessage("Rule " + ruleID + " was unsuccessfully baselined (" + e.getMessage() + ")", MessageSeverity.ALERT);			
 		}
 		
@@ -335,8 +349,9 @@ public class SiteGroupView extends View {
 	 * @throws NotFoundException 
 	 * @throws NoDatabaseConnectionException 
 	 * @throws SQLException 
+	 * @throws InputValidationException 
 	 */
-	private WorkerThreadDescriptor scanRules( RequestContext context, long[] rules, boolean archiveResults ) throws GeneralizedException, InsufficientPermissionException, NoSessionException, DuplicateEntryException, ViewFailedException, SQLException, NoDatabaseConnectionException, NotFoundException{
+	private WorkerThreadDescriptor scanRules( RequestContext context, long[] rules, boolean archiveResults ) throws GeneralizedException, InsufficientPermissionException, NoSessionException, DuplicateEntryException, ViewFailedException, SQLException, NoDatabaseConnectionException, NotFoundException, InputValidationException{
 		
 		// 0 -- Precondition check
 		
@@ -350,13 +365,11 @@ public class SiteGroupView extends View {
 		// 1 -- Make the user can execute each rule
 		try {
 			for (long ruleID : rules) {
-				if(siteGroupID == -1){
-					siteGroupID = ScanRule.getAssociatedSiteGroup(ruleID);
-				}
 				
+				SiteGroupDescriptor siteGroup = ScanRule.getAssociatedSiteGroup(ruleID);
+				siteGroupID = siteGroup.getGroupId();
 				ScanRule scanRule = ScanRuleLoader.getScanRule(ruleID);
-				long ruleObjectId = scanRule.getObjectId();
-				Shortcuts.checkExecute(context.getSessionInfo(), ruleObjectId, "Scan rule " + ruleID);
+				Shortcuts.checkExecute(context.getSessionInfo(), siteGroup.getObjectId(), "Scan rule " + ruleID + " (" + scanRule.getRuleType() + "\\" + scanRule.getSpecimenDescription() + ") for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")");
 			}
 			
 			// 2 -- Start the thread to scan each rule
@@ -376,7 +389,7 @@ public class SiteGroupView extends View {
 		catch(DuplicateEntryException e){
 			throw e;
 		}
-		catch (Exception e) {
+		catch (ScanRuleLoadFailureException e) {
 			StringBuffer rulesString = new StringBuffer();
 			
 			for (int c = 0; c < rules.length; c++) {
@@ -467,13 +480,9 @@ public class SiteGroupView extends View {
 			data.put("menu", Menu.getSiteGroupMenu(context, siteGroup));
 			
 			// 3 -- Check permissions
-			try {
-				if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId(), "View site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
-					Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site group");
-					return true;
-				}
-			} catch (GeneralizedException e) {
-				throw new ViewFailedException(e);
+			if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId(), "View site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site group");
+				return true;
 			}
 			
 			// 4 -- Determine if the site group is being scanned (show the dialog if it is)
@@ -498,40 +507,78 @@ public class SiteGroupView extends View {
 						context.addMessage("No rules were selected", MessageSeverity.WARNING);
 					}
 					else{
-						//Shortcuts.checkRight( context.getSessionInfo(), "System.Configuration.Edit"); //TODO Check permissions
+						
+						if( Shortcuts.canExecute( context.getSessionInfo(), siteGroup.getObjectId(), "Scan rules for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
+							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to scan this site group");
+							return true;
+						}
+						
 						startedNow = true;
 						try {
 							worker = scanRules(context, getRules(request), true);
 						} catch (DuplicateEntryException e) {
 							//Ignore, the scanner thread was already started
+						} catch (InsufficientPermissionException e) {
+							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to scan this site group");
+							return true;
 						}
 					}
 				}
 				
 				// 6.2 -- Cancel the running scan
-				if( "CancelScan".equalsIgnoreCase( request.getParameter("Action") ) ) {
+				if( "Cancel".equalsIgnoreCase( request.getParameter("Selected") ) ) {
+					
+					if( Shortcuts.canExecute( context.getSessionInfo(), siteGroup.getObjectId(), "Cancel scanning of rules for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to cancel scans for this site group");
+						return true;
+					}
+					
 					worker.getWorkerThread().terminate();
 				}
 				
-				// 6.3 -- Delete the rules selected
-				if( "Delete".equalsIgnoreCase( request.getParameter("Action") ) ) {
+				
+				// 6.3 -- Baseline the rules selected
+				if( "Baseline".equalsIgnoreCase( request.getParameter("Action") ) ) {
+					
+					if( Shortcuts.canExecute( context.getSessionInfo(), siteGroup.getObjectId(), "Baseline scanning of rules for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to execute scans or baseline rules for this site group");
+						return true;
+					}
+					
 					if( request.getParameterValues("RuleID") == null ){
 						context.addMessage("No rules were selected", MessageSeverity.WARNING);
 					}
 					else{
-						deleteRules(context, getRules(request));
+						try {
+							baselineRules(context, getRules(request));
+						} catch (InsufficientPermissionException e) {
+							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to baseline rules in this site group");
+							return true;
+						}
 					}
 				}
 				
-				// 6.4 -- Baseline the rules selected
-				if( "Baseline".equalsIgnoreCase( request.getParameter("Action") ) ) {
+				// 6.4 -- Delete the rules selected
+				if( "Delete".equalsIgnoreCase( request.getParameter("Action") ) ) {
+					
+					if( Shortcuts.canDelete( context.getSessionInfo(), siteGroup.getObjectId(), "Delete rules for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to delete rules in this site group");
+						return true;
+					}
+					
 					if( request.getParameterValues("RuleID") == null ){
 						context.addMessage("No rules were selected", MessageSeverity.WARNING);
 					}
 					else{
-						baselineRules(context, getRules(request));
+						try {
+							deleteRules(context, getRules(request));
+						} catch (InsufficientPermissionException e) {
+							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to delete rules from this site group");
+							return true;
+						}
 					}
 				}
+
 			}
 			
 			// 7 -- Post the progress dialog if a backup is underway
@@ -550,7 +597,7 @@ public class SiteGroupView extends View {
 			
 			//	 7.3 -- Post the progress dialog otherwise
 			else if( isAjax ){
-				response.getWriter().print( Dialog.getProgressDialog(worker.getWorkerThread().getStatusDescription(), worker.getWorkerThread().getTaskDescription(), worker.getWorkerThread().getProgress()) );
+				response.getWriter().print( Dialog.getProgressDialog(worker.getWorkerThread().getStatusDescription(), worker.getWorkerThread().getTaskDescription(), worker.getWorkerThread().getProgress(), new Link("Cancel", createURL(siteGroup.getGroupId()))) );
 				return true;
 			}
 			
@@ -561,7 +608,7 @@ public class SiteGroupView extends View {
 			if( worker != null && (startedNow || worker.getWorkerThread().getStatus() == State.STARTING || worker.getWorkerThread().getStatus() == State.STARTED ) ){
 				data.put("ajaxurl", createURL(siteGroup.getGroupId()) + "?AJAX=True");
 				data.put("title", "Scanning");
-				data.put("content", Dialog.getProgressDialog(worker.getWorkerThread().getStatusDescription(), worker.getWorkerThread().getTaskDescription(), worker.getWorkerThread().getProgress()) );
+				data.put("content", Dialog.getProgressDialog(worker.getWorkerThread().getStatusDescription(), worker.getWorkerThread().getTaskDescription(), worker.getWorkerThread().getProgress(), new Link("Cancel", createURL(siteGroup.getGroupId()))) );
 				
 				response.getWriter().println( TemplateLoader.renderToString("AJAXProgressDialog.ftl", data) );
 				
@@ -628,8 +675,6 @@ public class SiteGroupView extends View {
 		} catch (ScanRuleLoadFailureException e) {
 			throw new ViewFailedException(e);
 		}catch (GeneralizedException e) {
-			throw new ViewFailedException(e);
-		} catch (InsufficientPermissionException e) {
 			throw new ViewFailedException(e);
 		} catch (NoSessionException e) {
 			throw new ViewFailedException(e);
