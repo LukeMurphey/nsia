@@ -178,36 +178,6 @@ public class ExceptionEditView extends View {
 		}
 	}
 	
-	public void addSubCategoryDescriptor( RequestContext context, String categoryName, String subCategoryName, DefinitionPolicyAction action) throws GeneralizedException, NoSessionException, NotFoundException, InsufficientPermissionException{
-		
-		Connection connection = null;
-		
-		try{
-			Shortcuts.checkRight(context.getSessionInfo(), "System.Configuration.View", "Set " + action.name().toLowerCase() + " policy for " + categoryName + "." + subCategoryName + ".* at global level" );
-			
-			DefinitionPolicyDescriptor filter = DefinitionPolicyDescriptor.createSubCategoryPolicy(categoryName, subCategoryName, action );
-			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
-			
-			filter.saveToDatabase(connection);
-		
-		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
-			throw new GeneralizedException();
-		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
-			throw new GeneralizedException();
-		} finally{
-			if( connection != null ){
-				try{
-					connection.close();
-				}
-				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
-				}
-			}
-		}
-	}
-	
 	public void addSubCategoryDescriptor( RequestContext context, SiteGroupDescriptor siteGroupDesc, String categoryName, String subCategoryName, DefinitionPolicyAction action) throws GeneralizedException, NoSessionException, NotFoundException, InsufficientPermissionException{
 		
 		Connection connection = null;
