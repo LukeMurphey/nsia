@@ -90,7 +90,7 @@ public class DefinitionsUpdateView extends View {
 		
 		// 2 -- Check rights
 		try {
-			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit", "Update definitions") == false ){
 				context.addMessage("You do not have permission to update the definitions", MessageSeverity.WARNING);
 				response.sendRedirect( DefinitionsView.getURL() );
 				return true;

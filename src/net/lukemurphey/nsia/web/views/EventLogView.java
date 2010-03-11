@@ -154,7 +154,7 @@ public class EventLogView extends View {
 		
 		// 2 -- Check permissions
 		try {
-			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Information.View") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Information.View", "View event logs") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the event logs");
 				return true;
 			}

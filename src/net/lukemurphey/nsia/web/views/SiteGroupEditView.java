@@ -237,10 +237,10 @@ public class SiteGroupEditView extends View {
 			// 3 -- Check permissions
 			try{
 				if( siteGroup == null ){//Creating a new site group...
-					Shortcuts.checkRight( context.getSessionInfo(), "SiteGroups.Add" );
+					Shortcuts.checkRight( context.getSessionInfo(), "SiteGroups.Add", "Create new site-group" );
 				}
 				else{ //Editing an existing site group
-					Shortcuts.checkModify(context.getSessionInfo(), siteGroup.getObjectId());
+					Shortcuts.checkModify(context.getSessionInfo(), siteGroup.getObjectId(), "Edit site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")");
 				}
 			}
 			catch( NoSessionException e ){

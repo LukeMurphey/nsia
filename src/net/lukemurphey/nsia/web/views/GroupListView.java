@@ -62,7 +62,7 @@ public class GroupListView extends View {
 		
 		// 2 -- Check permissions
 		try {
-			if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.View") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.View", "View user groups") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the user groups");
 				return true;
 			}

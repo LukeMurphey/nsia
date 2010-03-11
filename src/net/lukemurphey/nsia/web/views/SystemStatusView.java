@@ -99,7 +99,7 @@ public class SystemStatusView extends View {
 		
 		// 1 -- Check permissions
 		try {
-			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View", "View system status") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the system status");
 				return true;
 			}

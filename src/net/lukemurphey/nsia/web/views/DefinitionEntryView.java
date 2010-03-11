@@ -202,13 +202,13 @@ public class DefinitionEntryView extends View {
 			// 3 -- Check rights
 			try {
 				if( definition != null ){
-					if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
+					if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View", "View definition") == false ){
 						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view definitions");
 						return true;
 					}
 				}
 				else{
-					if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit") == false ){
+					if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit", "Create definition") == false ){
 						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to create definitions");
 						return true;
 					}

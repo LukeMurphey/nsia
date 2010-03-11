@@ -93,7 +93,7 @@ public class ScanResultHistoryView extends View {
 			Shortcuts.addDashboardHeaders(request, response, data);
 			
 			// 5 -- Check rights
-			if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId()) == false ){
+			if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId(), "View scan result history for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site group");
 				return true;
 			}

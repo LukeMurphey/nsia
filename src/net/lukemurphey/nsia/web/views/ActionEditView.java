@@ -239,7 +239,7 @@ public class ActionEditView extends View {
 			
 			// 4 -- Check permissions
 			try {
-				if( Shortcuts.canModify(context.getSessionInfo(), siteGroup.getObjectId()) == false ){
+				if( Shortcuts.canModify(context.getSessionInfo(), siteGroup.getObjectId(), "Edit incident response action for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
 					data.put("permission_denied_message", "You do not permission to edit this site group.");
 					data.put("permission_denied_link", new Link("View Site Group", SiteGroupView.getURL(siteGroup)) );
 					TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);

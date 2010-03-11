@@ -65,7 +65,7 @@ public class DefinitionsView extends View {
 			
 			// 2 -- Make sure the user has permission
 			try{
-				if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
+				if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View", "View definitions") == false ){
 					Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the definitions");
 					return true;
 				}

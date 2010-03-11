@@ -468,7 +468,7 @@ public class SiteGroupView extends View {
 			
 			// 3 -- Check permissions
 			try {
-				if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId()) == false ){
+				if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId(), "View site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
 					Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site group");
 					return true;
 				}

@@ -130,7 +130,7 @@ public class EventLogEntryView extends View {
 		
 		// 3 -- Check rights
 		try {
-			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Information.View") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Information.View", "View event log entry") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the event logs");
 				return true;
 			}

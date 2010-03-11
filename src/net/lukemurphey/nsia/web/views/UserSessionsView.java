@@ -79,7 +79,7 @@ public class UserSessionsView extends View {
 		
 		// 4 -- Check permissions
 		try {
-			if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Sessions.View") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Sessions.View", "View user sessions") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view user sessions");
 				return true;
 			}

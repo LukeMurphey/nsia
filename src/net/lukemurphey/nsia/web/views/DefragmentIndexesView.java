@@ -86,7 +86,7 @@ public class DefragmentIndexesView extends View {
 		
 		// 2 -- Check rights
 		try {
-			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit", "Reindex database") == false ){
 				context.addMessage("You do not have permission to defragment the database indexes", MessageSeverity.WARNING);
 				response.sendRedirect( SystemStatusView.getURL() );
 				return true;

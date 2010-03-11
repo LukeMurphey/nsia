@@ -187,14 +187,14 @@ public class UserPasswordUpdateView extends View {
 		// 3 -- Check permissions
 		try{
 			if( context.getUser().getUserID() == user.getUserID() ){ // Wants to change their own password
-				if( Shortcuts.hasRight( context.getSessionInfo(), "Users.UpdateOwnPassword" ) == false ){
+				if( Shortcuts.hasRight( context.getSessionInfo(), "Users.UpdateOwnPassword", "Update user's own password" ) == false ){
 					context.addMessage("You do not have permission to update your password", MessageSeverity.WARNING);
 					response.sendRedirect( UserView.getURL(user) );
 					return true;
 				}
 			}
 			else{ // Wants to change someone else's password
-				if( Shortcuts.hasRight( context.getSessionInfo(), "Users.UpdatePassword" ) == false ){
+				if( Shortcuts.hasRight( context.getSessionInfo(), "Users.UpdatePassword", "Update another user's password" ) == false ){
 					context.addMessage("You do not have permission to update user passwords", MessageSeverity.WARNING);
 					response.sendRedirect( UserView.getURL(user) );
 					return true;

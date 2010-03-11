@@ -114,7 +114,7 @@ public class TaskListView extends View {
 		
 		// 2 -- Check the permissions
 		try{
-			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Information.View") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Information.View", "View running tasks") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission view the running tasks");
 				return true;
 			}

@@ -62,7 +62,7 @@ public class LicenseView extends View {
 			Shortcuts.addDashboardHeaders(request, response, data);
 		
 			// 2 -- Check rights
-			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View", "View license") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the license");
 				return true;
 			}
@@ -81,7 +81,7 @@ public class LicenseView extends View {
 				if( "POST".equalsIgnoreCase( request.getMethod() ) && licenseKey != null ){
 					
 					// Check update rights
-					if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit") == false ){
+					if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit", "Update license") == false ){
 						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to update the license");
 						return true;
 					}
