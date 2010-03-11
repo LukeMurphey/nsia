@@ -140,7 +140,7 @@ public class ApiScannerController extends ApiHandler{
 		try {
 			for (long ruleID : rules) {
 				if(siteGroupID == -1){
-					siteGroupID = ScanRule.getAssociatedSiteGroup(ruleID);
+					siteGroupID = ScanRule.getAssociatedSiteGroupID(ruleID);
 				}
 				
 				ScanRule scanRule = ScanRuleLoader.getScanRule(ruleID);
@@ -247,7 +247,7 @@ public class ApiScannerController extends ApiHandler{
 		try {
 			
 			//ScanRule scanRule = ScanRuleLoader.getScanRule(ruleId);
-			int siteGroupID = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupID = ScanRule.getAssociatedSiteGroupID(ruleId);
 			
 			SiteGroupDescriptor desc = siteGroupManagement.getGroupDescriptor(siteGroupID);
 			checkDelete(sessionIdentifier, desc.getObjectId(), "Delete rule " + ruleId + " from site group \"" + desc.getGroupName() + "\" (" + desc.getGroupId() + ")" );

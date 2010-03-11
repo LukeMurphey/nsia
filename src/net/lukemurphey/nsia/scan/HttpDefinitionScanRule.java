@@ -152,7 +152,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 
 		if( this.scanRuleId > -1 ){
 			try{
-				siteGroupID = ScanRule.getAssociatedSiteGroup(scanRuleId);
+				siteGroupID = ScanRule.getAssociatedSiteGroupID(scanRuleId);
 
 				return signatureManagement.getPolicySet(siteGroupID);
 			}
@@ -214,7 +214,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 			// 1.1 -- Get the site group identifier
 			if( this.scanRuleId > -1 ){
 				try{
-					siteGroupID = ScanRule.getAssociatedSiteGroup(scanRuleId);
+					siteGroupID = ScanRule.getAssociatedSiteGroupID(scanRuleId);
 				}
 				catch(NotFoundException e){
 					siteGroupID = -1;
