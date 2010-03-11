@@ -291,9 +291,10 @@ public class RightsEditView extends View {
 		}
 		else {//if( tabIndex == Tab.SYSTEM_CONFIGURATION){
 			rights.add( getRight( "System.Information.View", "View System Information and Status", subjectId, subjectType, accessControl ) ) ;
+			rights.add( getRight( "System.Configuration.View", "View System Configuration", subjectId, subjectType, accessControl ) ) ;
 			rights.add( getRight( "System.Configuration.Edit", "Modify System Configuration", subjectId, subjectType, accessControl ) ) ;
-			rights.add( getRight( "System.Firewall.View", "View Firewall Configuration", subjectId, subjectType, accessControl ) ) ;
-			rights.add( getRight( "System.Firewall.Edit", "Change Firewall Configuration", subjectId, subjectType, accessControl ) ) ;
+			//rights.add( getRight( "System.Firewall.View", "View Firewall Configuration", subjectId, subjectType, accessControl ) ) ;
+			//rights.add( getRight( "System.Firewall.Edit", "Change Firewall Configuration", subjectId, subjectType, accessControl ) ) ;
 			rights.add( getRight( "System.ControlScanner", "Start/Stop Scanner", subjectId, subjectType, accessControl ) ) ;
 			rights.add( getRight( "SiteGroups.ScanAllRules", "Allow Gratuitous Scanning of All Rules", subjectId, subjectType, accessControl ) ) ;
 		}
