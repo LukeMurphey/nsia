@@ -108,11 +108,7 @@ public class Shortcuts {
 		UserManagement userManagement = new UserManagement(appRes);
 		
 		try {	
-			
-			if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
-				return false;
-			}
-			
+
 			RightDescriptor acl = null;
 			
 			try{
@@ -257,10 +253,6 @@ public class Shortcuts {
 		
 		try {
 			
-			if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
-				return false;
-			}
-			
 			ObjectPermissionDescriptor acl = accessControl.getUserPermissions(sessionInfo.getUserId(), objectId, true);
 			
 			long userId = sessionInfo.getUserId();
@@ -371,7 +363,7 @@ public class Shortcuts {
 	 * @throws NoSessionException
 	 */
 	public static void checkExecute( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws InsufficientPermissionException, GeneralizedException, NoSessionException{
-		checkModify(sessionInfo, objectId, false, annotation);
+		checkExecute(sessionInfo, objectId, false, annotation);
 	}
 	
 	/**
@@ -409,6 +401,7 @@ public class Shortcuts {
 	 * Returns a boolean indicating if the user has execute permissions.
 	 * @param sessionInfo
 	 * @param objectId
+	 * @param checkSession
 	 * @param annotation
 	 * @return
 	 */
@@ -418,11 +411,7 @@ public class Shortcuts {
 		UserManagement userManagement = new UserManagement(appRes);
 		
 		try {
-			
-			if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
-				return false;
-			}
-			
+
 			ObjectPermissionDescriptor acl = accessControl.getUserPermissions(sessionInfo.getUserId(), objectId, true);
 			
 			long userId = sessionInfo.getUserId();
@@ -580,11 +569,7 @@ public class Shortcuts {
 		UserManagement userManagement = new UserManagement(appRes);
 		
 		try {		
-			
-			if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
-				return false;
-			}
-			
+
 			ObjectPermissionDescriptor acl = accessControl.getUserPermissions(sessionInfo.getUserId(), objectId, true);
 			
 			long userId = sessionInfo.getUserId();
@@ -745,10 +730,6 @@ public class Shortcuts {
 		
 		try {
 			
-			if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
-				return false;
-			}
-			
 			ObjectPermissionDescriptor acl = accessControl.getUserPermissions(sessionInfo.getUserId(), objectId, true);
 			
 			UserDescriptor user = userManagement.getUserDescriptor( sessionInfo.getUserId());
@@ -901,11 +882,7 @@ public class Shortcuts {
 		UserManagement userManagement = new UserManagement(appRes);
 		
 		try {
-			
-			if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
-				return false;
-			}
-			
+
 			ObjectPermissionDescriptor acl = accessControl.getUserPermissions(sessionInfo.getUserId(), objectId, true);
 			
 			UserDescriptor user = userManagement.getUserDescriptor( sessionInfo.getUserId());
@@ -1058,10 +1035,7 @@ public class Shortcuts {
 		UserManagement userManagement = new UserManagement(appRes);
 		
 		try {
-			if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_ACTIVE ){
-				return false;
-			}
-			
+
 			ObjectPermissionDescriptor acl = accessControl.getUserPermissions(sessionInfo.getUserId(), objectId, true);
 			
 			UserDescriptor user = userManagement.getUserDescriptor( sessionInfo.getUserId());
