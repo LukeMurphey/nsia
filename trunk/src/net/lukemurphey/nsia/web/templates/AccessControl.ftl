@@ -165,7 +165,7 @@
     </#list>            
     <#if ( permissions?size == 0)>
         <tr class="Background3">
-            <td colspan="99">
+            <td colspan="10">
             <@infonote message="No Access Control List Entries Exist" />
             </td>
         </tr>
