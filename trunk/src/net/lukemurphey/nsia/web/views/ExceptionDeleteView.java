@@ -100,10 +100,19 @@ public class ExceptionDeleteView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 		
-		// 1 -- Get the exceptions to delete
+		// 1 -- Get the rule ID
+		int ruleID = Integer.valueOf( args[0] );
+		
+		// 2 -- Get the exceptions to delete
 		Vector<Integer> exceptionsToDelete = new Vector<Integer>();
 		
 		String[] identifiers = request.getParameterValues("ExceptionID");
+		
+		if( identifiers == null ){
+			context.addMessage("Select the entries to delete", MessageSeverity.WARNING);
+			response.sendRedirect( ExceptionListView.getURL(ruleID) );
+			return false;
+		}
 		
 		// Convert the exception identifiers to integers
 		for (String stringID : identifiers) {
@@ -115,10 +124,7 @@ public class ExceptionDeleteView extends View {
 				//At least one the IDs was invalid
 			}
 		}
-		
-		// 2 -- Get the rule ID
-		int ruleID = Integer.valueOf( args[0] );
-		
+
 		// 3 -- Delete the exceptions
 		try{
 			deleteExceptions(context, exceptionsToDelete);
