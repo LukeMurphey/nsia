@@ -322,17 +322,17 @@ public class UserEditView extends View {
 		// 3 -- Check the user's rights
 		try {
 			if( user == null ){
-				if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Add" ) == false ){
+				if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Add", "Create new user account" ) == false ){
 					Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to create users");
 					return true;
 				}
 			}
 			else{
-				if( context.getUser().getUserID() == user.getUserID() && Shortcuts.hasRight( context.getSessionInfo(), "Users.UpdateOwnPassword" ) == false ){ //TODO Replace with a more appropriate right name
+				if( context.getUser().getUserID() == user.getUserID() && Shortcuts.hasRight( context.getSessionInfo(), "Users.UpdateOwnPassword", "Update user's own account" ) == false ){ //TODO Replace with a more appropriate right name
 					Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit your account");
 					return true;
 				}
-				else if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Edit" ) == false ){
+				else if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Edit", "Update another user's account" ) == false ){
 						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit users");
 						return true;
 				}

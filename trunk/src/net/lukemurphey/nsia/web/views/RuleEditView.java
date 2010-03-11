@@ -172,7 +172,7 @@ public class RuleEditView extends View {
 			}
 			
 			// 5 -- Check permissions
-			if( Shortcuts.canModify( context.getSessionInfo(), siteGroup.getObjectId()) == false ){
+			if( Shortcuts.canModify( context.getSessionInfo(), siteGroup.getObjectId(), "Edit rule for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to edit rules for this site group");
 				return true;
 			}

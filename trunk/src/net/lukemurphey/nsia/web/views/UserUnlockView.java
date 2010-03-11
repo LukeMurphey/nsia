@@ -77,7 +77,7 @@ public class UserUnlockView extends View {
 		
 		// 2 -- Check the user's permissions
 		try {
-			if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Unlock") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Unlock", "Unlock user account") == false ){
 				context.addMessage("You do not have permission to unlock user accounts", MessageSeverity.WARNING);
 				response.sendRedirect( UserView.getURL(userID) );
 				return true;

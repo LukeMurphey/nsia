@@ -47,7 +47,7 @@ public class SiteGroupDeleteView extends View {
 			// 0 -- Precondition check
 			
 			//	 0.1 -- Make sure the user has permission
-			if( Shortcuts.hasRight(context.getSessionInfo(), "SiteGroups.Delete") == false ){
+			if( Shortcuts.hasRight(context.getSessionInfo(), "SiteGroups.Delete", "Delete site-group") == false ){
 				context.addMessage("You do not have permission to delete this site group", MessageSeverity.WARNING);
 				return false;
 			}

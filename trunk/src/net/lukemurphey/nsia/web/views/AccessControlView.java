@@ -179,7 +179,7 @@ public class AccessControlView extends View {
 	        }
 	        
 	        // 2 -- Check permissions
-	        if( Shortcuts.canControl(context.getSessionInfo(), objectId) == false ){
+	        if( Shortcuts.canControl(context.getSessionInfo(), objectId, "View access control list") == false ){
 	        	data.put("permission_denied_message", "You do not have permission to view the access control list" );
 	        	TemplateLoader.renderToResponse("AccessControl.ftl", data, response);
 	        	return true;

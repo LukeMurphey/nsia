@@ -184,7 +184,7 @@ public class UserView extends View {
 		// 4 -- Get the user group membership
 		UserGroupInfo[] userGroups = null;
 		try{
-			boolean can_enum_groups = Shortcuts.hasRight( context.getSessionInfo(), "Groups.View");
+			boolean can_enum_groups = Shortcuts.hasRight( context.getSessionInfo(), "Groups.View", "View user group membership");
 			data.put("can_enum_groups", can_enum_groups );
 			
 			if( can_enum_groups ){

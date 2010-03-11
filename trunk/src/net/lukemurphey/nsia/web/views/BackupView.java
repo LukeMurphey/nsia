@@ -47,7 +47,7 @@ public class BackupView extends View {
 		
 		// 2 -- Determine if the user has permission
 		try {
-			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit", "Perform system backup") == false ){
 				context.addMessage("You do not have permission to perform database backups", MessageSeverity.WARNING);
 				response.sendRedirect( SystemStatusView.getURL() );
 				return true;

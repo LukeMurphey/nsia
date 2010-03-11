@@ -43,7 +43,7 @@ public class ShutdownView extends View {
 		
 		// 2 -- Check permissions
 		try {
-			if( Shortcuts.hasRight(context.getSessionInfo(), "System.Shutdown") == false ){
+			if( Shortcuts.hasRight(context.getSessionInfo(), "System.Shutdown", "Shutdown system") == false ){
 				context.addMessage("You do not have permission to shutdown the system", MessageSeverity.WARNING);
 				response.sendRedirect(SystemStatusView.getURL());
 				return true;

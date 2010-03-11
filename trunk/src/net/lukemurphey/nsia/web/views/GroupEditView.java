@@ -225,11 +225,11 @@ public class GroupEditView extends View {
 		
 		// 3 -- Check rights
 		try {
-			if( group == null && Shortcuts.hasRight( context.getSessionInfo(), "Groups.Add") == false ){
+			if( group == null && Shortcuts.hasRight( context.getSessionInfo(), "Groups.Add", "Create user group") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to create groups");
 				return true;
 			}
-			else if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.Edit") == false ){
+			else if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.Edit", "Edit user groups") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit groups");
 				return true;
 			}

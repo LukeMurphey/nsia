@@ -115,7 +115,7 @@ public class ScanResultView extends View {
 			Shortcuts.addDashboardHeaders(request, response, data);
 
 			// 6 -- Check permissions
-			if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId()) == false ){
+			if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId(), "View scan result for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site group");
 				return true;
 			}

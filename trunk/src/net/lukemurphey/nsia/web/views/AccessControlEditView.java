@@ -225,7 +225,7 @@ public class AccessControlEditView extends View {
 			}
 			
 	        // 2 -- Check permissions
-	        if( Shortcuts.canControl(context.getSessionInfo(), objectId) == false ){
+	        if( Shortcuts.canControl(context.getSessionInfo(), objectId, "Edit access control list") == false ){
 	        	data.put("permission_denied_message", "You do not have permission to edit the access control list" );
 	        	TemplateLoader.renderToResponse("AccessControl.ftl", data, response);
 	        	return true;

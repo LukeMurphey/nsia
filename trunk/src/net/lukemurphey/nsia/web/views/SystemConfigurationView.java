@@ -397,7 +397,7 @@ public class SystemConfigurationView extends View {
 			Shortcuts.addDashboardHeaders(request, response, data);
 			
 			// 2 -- Check rights
-			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.View", "View system configuration") == false ){
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the system configuration");
 				return true;
 			}
@@ -405,7 +405,7 @@ public class SystemConfigurationView extends View {
 			// 3 -- Process any changes requested
 			if( request.getMethod().equalsIgnoreCase("POST") ){
 				
-				if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit") == false ){
+				if( Shortcuts.hasRight( context.getSessionInfo(), "System.Configuration.Edit", "Change system configuration") == false ){
 					Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to change the system configuration");
 					return true;
 				}
