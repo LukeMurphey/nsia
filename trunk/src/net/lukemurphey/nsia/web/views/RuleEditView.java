@@ -109,7 +109,7 @@ public class RuleEditView extends View {
 			//	 2.1 -- Determine the site group ID
 			if( rule != null ){
 				try{
-					siteGroupID = ScanRule.getAssociatedSiteGroup(rule.getRuleId());
+					siteGroupID = ScanRule.getAssociatedSiteGroupID(rule.getRuleId());
 				}
 				catch(NotFoundException e1){
 					Dialog.getDialog(response, context, data, "No SiteGroup exists with the given ID", "SiteGroup Not Found", DialogType.WARNING);

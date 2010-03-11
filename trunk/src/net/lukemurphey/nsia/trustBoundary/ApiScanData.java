@@ -112,7 +112,7 @@ public class ApiScanData extends ApiHandler{
 			//long ruleObjectId = scanRule.getObjectId();
 			//checkRead(sessionIdentifier, ruleObjectId, "Get site group associated with rule " + ruleId);
 			
-			int siteGroupID = ScanRule.getAssociatedSiteGroup( ruleId );
+			int siteGroupID = ScanRule.getAssociatedSiteGroupID( ruleId );
 			
 			SiteGroupDescriptor siteGroupDescriptor = this.siteGroupManagement.getGroupDescriptor(siteGroupID);
 
@@ -142,7 +142,7 @@ public class ApiScanData extends ApiHandler{
 	public MaxMinCount getEntryInfo( String sessionIdentifier, long ruleId ) throws InsufficientPermissionException, GeneralizedException, NoSessionException, NotFoundException{
 		// 0 -- Make sure the user has permission to read the site group
 		try{
-			int siteGroupID = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupID = ScanRule.getAssociatedSiteGroupID(ruleId);
 			
 			SiteGroupDescriptor siteGroupDesc = siteGroupManagement.getGroupDescriptor(siteGroupID);
 			
@@ -168,7 +168,7 @@ public class ApiScanData extends ApiHandler{
 	public long getMaxEntry( String sessionIdentifier, long ruleId ) throws GeneralizedException, InsufficientPermissionException, NoSessionException, NotFoundException{
 		// 0 -- Make sure the user has permission to read the site group
 		try{
-			int siteGroupID = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupID = ScanRule.getAssociatedSiteGroupID(ruleId);
 			
 			SiteGroupDescriptor siteGroupDesc = siteGroupManagement.getGroupDescriptor(siteGroupID);
 			
@@ -194,7 +194,7 @@ public class ApiScanData extends ApiHandler{
 	public long getMinEntry( String sessionIdentifier, long ruleId ) throws GeneralizedException, InsufficientPermissionException, NoSessionException, NotFoundException{
 		// 0 -- Make sure the user has permission to read the site group
 		try{
-			int siteGroupID = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupID = ScanRule.getAssociatedSiteGroupID(ruleId);
 			
 			SiteGroupDescriptor siteGroupDesc = siteGroupManagement.getGroupDescriptor(siteGroupID);
 			
@@ -221,7 +221,7 @@ public class ApiScanData extends ApiHandler{
 		
 		// 0 -- Make sure the user has permission to read the site group
 		try{
-			int siteGroupID = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupID = ScanRule.getAssociatedSiteGroupID(ruleId);
 			
 			SiteGroupDescriptor siteGroupDesc = siteGroupManagement.getGroupDescriptor(siteGroupID);
 			checkRead(sessionIdentifier, siteGroupDesc.getObjectId(), "Get scan results for site group \"" + siteGroupDesc.getGroupName() + "\" (" + siteGroupID + ")");
@@ -252,7 +252,7 @@ public class ApiScanData extends ApiHandler{
 		
 		// 0 -- Make sure the user has permission to read the site group
 		try{
-			int siteGroupID = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupID = ScanRule.getAssociatedSiteGroupID(ruleId);
 			
 			SiteGroupDescriptor siteGroupDesc = siteGroupManagement.getGroupDescriptor(siteGroupID);
 			checkRead(sessionIdentifier, siteGroupDesc.getObjectId(), "Get scan results for site group \"" + siteGroupDesc.getGroupName() + "\" (" + siteGroupID + ")");
@@ -279,7 +279,7 @@ public class ApiScanData extends ApiHandler{
 		
 		// 0 -- Make sure the user has permission to read the site group
 		try{
-			int siteGroupID = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupID = ScanRule.getAssociatedSiteGroupID(ruleId);
 			
 			SiteGroupDescriptor siteGroupDesc = siteGroupManagement.getGroupDescriptor(siteGroupID);
 			checkRead(sessionIdentifier, siteGroupDesc.getObjectId(), "Get scan results for site group \"" + siteGroupDesc.getGroupName() + "\" (" + siteGroupID + ")");
@@ -346,7 +346,7 @@ public class ApiScanData extends ApiHandler{
 			// 	0.1 -- Make sure the user has a valid session and has permission to read the rule
 			
 			// Get the site group that contains this rule to determine if the user has permission to view this group
-			int siteGroupId = ScanRule.getAssociatedSiteGroup(scanRuleId);
+			int siteGroupId = ScanRule.getAssociatedSiteGroupID(scanRuleId);
 			SiteGroupDescriptor siteGroupDescriptor = siteGroupManagement.getGroupDescriptor(siteGroupId);
 			
 			// Determine if the user can view this site group
@@ -661,7 +661,7 @@ public class ApiScanData extends ApiHandler{
 			// 0 -- Precondition check
 			
 			//	 0.1 -- Find the associated site group
-			int siteGroupId = ScanRule.getAssociatedSiteGroup(scanRuleId);
+			int siteGroupId = ScanRule.getAssociatedSiteGroupID(scanRuleId);
 			
 			//	 0.2 -- Check permissions
 			SiteGroupDescriptor desc = siteGroupManagement.getGroupDescriptor(siteGroupId);
@@ -760,7 +760,7 @@ public class ApiScanData extends ApiHandler{
 		
 		//	 0.1 -- Check permissions
 		try{
-			int siteGroupId = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupId = ScanRule.getAssociatedSiteGroupID(ruleId);
 			SiteGroupDescriptor desc = siteGroupManagement.getGroupDescriptor(siteGroupId);
 			checkModify(sessionIdentifier, desc.getGroupId(), "Update HTTP/Auto-Discovery rule " + ruleId);
 		
@@ -857,7 +857,7 @@ public class ApiScanData extends ApiHandler{
 		
 		//	 0.1 -- Check permissions
 		try{
-			int siteGroupId = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupId = ScanRule.getAssociatedSiteGroupID(ruleId);
 			SiteGroupDescriptor desc = siteGroupManagement.getGroupDescriptor(siteGroupId);
 			checkModify(sessionIdentifier, desc.getGroupId(), "Update HTTP static rule " + ruleId);
 		
@@ -911,7 +911,7 @@ public class ApiScanData extends ApiHandler{
 			// 0 -- Precondition check
 
 			//	 0.1 -- Check permissions
-			int siteGroupId = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupId = ScanRule.getAssociatedSiteGroupID(ruleId);
 			SiteGroupDescriptor desc = siteGroupManagement.getGroupDescriptor(siteGroupId);
 			checkModify(sessionIdentifier, desc.getGroupId(), "Add HTTP header rule to rule " + ruleId);
 
@@ -1011,7 +1011,7 @@ public class ApiScanData extends ApiHandler{
 			ruleId = HttpStaticScanRule.resolveRuleId( headerRuleId );
 	
 			// Check permissions
-			int siteGroupId = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupId = ScanRule.getAssociatedSiteGroupID(ruleId);
 			SiteGroupDescriptor desc = siteGroupManagement.getGroupDescriptor(siteGroupId);
 			checkModify(sessionIdentifier, desc.getGroupId(), "Delete HTTP header rule for rule " + ruleId );
 			
@@ -1068,7 +1068,7 @@ public class ApiScanData extends ApiHandler{
 			ruleId = HttpStaticScanRule.resolveRuleId( headerRuleId );
 			
 			//Check permissions
-			int siteGroupId = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupId = ScanRule.getAssociatedSiteGroupID(ruleId);
 			SiteGroupDescriptor desc = siteGroupManagement.getGroupDescriptor(siteGroupId);
 			checkModify(sessionIdentifier, desc.getGroupId(), "Update HTTP header rule for rule " + ruleId );
 			
@@ -1201,7 +1201,7 @@ public class ApiScanData extends ApiHandler{
 		try {
 			
 			//Check permissions
-			int siteGroupId = ScanRule.getAssociatedSiteGroup(ruleId);
+			int siteGroupId = ScanRule.getAssociatedSiteGroupID(ruleId);
 			SiteGroupDescriptor desc = siteGroupManagement.getGroupDescriptor(siteGroupId);
 			checkModify(sessionIdentifier, desc.getGroupId(), "Delete rule " + ruleId );
 			

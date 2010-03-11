@@ -5,10 +5,13 @@ import java.util.*;
 
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.HashtableSerialization;
+import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.ScanCallback;
+import net.lukemurphey.nsia.SiteGroupManagement;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 
 public abstract class ScanRule implements HashtableSerialization{
 	protected Application appRes = null;
@@ -378,6 +381,23 @@ public abstract class ScanRule implements HashtableSerialization{
 	}
 	
 	/**
+	 * Get the the site group that owns the given rule.
+	 * @param ruleId
+	 * @return
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 * @throws NotFoundException
+	 * @throws InputValidationException 
+	 */
+	public static SiteGroupDescriptor getAssociatedSiteGroup( long ruleId ) throws SQLException, NoDatabaseConnectionException, NotFoundException, InputValidationException{
+		int siteGroupID = getAssociatedSiteGroupID(ruleId);
+		
+		SiteGroupManagement siteGroupMgmt = new SiteGroupManagement(Application.getApplication());
+		return siteGroupMgmt.getGroupDescriptor(siteGroupID);
+	}
+	
+	
+	/**
 	 * Get the identifier for the site group identifier that owns the given rule.
 	 * @param ruleId
 	 * @return
@@ -385,7 +405,7 @@ public abstract class ScanRule implements HashtableSerialization{
 	 * @throws NoDatabaseConnectionException 
 	 * @throws NotFoundException 
 	 */
-	public static int getAssociatedSiteGroup( long ruleId ) throws SQLException, NoDatabaseConnectionException, NotFoundException{
+	public static int getAssociatedSiteGroupID( long ruleId ) throws SQLException, NoDatabaseConnectionException, NotFoundException{
 		Application appRes = Application.getApplication();
 		Connection connection = null;
 		
