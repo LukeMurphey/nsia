@@ -672,7 +672,7 @@ public class AccessControl {
 			rightDescriptors[3] = getRight( userId, "Users.UpdateOwnPassword", false, resolveUserGroupPermissions );
 			rightDescriptors[4] = getRight( userId, "Users.UpdatePassword", false, resolveUserGroupPermissions );
 			rightDescriptors[5] = getRight( userId, "Users.Edit", false, resolveUserGroupPermissions );
-			rightDescriptors[6] = getRight( userId, "Users.UpdateOwnPassword", false, resolveUserGroupPermissions );
+			rightDescriptors[6] = getRight( userId, "Users.UpdateOwnPassword", false, resolveUserGroupPermissions ); //TODO Remove redundant right
 			rightDescriptors[7] = getRight( userId, "Administration.ViewUsers", false, resolveUserGroupPermissions );
 			rightDescriptors[8] = getRight( userId, "Users.Unlock", false, resolveUserGroupPermissions );
 			rightDescriptors[9] = getRight( userId, "Users.Delete", false, resolveUserGroupPermissions );
