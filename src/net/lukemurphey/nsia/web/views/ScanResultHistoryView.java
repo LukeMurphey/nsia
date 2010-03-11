@@ -69,7 +69,7 @@ public class ScanResultHistoryView extends View {
 			SiteGroupDescriptor siteGroup = null;
 			
 			try{
-				siteGroupID = ScanRule.getAssociatedSiteGroup(ruleID);
+				siteGroupID = ScanRule.getAssociatedSiteGroupID(ruleID);
 				SiteGroupManagement siteGroupMgmt = new SiteGroupManagement(Application.getApplication());
 				siteGroup = siteGroupMgmt.getGroupDescriptor(siteGroupID);
 			}

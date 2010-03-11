@@ -88,7 +88,7 @@ public class ScanResultView extends View {
 			SiteGroupDescriptor siteGroup;
 			
 			try{
-				siteGroupID = ScanRule.getAssociatedSiteGroup(scanResult.getRuleID());
+				siteGroupID = ScanRule.getAssociatedSiteGroupID(scanResult.getRuleID());
 				SiteGroupManagement siteGroupMgmt = new SiteGroupManagement(Application.getApplication());
 				siteGroup = siteGroupMgmt.getGroupDescriptor(siteGroupID);
 			
