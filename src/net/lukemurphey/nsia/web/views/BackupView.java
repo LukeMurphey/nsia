@@ -62,7 +62,6 @@ public class BackupView extends View {
 		// 3 -- Start the backup if the user has so requested
 		boolean startedNow = false;
 		if( "Backup".equalsIgnoreCase( request.getParameter("Selected") ) ) {
-			//Shortcuts.checkRight( context.getSessionInfo(), "System.Configuration.Edit"); //TODO Check permissions
 			startedNow = true;
 			backupWorker = startBackup();
 		}
