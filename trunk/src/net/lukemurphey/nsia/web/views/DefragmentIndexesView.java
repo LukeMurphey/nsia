@@ -101,7 +101,6 @@ public class DefragmentIndexesView extends View {
 		// 4 -- Start the indexer if requested and not already running
 		boolean startedNow = false;
 		if( "Reindex".equalsIgnoreCase( request.getParameter("Selected") ) ) {
-			//Shortcuts.checkRight( context.getSessionInfo(), "System.Configuration.Edit"); //TODO Check permissions
 			startedNow = true;
 			worker = startReindexerWorker();
 		}

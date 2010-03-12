@@ -184,8 +184,6 @@ public class SiteGroupEditView extends View {
 			ViewNotFoundException {
 		
 		try{
-			// 0 -- Check permissions
-			//TODO Check rights
 			
 			// 1 -- Get the associated site group (if there is one)
 			SiteGroupDescriptor siteGroup = null;
