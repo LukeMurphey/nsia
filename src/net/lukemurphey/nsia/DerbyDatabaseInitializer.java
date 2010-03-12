@@ -79,8 +79,8 @@ public class DerbyDatabaseInitializer extends DatabaseInitializer {
 			indexes.add( new DatabaseIndex("EventLogDateSeverityIndexDesc", "EventLog(LogDate, Severity Desc)") );
 			indexes.add( new DatabaseIndex("EventLogIDIndexDesc", "EventLog(EventLogID Desc)") );
 			indexes.add( new DatabaseIndex("DefinitionPolicySiteGroupIndex", "DefinitionPolicy(SiteGroupID)") );
-			indexes.add( new DatabaseIndex("DefinitionScanResultIDIndex", "DefinitionScanResult(ScanResultID)") );
-			indexes.add( new DatabaseIndex("DefinitionScanResultContentTypeIndex", "DefinitionScanResult(ContentType)") );
+			indexes.add( new DatabaseIndex("DefinitionScanResultIDIndex", "SignatureScanResult(ScanResultID)") );
+			indexes.add( new DatabaseIndex("DefinitionScanResultContentTypeIndex", "SignatureScanResult(ContentType)") );
 			indexes.add( new DatabaseIndex("ScanResultRuleIDIndex", "ScanResult(ScanRuleID)") );
 			indexes.add( new DatabaseIndex("ScanResultParentIDIndex", "ScanResult(ParentScanResultID)") );
 			indexes.add( new DatabaseIndex("ScriptEnvironmentScanResultIDIndexDesc", "ScriptEnvironment(ScanResultID Desc)") );
