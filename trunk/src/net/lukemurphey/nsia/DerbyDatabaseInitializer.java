@@ -1357,7 +1357,16 @@ public class DerbyDatabaseInitializer extends DatabaseInitializer {
 	}
 	
 	protected void postTableCreation(){
+		Vector<DatabaseIndex> indexes = getDatabaseIndexManagers();
 		
+		for (DatabaseIndex databaseIndex : indexes) {
+			try {
+				databaseIndex.create(true);
+			} catch (SQLException e) {
+				System.out.println("Failed to create index: " + databaseIndex.getIndexName());
+				System.out.println("\t" + e.getMessage());
+			}
+		}
 	}
 
 	@Override
