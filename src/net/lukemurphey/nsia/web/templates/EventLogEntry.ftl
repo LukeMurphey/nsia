@@ -50,25 +50,25 @@
                 <td>
                 <#if curPrevId?? && (curPrevId >= 0)>
                     <form method="post" action="<@url name="event_log_entry" args=[curPrevId] />">
-                    <input class="button" type="Submit" name="Action" value="[Previous]" />
+                    <input class="button" type="Submit" name="Action" value="Previous" />
                     <#if (severity >= 0)><input type="hidden" name="Severity" value="${severity?html}" /></#if>
                     <#if ( contentFilter?? )><input type="hidden" name="Content" value="${contentFilter?html}" /></#if>
                     <input type="hidden" name="PrevEntryID" value="${curPrevId?c}" />
                     </form>
                 <#else>
-                    <input disabled class="buttonDisabled" type="Submit" name="Action" value="[Previous]" />
+                    <input disabled class="buttonDisabled" type="Submit" name="Action" value="Previous" />
                 </#if>
                 </td>
                 <td>
                 <#if curNextId?? && (curNextId >= 0)>
                     <form method="post" action="<@url name="event_log_entry" args=[curNextId] />">
-                    <input class="button" type="Submit" name="Action" value="[Next]" />
+                    <input class="button" type="Submit" name="Action" value="Next" />
                     <#if (severity >= 0)><input type="hidden" name="Severity" value="${severity?html}" /></#if>
                     <#if ( contentFilter?? )><input type="hidden" name="Content" value="${contentFilter?html}" /></#if>
                     <input type="hidden" name="EntryID" value="${curNextId?c}" />
                     </form>
                 <#else>
-                    <input disabled class="buttonDisabled" type="Submit" name="Action" value="[Next]" />
+                    <input disabled class="buttonDisabled" type="Submit" name="Action" value="Next" />
                 </#if>
                 </td>
           </tr>
