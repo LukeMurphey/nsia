@@ -167,7 +167,7 @@ public class EventLogView extends View {
 		boolean getEventsAfterID = false;
 		
 		//	 3.1 -- Determine if the user clicked the "Next" button
-		if( request.getParameter("Action") != null && request.getParameter("Action").equalsIgnoreCase("[Previous]")){
+		if( request.getParameter("Action") != null && request.getParameter("Action").equalsIgnoreCase("Previous")){
 			getEventsAfterID = false;
 			
 			try{
@@ -180,7 +180,7 @@ public class EventLogView extends View {
 		}
 		
 		//	 3.2 -- Determine if the user clicked the "Next" button
-		else if( request.getParameter("Action") != null && request.getParameter("Action").equalsIgnoreCase("[Next]")){
+		else if( request.getParameter("Action") != null && request.getParameter("Action").equalsIgnoreCase("Next")){
 			getEventsAfterID = true;
 			
 			try{

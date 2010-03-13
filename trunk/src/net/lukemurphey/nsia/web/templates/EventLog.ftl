@@ -87,15 +87,15 @@
         
         <form action="<@url name="event_log" />" method="get">
             <#if hasnext>
-                <input class="button" type="Submit" name="Action" value="[Next]">
+                <input class="button" type="Submit" name="Action" value="Next">
             <#else>
-                <input disabled class="buttonDisabled" type="Submit" name="Action" value="[Next]">
+                <input disabled class="buttonDisabled" type="Submit" name="Action" value="Next">
             </#if>
             
             <#if hasprev>
-                <input class="button" type="Submit" name="Action" value="[Previous]">
+                <input class="button" type="Submit" name="Action" value="Previous">
             <#else>
-                <input disabled class="buttonDisabled" type="Submit" name="Action" value="[Previous]">
+                <input disabled class="buttonDisabled" type="Submit" name="Action" value="Previous">
             </#if>
             
             <#if contentfilter?? >
