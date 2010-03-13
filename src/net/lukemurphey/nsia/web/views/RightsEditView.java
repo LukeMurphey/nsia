@@ -174,7 +174,7 @@ public class RightsEditView extends View {
 			if( !setRight( request, "Users.Add", subjectId, subjectType, accessControl, context) ) setFailures++;
 			if( !setRight( request, "Users.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "Users.View", subjectId, subjectType, accessControl, context)) setFailures++;
-			if( !setRight( request, "Users.Rights.View", subjectId, subjectType, accessControl, context)) setFailures++;
+			//if( !setRight( request, "Users.Rights.View", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "Users.Delete", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "Users.Unlock",  subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "Users.UpdatePassword", subjectId, subjectType, accessControl, context)) setFailures++;
@@ -206,10 +206,11 @@ public class RightsEditView extends View {
 		
 		if( tabIndex == Tab.SYSTEM_CONFIGURATION || tabIndex == null ){
 			if( !setRight( request, "System.Information.View", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "System.Configuration.View", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "System.Configuration.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
-			if( !setRight( request, "Administration.ClearSqlWarnings", subjectId, subjectType, accessControl, context)) setFailures++;
-			if( !setRight( request, "System.Firewall.View", subjectId, subjectType, accessControl, context)) setFailures++;
-			if( !setRight( request, "System.Firewall.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
+			//if( !setRight( request, "Administration.ClearSqlWarnings", subjectId, subjectType, accessControl, context)) setFailures++;
+			//if( !setRight( request, "System.Firewall.View", subjectId, subjectType, accessControl, context)) setFailures++;
+			//if( !setRight( request, "System.Firewall.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "System.ControlScanner", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "SiteGroups.ScanAllRules", subjectId, subjectType, accessControl, context)) setFailures++;
 			
