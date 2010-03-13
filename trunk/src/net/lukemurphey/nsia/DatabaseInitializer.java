@@ -344,6 +344,7 @@ public abstract class DatabaseInitializer {
 		// 4 -- System configuration
 		insertRight( "System.Information.View", "View System Information and Status");
 		insertRight( "System.Configuration.Edit", "Modify System Configuration");
+		insertRight( "System.Configuration.View", "View System Configuration");
 		insertRight( "System.Firewall.View", "View Firewall Configuration");
 		insertRight( "System.Firewall.Edit", "Change Firewall Configuration");
 		insertRight( "System.ControlScanner", "Start/Stop Scanner");
