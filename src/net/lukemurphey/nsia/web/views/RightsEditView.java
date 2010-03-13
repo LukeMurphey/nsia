@@ -208,6 +208,7 @@ public class RightsEditView extends View {
 			if( !setRight( request, "System.Information.View", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "System.Configuration.View", subjectId, subjectType, accessControl, context)) setFailures++;
 			if( !setRight( request, "System.Configuration.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
+			if( !setRight( request, "System.Shutdown", subjectId, subjectType, accessControl, context)) setFailures++;
 			//if( !setRight( request, "Administration.ClearSqlWarnings", subjectId, subjectType, accessControl, context)) setFailures++;
 			//if( !setRight( request, "System.Firewall.View", subjectId, subjectType, accessControl, context)) setFailures++;
 			//if( !setRight( request, "System.Firewall.Edit", subjectId, subjectType, accessControl, context)) setFailures++;
@@ -294,6 +295,7 @@ public class RightsEditView extends View {
 			rights.add( getRight( "System.Information.View", "View System Information and Status", subjectId, subjectType, accessControl ) ) ;
 			rights.add( getRight( "System.Configuration.View", "View System Configuration", subjectId, subjectType, accessControl ) ) ;
 			rights.add( getRight( "System.Configuration.Edit", "Modify System Configuration", subjectId, subjectType, accessControl ) ) ;
+			rights.add( getRight( "System.Shutdown", "Shutdown the application", subjectId, subjectType, accessControl ) ) ;
 			//rights.add( getRight( "System.Firewall.View", "View Firewall Configuration", subjectId, subjectType, accessControl ) ) ;
 			//rights.add( getRight( "System.Firewall.Edit", "Change Firewall Configuration", subjectId, subjectType, accessControl ) ) ;
 			rights.add( getRight( "System.ControlScanner", "Start/Stop Scanner", subjectId, subjectType, accessControl ) ) ;
