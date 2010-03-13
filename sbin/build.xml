@@ -3,7 +3,7 @@
     <javac srcdir="." />
   </target> -->
   
-    <target name="jar" >
+    <target name="jar" description="Create core NSIA JAR file">
         <jar destfile="bin/nsia.jar"
         	basedir="java-bin/" 
         	manifest="sbin/Manifest.txt"
@@ -11,14 +11,14 @@
         />
     </target>
 	
-    <target name="webarchive" >
+    <target name="webarchive" description="Create the web-archive used by the NSIA web-application" >
 	    <jar destfile="lib/webConsole.war"
 	        basedir="src/webarchive"
 	    	excludes="*.svn"
 	    />
 	</target>
 	
-    <target name="zip" >
+    <target name="zip" description="Create the zip file used for installing NSIA">
         <jar destfile="bin/NSIA_No_Installer.zip"
             basedir="."
         	includesfile="sbin/include_list.txt"
@@ -26,7 +26,7 @@
         />
     </target>
 	
-	<target name="clean" >
+	<target name="clean" description="Clean up archives creating by this build script" >
 	    <delete>
 	    	<fileset file="bin/NSIA_No_Installer.zip"/>
 	    	<fileset file="bin/nsia.jar"/>
@@ -34,13 +34,21 @@
 	    </delete>
 	</target>
   
-	<target name="svnbinclean" >
+	<target name="svnbinclean" description="Clean up the .svn directories found in the java-bin directory (prevents SVN from thinking the java-bin directory should under revision control)">
 		<echo level="info">Remove svn-files...</echo>
 		<delete includeemptydirs="true" >
 		    <fileset dir="java-bin" defaultexcludes="false" >
 		        <include name="**/.svn/" />
 		    </fileset>
 		</delete>
+	</target>
+	
+	<!-- java -Dij.database=jdbc:derby:var/database -jar lib/derbyrun.jar ij -->
+	<target name="sqlshell" description="Starts the interactive interpreter used for administrating the Java database" >
+		  <java fork="true" jar="lib/derbyrun.jar">
+		  	<sysproperty key="ij.database" value="jdbc:derby:var/database" />
+		  	 <arg value="ij" />    
+		  </java>
 	</target>
 	
 	<target name="buildall" depends="webarchive,jar,zip"/>
