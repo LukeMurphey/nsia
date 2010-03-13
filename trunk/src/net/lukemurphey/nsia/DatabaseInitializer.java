@@ -349,6 +349,7 @@ public abstract class DatabaseInitializer {
 		insertRight( "System.Firewall.Edit", "Change Firewall Configuration");
 		insertRight( "System.ControlScanner", "Start/Stop Scanner");
 		insertRight( "SiteGroups.ScanAllRules", "Allow Gratuitous Scanning of All Rules");
+		insertRight( "System.Shutdown", "Shutdown system");
 		
 	}
 	
