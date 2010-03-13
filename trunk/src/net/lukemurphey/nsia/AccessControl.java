@@ -654,6 +654,59 @@ public class AccessControl {
 	}
 	
 	/**
+	 * Get the names of the supported rights
+	 * @return
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
+	protected String[] getPossibleRights() throws SQLException, NoDatabaseConnectionException{
+		
+		// 1 -- Get the list of possible rights
+		Vector<String> possibleRights = new Vector<String>();
+		
+		{
+			Connection connection = null;
+			
+			// 1.1 -- Get the object ID for the right
+			PreparedStatement statement = null;
+			ResultSet result = null;
+			
+			try{
+				connection = appRes.getDatabaseConnection(Application.DatabaseAccessType.PERMISSIONS);
+				
+				statement = connection.prepareStatement("Select RightName from Rights");
+				result = statement.executeQuery();
+				
+				// 1.2 -- Get the access descriptor for the object ID
+				while( result.next() ){
+					String value = result.getString("RightName");
+					
+					if( value != null ){
+						possibleRights.add(value);
+					}
+				}
+				
+				
+			} finally {
+				if (result != null )
+					result.close();
+				
+				if (statement != null )
+					statement.close();
+				
+				if( connection != null )
+					connection.close();
+			}
+		}
+		
+		// 1.3 -- Return the list as an array
+		String[] possibleRightsArray = new String[possibleRights.size()];
+		possibleRights.toArray( possibleRightsArray );
+		
+		return possibleRightsArray;
+	}
+	
+	/**
 	 * Get all right descriptors that corresponds to the given user.
 	 * @precondition The user ID and the right name must be valid
 	 * @postcondition An access control descriptor indicating the user's rights will be returned or null if the right could not be found
@@ -664,43 +717,24 @@ public class AccessControl {
 	 * @throws NoDatabaseConnectionException
 	 */
 	public RightDescriptor[] getUserRights( int userId, boolean resolveUserGroupPermissions ) throws SQLException, NoDatabaseConnectionException{
-		RightDescriptor[] rightDescriptors = new RightDescriptor[28];
-		try{
-			rightDescriptors[0] = getRight( userId, "System.Information.View", false, resolveUserGroupPermissions );
-			rightDescriptors[1] = getRight( userId, "Administration.ClearSqlWarnings", false, resolveUserGroupPermissions );
-			rightDescriptors[2] = getRight( userId, "Users.Add", false, resolveUserGroupPermissions );
-			rightDescriptors[3] = getRight( userId, "Users.UpdateOwnPassword", false, resolveUserGroupPermissions );
-			rightDescriptors[4] = getRight( userId, "Users.UpdatePassword", false, resolveUserGroupPermissions );
-			rightDescriptors[5] = getRight( userId, "Users.Edit", false, resolveUserGroupPermissions );
-			rightDescriptors[6] = getRight( userId, "Users.UpdateOwnPassword", false, resolveUserGroupPermissions ); //TODO Remove redundant right
-			rightDescriptors[7] = getRight( userId, "Administration.ViewUsers", false, resolveUserGroupPermissions );
-			rightDescriptors[8] = getRight( userId, "Users.Unlock", false, resolveUserGroupPermissions );
-			rightDescriptors[9] = getRight( userId, "Users.Delete", false, resolveUserGroupPermissions );
-			rightDescriptors[10] = getRight( userId, "Groups.View", false, resolveUserGroupPermissions );
-			rightDescriptors[11] = getRight( userId, "Groups.Add", false, resolveUserGroupPermissions );
-			rightDescriptors[12] = getRight( userId, "Groups.Edit", false, resolveUserGroupPermissions );
-			rightDescriptors[13] = getRight( userId, "Groups.Delete", false, resolveUserGroupPermissions );
-			rightDescriptors[14] = getRight( userId, "Groups.Membership.Edit", false, resolveUserGroupPermissions );
-			rightDescriptors[15] = getRight( userId, "System.Firewall.Edit", false, resolveUserGroupPermissions );
-			rightDescriptors[16] = getRight( userId, "System.Firewall.View", false, resolveUserGroupPermissions );
-			rightDescriptors[17] = getRight( userId, "System.Firewall.Edit", false, resolveUserGroupPermissions );
-			rightDescriptors[18] = getRight( userId, "System.ControlScanner", false, resolveUserGroupPermissions );
-			rightDescriptors[19] = getRight( userId, "System.Configuration.View", false, resolveUserGroupPermissions );
-			rightDescriptors[20] = getRight( userId, "System.Configuration.Edit", false, resolveUserGroupPermissions );
-			rightDescriptors[21] = getRight( userId, "SiteGroups.ScanAllRules", false, resolveUserGroupPermissions );
-			rightDescriptors[22] = getRight( userId, "Users.Sessions.Delete", false, resolveUserGroupPermissions );
-			rightDescriptors[23] = getRight( userId, "Administration.ViewSessions", false, resolveUserGroupPermissions );
-			rightDescriptors[24] = getRight( userId, "SiteGroups.View", false, resolveUserGroupPermissions );
-			rightDescriptors[25] = getRight( userId, "SiteGroups.Add", false, resolveUserGroupPermissions );
-			rightDescriptors[26] = getRight( userId, "SiteGroups.Edit", false, resolveUserGroupPermissions );
-			rightDescriptors[27] = getRight( userId, "SiteGroups.Delete", false, resolveUserGroupPermissions );
-		}
-		catch(NotFoundException e){
-			//TODO Determine what to do when a right that should exist does not
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+		
+		// 1 -- Get the rights for the user
+		String[] supportedRights = getPossibleRights();
+		Vector<RightDescriptor> rights = new Vector<RightDescriptor>();
+		
+		for (String right : supportedRights) {
+			try{
+				rights.add(  getRight( userId, right, false, resolveUserGroupPermissions ) ) ;
+			}
+			catch(NotFoundException e){
+				appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			}
 		}
 		
-		return rightDescriptors;
+		RightDescriptor[] rightsArray = new RightDescriptor[rights.size()];
+		rights.toArray(rightsArray);
+		
+		return rightsArray;
 	}
 	
 	/**
