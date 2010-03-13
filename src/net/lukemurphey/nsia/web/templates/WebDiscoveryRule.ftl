@@ -52,7 +52,7 @@
                 <td><input class="textInput" size="40" type="text" name="ScanLimit" value="<#if request.getParameter("ScanLimit")??>${request.getParameter("ScanLimit")?html}<#elseif rule??>${rule.scanCountLimit?c}</#if>"></td>
             </tr>
             <tr class="lastRow">
-                <td class="alignRight" colspan="99">
+                <td class="alignRight" colspan="2">
                 <#if !rule?? >
                     <input class="button" type="submit" value="Create Rule" name="Action">&nbsp;&nbsp;
                     <input type="hidden" name="SiteGroupID" value="${siteGroupID?c}">
