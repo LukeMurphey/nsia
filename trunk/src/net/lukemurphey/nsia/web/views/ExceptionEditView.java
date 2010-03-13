@@ -656,7 +656,7 @@ public class ExceptionEditView extends View {
 		
 		// 6 -- Check rights
 		try {
-			if( Shortcuts.canModify(context.getSessionInfo(), siteGroup.getGroupId(), "Create exception") == false ){
+			if( Shortcuts.canModify(context.getSessionInfo(), siteGroup.getObjectId(), "Create exception") == false ){
 				
 				String returnTo = request.getParameter("ReturnTo");
 				Link link = null;
