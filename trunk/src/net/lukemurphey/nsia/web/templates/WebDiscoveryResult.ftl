@@ -47,9 +47,8 @@
         <#else>
             <tr class="Background0">
                 <td height="8px" colspan="3" class="Text_3">Definitions Matched</td>
-        
             <#if ( definitionMatches?size >= 5) >
-                <td width="400px" rowspan="99" style="vertical-align:top" class="BackgroundLoading1"><img alt="ContentTypes" src="/graph/SeverityResults?ResultID=${scanResult.scanResultID?c}&H="${(25 + (definitionMatches?size * 23))}"></td></tr>
+                <td width="400px" rowspan="99" style="vertical-align:top" class="BackgroundLoading1"><img alt="ContentTypes" src="/graph/SeverityResults?ResultID=${scanResult.scanResultID?c}&H=${(25 + (definitionMatches?size * 23))?c}"></td></tr>
             <#else>
                 <td width="400px" rowspan="99" style="vertical-align:top" class="BackgroundLoading1"><img alt="ContentTypes" src="/graph/SeverityResults?ResultID=${scanResult.scanResultID?c}"></td></tr>
             </#if>
@@ -121,6 +120,7 @@
         </tr>
             </#if>
         <#else>
+        <br/>
         <tr class="Background0">
             <td colspan="4" class="Text_3">Scan Findings</td>
         </tr>
@@ -212,6 +212,7 @@
         </#if>
             <input type="hidden" name="S" value="${firstScanResultID?c}">
             <input type="hidden" name="E" value="${lastScanResultID?c}">
-        </form>
+     </form>
+     <br/>
 </#assign>
 <#include "BaseWithNav.ftl">
