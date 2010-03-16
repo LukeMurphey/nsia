@@ -9,6 +9,7 @@ import net.lukemurphey.nsia.extension.ArgumentFieldsInvalidException;
 import net.lukemurphey.nsia.extension.FieldLayout;
 import net.lukemurphey.nsia.extension.FieldText;
 import net.lukemurphey.nsia.extension.FileFieldValidator;
+import net.lukemurphey.nsia.scan.ScanResult;
 
 public class CommandAction extends Action{
 
@@ -137,6 +138,13 @@ public class CommandAction extends Action{
 	@Override
 	public String getConfigDescription(){
 		return command;
+	}
+
+	@Override
+	public void execute(ScanResult scanResult) throws ActionFailedException {
+		String commandProcessed = getMessage(command, scanResult);
+		runCommand( commandProcessed, workingDirectory );
+		
 	}
 
 	/*@Override

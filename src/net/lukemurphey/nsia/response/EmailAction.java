@@ -11,6 +11,7 @@ import net.lukemurphey.nsia.extension.FieldLayout;
 import net.lukemurphey.nsia.extension.FieldText;
 import net.lukemurphey.nsia.extension.FieldValidator;
 import net.lukemurphey.nsia.extension.MessageValidator;
+import net.lukemurphey.nsia.scan.ScanResult;
 
 import java.net.UnknownHostException;
 import java.util.*;
@@ -142,5 +143,20 @@ public class EmailAction extends Action {
 				this.toAddress = null;
 			}
 		}
+	}
+
+	@Override
+	public void execute(ScanResult scanResult) throws ActionFailedException {
+		String subjectTmp = getMessage(subject, scanResult);
+		
+		String bodyTmp = getMessage(body, scanResult);
+		
+		try{
+			GenericUtils.sendMail(toAddress, subjectTmp, bodyTmp);
+		}
+		catch(MessagingException e){
+			throw new ActionFailedException("The action failed to send the email: " + e.getMessage(), e);
+		}
+		
 	}
 }
