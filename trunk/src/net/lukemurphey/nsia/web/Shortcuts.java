@@ -27,11 +27,12 @@ import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.web.templates.TemplateLoader;
 import net.lukemurphey.nsia.web.views.DashboardDefinitionErrorsPanel;
+import net.lukemurphey.nsia.web.views.DashboardDefinitionsUpdate;
 import net.lukemurphey.nsia.web.views.DashboardLicensePanel;
 import net.lukemurphey.nsia.web.views.DashboardRefreshPanel;
 import net.lukemurphey.nsia.web.views.DashboardStatusPanel;
 import net.lukemurphey.nsia.web.views.DashboardTasksPanel;
-import net.lukemurphey.nsia.web.views.DashboardVersonPanel;
+import net.lukemurphey.nsia.web.views.DashboardVersionPanel;
 import net.lukemurphey.nsia.web.views.LogoutView;
 import net.lukemurphey.nsia.web.views.UserPasswordUpdateView;
 
@@ -1160,11 +1161,19 @@ public class Shortcuts {
 		}
 		
 		// 5 -- Get the license warning
-		DashboardVersonPanel version_panel = new DashboardVersonPanel();
+		DashboardVersionPanel version_panel = new DashboardVersionPanel();
 		String version_warning = version_panel.getPanel(request, data, Application.getApplication());
 		
 		if( version_warning != null ){
 			panels.add( version_warning );
+		}
+		
+		// 6 -- Get the definitions update notification
+		DashboardDefinitionsUpdate defs_update_panel = new DashboardDefinitionsUpdate();
+		String defs_update= defs_update_panel.getPanel(request, data, Application.getApplication());
+		
+		if( defs_update != null ){
+			panels.add( defs_update );
 		}
 		
 		// 7 -- Populate the data

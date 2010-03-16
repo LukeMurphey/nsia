@@ -7,8 +7,9 @@ import net.lukemurphey.nsia.web.views.ActionEditView;
 import net.lukemurphey.nsia.web.views.ActionsListView;
 import net.lukemurphey.nsia.web.views.ApplicationUpdateView;
 import net.lukemurphey.nsia.web.views.BackupView;
+import net.lukemurphey.nsia.web.views.DashboardDefinitionsUpdate;
 import net.lukemurphey.nsia.web.views.DashboardStatusPanel;
-import net.lukemurphey.nsia.web.views.DashboardVersonPanel;
+import net.lukemurphey.nsia.web.views.DashboardVersionPanel;
 import net.lukemurphey.nsia.web.views.DefinitionDeleteView;
 import net.lukemurphey.nsia.web.views.DefinitionEntryView;
 import net.lukemurphey.nsia.web.views.DefinitionErrorsView;
@@ -125,7 +126,8 @@ public class StandardViewList {
 				view_list.registerView( new ExceptionDeleteView() );
 				view_list.registerView( new ExceptionEditView() );
 				view_list.registerView( new RightsEditView() );
-				view_list.registerView( new DashboardVersonPanel() );
+				view_list.registerView( new DashboardVersionPanel() );
+				view_list.registerView( new DashboardDefinitionsUpdate() );
 				view_list.registerView( new ApplicationUpdateView() );
 			} catch (Exception e) {
 				e.printStackTrace();
