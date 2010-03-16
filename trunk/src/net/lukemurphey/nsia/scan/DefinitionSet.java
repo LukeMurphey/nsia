@@ -230,6 +230,20 @@ public class DefinitionSet {
 			return extendedInfo;
 		}
 		
+		public boolean equals( DefinitionVersionID versionID ){
+			if( versionID != null
+					&& versionID.formatID == this.formatID
+					&& versionID.revisionID == this.revisionID
+					&& (
+							(versionID.extendedInfo == null && this.extendedInfo == null )
+							|| (versionID.extendedInfo.equalsIgnoreCase(this.extendedInfo)) ) ){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		
 		public String toString(){
 			if( extendedInfo != null && extendedInfo.length() > 0){
 				return formatID + "." + revisionID + " " + extendedInfo;
