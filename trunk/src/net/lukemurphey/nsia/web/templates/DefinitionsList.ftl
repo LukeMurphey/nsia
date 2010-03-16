@@ -76,7 +76,7 @@
         
         <form action="/Definitions" method="Post">
             <#if ( start_page > 1 )>
-                <input style="width:64px;" class="button" type="submit" name="N" value="[Start]">&nbsp;
+                <input style="width:64px;" class="button" type="submit" name="N" value="Start">&nbsp;
             </#if>
             
             <#list page_numbers as n>
@@ -84,7 +84,7 @@
             </#list>
             
             <#if needs_end_marker??>
-                <input style="width:64px;" class="button" type="submit" name="N" value="[End]" />
+                <input style="width:64px;" class="button" type="submit" name="N" value="End" />
             </#if>
             
             <#if filter?? >
