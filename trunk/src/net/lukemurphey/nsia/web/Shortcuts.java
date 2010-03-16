@@ -32,6 +32,8 @@ import net.lukemurphey.nsia.web.views.DashboardRefreshPanel;
 import net.lukemurphey.nsia.web.views.DashboardStatusPanel;
 import net.lukemurphey.nsia.web.views.DashboardTasksPanel;
 import net.lukemurphey.nsia.web.views.DashboardVersonPanel;
+import net.lukemurphey.nsia.web.views.LogoutView;
+import net.lukemurphey.nsia.web.views.UserPasswordUpdateView;
 
 public class Shortcuts {
 	
@@ -1236,12 +1238,9 @@ public class Shortcuts {
 				Vector<Link> user_options = new Vector<Link>();
 				
 				try {
-					user_options.add( new Link("[Logout]", StandardViewList.getURL("Logout")) );
-					user_options.add( new Link("[Change Password]", StandardViewList.getURL("Logout")) ); //TODO replace with real link to change password
+					user_options.add( new Link("[Logout]", LogoutView.getURL()) );
+					user_options.add( new Link("[Change Password]", UserPasswordUpdateView.getURL(context.getUser())) );
 				} catch (URLInvalidException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ViewNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
