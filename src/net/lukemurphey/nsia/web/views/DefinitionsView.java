@@ -78,7 +78,7 @@ public class DefinitionsView extends View {
 			boolean endRequested = false;
 			int page = 1;
 			
-			if( request.getParameter("N") != null && request.getParameter("N").equalsIgnoreCase("[End]") ){
+			if( request.getParameter("N") != null && request.getParameter("N").equalsIgnoreCase("End") ){
 				endRequested = true;
 			}
 			else if( request.getParameter("N") != null ){
