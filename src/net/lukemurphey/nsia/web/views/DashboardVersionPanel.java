@@ -17,9 +17,9 @@ import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.ViewNotFoundException;
 import net.lukemurphey.nsia.web.templates.TemplateLoader;
 
-public class DashboardVersonPanel extends View {
+public class DashboardVersionPanel extends View {
 
-	public DashboardVersonPanel() {
+	public DashboardVersionPanel() {
 		super("DashboardPanel/NewVersion", "dashboard_panel_version");
 	}
 	
