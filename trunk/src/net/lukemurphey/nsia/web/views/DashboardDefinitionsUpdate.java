@@ -126,6 +126,18 @@ public class DashboardDefinitionsUpdate extends View {
 	
 	public String getPanel( HttpServletRequest request, Map<String, Object> data, Application app) throws ViewFailedException{
 		
+		try {
+			if( Application.getApplication().getApplicationConfiguration().getAutoDefinitionUpdating() == true ){
+				return null; //Don't bother showing the panel if updates occur automatically
+			}
+		} catch (NoDatabaseConnectionException e) {
+			throw new ViewFailedException(e);
+		} catch (SQLException e) {
+			throw new ViewFailedException(e);
+		} catch (InputValidationException e) {
+			throw new ViewFailedException(e);
+		}
+		
 		if( isNewerVersionAvailable() ){
 			data.put("new_version", currentDefinitionsID.toString());
 			data.put("new_version_date", currentDefinitionsDate);
