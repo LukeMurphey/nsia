@@ -77,7 +77,7 @@ public class UserPasswordUpdateView extends View {
 				return errors;
 			}
 			else{
-				System.out.println(  request.getParameter("Password") + " == " + request.getParameter("PasswordConfirm"));
+				
 				if( request.getParameter("Password") != null && !request.getParameter("Password").equalsIgnoreCase( request.getParameter("PasswordConfirm") ) ){
 					errors.put(new FieldError("Password", request.getParameter("PasswordConfirm"), "The passwords are not identical"));
 				}
@@ -106,7 +106,8 @@ public class UserPasswordUpdateView extends View {
 				else{
 					// 3 -- Check the user's password
 					LocalPasswordAuthentication localAuth = new LocalPasswordAuthentication( Application.getApplication() );
-					if( !localAuth.checkPassword( user.getUserID(), new PasswordAuthenticationValidator( request.getParameter("MyPassword") ) ) ){
+					System.out.print("Password: " + request.getParameter("YourPassword"));
+					if( !localAuth.checkPassword( user.getUserID(), new PasswordAuthenticationValidator( request.getParameter("YourPassword") ) ) ){
 						errors.put(new FieldError("YourPassword", "", "Your current password is incorrect"));
 						data.put("form_errors", errors);
 						throw new PasswordInvalidException();
@@ -121,6 +122,16 @@ public class UserPasswordUpdateView extends View {
 							new EventLogField( EventLogField.FieldName.TARGET_USER_ID, user.getUserID() ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getSessionInfo().getUserId() )} );
+					
+					if( user != null && context.getUser() != null && user.getUserID() == context.getUser().getUserID()){
+						context.addMessage("Your password was successfully updated", MessageSeverity.SUCCESS);
+					}
+					else{
+						context.addMessage("The password for the " + user.getUserName() + " account was successfully updated", MessageSeverity.SUCCESS);
+					}
+					
+					response.sendRedirect(UserView.getURL(user));
+					return true;
 				}
 			}
 		} catch (SQLException e) {
@@ -132,6 +143,10 @@ public class UserPasswordUpdateView extends View {
 		} catch(InputValidationException e){
 			throw new ViewFailedException(e);
 		} catch( NumericalOverflowException e ){
+			throw new ViewFailedException(e);
+		} catch (IOException e) {
+			throw new ViewFailedException(e);
+		} catch (URLInvalidException e) {
 			throw new ViewFailedException(e);
 		}
 		
