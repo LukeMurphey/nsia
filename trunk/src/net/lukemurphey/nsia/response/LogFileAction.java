@@ -16,6 +16,7 @@ import net.lukemurphey.nsia.extension.FileFieldValidator;
 import net.lukemurphey.nsia.extension.MessageValidator;
 import net.lukemurphey.nsia.extension.PrototypeField;
 import net.lukemurphey.nsia.extension.FieldValidator.FieldValidatorResult;
+import net.lukemurphey.nsia.scan.ScanResult;
 
 
 public class LogFileAction extends Action {
@@ -176,6 +177,13 @@ public class LogFileAction extends Action {
 	@Override
 	public String getConfigDescription() {
 		return file.getAbsolutePath();
+	}
+
+	@Override
+	public void execute(ScanResult scanResult) throws ActionFailedException {
+		String text = getMessage(template, scanResult);
+		
+		appendFile(file, text);
 	}
 	
 }

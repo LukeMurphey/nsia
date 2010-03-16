@@ -30,6 +30,7 @@ import net.lukemurphey.nsia.extension.ArgumentFieldsInvalidException;
 import net.lukemurphey.nsia.extension.FieldLayout;
 import net.lukemurphey.nsia.extension.PrototypeField;
 import net.lukemurphey.nsia.extension.FieldValidator.FieldValidatorResult;
+import net.lukemurphey.nsia.scan.ScanResult;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -176,6 +177,31 @@ public abstract class Action implements Serializable  {
 	private int actionID = -1;
 	
 	public abstract void execute(EventLogMessage logMessage) throws ActionFailedException;
+	
+	public abstract void execute(ScanResult scanResult) throws ActionFailedException;
+	
+	protected String getMessage(String templateString, ScanResult scanResult) throws ActionFailedException{
+		try{
+			Configuration cfg = new Configuration();
+			cfg.setTagSyntax(Configuration.AUTO_DETECT_TAG_SYNTAX);
+			
+			StringReader reader = new StringReader(templateString);
+			Template template = new Template( "default_template", reader, cfg);
+			
+			HashMap<String, Object> data = new HashMap<String, Object>();
+			data.put("scan_result", scanResult);
+			
+			StringWriter writer = new StringWriter();
+			template.process(data, writer);
+			
+			return writer.toString();
+		}
+		catch( IOException e ){
+			throw new ActionFailedException("Exception generated while rendering message field", e);
+		} catch (TemplateException e) {
+			throw new ActionFailedException("Exception generated while rendering message field", e);
+		}
+	}
 	
 	protected Action(String description, String extenededDescription){
 		

@@ -6,6 +6,7 @@ import net.lukemurphey.nsia.extension.FieldLayout;
 import net.lukemurphey.nsia.extension.FieldPassword;
 import net.lukemurphey.nsia.extension.FieldText;
 import net.lukemurphey.nsia.extension.MessageValidator;
+import net.lukemurphey.nsia.scan.ScanResult;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -253,6 +254,25 @@ public class SSHCommandAction extends Action {
 		}
 		else if( "Commands".equals(name) ){
 			this.commands = value;
+		}
+	}
+
+	@Override
+	public void execute(ScanResult scanResult) throws ActionFailedException {
+		try{
+			
+			// 1 -- Process the commands to get the actual command list
+			String[] processedCommands = splitUpCommands(commands);
+			
+			for (int c = 0; c < processedCommands.length; c++) {
+				processedCommands[c] = getMessage(processedCommands[c], scanResult);
+			}
+			
+			// 2 -- Execute the commands
+			runSSHCommands(processedCommands, hostname, username, password);
+		}
+		catch(IOException e){
+			throw new ActionFailedException("Exception thrown while attempting to execute SSH commands", e);
 		}
 	}
 
