@@ -215,12 +215,25 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	//This contains the list of thread in process. These are retained so that the rule can be terminated
 	Vector<ScanRunner> runningThreads = new Vector<ScanRunner>();
 	
+	//Sets a limit on the number of scan threads that will be created when performing multi-threaded scans
+	int maxScanThreads = 10;
+	
 	public static final String RULE_TYPE = "HTTP/Autodiscovery";
 	
 	public static final int SUBCATEGORY_EXCEPTION_THRESHOLD = 5;
 	
 	public HttpSeekingScanRule(Application appRes ){
 		super(appRes);
+		
+		try {
+			setMaxScanThreads(appRes.getApplicationConfiguration().getMaxHTTPScanThreads());
+		} catch (NoDatabaseConnectionException e) {
+			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+		} catch (SQLException e) {
+			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+		} catch (InputValidationException e) {
+			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+		}
 	}
 	
 	public HttpSeekingScanRule(Application appRes, Wildcard restrictTo, int scanFrequency, boolean includeFirstLevelOfExternalLinks ){
@@ -229,6 +242,15 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		setDomainRestriction(restrictTo);
 		setScanFrequency(scanFrequency);
 		
+		try {
+			setMaxScanThreads(appRes.getApplicationConfiguration().getMaxHTTPScanThreads());
+		} catch (NoDatabaseConnectionException e) {
+			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+		} catch (SQLException e) {
+			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+		} catch (InputValidationException e) {
+			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+		}
 	}
 
 	public HttpSeekingScanRule(Application appRes, Wildcard restrictTo, boolean includeFirstLevelOfExternalLinks ){
@@ -237,6 +259,15 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		setDomainRestriction(restrictTo);
 		setScanFrequency(3600);
 		
+		try {
+			setMaxScanThreads(appRes.getApplicationConfiguration().getMaxHTTPScanThreads());
+		} catch (NoDatabaseConnectionException e) {
+			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+		} catch (SQLException e) {
+			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+		} catch (InputValidationException e) {
+			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+		}
 	}
 	
 	public void scanExternalLinks( boolean includeFirstLevelOfExternalLinks ){
@@ -681,6 +712,19 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		}
 	}
 
+	public void setMaxScanThreads( int max ){
+		
+		if( max < 1 ){
+			throw new IllegalArgumentException("The maximum number of threads cannot be less than one");
+		}
+		
+		maxScanThreads = max;
+	}
+	
+	public int getMaxScanThreads(){
+		return maxScanThreads;
+	}
+	
 	@Override
 	public ScanResult doScan() throws ScanException {
 		
@@ -707,7 +751,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			}
 			
 			// 2 -- Scan the seed URLs
-			multiThreadedScan(sigs, 10, findings);
+			multiThreadedScan(sigs, maxScanThreads, findings);
 			
 			// 3 -- Determine if any of the scan attempts failed
 			ScanResultCode resultCode = null;

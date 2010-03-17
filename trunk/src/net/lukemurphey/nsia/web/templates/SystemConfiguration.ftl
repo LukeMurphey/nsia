@@ -84,6 +84,7 @@
     <@config_options options=logging_options name="Logging Subsystem" />
     <@config_options options=license_options name="License" />
     <@config_options options=email_options name="Email" />
+    <@config_options options=scanner_options name="Scanner" />
 </table>
 </#assign>
 <#include "BaseWithNav.ftl">
