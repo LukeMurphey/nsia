@@ -29,7 +29,7 @@ public class HttpResponseData  {
 	private String originalLocation;
 	private String finalLocation;
 	
-	private static final int DEFAULT_LENGTH_LIMIT = 3145728;//3 MB
+	private static final int DEFAULT_LENGTH_LIMIT = 1048576; //1 MB
 	
 	private static final Pattern REGEX_GET_ENCODING = Pattern.compile("[-a-zA-Z_ 0-9/;]*charset=[ ]*([-a-zA-Z_0-9]*)");
 	private static final Pattern REGEX_CONTENT_TYPE = Pattern.compile("[-.+a-zA-Z0-9]+/[-.+a-zA-Z0-9]+");
