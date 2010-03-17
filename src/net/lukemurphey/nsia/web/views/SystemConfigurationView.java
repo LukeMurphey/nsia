@@ -59,7 +59,9 @@ public class SystemConfigurationView extends View {
 		EMAIL_SMTP_SERVER("email_smtp_server"),
 		EMAIL_USERNAME("email_username"),
 		EMAIL_PASSWORD("email_password"),
-		EMAIL_SMTP_PORT("email_smtp_port");
+		EMAIL_SMTP_PORT("email_smtp_port"),
+		
+		SCANNER_HTTP_THREADS("scanner_http_threads");
 		
 		private String name;
 		
@@ -294,6 +296,10 @@ public class SystemConfigurationView extends View {
 				else if( ParameterTitles.SERVER_WEB_ACCESS.equals(name) ){
 					//config.set( getAsBoolean(value) );
 				}
+				else if( ParameterTitles.SERVER_AUTO_UPDATE_DEFINITIONS.equals(name) ){
+					config.setAutoDefinitionUpdating( getAsBoolean(value) );
+					context.addMessage("Definitions auto-update updated", MessageSeverity.SUCCESS);
+				}
 				
 				// Session management
 				else if( ParameterTitles.SESSION_IDENTIFIER_LIFETIME.equals(name) ){
@@ -360,7 +366,13 @@ public class SystemConfigurationView extends View {
 				}
 				else if( ParameterTitles.LICENSE_KEY.equals(name) ){
 					config.setLicenseKey(value);
-					context.addMessage("license key updated", MessageSeverity.SUCCESS);
+					context.addMessage("License key updated", MessageSeverity.SUCCESS);
+				}
+				
+				// Scanner configuration
+				else if( ParameterTitles.SCANNER_HTTP_THREADS.equals(name) ){
+					config.setMaxHTTPScanThreads( getAsInt(value) );
+					context.addMessage("Scanner HTTP thread limit updated", MessageSeverity.SUCCESS);
 				}
 			}
 			catch(NoDatabaseConnectionException e){
@@ -497,6 +509,11 @@ public class SystemConfigurationView extends View {
 				data.put("selected", request.getParameter("ParamID"));
 			}
 
+			// 9 -- Add the scanner options
+			Vector<Parameter> scanner_options = new Vector<Parameter>();
+			scanner_options.add( new Parameter("Maximum HTTP Scan Threads", appConfig.getMaxHTTPScanThreads(), ParameterTitles.SCANNER_HTTP_THREADS.getName(), ParameterType.INTEGER) );
+			data.put("scanner_options", scanner_options);
+			
 			TemplateLoader.renderToResponse("SystemConfiguration.ftl", data, response);
 
 			return true;

@@ -31,6 +31,7 @@ public class ApplicationConfiguration {
 	protected static final long DEFAULT_SESSION_LIFETIME = 21600;//6 hours
 	protected static final long DEFAULT_SESSION_INACTIVITY_THRESHOLD = 3600;//1 hour
 	protected static final long DEFAULT_SESSION_ID_LIFETIME = 300;//5 minutes
+	protected static final long DEFAULT_SIMULTANEOUS_HTTP_CONNECTIONS = 10;
 	protected static final String DEFAULT_LOG_FORMAT = "Native";
 	
 	public ApplicationConfiguration( Application app ){
@@ -122,6 +123,17 @@ public class ApplicationConfiguration {
 			serverPort = (int)appParams.getParameter("Administration.ServerPort", 8080);
 		
 		return serverPort;
+	}
+	
+	public void setMaxHTTPScanThreads( int value ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
+		if( value < 0 || value > 25 )
+			throw new InputValidationException("The maximum number of simultaneous HTTP scan threads is too high (cannot be greater than 25)", "HTTP Scan Threads", String.valueOf( value ));
+		
+		appParams.setParameter("Administration.HTTPScanThreads", String.valueOf( value ));
+	}
+	
+	public int getMaxHTTPScanThreads() throws NoDatabaseConnectionException, SQLException, InputValidationException{
+		return (int)appParams.getParameter("Administration.HTTPScanThreads", 10);
 	}
 	
 	public String getKeystore() throws NoDatabaseConnectionException, SQLException, InputValidationException{
