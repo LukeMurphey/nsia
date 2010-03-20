@@ -108,7 +108,7 @@ public class LoginView extends View {
 		data.put("success", MessageSeverity.SUCCESS);
 		data.put("warning", MessageSeverity.WARNING);
 		
-		if( request.getMethod().equalsIgnoreCase("POST")){
+		if( request.getMethod().equalsIgnoreCase("POST") && request.getParameter("Username") != null ){
 			String username = request.getParameter("Username");
 			String password = request.getParameter("Password");
 			data.put("username", username);
