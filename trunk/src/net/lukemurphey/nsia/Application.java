@@ -844,7 +844,7 @@ public final class Application {
 		appRes.logEvent( new EventLogMessage(EventLogMessage.Category.APPLICATION_STARTED, new EventLogField(FieldName.VERSION, Application.getVersion())));
 		
 		// Launch console listener for accepting command line commands
-		if( runMode == RunMode.CLI || runMode == RunMode.SERVICE  ){
+		if( runMode == RunMode.CLI ){
 			ConsoleListener.startConsoleListener();
 		}
 		
