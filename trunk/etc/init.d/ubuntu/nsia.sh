@@ -13,6 +13,10 @@
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON='/usr/bin/java'
 DAEMON_OPTS='-jar /opt/nsia/bin/nsia.jar -s'
+
+#The following is used for debugging
+#DAEMON_OPTS='-XX:+HeapDumpOnOutOfMemoryError -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044 -jar /opt/nsia/bin/nsia.jar -s'
+
 NAME=nsia
 DESC='ThreatFactor NSIA'
 INSTALL_DIR=/opt/nsia
@@ -34,13 +38,13 @@ case "$1" in
     echo -n "Starting $DESC: "
     start-stop-daemon -d $INSTALL_DIR/bin -b --start --quiet --make-pidfile --pidfile $PIDFILE \
         --exec "$DAEMON" -- $DAEMON_OPTS || true
-    echo "$NAME."
+    echo "[Done]"
     ;;
   stop)
     echo -n "Stopping $DESC: "
     start-stop-daemon -d $INSTALL_DIR/bin --stop --quiet --pidfile $PIDFILE \
         --exec "$DAEMON" || true
-    echo "$NAME."
+    echo "[Done]"
     ;;
   restart|force-reload)
     echo -n "Restarting $DESC: "
@@ -49,7 +53,7 @@ case "$1" in
     sleep 1
     start-stop-daemon -d $INSTALL_DIR/bin -b --start --quiet --make-pidfile --pidfile \
         $PIDFILE --exec "$DAEMON" -- $DAEMON_OPTS || true
-    echo "$NAME."
+    echo "[Done]"
     ;;
   reload)
       echo -n "Reloading $DESC configuration: "
