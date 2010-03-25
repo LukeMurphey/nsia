@@ -19,7 +19,7 @@ public class Main {
 				runMode = RunMode.GUI;
 			}
 			
-			if( "-service".equalsIgnoreCase(arg) || "--service".equalsIgnoreCase(arg)){
+			if( "-s".equalsIgnoreCase(arg) || "-service".equalsIgnoreCase(arg) || "--service".equalsIgnoreCase(arg)){
 				runMode = RunMode.SERVICE;
 			}
 		}
