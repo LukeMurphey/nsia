@@ -59,7 +59,7 @@ public class ManagerServiceBase : ServiceBase
         Environment.CurrentDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
  
         process.StartInfo.FileName = "java";
-        process.StartInfo.Arguments = getJVMArguments() + " -jar nsia.jar --service" ;
+        process.StartInfo.Arguments = getJVMArguments() + " -jar nsia.jar" ;
 
         process.StartInfo.RedirectStandardOutput = true;
         process.StartInfo.RedirectStandardInput = true;
