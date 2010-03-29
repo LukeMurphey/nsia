@@ -293,8 +293,7 @@ public abstract class DatabaseInitializer {
 		initResults.definitionErrors = createDefinitionErrorTable();
 		
 		// 3 -- Insert the necessary entries
-		if( initResults.getRightsTableState() == Result.TABLE_CREATED )
-			insertRights();
+		insertRights();
 		
 		if( initResults.getUsersTableState() == Result.TABLE_CREATED)
 			insertDefaultUser();
@@ -382,12 +381,45 @@ public abstract class DatabaseInitializer {
 		
 	}
 	
+	protected boolean doesRightExist( String rightName ) throws SQLException{
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		
+		try{
+			statement = connection.prepareStatement("select * from Rights where RightName = ?");
+			statement.setString(1, rightName);
+			
+			result = statement.executeQuery();
+			
+			if( result.next() ){
+				return true;
+			}
+			else{
+				return false;
+			}
+			
+		}
+		finally{
+			if (statement != null )
+				statement.close();
+			
+			if (result != null )
+				result.close();
+		}
+		
+	}
+	
 	protected boolean insertRight( String rightName, String rightDescription )throws SQLException, NoDatabaseConnectionException {
 		
-		// 1 -- Allocate the object ID
+		// 1 -- Make sure the right does not already exist
+		if(doesRightExist(rightName) == true ){
+			return true;
+		}
+		
+		// 2 -- Allocate the object ID
 		long objectId = allocateObjectId( "UserRights");
 		
-		// 2 -- Insert the right
+		// 3 -- Insert the right
 		PreparedStatement statement = null;
 		
 		try{
