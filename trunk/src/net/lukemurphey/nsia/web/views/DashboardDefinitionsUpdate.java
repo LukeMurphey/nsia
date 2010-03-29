@@ -138,7 +138,7 @@ public class DashboardDefinitionsUpdate extends View {
 			throw new ViewFailedException(e);
 		}
 		
-		if( isNewerVersionAvailable() ){
+		if( isNewerVersionAvailable() && currentDefinitionsID != null ){
 			data.put("new_version", currentDefinitionsID.toString());
 			data.put("new_version_date", currentDefinitionsDate);
 			return TemplateLoader.renderToString("DashboardDefinitionUpdate.ftl", data);
