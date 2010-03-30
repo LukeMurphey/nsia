@@ -4,7 +4,7 @@ set newline=^& echo.
 REM 1 -- Determine if a JRE exists
 echo.
 echo.
-echo Step 1 of 4: Make sure a Java runtime exists
+echo Step 1 of 5: Make sure a Java runtime exists
 echo ---------------------------------------------------
 
 @reg query "HKLM\SOFTWARE\JavaSoft\Java Runtime Environment" || goto JAVA_NOT_INSTALLED
@@ -20,9 +20,9 @@ echo A Java runtime was found.
 REM 2 -- Determine if the system appears to have been configured already
 echo.
 echo.
-echo Step 2 of 4: Make sure that NSIA has not been configured yet
+echo Step 2 of 5: Make sure that NSIA has not been configured yet
 echo ---------------------------------------------------
-IF EXIST ../var/database2 GOTO NSIA_CONFIGURED
+IF EXIST ../var/database GOTO NSIA_CONFIGURED
 goto NSIA_NOT_CONFIGURED
 
 :NSIA_CONFIGURED
@@ -36,7 +36,7 @@ echo An existing NSIA database was not found
 REM 3 -- Get the username
 echo.
 echo.
-echo Step 3 of 4: Setup the administrator account
+echo Step 3 of 5: Setup the administrator account
 echo ---------------------------------------------------
 echo Enter a username for the administrator account. Note that the username can contain letters, numbers, dashes and periods:
 set /p username=
@@ -49,16 +49,19 @@ set /p password=
 REM 5 -- Initialize the application
 echo.
 echo.
-echo Step 4 of 4: Initialize NSIA
+echo Step 4 of 5: Initialize NSIA
 echo ---------------------------------------------------
 REM java -jar nsia.jar --install $username $username $password
-echo java -jar nsia.jar --install %username% %username% %password%
+java -jar nsia.jar --install %username% %username% %password%
+
+echo NSIA was successfully installed!
+echo Now, all you have to do is run it
 
 REM 6 -- Print out the success message and give the user the option to run NSIA now
 echo.
 echo.
-echo NSIA was successfully installed!
-echo Now, all you have to do is run it
+echo Step 5 of 5: Start NSIA
+echo ---------------------------------------------------
 
 REM    6.1 -- Tell the user how to run it in the future
 echo.
@@ -81,7 +84,7 @@ for %%x in (%0) do set BatchPath=%%~dpsx
 for %%x in (%BatchPath%) do set BatchPath=%%~dpsx
 
 REM Get the path to the service executable
-set ServiceExe=%BatchPath%ThreatFactor NSIA Service.exe
+set ServiceExe=\"%BatchPath%ThreatFactor NSIA Service.exe\"
 
 REM Create the service
 echo sc.exe create "nsia" DisplayName= "Threatfactor NSIA" binPath= "%ServiceExe%" start= auto || goto SERVICE_INSTALL_FAILED
