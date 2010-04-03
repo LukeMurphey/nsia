@@ -1302,13 +1302,19 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			//TODO Create method to identify rule categories that should be filtered
 			
 			// 3 -- Identify rules to create exceptions for
+			
+			//	 3.1 -- Don't bother continuing if no scan results exist yet
+			if( result == null){
+				return false;
+			}
+			
 			HttpDefinitionScanResult[] findings = result.getFindings();
 			
 			DefinitionPolicySet policySet = DefinitionPolicySet.getPolicySetForSiteGroup(conn, this.scanRuleId);
 			
 			DefinitionSet definitions = DefinitionArchive.getArchive().getDefinitionSet();
 			
-			//	 3.1 -- Loop through each finding
+			//	 3.2 -- Loop through each finding
 			for( HttpDefinitionScanResult finding : findings )
 			{
 				// Create an entry for each definition match
