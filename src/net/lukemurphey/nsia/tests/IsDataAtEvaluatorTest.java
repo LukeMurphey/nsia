@@ -1,15 +1,12 @@
 package net.lukemurphey.nsia.tests;
 
-import static org.junit.Assert.*;
-
 import net.lukemurphey.nsia.scan.DataSpecimen;
 import net.lukemurphey.nsia.scan.IsDataAtEvaluator;
 
-import org.junit.Test;
+import junit.framework.TestCase;
 
-public class IsDataAtEvaluatorTest {
+public class IsDataAtEvaluatorTest extends TestCase {
 
-	@Test
 	public void testEvaluateFailRelativeAtLEdge() {
 		
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
@@ -24,7 +21,6 @@ public class IsDataAtEvaluatorTest {
 		}
 	}
 	
-	@Test
 	public void testEvaluateFailAbsoluteAtEdge() {
 		
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
@@ -39,7 +35,6 @@ public class IsDataAtEvaluatorTest {
 		}
 	}
 	
-	@Test
 	public void testEvaluateFailRelativeWithLastMatchAtEdge() {
 		
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
@@ -54,7 +49,6 @@ public class IsDataAtEvaluatorTest {
 		}
 	}
 	
-	@Test
 	public void testEvaluateFailAbsoluteWithLastMatchAtEdge() {
 		
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
@@ -69,7 +63,6 @@ public class IsDataAtEvaluatorTest {
 		}
 	}
 	
-	@Test
 	public void testEvaluateRelativeAtEdge() {
 		
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
@@ -84,7 +77,6 @@ public class IsDataAtEvaluatorTest {
 		}
 	}
 	
-	@Test
 	public void testEvaluateAbsoluteWithLastMatchAtEdge() {
 		
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
@@ -99,7 +91,6 @@ public class IsDataAtEvaluatorTest {
 		}
 	}
 	
-	@Test
 	public void testEvaluateAbsolute() {
 		
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
@@ -115,7 +106,6 @@ public class IsDataAtEvaluatorTest {
 		
 	}
 	
-	@Test
 	public void testEvaluateAtEdge() {
 		
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
@@ -130,7 +120,6 @@ public class IsDataAtEvaluatorTest {
 		}
 	}
 
-	@Test
 	public void testIsDataAtEvaluator() {
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
 		eval.setOffset(4);
