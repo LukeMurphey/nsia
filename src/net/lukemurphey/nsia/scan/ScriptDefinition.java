@@ -548,12 +548,17 @@ public class ScriptDefinition extends Definition {
 			try{
 				isRunning = true;
 				result = (Result)invocable.invokeFunction("analyze", httpResponse, operation, variables, env, this.defaultRule );
-			}
-			catch(ScriptException e){
+			} catch(ScriptException e){
+				isRunning = false;
 				this.e = e;
 			} catch (NoSuchMethodException e) {
+				isRunning = false;
+				this.e = e;
+			} catch (Exception e) {
+				isRunning = false;
 				this.e = e;
 			}
+			
 			isRunning = false;
 			
 			synchronized(this){
