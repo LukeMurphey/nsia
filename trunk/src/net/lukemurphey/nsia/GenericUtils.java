@@ -231,7 +231,13 @@ public class GenericUtils {
 	}
 	
 	public static void sendMail(EmailAddress toAddress, String subject, String body, EmailAddress fromAddress, String smtpServer, String username, String password, int port ) throws MessagingException { 
-	    Properties props = new Properties();
+	    
+		// Make sure the SMTP server and from address was defined
+		if( smtpServer == null || fromAddress == null ){
+			return;
+		}
+		
+		Properties props = new Properties();
 	    props.put("mail.smtp.host", smtpServer);
 	    props.put("mail.from", fromAddress.toString());
 	    props.put("mail.smtp.port", Integer.toString(port));
