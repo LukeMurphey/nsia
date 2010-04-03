@@ -1,15 +1,12 @@
 package net.lukemurphey.nsia.tests;
 
-import org.junit.Test;
-
 import junit.framework.TestCase;
 import net.lukemurphey.nsia.scan.ByteJumpEvaluator;
 import net.lukemurphey.nsia.scan.InvalidEvaluatorException;
 
 
-public class ByteJumpEvaluatorTest{
-
-	@Test
+public class ByteJumpEvaluatorTest extends TestCase { 
+	
 	public void testParse() throws InvalidEvaluatorException{
 		ByteJumpEvaluator eval = ByteJumpEvaluator.parse("1 bytes (align-4, little-endian, hexadecimal) x 2");
 		
@@ -30,7 +27,6 @@ public class ByteJumpEvaluatorTest{
 		}
 	}
 	
-	@Test
 	public void testParseMultiplierOnly() throws InvalidEvaluatorException{
 		ByteJumpEvaluator eval = ByteJumpEvaluator.parse("1 bytes x 2");
 		
@@ -51,7 +47,6 @@ public class ByteJumpEvaluatorTest{
 		}
 	}
 	
-	@Test
 	public void testSingleByte() throws InvalidEvaluatorException{
 		ByteJumpEvaluator eval = ByteJumpEvaluator.parse("1 byte");
 		eval.setOffset(2);
@@ -65,7 +60,6 @@ public class ByteJumpEvaluatorTest{
 		}
 	}
 	
-	@Test
 	public void testMultipleBytes() throws InvalidEvaluatorException{
 		ByteJumpEvaluator eval = ByteJumpEvaluator.parse("2 bytes");
 		eval.setOffset(1);
@@ -78,7 +72,6 @@ public class ByteJumpEvaluatorTest{
 		}
 	}
 	
-	@Test
 	public void testMultiplier() throws InvalidEvaluatorException{
 		ByteJumpEvaluator eval = ByteJumpEvaluator.parse("1 byte x 2");
 		eval.setOffset(2);
@@ -92,7 +85,6 @@ public class ByteJumpEvaluatorTest{
 		}
 	}
 	
-	@Test
 	public void testJustPastEdge() throws InvalidEvaluatorException{
 		ByteJumpEvaluator eval = ByteJumpEvaluator.parse("2 bytes");
 		eval.setOffset(30);
@@ -105,7 +97,6 @@ public class ByteJumpEvaluatorTest{
 		}
 	}
 	
-	@Test
 	public void testAtEdge() throws InvalidEvaluatorException{
 		ByteJumpEvaluator eval = ByteJumpEvaluator.parse("1 byte");
 		eval.setOffset(28);
