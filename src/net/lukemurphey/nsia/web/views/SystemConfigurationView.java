@@ -450,7 +450,7 @@ public class SystemConfigurationView extends View {
 			// 6 -- Add the Server configuration options
 			Vector<Parameter> server_options = new Vector<Parameter>();
 			server_options.add( new Parameter("Manager Port", appConfig.getServerPort(), ParameterTitles.SERVER_PORT.getName(), ParameterType.INTEGER) );
-			server_options.add( new Parameter("Enable Web Access", "true", ParameterTitles.SERVER_SSL_ENABLED.getName(), ParameterType.BOOL) );
+			//server_options.add( new Parameter("Enable Web Access", "true", ParameterTitles.SERVER_WEB_ACCESS.getName(), ParameterType.BOOL) );
 			server_options.add( new Parameter("Enable SSL", appConfig.isSslEnabled(), ParameterTitles.SERVER_SSL_ENABLED.getName(), ParameterType.BOOL) );
 			server_options.add( new Parameter("SSL Password", appConfig.getSslPassword(), ParameterTitles.SERVER_SSL_PASSWORD.getName(), ParameterType.PASSWORD) );
 			server_options.add( new Parameter("SSL Key Password", appConfig.getSslKeyPassword(), ParameterTitles.SERVER_SSL_KEY_PASSWORD.getName(), ParameterType.PASSWORD) );
