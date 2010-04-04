@@ -817,7 +817,7 @@ public class DerbyDatabaseInitializer extends DatabaseInitializer {
 					"PortsClosed VARCHAR(16384)," +
 					"PortsNotResponding VARCHAR(16384)," +
 					"Server VARCHAR(4096)," +
-					"PRIMARY KEY  (HttpHashScanResultID)" +
+					"PRIMARY KEY  (PortScanResultID)" +
 			")");
 
 			statement.execute();
@@ -1341,7 +1341,7 @@ public class DerbyDatabaseInitializer extends DatabaseInitializer {
 					"MinimumSeverity INTEGER," +
 					"Enabled INTEGER default 1," +
 					"State BLOB," +
-					"PRIMARY KEY(ActionID)" +
+					"PRIMARY KEY(EventLogHookID)" +
 			")");
 			
 			statement.execute();
