@@ -1,6 +1,7 @@
 package net.lukemurphey.nsia.scan;
 
 
+import java.net.URL;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -35,10 +36,10 @@ public class ScriptClassLoader extends ClassLoader {
 			if( SHORTCUTS == null ){
 				Hashtable<String, String> temp = new Hashtable<String, String>();
 				
-				temp.put("ThreatScript.Result", "net.lukemurphey.nsia.scan.Result");
-				temp.put("HTTP.URL", "java.net.URL");
-				temp.put("HTTP.TagNameFilter", "org.htmlparser.filters.TagNameFilter");
-				temp.put("ThreatScript.DataAnalysis", "net.lukemurphey.nsia.scan.ScriptSignatureUtils");
+				temp.put("ThreatScript.Result", Result.class.getName());
+				temp.put("HTTP.URL", URL.class.getName());
+				temp.put("HTTP.TagNameFilter", org.htmlparser.filters.TagNameFilter.class.getName());
+				temp.put("ThreatScript.DataAnalysis", ScriptSignatureUtils.class.getName() );
 				
 				SHORTCUTS = temp;
 			}
