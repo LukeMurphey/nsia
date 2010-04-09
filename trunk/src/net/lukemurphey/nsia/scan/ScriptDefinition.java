@@ -14,6 +14,7 @@ import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.scan.scriptenvironment.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -453,8 +454,7 @@ public class ScriptDefinition extends Definition {
 		Environment env = new Environment(data);
 		
 		SimpleBindings bindings = new SimpleBindings();
-		bindings.put("Analysis", new ScriptSignatureUtils() );
-		
+		scriptEngine.put("StringUtils", new StringUtils());
 		
 		// 2 -- Execute the script
 		
@@ -477,13 +477,15 @@ public class ScriptDefinition extends Definition {
 			// Create and start the thread that will be responsible for performing the scan
 			InvokerThread thread = new InvokerThread(invocable, httpResponse, Operation.SCAN, variables, env, false );
 			thread.setName("ScriptDefinition " + this.getFullName() );
-			thread.start();
 			
-			synchronized (thread) {
+			synchronized (thread.mutex) {
 				try {
-					thread.wait(MAX_SCRIPT_RUNTIME);
-				} catch (InterruptedException e1) {
+					long startTime = System.currentTimeMillis();
 					
+					thread.start();
+					thread.mutex.wait();//MAX_SCRIPT_RUNTIME);
+				} catch (InterruptedException e1) {
+					//Thread was forceably awoken, ignore this and let the thread complete
 				}
 			}
 			
@@ -493,9 +495,9 @@ public class ScriptDefinition extends Definition {
 				DefinitionErrorList.logError(this.getFullName(), this.revision, "Execution exceeded limit", "Rule ID " + ruleId , this.id, this.localId);
 				throw new DefinitionEvaluationException("The definition exceeded the maximum timeout (ID " + ruleId + ", definition \"" + this.getFullName() + "\")");
 			}
-			else if (thread.getException() != null){
+			else if (thread.getThrowable() != null){
 				DefinitionErrorList.logError(this.getFullName(), this.revision, "Runtime exception", "Rule ID " + ruleId , this.id, this.localId);
-				throw new DefinitionEvaluationException("The definition threw an exception (ID " + ruleId + ", definition \"" + this.getFullName() + "\")", thread.getException());
+				throw new DefinitionEvaluationException("The definition threw an exception (ID " + ruleId + ", definition \"" + this.getFullName() + "\")", thread.getThrowable());
 			}
 			else{
 				result = thread.getResult();
@@ -531,8 +533,9 @@ public class ScriptDefinition extends Definition {
 		private boolean defaultRule;
 		private Environment env;
 		
-		private Exception e = null;
+		private Throwable e = null;
 		private boolean isRunning = false;
+		private Object mutex = new Object();
 		
 		public InvokerThread(Invocable invocable, HttpResponseData httpResponse, Operation operation, Variables variables, Environment env, boolean defaultRule){
 			this.invocable = invocable;
@@ -545,25 +548,27 @@ public class ScriptDefinition extends Definition {
 		
 		@Override
 		public void run(){
+			
+			isRunning = true;
+			
 			try{
-				isRunning = true;
 				result = (Result)invocable.invokeFunction("analyze", httpResponse, operation, variables, env, this.defaultRule );
 			} catch(ScriptException e){
-				isRunning = false;
 				this.e = e;
 			} catch (NoSuchMethodException e) {
-				isRunning = false;
 				this.e = e;
 			} catch (Exception e) {
-				isRunning = false;
+				this.e = e;
+			} catch (Throwable e) {
 				this.e = e;
 			}
 			
 			isRunning = false;
 			
-			synchronized(this){
-				notifyAll();
+			synchronized(mutex){
+				mutex.notifyAll();
 			}
+			
 		}
 		
 		public boolean isRunning(){
@@ -574,7 +579,7 @@ public class ScriptDefinition extends Definition {
 			return result;
 		}
 		
-		public Exception getException(){
+		public Throwable getThrowable(){
 			return e;
 		}
 	}
@@ -586,42 +591,52 @@ public class ScriptDefinition extends Definition {
 			this.data = data;
 		}
 		
+		@SuppressWarnings("unused")
 		public NameValuePair get(String name){
 			return data.get(name);
 		}
 		
+		@SuppressWarnings("unused")
 		public void set(String name, int value){
 			data.set(name, Integer.valueOf( value ));
 		}
 		
+		@SuppressWarnings("unused")
 		public void set(String name, short value){
 			data.set(name, Short.valueOf( value ));
 		}
 		
+		@SuppressWarnings("unused")
 		public void set(String name, long value){
 			data.set(name, Long.valueOf( value ) );
 		}
 		
+		@SuppressWarnings("unused")
 		public void set(String name, float value){
 			data.set(name, Float.valueOf( value) );
 		}
 		
+		@SuppressWarnings("unused")
 		public void set(String name, boolean value){
 			data.set(name, Boolean.valueOf(value));
 		}
 		
+		@SuppressWarnings("unused")
 		public void set(String name, double value){
 			data.set(name, Double.valueOf(value));
 		}
 		
+		@SuppressWarnings("unused")
 		public void set(String name, char value){
 			data.set(name, Character.valueOf( value ));
 		}
 		
+		@SuppressWarnings("unused")
 		public void set(String name, Serializable value){
 			data.set(name, value);
 		}
 		
+		@SuppressWarnings("unused")
 		public void set(String name, Externalizable value){
 			data.set(name, value);
 		}
