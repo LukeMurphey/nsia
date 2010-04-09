@@ -418,6 +418,66 @@ public class ScriptDefinition extends Definition {
 	}
 	
 	/**
+	 * Dispatches a thread to perform an analysis of the given HTTP response and returns the result. The analysis
+	 * thread is terminated if it fails to complete within a the time set according to the maxRuntime argument.
+	 * No limit is used if the maxRuntime argument is set to 0.  
+	 * @param maxRuntime
+	 * @param invocable
+	 * @param httpResponse
+	 * @param variables
+	 * @param env
+	 * @param ruleId
+	 * @return
+	 * @throws DefinitionEvaluationException
+	 */
+	@SuppressWarnings("deprecation")
+	private Result performAnalysis( int maxRuntime, Invocable invocable, HttpResponseData httpResponse, Variables variables, Environment env, long ruleId ) throws DefinitionEvaluationException{
+		Result result = null;
+		
+		if( maxRuntime <= 0 ){
+			try {
+				result = (Result)invocable.invokeFunction("analyze", httpResponse, Operation.SCAN, variables, env, false );
+			} catch (ScriptException e) {
+				DefinitionErrorList.logError(this.getFullName(), this.revision, "Runtime exception", "Rule ID " + ruleId , this.id, this.localId);
+				throw new DefinitionEvaluationException("The definition threw an exception (ID " + ruleId + ", definition \"" + this.getFullName() + "\")", e);
+			} catch (NoSuchMethodException e) {
+				DefinitionErrorList.logError(this.getFullName(), this.revision, "Missing method", "Rule ID " + ruleId , this.id, this.localId);
+				throw new DefinitionEvaluationException("The definition threw an exception (ID " + ruleId + ", definition \"" + this.getFullName() + "\")", e);
+			}
+		}
+		else {
+			// Create and start the thread that will be responsible for performing the scan
+			InvokerThread thread = new InvokerThread(invocable, httpResponse, Operation.SCAN, variables, env, false );
+			thread.setName("ScriptDefinition " + this.getFullName() );
+			
+			synchronized (thread.mutex) {
+				try {
+					thread.start();
+					thread.mutex.wait(maxRuntime);
+				} catch (InterruptedException e1) {
+					//Thread was forceably awoken, ignore this and let the thread complete
+				}
+			}
+			
+			//If the thread is still running, then log that the script failed to complete within the defined time period
+			if( thread.isRunning() ){
+				thread.stop(); //This function is deprecated, however, it is the only way to terminate this thread since the script engine does not have a method for terminating execution
+				DefinitionErrorList.logError(this.getFullName(), this.revision, "Execution exceeded limit", "Rule ID " + ruleId , this.id, this.localId);
+				throw new DefinitionEvaluationException("The definition exceeded the maximum timeout (ID " + ruleId + ", definition \"" + this.getFullName() + "\")");
+			}
+			else if (thread.getThrowable() != null){
+				DefinitionErrorList.logError(this.getFullName(), this.revision, "Runtime exception", "Rule ID " + ruleId , this.id, this.localId);
+				throw new DefinitionEvaluationException("The definition threw an exception (ID " + ruleId + ", definition \"" + this.getFullName() + "\")", thread.getThrowable());
+			}
+			else{
+				result = thread.getResult();
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
 	 * This method evaluates the given data with this definition. The variables argument includes the list of variables that have been set by other definitions that were evalauted
 	 * in the current pass. The rule identifier is used in order to load the saved script data for the given definition. 
 	 * @param httpResponse
@@ -431,7 +491,6 @@ public class ScriptDefinition extends Definition {
 	 * @throws NoSuchMethodException 
 	 * @throws IOException 
 	 */
-	@SuppressWarnings("deprecation")
 	public Result evaluate( HttpResponseData httpResponse, Variables variables, long ruleId, Connection connection ) throws DefinitionEvaluationException{
 		
 		// 0 -- Precondition Check
@@ -453,56 +512,13 @@ public class ScriptDefinition extends Definition {
 		
 		Environment env = new Environment(data);
 		
-		SimpleBindings bindings = new SimpleBindings();
-		scriptEngine.put("StringUtils", new StringUtils());
+		scriptEngine.put("StringUtils", new StringUtils()); //Note: SimpleBindings can also be used to populate the script environment
 		
 		// 2 -- Execute the script
 		
 		//	 2.1 -- Call the analyze method
 		Invocable invocable = (Invocable)scriptEngine;
-		Result result = null;
-		
-		if( MAX_SCRIPT_RUNTIME <= 0 ){
-			try {
-				result = (Result)invocable.invokeFunction("analyze", httpResponse, Operation.SCAN, variables, env, false );
-			} catch (ScriptException e) {
-				DefinitionErrorList.logError(this.getFullName(), this.revision, "Runtime exception", "Rule ID " + ruleId , this.id, this.localId);
-				throw new DefinitionEvaluationException("The definition threw an exception (ID " + ruleId + ", definition \"" + this.getFullName() + "\")", e);
-			} catch (NoSuchMethodException e) {
-				DefinitionErrorList.logError(this.getFullName(), this.revision, "Missing method", "Rule ID " + ruleId , this.id, this.localId);
-				throw new DefinitionEvaluationException("The definition threw an exception (ID " + ruleId + ", definition \"" + this.getFullName() + "\")", e);
-			}
-		}
-		else {
-			// Create and start the thread that will be responsible for performing the scan
-			InvokerThread thread = new InvokerThread(invocable, httpResponse, Operation.SCAN, variables, env, false );
-			thread.setName("ScriptDefinition " + this.getFullName() );
-			
-			synchronized (thread.mutex) {
-				try {
-					long startTime = System.currentTimeMillis();
-					
-					thread.start();
-					thread.mutex.wait();//MAX_SCRIPT_RUNTIME);
-				} catch (InterruptedException e1) {
-					//Thread was forceably awoken, ignore this and let the thread complete
-				}
-			}
-			
-			//If the thread is still running, then log that the script failed to complete within the defined time period
-			if( thread.isRunning() ){
-				thread.stop(); //This function is deprecated, however, it is the only way to terminate this thread since the script engine does not have a method for terminating execution
-				DefinitionErrorList.logError(this.getFullName(), this.revision, "Execution exceeded limit", "Rule ID " + ruleId , this.id, this.localId);
-				throw new DefinitionEvaluationException("The definition exceeded the maximum timeout (ID " + ruleId + ", definition \"" + this.getFullName() + "\")");
-			}
-			else if (thread.getThrowable() != null){
-				DefinitionErrorList.logError(this.getFullName(), this.revision, "Runtime exception", "Rule ID " + ruleId , this.id, this.localId);
-				throw new DefinitionEvaluationException("The definition threw an exception (ID " + ruleId + ", definition \"" + this.getFullName() + "\")", thread.getThrowable());
-			}
-			else{
-				result = thread.getResult();
-			}
-		}
+		Result result = performAnalysis(MAX_SCRIPT_RUNTIME, invocable, httpResponse, variables, env, ruleId );
 		
 		//	 2.3 -- Save the state variables
 		if( data != null ){
