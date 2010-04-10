@@ -27,6 +27,7 @@ public class EventLogField{
 		public static final FieldName RULE_SPECIMEN = FieldName.createFieldName("Specimen");
 		public static final FieldName DEFINITION_ID = FieldName.createFieldName("DefinitionID");
 		public static final FieldName DEFINITION_NAME = FieldName.createFieldName("DefinitionName");
+		public static final FieldName DEFINITION_REVISION = FieldName.createFieldName("DefinitionRevision");
 		public static final FieldName RULE_TYPE = FieldName.createFieldName("RuleType");
 		public static final FieldName STACK_TRACE = FieldName.createFieldName("StackTrace");
 		public static final FieldName TASK = FieldName.createFieldName("Task");
