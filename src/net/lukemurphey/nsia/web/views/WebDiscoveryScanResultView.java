@@ -121,9 +121,7 @@ public class WebDiscoveryScanResultView extends View {
 			}
 		}
 		catch(Exception e){
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			findings = new HttpDefinitionScanResult[0]; //TODO deal with this exception
+			throw new ViewFailedException(e); //findings = new HttpDefinitionScanResult[0];
 		}
 		
 		Vector<NameIntPair> definitionMatches;

@@ -25,6 +25,7 @@ import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
 import net.lukemurphey.nsia.web.templates.TemplateLoader;
 import net.lukemurphey.nsia.web.views.DashboardDefinitionErrorsPanel;
 import net.lukemurphey.nsia.web.views.DashboardDefinitionsUpdate;
@@ -1250,8 +1251,7 @@ public class Shortcuts {
 					user_options.add( new Link("[Logout]", LogoutView.getURL()) );
 					user_options.add( new Link("[Change Password]", UserPasswordUpdateView.getURL(context.getUser())) );
 				} catch (URLInvalidException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Application.getApplication().getEventLog().logExceptionEvent(new EventLogMessage(Category.WEB_ERROR), e);
 				}
 				
 				data.put("upperbar_options", user_options);

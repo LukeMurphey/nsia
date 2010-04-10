@@ -49,7 +49,6 @@ public class DashboardLicensePanel extends View {
 		} catch (SQLException e) {
 			throw new ViewFailedException(e);
 		} catch (InputValidationException e) {
-			//TODO Log that license is invalid
 			throw new ViewFailedException(e);
 		}
 		
