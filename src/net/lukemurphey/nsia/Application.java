@@ -1728,25 +1728,10 @@ public final class Application {
 				}
 			}
 			catch(IOException e2){
-				//Ignore this exception, reeading the buildnumber is not that important (won't cause a crash)
+				//Ignore this exception, reading the buildnumber is not that important (won't cause a crash)
 			}
 		}
-		/*
-		long newestFile = 0;
 		
-		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/")), newestFile);
-		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/consoleInterface")), newestFile);
-		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/htmlInterface")), newestFile);
-		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/scanRules")), newestFile);
-		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/trustBoundary")), newestFile);
-		newestFile = Math.max(newestFileInDir(new File("./net/lukemurphey/nsia/xmlRpcInterface")), newestFile);
-	    
-		newestFile -=  1072933200;
-		
-		newestFile = newestFile / (60*60*24);
-		
-		buildNumber = String.valueOf( newestFile );
-		*/
 		return buildNumber;
 	}
 	
