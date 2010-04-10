@@ -116,7 +116,9 @@ public abstract class EventLogHook implements Serializable{
 			}
 			catch(InvalidClassException e){
 				//This occurs when a class was modified and is different from the version that provided the serialized data.
-				//TODO Log this exception so that the user knows why the incident response action will no longer be available
+				EventLogMessage message = new EventLogMessage(EventLogMessage.Category.INTERNAL_ERROR);
+				message.addField(new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to load the event log hook for ID \"" + hookID + "\"") );
+				Application.getApplication().logExceptionEvent(message, e);
 			}
 		}
 		catch(ClassNotFoundException e){

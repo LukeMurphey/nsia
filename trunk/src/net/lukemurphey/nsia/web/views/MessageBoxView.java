@@ -21,7 +21,6 @@ public class MessageBoxView extends View {
 
 	@Override
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
