@@ -1,4 +1,4 @@
-package net.lukemurphey.nsia.scan;
+package net.lukemurphey.nsia.scan.scriptenvironment;
 
 /**
  * This class communicates the result of a scan and is intended to be used by the signature scripts.

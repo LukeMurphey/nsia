@@ -15,6 +15,7 @@ import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor.DefinitionPolicyAction;
+import net.lukemurphey.nsia.scan.scriptenvironment.Result;
 
 import java.sql.SQLException;
 
