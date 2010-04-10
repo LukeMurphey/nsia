@@ -1,9 +1,10 @@
 package net.lukemurphey.nsia.scan;
 
-
+import net.lukemurphey.nsia.scan.scriptenvironment.Result;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.Vector;
+
 
 /**
  * This class loader is intended for use within the scripting environments. It exists for two reasons:
