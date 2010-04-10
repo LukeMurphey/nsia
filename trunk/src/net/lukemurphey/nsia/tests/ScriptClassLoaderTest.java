@@ -20,7 +20,8 @@ import net.lukemurphey.nsia.scan.HttpResponseData;
 import net.lukemurphey.nsia.scan.InvalidDefinitionException;
 import net.lukemurphey.nsia.scan.ScriptClassLoader;
 import net.lukemurphey.nsia.scan.ScriptDefinition;
-import net.lukemurphey.nsia.scan.Variables;
+import net.lukemurphey.nsia.scan.scriptenvironment.Variables;
+
 import junit.framework.TestCase;
 
 public class ScriptClassLoaderTest extends TestCase {

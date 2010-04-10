@@ -3,6 +3,7 @@ package net.lukemurphey.nsia.tests;
 import java.io.UnsupportedEncodingException;
 import junit.framework.TestCase;
 import net.lukemurphey.nsia.scan.*;
+import net.lukemurphey.nsia.scan.scriptenvironment.Variables;
 
 public class PatternDefinitionTest extends TestCase {
 	

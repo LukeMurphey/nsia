@@ -18,7 +18,7 @@ import net.lukemurphey.nsia.scan.DefinitionEvaluationException;
 import net.lukemurphey.nsia.scan.HttpResponseData;
 import net.lukemurphey.nsia.scan.InvalidDefinitionException;
 import net.lukemurphey.nsia.scan.ScriptDefinition;
-import net.lukemurphey.nsia.scan.Variables;
+import net.lukemurphey.nsia.scan.scriptenvironment.Variables;
 
 import java.net.*;
 

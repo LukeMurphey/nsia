@@ -6,6 +6,7 @@ import java.util.regex.*;
 import net.lukemurphey.nsia.MimeType;
 import net.lukemurphey.nsia.Wildcard;
 import net.lukemurphey.nsia.scan.Evaluator.OffsetRelativity;
+import net.lukemurphey.nsia.scan.scriptenvironment.Variables;
 
 import org.apache.commons.lang.StringUtils;
 
