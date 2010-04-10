@@ -1,4 +1,4 @@
-package net.lukemurphey.nsia.scan;
+package net.lukemurphey.nsia.scan.scriptenvironment;
 
 import java.util.Vector;
 

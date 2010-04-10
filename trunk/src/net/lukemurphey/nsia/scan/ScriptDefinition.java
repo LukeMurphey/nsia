@@ -16,6 +16,7 @@ import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
 import net.lukemurphey.nsia.scan.scriptenvironment.StringUtils;
 import net.lukemurphey.nsia.scan.scriptenvironment.Result;
+import net.lukemurphey.nsia.scan.scriptenvironment.Variables;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
