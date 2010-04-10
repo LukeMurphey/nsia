@@ -17,7 +17,6 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.ApplicationStatusDescriptor;
 import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLog;
-import net.lukemurphey.nsia.htmlInterface.Html;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -116,14 +115,14 @@ public class SystemStatusView extends View {
 		//	 2.1 -- Get the memory status
 		Application.StatusEntry statusEntry = managerStatusDesc.getStatusEntry("Memory Utilization");
 		if (statusEntry.getStatus() == Application.ApplicationStatusDescriptor.STATUS_RED )
-			system_stats.add( new SystemStat("Memory Used", Html.getBytesDescription( application.getUsedMemory() )  + " (free memory critical)", StatType.ERROR));
+			system_stats.add( new SystemStat("Memory Used", Shortcuts.getBytesDescription( application.getUsedMemory() )  + " (free memory critical)", StatType.ERROR));
 		else if (statusEntry.getStatus()  == Application.ApplicationStatusDescriptor.STATUS_YELLOW)
-			system_stats.add( new SystemStat("Memory Used", Html.getBytesDescription( application.getUsedMemory() )  + " (free memory low)", StatType.WARNING));
+			system_stats.add( new SystemStat("Memory Used", Shortcuts.getBytesDescription( application.getUsedMemory() )  + " (free memory low)", StatType.WARNING));
 		else
-			system_stats.add( new SystemStat("Memory Used", Html.getBytesDescription( application.getUsedMemory() ), StatType.CHECK));
+			system_stats.add( new SystemStat("Memory Used", Shortcuts.getBytesDescription( application.getUsedMemory() ), StatType.CHECK));
 		
 		//	 2.2 -- Get the memory available
-		system_stats.add( new SystemStat("Memory Available", Html.getBytesDescription( application.getMaxMemory() ), StatType.INFO));
+		system_stats.add( new SystemStat("Memory Available", Shortcuts.getBytesDescription( application.getMaxMemory() ), StatType.INFO));
 		
 		//	 2.3 -- Get the number of threads
 		statusEntry = managerStatusDesc.getStatusEntry("Thread Count");
@@ -153,7 +152,7 @@ public class SystemStatusView extends View {
 			system_stats.add( new SystemStat("Scanner Status", "Operational", StatType.CHECK));
 		
 		//	 2.6 -- Get the uptime
-		system_stats.add( new SystemStat("Uptime",  Html.getTimeDescription( application.getUptime()/1000 ), StatType.INFO));
+		system_stats.add( new SystemStat("Uptime",  Shortcuts.getTimeDescription( application.getUptime()/1000 ), StatType.INFO));
 		
 		data.put("system_stats", system_stats);
 		
