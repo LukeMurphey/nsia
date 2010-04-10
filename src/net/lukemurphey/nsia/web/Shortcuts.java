@@ -1,6 +1,7 @@
 package net.lukemurphey.nsia.web;
 
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -1300,5 +1301,43 @@ public class Shortcuts {
 		data.put("permission_denied_link", link );
 		data.put("show_simple", showSimple );
 		TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);
+	}
+	
+	/**
+	 * Privates a human readable string representing the number of bytes provided in the argument. For example, the argument 1024 would return "1 KB".
+	 * @param bytes
+	 * @return
+	 */
+	public static String getBytesDescription( long bytes ){
+		double bytesDouble = bytes;
+		DecimalFormat twoPlaces = new DecimalFormat("0.00");
+		
+		if( bytes < 1024 )
+			return bytes + " Bytes";
+		else if ( bytes < 1048576 )
+			return twoPlaces.format( bytesDouble/1024 ) + " KB";
+		else if ( bytes < 1073741824 )
+			return twoPlaces.format( bytesDouble/1048576 ) + " MB";
+		else
+			return twoPlaces.format( bytesDouble/1073741824 ) + " GB";
+	}
+	
+	/**
+	 * Retrieves a human readable description of the seconds provided. For example, 120 would return "2 minutes". 
+	 * @param secs
+	 * @return
+	 */
+	public static String getTimeDescription( long secs ){
+		double doubleSecs = secs;
+		DecimalFormat twoPlaces = new DecimalFormat("0.00");
+		
+		if( secs < 60 )
+			return secs + " sec";
+		else if ( secs < 3600 )
+			return twoPlaces.format( doubleSecs/60 ) + " min";
+		else if ( secs < 86400 )
+			return twoPlaces.format( doubleSecs/3600 ) + " hours";
+		else
+			return twoPlaces.format( doubleSecs/86400 ) + " days";
 	}
 }
