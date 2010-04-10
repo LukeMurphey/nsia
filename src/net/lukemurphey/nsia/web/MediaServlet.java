@@ -7,7 +7,6 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.GenericUtils;
 import net.lukemurphey.nsia.MimeType;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
-import net.lukemurphey.nsia.htmlInterface.HtmlContentProvider;
 
 import java.io.*;
 import java.net.*;
@@ -36,7 +35,7 @@ public class MediaServlet extends HttpServlet {
 	
 	protected void doRequest(HttpServletRequest request, HttpServletResponse response, boolean inGet) throws ServletException, IOException {
 
-		response.setHeader("Server", HtmlContentProvider.SERVER_STRING);
+		response.setHeader("Server", WebConsoleServlet.SERVER_STRING);
 		
 		// 1 -- Try to find the file
 		try{
