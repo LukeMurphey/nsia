@@ -14,6 +14,7 @@ import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.scan.scriptenvironment.Debug;
 import net.lukemurphey.nsia.scan.scriptenvironment.StringUtils;
 import net.lukemurphey.nsia.scan.scriptenvironment.Result;
 import net.lukemurphey.nsia.scan.scriptenvironment.Variables;
@@ -386,6 +387,17 @@ public class ScriptDefinition extends Definition {
 	}
 	
 	/**
+	 * This method populates the script engine's environment with classes and objects it needs to execute the definition.
+	 * @param scriptEngine
+	 */
+	private void populateBindings( ScriptEngine scriptEngine ){
+		//Note: SimpleBindings can also be used to populate the script environment
+		
+		scriptEngine.put("StringUtils", new StringUtils());
+		scriptEngine.put("Debug", new Debug(this));
+	}
+	
+	/**
 	 * This method evaluates the given data with this definition. The variables argument includes the list of variables that have been set by other definitions that were evalauted
 	 * in the current pass. The rule identifier is used in order to load the saved script data for the given definition. This method will attempt to load a database connection
 	 * from the default application class.
@@ -513,8 +525,7 @@ public class ScriptDefinition extends Definition {
 		}
 		
 		Environment env = new Environment(data);
-		
-		scriptEngine.put("StringUtils", new StringUtils()); //Note: SimpleBindings can also be used to populate the script environment
+		populateBindings(scriptEngine);
 		
 		// 2 -- Execute the script
 		
