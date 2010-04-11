@@ -28,6 +28,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.*;
 
+/**
+ * Script definitions (a.k.a. ThreatScript definitions) are used to performed advanced analysis of web-site content. Script definitions
+ * are written in a high-level programming language and can therefore perform more advanced analysis than Pattern definitions. Additionally,
+ * Script definitions can declare a baselining function that allows them to self-baseline on content that user indicates is clean.
+ * 
+ * The ScriptDefinition class must be capable of gracefully handling cases where the analysis script contains a defect. Therefore, the 
+ * ScriptDefinition class will identify lexical and some semantic errors when the definition is compiled. Additionally, the ScriptDefinition
+ * class will monitor the execution of the script at runtime and terminate it if it runs too long. Any detected error will be reported to
+ * the event logging sub-system.
+ * 
+ * ScriptDefinition will populate the scripts namespace with objects reguired for execution. For security reasons a custom class-loader will
+ * be used that restricts the classes that can be loaded and uses simplified names for the packages.
+ * @author Luke
+ * 
+ */
 public class ScriptDefinition extends Definition {
 
 	private static final int MAX_SCRIPT_RUNTIME = 10000;
@@ -450,7 +465,7 @@ public class ScriptDefinition extends Definition {
 		
 		if( maxRuntime <= 0 ){
 			try {
-				result = (Result)invocable.invokeFunction("analyze", httpResponse, Operation.SCAN, variables, env, false );
+				result = (Result)invocable.invokeFunction("analyze", httpResponse, variables, env );
 			} catch (ScriptException e) {
 				DefinitionErrorList.logError(this.getFullName(), this.revision, "Runtime exception", "Rule ID " + ruleId , this.id, this.localId);
 				throw new DefinitionEvaluationException("The definition threw an exception (ID " + ruleId + ", definition \"" + this.getFullName() + "\")", e);
@@ -461,7 +476,7 @@ public class ScriptDefinition extends Definition {
 		}
 		else {
 			// Create and start the thread that will be responsible for performing the scan
-			InvokerThread thread = new InvokerThread(invocable, httpResponse, Operation.SCAN, variables, env, false );
+			InvokerThread thread = new InvokerThread(invocable, httpResponse, variables, env );
 			thread.setName("ScriptDefinition " + this.getFullName() );
 			
 			synchronized (thread.mutex) {
@@ -557,21 +572,17 @@ public class ScriptDefinition extends Definition {
 		private Invocable invocable;
 		private Result result = null;
 		private HttpResponseData httpResponse;
-		private Operation operation;
 		private Variables variables;
-		private boolean defaultRule;
 		private Environment env;
 		
 		private Throwable e = null;
 		private boolean isRunning = false;
 		private Object mutex = new Object();
 		
-		public InvokerThread(Invocable invocable, HttpResponseData httpResponse, Operation operation, Variables variables, Environment env, boolean defaultRule){
+		public InvokerThread(Invocable invocable, HttpResponseData httpResponse, Variables variables, Environment env){
 			this.invocable = invocable;
 			this.httpResponse = httpResponse;
 			this.variables = variables;
-			this.defaultRule = defaultRule;
-			this.operation = operation;
 			this.env = env;
 		}
 		
@@ -581,7 +592,7 @@ public class ScriptDefinition extends Definition {
 			isRunning = true;
 			
 			try{
-				result = (Result)invocable.invokeFunction("analyze", httpResponse, operation, variables, env, this.defaultRule );
+				result = (Result)invocable.invokeFunction("analyze", httpResponse, variables, env );
 			} catch(ScriptException e){
 				this.e = e;
 			} catch (NoSuchMethodException e) {
