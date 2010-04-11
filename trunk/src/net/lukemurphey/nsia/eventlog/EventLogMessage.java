@@ -66,7 +66,7 @@ public class EventLogMessage {
 		SCANNER_STARTED(EventLogSeverity.NOTICE, "System: Scanner started"), 
 		DEFINITIONS_UPDATED(EventLogSeverity.NOTICE, "System: Definitions updated"), 
 		SCAN_ENGINE_EXCEPTION(EventLogSeverity.ERROR, "System: Scan engine encountered an exception"),
-		DEFINITION_DEBUG_MESSAGE(EventLogSeverity.DEBUG, "System: Definition debug message"), 
+		DEFINITION_DEBUG_MESSAGE(EventLogSeverity.DEBUG, "Scanner: Definition debug message"), 
 		DEFINITIONS_EXPORTED(EventLogSeverity.NOTICE, "System: Definition set exported"), 
 		DEFINITIONS_ADDED(EventLogSeverity.NOTICE, "System: Definition added"), 
 		DEFINITIONS_DELETED(EventLogSeverity.NOTICE, "System: Definition deleted"), 
