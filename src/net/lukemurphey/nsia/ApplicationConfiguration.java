@@ -4,6 +4,7 @@ import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
 import net.lukemurphey.nsia.LicenseManagement.LicenseStatus;
@@ -575,5 +576,17 @@ public class ApplicationConfiguration {
 	
 	public int getEmailSMTPPort() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return (int)appParams.getParameter("Administration.EmailSMTPPort", 25);
+	}
+	
+	public synchronized String getUniqueInstallationID() throws NoDatabaseConnectionException, SQLException, InputValidationException{
+		String uniqueID = appParams.getParameter("Administration.UniqueInstallationID", "");
+		
+		if( uniqueID.length() == 0 ){
+			uniqueID = UUID.randomUUID().toString();
+			
+			appParams.setParameter("Administration.UniqueInstallationID", uniqueID);
+		}
+		
+		return uniqueID;
 	}
 }
