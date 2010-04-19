@@ -35,13 +35,20 @@ public class ApplicationConfiguration {
 	protected static final long DEFAULT_SIMULTANEOUS_HTTP_CONNECTIONS = 10;
 	protected static final String DEFAULT_LOG_FORMAT = "Native";
 	
+	/**
+	 * Constructor that takes an application object (used to retrieve the parameters from).
+	 * @param app
+	 */
 	public ApplicationConfiguration( Application app ){
 		application = app;
 		appParams = new ApplicationParameters(app);
 	}
 	
 	
-	
+	/**
+	 * Gets the application parameters object used to get the configuration values.
+	 * @return
+	 */
 	public ApplicationParameters getApplicationParameters(){
 		return appParams;
 	}
@@ -54,14 +61,32 @@ public class ApplicationConfiguration {
 		appParams.setParameter("Security.LoginBanner", value);
 	}*/
 	
+	/**
+	 * Sets the banner shown on the web-interface before logging in.
+	 */
 	public void setLoginBanner( String value ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		appParams.setParameter("Security.LoginBanner", value);
 	}
+	
+	/**
+	 * Get the banner shown on the web-interface before logging in.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	
 	public String getLoginBanner() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Security.LoginBanner", null);
 	}
 	
+	/**
+	 * Sets the number of iterations passwords are hashed before being stored. This is used to prevent offline password cracking.
+	 * @param value
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setHashIterations( long value ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		if( value <= 0 )
 			throw new InputValidationException("The hash iteration count is invalid (must be greater than or equal to one)", "Hash Iterations", String.valueOf( value ) );
@@ -69,6 +94,13 @@ public class ApplicationConfiguration {
 		appParams.setParameter("Security.PasswordHashIterations", String.valueOf( value ) ); 
 	}
 	
+	/**
+	 * Gets the number of iterations passwords are hashed before being stored. This is used to prevent offline password cracking.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public long getHashIterations() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		long hashIterationCount = appParams.getParameter( "Security.PasswordHashIterations", DEFAULT_PASSWORD_ITERATION_COUNT );
 		
@@ -79,6 +111,13 @@ public class ApplicationConfiguration {
 		return appParams.getParameter( "Security.PasswordHashIterations", DEFAULT_PASSWORD_ITERATION_COUNT );
 	}
 	
+	/**
+	 * Set the default hash algorithm used when hashing passwords.
+	 * @param value
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setHashAlgorithm( String value ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		
 		try {
@@ -90,14 +129,35 @@ public class ApplicationConfiguration {
 		appParams.setParameter("Security.PasswordHashAlgorithm", value);
 	}
 	
+	/**
+	 * Get the default hash algorithm used when hashing passwords.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public String getHashAlgorithm() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Security.PasswordHashAlgorithm", DEFAULT_HASH_ALGORITHM );
 	}
 	
+	/**
+	 * Get the HTTP client ID used when the scan engine accesses web-content.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public String getHttpClientId() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Administration.HTTPClientID", "ThreatFactor NSIA " + Application.getVersion());
 	}
 	
+	/**
+	 * Enables or disables SSL for the web-interface.
+	 * @param value
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setSslEnabled( boolean value ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		if( value )
 			appParams.setParameter("Administration.EnableSSL", "1" );
@@ -105,10 +165,24 @@ public class ApplicationConfiguration {
 			appParams.setParameter("Administration.EnableSSL", "0" );
 	}
 	
+	/**
+	 * Returns a boolean indicating if SSL is enabled for the web-interface.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public boolean isSslEnabled() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Administration.EnableSSL", 0) == 1;
 	}
 	
+	/**
+	 * Set the port used for the internal web-interface.
+	 * @param value
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setServerPort( int value ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		if( value < 0 || value > 65535 )
 			throw new InputValidationException("The manager port is invalid (must be within 0-65535)", "Manager Port", String.valueOf( value ));
@@ -116,6 +190,13 @@ public class ApplicationConfiguration {
 		appParams.setParameter("Administration.ServerPort", String.valueOf( value ));
 	}
 	
+	/**
+	 * Get the port used for the internal web-interface. 
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public int getServerPort() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		int serverPort;
 		if( isSslEnabled() )
@@ -126,6 +207,13 @@ public class ApplicationConfiguration {
 		return serverPort;
 	}
 	
+	/**
+	 * Set the maximum number of scan threads allowed.
+	 * @param value
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setMaxHTTPScanThreads( int value ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		if( value < 0 || value > 25 )
 			throw new InputValidationException("The maximum number of simultaneous HTTP scan threads is too high (cannot be greater than 25)", "HTTP Scan Threads", String.valueOf( value ));
@@ -133,34 +221,90 @@ public class ApplicationConfiguration {
 		appParams.setParameter("Administration.HTTPScanThreads", String.valueOf( value ));
 	}
 	
+	/**
+	 * Get the maximum number of scan threads allowed.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public int getMaxHTTPScanThreads() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return (int)appParams.getParameter("Administration.HTTPScanThreads", 10);
 	}
 	
+	/**
+	 * Get the location of the keystore (used for storing the SSL certificate).
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public String getKeystore() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter( "Administration.SSLKeystore", "../etc/keystore");
 	}
 	
+	/**
+	 * Get the SSL password.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public String getSslPassword() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter( "Administration.SSLPassword", null);
 	}
 	
+	/**
+	 * Get the SSL key password.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public String getSslKeyPassword() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter( "Administration.SSLKeyPassword", null);
 	}
 	
+	/**
+	 * Set the SSL password.
+	 * @param value
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public void setSslPassword( String value ) throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		appParams.setParameter( "Administration.SSLPassword", value);
 	}
 	
+	/**
+	 * Set the SSL key password.
+	 * @param value
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public void setSslKeyPassword( String value ) throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		appParams.setParameter( "Administration.SSLKeyPassword", value);
 	}
 	
+	/**
+	 * Get the format to be when creating the log messages.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public String getLogFormat() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter( "Administration.LogFormat", DEFAULT_LOG_FORMAT);
 	}
 	
+	/**
+	 * Set the format to be when creating the log messages. 
+	 * @param value
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public void setLogFormat( String value ) throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		
 		MessageFormatter formatter = MessageFormatterFactory.getFormatter(value);
@@ -169,6 +313,13 @@ public class ApplicationConfiguration {
 		appParams.setParameter( "Administration.LogFormat", value);
 	}
 	
+	/**
+	 * Set the amount of time that login attempts will be aggregated for purposes of locking account accounts due to repeated failed authentication attempts.
+	 * @param value
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setAuthenticationAttemptAggregationCount( long value ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		if( value < 2 ){
 			throw new InputValidationException( "Authentication attempt aggregation is invalid (must be 2 or more)", "Authentication Attempt Count", String.valueOf( value ) );
@@ -177,20 +328,48 @@ public class ApplicationConfiguration {
 		appParams.setParameter("Security.AuthenticationAttemptAggregationPeriod",String.valueOf(value) );
 	}
 	
+	/**
+	 * Get the amount of time that login attempts will be aggregated for purposes of locking account accounts due to repeated failed authentication attempts.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public long getAuthenticationAttemptAggregationCount() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Security.AuthenticationAttemptAggregationPeriod", DEFAULT_AUTHENTICATION_AGGREGATION_PERIOD_SECONDS);
 	}
 	
+	/**
+	 * Set the limit on the number of failed logins before a login name is locked.
+	 * @param value
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public void setAuthenticationAttemptLimit( long value ) throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		if( value < 0 )
 			throw new InputValidationException( "Authentication attempt limit is invalid (must be 0 or more)", "Authentication Attempt Limit", String.valueOf( value ) );
 		
 	}
 	
+	/**
+	 * Retrieve the limit on the number of failed logins before a login name is locked.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public long getAuthenticationAttemptLimit() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Security.MaximumAuthenticationAttemptLimit",DEFAULT_AUTHENTICATION_ATTEMPT_LIMIT);
 	}
 	
+	/**
+	 * Set the maximum time that a session is allowed to exist without re-authentication.
+	 * @param value
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setSessionLifetime(long value) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		if( value < -1 ) // Session lifetime is disabled
 			throw new InputValidationException("The maximum session lifetime is invalid (must not be less than -1)", "Session Lifetime", String.valueOf(value));
@@ -230,10 +409,24 @@ public class ApplicationConfiguration {
 		
 	}
 	
+	/**
+	 * Get the amount of time that is allowed without activity before a session identifier is invalidated.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public long getSessionInactivityThreshold() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Security.SessionInactivityThreshold", DEFAULT_SESSION_INACTIVITY_THRESHOLD);
 	}
 	
+	/**
+	 * Set the amount of time that is allowed without activity before a session identifier is invalidated.
+	 * @param value
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public void setSessionInactivityThreshold(long value) throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		if( value < -1 )
 			throw new InputValidationException( "Session inactivity threshold is invalid (must not be less then 60 seconds)", "Session Inactivity Threshold", String.valueOf( value ));
@@ -243,6 +436,13 @@ public class ApplicationConfiguration {
 		appParams.setParameter("Security.SessionInactivityThreshold", String.valueOf( value ));
 	}
 	
+	/**
+	 * Set the maximum session identifier lifetime.
+	 * @param value
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public void setSessionIdentifierLifetime( long value ) throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		if( value < -1 )
 			throw new InputValidationException("The session identifier lifetime is invalid (must not be less than -1)", "Session Identifier Lifetime", String.valueOf( value ));
@@ -250,26 +450,68 @@ public class ApplicationConfiguration {
 		appParams.setParameter("Security.SessionIdentifierLifetime", String.valueOf( value ));
 	}
 	
+	/**
+	 * Get the maximum duration of the session identifier.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public long getSessionIdentifierLifetime() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Security.SessionIdentifierLifetime", DEFAULT_SESSION_ID_LIFETIME);
 	}
 	
+	/**
+	 * Get the transport protocol to use when sending the log messages (TCP or UDP).
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public String getLogServerProtocol() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Administration.LogServerProtocol", "UDP");
 	}
 	
+	/**
+	 * Get the port to send the log messages to.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public int getLogServerPort() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return (int)appParams.getParameter("Administration.LogServerPort", 514);
 	}
 	
+	/**
+	 * Get the address to send the log messages to.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public String getLogServerAddress() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Administration.LogServerAddress", null);
 	}
 	
+	/**
+	 * Determine if external logging is enabled.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public boolean getLogServerEnabled() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Administration.LogServerEnabled", 0) == 1;
 	}
 	
+	/**
+	 * Set the port to be used to send the log messages to.
+	 * @param port
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public void setLogServerPort( int port ) throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		
 		if( port < 0 || port > 65535){
@@ -281,10 +523,14 @@ public class ApplicationConfiguration {
 		setupSyslog();
 	}
 	
+	/**
+	 * Reconfigure the syslog setup per the updated configuration.
+	 */
 	protected void setupSyslog(){
 		try{
 			String protocol = getLogServerProtocol();
 			
+			// Select the protocol accordingly
 			if( protocol.equalsIgnoreCase("TCP")){
 				application.getEventLog().setLogServer(getLogServerAddress(), getLogServerPort(), SyslogNGAppender.Protocol.TCP, getLogServerEnabled());
 			}
@@ -292,6 +538,7 @@ public class ApplicationConfiguration {
 				application.getEventLog().setLogServer(getLogServerAddress(), getLogServerPort(), SyslogNGAppender.Protocol.UDP, getLogServerEnabled());
 			}
 			
+			// Set the message format 
 			MessageFormatter formatter = MessageFormatterFactory.getFormatter( application.getApplicationConfiguration().getLogFormat() );
 			application.getEventLog().setMessageFormatter( formatter );
 		}
@@ -303,26 +550,37 @@ public class ApplicationConfiguration {
 	
 	public void setLogServerAddress( String address ) throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		
+		// 0 -- Precondition check
+		
+		//	 0.1 -- Make sure the address is not null
 		if( address == null ){
 			throw new InputValidationException("The address is invalid, cannot be null", "Syslog Server Address", address);
 		}
+		
+		//	 0.2 -- Make sure the address is not empty
 		else if( address.isEmpty() ){
 			throw new InputValidationException("The address is invalid, cannot be empty", "Syslog Server Address", address);
 		}
 		
 		//TODO Need to check syslog server address for validity before accepting
-		
+		// 1 -- Save the parameter
 		appParams.setParameter("Administration.LogServerAddress", address);
+		
+		// 2 -- Reconfigure the syslog server per the new setup
 		setupSyslog();
 	}
 	
 	
 	public void setLogServerProtocol(String protocol) throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		
+		// 0 -- Validate the parameters
+		
+		//	 0.1 -- Make sure the parameter is not null
 		if (protocol == null){
 			throw new InputValidationException("The protocol is invalid, cannot be null", "Syslog Server Protocol", protocol);
 		}
 		
+		//	 0.2 -- Make sure the parameter is a valid protocol
 		if( protocol.equalsIgnoreCase("UDP") == true || protocol.equalsIgnoreCase("TCP") == true){
 			appParams.setParameter("Administration.LogServerProtocol", protocol);
 		}
@@ -330,6 +588,7 @@ public class ApplicationConfiguration {
 			throw new InputValidationException("The protocol is invalid, must be either TCP or UDP", "Syslog Server Protocol", protocol);
 		}
 		
+		// 1 -- Reconfigure the syslog setup since the configuration has changed
 		setupSyslog();
 	}
 	
@@ -393,17 +652,21 @@ public class ApplicationConfiguration {
 		if(license != null && license.getStatus() == LicenseStatus.UNVALIDATED ){
 			lastCheckFresh = (licenseLastChecked + 900000) > System.currentTimeMillis();
 		}
+		
 		// 1.2 -- If the last date checked is less than 8 hours and the last validation was successful, then just return the last license (prevents checking the license repeatedly)
 		else {
 			lastCheckFresh = (licenseLastChecked + 28800000) > System.currentTimeMillis();
 		}
 		
+		// Return the current license information if it is current
 		if( licenseLastChecked > -1 && lastCheckFresh ){
 			return license;
 		}
 		
 		// 2 -- Return the license information
 		String key = appParams.getParameter("Administration.LicenseKey", null);
+		
+		//	 2.1 -- If the key is null then get a descriptor that indicates that the application is unlicensed
 		if( key == null ){
 			try{
 				licenseLastChecked = System.currentTimeMillis();
@@ -415,12 +678,16 @@ public class ApplicationConfiguration {
 			
 			return license;
 		}
+		
+		//	 2.2 -- Start checking the license in the background if the license has not yet been check
 		else if( license!= null && lastCheckFresh == false && dontBlock == true ){
 			LicenseChecker checker = new LicenseChecker();
 			checker.start();
 			
 			return license;
 		}
+		
+		//	 2.3 -- Start checking the license in the background if the license has not yet been check
 		else if( (license == null || lastCheckFresh == false) && dontBlock == true )
 		{
 			if( key != null && licenseBeingChecked == false ){
@@ -432,15 +699,24 @@ public class ApplicationConfiguration {
 			
 			return license;
 		}
+		
+		//	 2.4 -- Get the license
 		else if( license == null || lastCheckFresh == false ){
 			return fetchLicense();
 		}
+		
+		//	 2.5 -- Return the license
 		else
 		{
 			return license;
 		}
 	}
 	
+	/**
+	 * This class obtains licensing information from the licensing server.
+	 * @author Luke
+	 *
+	 */
 	private class LicenseChecker extends Thread{
 		
 		public UncaughtExceptionHandler exHandler = null; 
@@ -461,6 +737,13 @@ public class ApplicationConfiguration {
 		}
 	}
 	
+	/**
+	 * Try to obtain the license information from ThreatFactor.com. 
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	private LicenseDescriptor fetchLicense( ) throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		
 		String key = appParams.getParameter("Administration.LicenseKey", null);
@@ -525,10 +808,26 @@ public class ApplicationConfiguration {
 		}
 	}
 	
+	/**
+	 * Set the email address to use as the source address when sending email via SMTP.
+	 * @param fromAddress
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setEmailFromAddress(EmailAddress fromAddress) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		appParams.setParameter("Administration.EmailFromAddress", fromAddress.toString());
 	}
 	
+	/**
+	 * Get the email address to use as the source address when sending email via SMTP.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 * @throws UnknownHostException
+	 * @throws InvalidLocalPartException
+	 */
 	public EmailAddress getEmailFromAddress() throws NoDatabaseConnectionException, SQLException, InputValidationException, UnknownHostException, InvalidLocalPartException{
 		
 		String email = appParams.getParameter("Administration.EmailFromAddress", null);
@@ -541,30 +840,80 @@ public class ApplicationConfiguration {
 		}
 	}
 	
+	/**
+	 * Set the server to use for sending email via SMTP.
+	 * @param smtpServer
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setEmailSMTPServer(String smtpServer) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		appParams.setParameter("Administration.EmailSMTPServer", smtpServer);
 	}
 	
+	/**
+	 * Get the server to use for sending email via SMTP.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public String getEmailSMTPServer() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Administration.EmailSMTPServer", null);
 	}
 	
+	/**
+	 * Set the username to use when sending email via SMTP.
+	 * @param username
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setEmailUsername(String username) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		appParams.setParameter("Administration.EmailUsername", username);
 	}
 	
+	/**
+	 * Get the username to use when sending email via SMTP.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public String getEmailUsername() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Administration.EmailUsername", null);
 	}
 	
+	/**
+	 * Set the password to use when sending email via SMTP.
+	 * @param password
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setEmailPassword(String password) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		appParams.setParameter("Administration.EmailPassword", password);
 	}
 	
+	/**
+	 * Get the password to use when sending email via SMTP.
+	 * 
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public String getEmailPassword() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return appParams.getParameter("Administration.EmailUsername", null);
 	}
 	
+	/**
+	 * Set the port to use when sending email via SMTP.
+	 * @param port
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public void setEmailSMTPPort(int port) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		
 		if( port < 0 || port > 65535){
@@ -574,10 +923,24 @@ public class ApplicationConfiguration {
 		appParams.setParameter("Administration.EmailSMTPPort", String.valueOf(port));
 	}
 	
+	/**
+	 * Get the email port to use when sending email with SMTP. 
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public int getEmailSMTPPort() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return (int)appParams.getParameter("Administration.EmailSMTPPort", 25);
 	}
 	
+	/**
+	 * Gets an identifier that can be used to uniquely identify this instance. The ID is generated if one does not yet exist yet.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
 	public synchronized String getUniqueInstallationID() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		String uniqueID = appParams.getParameter("Administration.UniqueInstallationID", "");
 		
