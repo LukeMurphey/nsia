@@ -3,6 +3,36 @@
 <#include "Forms.ftl">
 
 <#assign content>
+    <#if sitegroup??>
+    <script type="text/javascript">
+            $(function() {
+                        $("#delete_dialog").dialog({
+                                bgiframe: true,
+                                resizable: false,
+                                height:150,
+                                modal: true,
+                                autoOpen: false,
+                                overlay: {
+                                        backgroundColor: '#000',
+                                        opacity: 0.5
+                                },
+                                buttons: {
+                                        'Delete this Site-Group': function() {
+                                                location='<@url name="sitegroup_delete" args=[sitegroup.groupId?c] />'
+                                        },
+                                        Cancel: function() {
+                                                $(this).dialog('close');
+                                        }
+                                }
+                        });
+                });
+    </script>
+
+    <div style="display:none" id="delete_dialog" title="Delete this Site-Group?">
+            <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>This Site-Group will be permanently deleted and cannot be recovered. Are you sure?</p>
+    </div>
+    </#if>
+    
     <span class="Text_1"><#if sitegroup??>Edit<#else>New</#if> Site Group</span>
     <#if sitegroup??><br><span class="LightText">${sitegroup.groupName?html}</span><p></#if>
     <#if (form_errors??)>
