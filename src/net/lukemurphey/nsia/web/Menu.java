@@ -105,7 +105,7 @@ public class Menu {
 			menu.add( new Link("Edit Site Group", SiteGroupEditView.getURL(siteGroup)) );
 			menu.add( new Link("Edit ACLs", AccessControlView.getURL(siteGroup.getObjectId()), new Link.Attribute("onclick", "\"w=window.open('" + AccessControlView.getURL(siteGroup.getObjectId()) + "', 'AccessControl', 'height=400,width=780,screenX=' + (screen.availWidth - 700)/2 + ',screenY=' + (screen.availHeight - 300)/2 + ',scrollbars=yes,resizable=yes,toolbar=no');return false\"") ) );
 			menu.add( new Link("Edit Scan Policy", DefinitionPolicyView.getURL(siteGroup) ));
-			menu.add( new Link("Delete Site Group", SiteGroupDeleteView.getURL(siteGroup)) );
+			menu.add( new Link("Delete Site Group", SiteGroupDeleteView.getURL(siteGroup) )); // , new Link.Attribute("onclick", "\"$('#delete_dialog').dialog('open');return false;\"")
 			
 			if( siteGroup.isEnabled() ){
 				menu.add( new Link("Disable Site Group", SiteGroupDisableView.getURL(siteGroup) ) );
