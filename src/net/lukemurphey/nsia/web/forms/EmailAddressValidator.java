@@ -14,7 +14,6 @@ public class EmailAddressValidator implements FieldValidator {
 		this.defaultMessage = defaultMessage;
 	}
 	
-	@Override
 	public FieldValidatorResponse validate(String value) {
 		
 		String msg = defaultMessage;

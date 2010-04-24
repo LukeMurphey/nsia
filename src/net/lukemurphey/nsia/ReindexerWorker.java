@@ -21,12 +21,10 @@ public class ReindexerWorker implements WorkerThread {
 	private State state = State.INITIALIZED;
 	private Exception exceptionThrown = null;
 	
-	@Override
 	public boolean canPause() {
 		return false;
 	}
 
-	@Override
 	public int getProgress() {
 		if( state == State.STARTED){
 			return (currentProgress * 100) / total;
@@ -36,12 +34,10 @@ public class ReindexerWorker implements WorkerThread {
 		}
 	}
 
-	@Override
 	public State getStatus() {
 		return state;
 	}
 
-	@Override
 	public String getStatusDescription() {
 		if( state == State.INITIALIZED ){
 			return "Ready";
@@ -57,27 +53,22 @@ public class ReindexerWorker implements WorkerThread {
 		}
 	}
 
-	@Override
 	public String getTaskDescription() {
 		return "Database Index Defragmenter";
 	}
 
-	@Override
 	public void pause() {
 		//This task cannot be paused
 	}
 
-	@Override
 	public boolean reportsProgress() {
 		return true;
 	}
 
-	@Override
 	public void terminate() {
 		shutdown = true;
 	}
 
-	@Override
 	public void run(){
 		state = State.STARTING;
 		Connection connection = null;
@@ -156,7 +147,6 @@ public class ReindexerWorker implements WorkerThread {
 		state = State.STOPPED;
 	}
 
-	@Override
 	public Throwable getException() {
 		return exceptionThrown;
 	}

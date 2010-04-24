@@ -191,7 +191,6 @@ public class DefinitionPolicySet {
 	 */
 	private static class DefinitionPolicyComparator implements java.util.Comparator<DefinitionPolicyDescriptor> {
 
-		@Override
 		public int compare(DefinitionPolicyDescriptor first, DefinitionPolicyDescriptor second) {
 			
 			if( first == null ){

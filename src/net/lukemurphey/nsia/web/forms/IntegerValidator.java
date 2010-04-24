@@ -18,7 +18,6 @@ public class IntegerValidator implements FieldValidator {
 		this.maximum = maximum;
 	}
 	
-	@Override
 	public FieldValidatorResponse validate(String value) {
 		
 		// 1 -- Get the value as an integer

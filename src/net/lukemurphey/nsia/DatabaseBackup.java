@@ -279,7 +279,6 @@ public class DatabaseBackup implements WorkerThread{
 		return "Database Backup";
 	}
 
-	@Override
 	public Throwable getException() {
 		return exceptionThrown;
 	}

@@ -36,12 +36,10 @@ public class DefinitionUpdateWorker extends TimerTask implements WorkerThread  {
 		this.force = force;
 	}
 	
-	@Override
 	public boolean canPause() {
 		return false;
 	}
 
-	@Override
 	public int getProgress() {
 		int currentTime = (int)System.currentTimeMillis();
 		
@@ -61,12 +59,10 @@ public class DefinitionUpdateWorker extends TimerTask implements WorkerThread  {
 		//return -1;
 	}
 
-	@Override
 	public State getStatus() {
 		return state;
 	}
 
-	@Override
 	public String getStatusDescription() {
 		
 		if( message != null ){
@@ -112,22 +108,18 @@ public class DefinitionUpdateWorker extends TimerTask implements WorkerThread  {
 		return true;
 	}
 
-	@Override
 	public String getTaskDescription() {
 		return "Definitions Updater";
 	}
 
-	@Override
 	public void pause() {
 		//Don't do anything, definition updates cannot be paused
 	}
 
-	@Override
 	public boolean reportsProgress() {
 		return false;
 	}
 
-	@Override
 	public void terminate() {
 		// TODO Implement termination routine
 	}
@@ -175,7 +167,6 @@ public class DefinitionUpdateWorker extends TimerTask implements WorkerThread  {
 		state = State.STOPPED;
 	}
 
-	@Override
 	public Throwable getException() {
 		return exceptionThrown;
 	}

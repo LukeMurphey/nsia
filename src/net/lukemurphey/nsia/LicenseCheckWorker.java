@@ -9,27 +9,22 @@ public class LicenseCheckWorker implements WorkerThread{
 	private Exception exceptionThrown = null;
 	private State state = State.INITIALIZED;
 	
-	@Override
 	public boolean canPause() {
 		return false;
 	}
-
-	@Override
+	
 	public Throwable getException() {
 		return exceptionThrown;
 	}
 
-	@Override
 	public int getProgress() {
 		return -1;
 	}
 
-	@Override
 	public State getStatus() {
 		return state;
 	}
 
-	@Override
 	public String getStatusDescription() {
 		if( state == State.STARTED ){
 			return "Retrieving license information";
@@ -42,27 +37,22 @@ public class LicenseCheckWorker implements WorkerThread{
 		}
 	}
 
-	@Override
 	public String getTaskDescription() {
 		return "License Validator";
 	}
 
-	@Override
 	public void pause() {
 		// This thread cannot be paused
 	}
 
-	@Override
 	public boolean reportsProgress() {
 		return false;
 	}
 
-	@Override
 	public void terminate() {
 		// This thread cannot be terminated
 	}
 
-	@Override
 	public void run() {
 		Application appRes = Application.getApplication();
 		state = State.STARTED;

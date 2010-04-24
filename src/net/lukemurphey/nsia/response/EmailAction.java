@@ -47,7 +47,6 @@ public class EmailAction extends Action {
 
 	private static class EmailAddressValidator implements FieldValidator{
 
-		@Override
 		public FieldValidatorResult validate(String value) {
 			
 			try{

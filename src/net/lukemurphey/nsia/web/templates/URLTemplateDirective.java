@@ -28,7 +28,6 @@ public class URLTemplateDirective implements TemplateDirectiveModel{
 	public static final String PARAM_ARGS = "args";
 	
 	@SuppressWarnings("unchecked")
-	@Override
 	public void execute(Environment env, Map params, TemplateModel[] model, TemplateDirectiveBody body) throws TemplateException, IOException {
 
 		// 1 -- Get the arguments

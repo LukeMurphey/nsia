@@ -791,7 +791,6 @@ public class DefinitionSet {
 	
 	private class DefinitionCategoryComparator implements java.util.Comparator<DefinitionCategory> {
 
-		@Override
 		public int compare(DefinitionCategory first, DefinitionCategory second ) {
 			
 			if( first.getCategory().equalsIgnoreCase(second.getCategory()) ){
