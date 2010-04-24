@@ -483,6 +483,41 @@ public class DefinitionArchive {
 	}
 	
 	/**
+	 * Gets the current definition set as a string.
+	 * @param key
+	 * @return
+	 * @throws DefinitionUpdateFailedException
+	 */
+	public static String getCurrentDefinitionsAsString(String key) throws DefinitionUpdateFailedException{
+		
+		try{
+			XmlRpcClient client = new XmlRpcClient( DEFINITION_SUPPORT_API_URL );
+			
+			Vector<Object> params = new Vector<Object>();
+			params.add(new Integer(DEFINITION_VERSION) );
+			params.add( key );
+			
+			Object result = client.execute( "Definitions.latestDefinitions", params );
+	
+			if ( result != null && result instanceof XmlRpcException ){
+				throw new DefinitionUpdateFailedException( "Error when attempting to retrieve definition updates from server", (XmlRpcException)result );
+			}
+	        if ( result != null && result instanceof String ){
+	            String definitionsXml = (String)result;
+	            
+	            return definitionsXml;
+	        }
+	        else{
+	        	return null;
+	        }
+		} catch(XmlRpcException e){
+			throw new DefinitionUpdateFailedException( "Error when attempting to retrieve definition updates from server", e );
+		} catch (IOException e) {
+			throw new DefinitionUpdateFailedException( "Error when attempting to retrieve definition updates from server", e );
+		}
+	}
+	
+	/**
 	 * Retrieves the latest set of definitions from the server and applies them.
 	 * @return
 	 * @throws IOException 
@@ -504,29 +539,18 @@ public class DefinitionArchive {
 				return null;
 			}
 			
-			XmlRpcClient client = new XmlRpcClient( DEFINITION_SUPPORT_API_URL );
+			// Get the definitions as a string (contains XML)
+			String definitionsXml = getCurrentDefinitionsAsString(key);
 			
-			Vector<Object> params = new Vector<Object>();
-			params.add(new Integer(DEFINITION_VERSION) );
-			params.add( key );
-			
-			Object result = client.execute( "Definitions.latestDefinitions", params );
-	
-			if ( result != null && result instanceof XmlRpcException ){
-				throw new DefinitionUpdateFailedException( "Error when attempting to retrieve definition updates from server", (XmlRpcException)result );
+			if( definitionsXml == null ){
+				return null;
 			}
-	        if ( result != null && result instanceof String ){
-	            String definitionsXml = (String)result;
-	            DefinitionSet definitionSet = DefinitionSet.loadFromString(definitionsXml);
-	            
-	            DefinitionArchive.archive.updateDefinitions(definitionSet, true);//Note: the argument of true means that all existing definitions marked as "Official" will be removed first (since they will be replaced)
-	            return definitionSet.getVersionID();
-	        }
-	        else{
-	        	return null;
-	        }
-		} catch(XmlRpcException e){
-			throw new DefinitionUpdateFailedException( "Error when attempting to retrieve definition updates from server", e );
+			
+            DefinitionSet definitionSet = DefinitionSet.loadFromString(definitionsXml);
+            
+            DefinitionArchive.archive.updateDefinitions(definitionSet, true);//Note: the argument of true means that all existing definitions marked as "Official" will be removed first (since they will be replaced)
+            return definitionSet.getVersionID();
+			
 		} catch (ParserConfigurationException e) {
 			throw new DefinitionUpdateFailedException( "Definitions loaded from server are corrupted", e );
 		} catch (SAXException e) {
