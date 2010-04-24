@@ -24,7 +24,6 @@ public class FileFieldValidator implements FieldValidator {
 		this.acceptFile = acceptFile;
 	}
 	
-	@Override
 	public FieldValidatorResult validate(String value) {
 		
 		File file = new File(value);

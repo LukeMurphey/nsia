@@ -95,7 +95,6 @@ public class DelayedShutdown implements WorkerThread{
 		running = false;
 	}
 
-	@Override
 	public Throwable getException() {
 		//return exceptionThrown;
 		return null;

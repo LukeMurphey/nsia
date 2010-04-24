@@ -14,7 +14,6 @@ public class HostAddressValidator implements FieldValidator {
 		this.defaultMessage = defaultMessage;
 	}
 	
-	@Override
 	public FieldValidatorResponse validate(String value) {
 		try{
 			new HostAddress(value);

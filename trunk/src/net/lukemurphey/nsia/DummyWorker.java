@@ -20,52 +20,42 @@ public class DummyWorker implements WorkerThread {
 	
 	public DummyWorker( ){ }
 	
-	@Override
 	public boolean canPause() {
 		return false;
 	}
 
-	@Override
 	public Throwable getException() {
 		return null;
 	}
 
-	@Override
 	public int getProgress() {
 		return progress;
 	}
 
-	@Override
 	public State getStatus() {
 		return status;
 	}
 
-	@Override
 	public String getStatusDescription() {
 		return "Waiting for a total of " + delays_secs + " seconds; currently " + getProgress() + "% done.";
 	}
 
-	@Override
 	public String getTaskDescription() {
 		return taskDesc;
 	}
 
-	@Override
 	public void pause() {
 		//Does not support pausing
 	}
 
-	@Override
 	public boolean reportsProgress() {
 		return true;
 	}
 
-	@Override
 	public void terminate() {
 		terminate = true;
 	}
 
-	@Override
 	public void run() {
 		status = State.STARTED;
 		int waitedSecs = 0;

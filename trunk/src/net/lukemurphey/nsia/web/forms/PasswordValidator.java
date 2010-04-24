@@ -11,7 +11,6 @@ public class PasswordValidator implements FieldValidator {
 	private static final Pattern HAS_SPECIAL = Pattern.compile("[^0-9A-Za-z]");
 	private static final String REQUIREMENT_DESCRIPTION = "(must have lower and upper case characters, numbers and at least one special character)";
 	
-	@Override
 	public FieldValidatorResponse validate(String value) {
 		
 		// 1 -- Make sure the password is not empty

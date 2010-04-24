@@ -12,7 +12,6 @@ public class MessageValidator implements FieldValidator {
 		name = fieldName;
 	}
 	
-	@Override
 	public FieldValidatorResult validate(String value) {
 
 		if(value == null || value.length() == 0){

@@ -59,7 +59,6 @@ public class PatternValidator implements FieldValidator {
 		this.defaultMessage = message;
 	}
 	
-	@Override
 	public FieldValidatorResponse validate(String value) {
 		Matcher matcher = pattern.matcher(value);
 		

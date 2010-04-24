@@ -64,7 +64,6 @@ public class EventLog {
 			//Only instantiable within the given class
 		}
 		
-		@Override
 		public void error(String message) {
 			EventLog.this.logEvent( new EventLogMessage( Category.LOG_FAILED, new EventLogField(FieldName.MESSAGE, message)), true );
 		}
@@ -93,7 +92,6 @@ public class EventLog {
 			}
 		}
 		
-		@Override
 		public void error(String message, Exception exception, int code) {
 			Category category = getCategoryFromCode(code);
 			
@@ -105,28 +103,23 @@ public class EventLog {
 			}
 		}
 
-		@Override
 		public void error(String message, Exception exception, int code,
 				LoggingEvent event) {
 			error(message, exception, code);
 		}
 
-		@Override
 		public void setAppender(Appender appender) {
 			
 		}
 
-		@Override
 		public void setBackupAppender(Appender appender) {
 			
 		}
 
-		@Override
 		public void setLogger(Logger logger) {
 			
 		}
 
-		@Override
 		public void activateOptions() {
 			
 		}

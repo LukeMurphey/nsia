@@ -20,7 +20,6 @@ public class DurationTemplateDirective implements TemplateDirectiveModel{
 	private static final String PARAM_TIME_SECS = "seconds";
 	
 	@SuppressWarnings("unchecked")
-	@Override
 	public void execute(Environment env, Map params, TemplateModel[] model, TemplateDirectiveBody body) throws TemplateException, IOException {
 		
 		// 1 -- Get the arguments

@@ -119,12 +119,10 @@ public class RuleScanWorker implements WorkerThread{
 		}
 	}
 	
-	@Override
 	public boolean canPause() {
 		return false;
 	}
 
-	@Override
 	public int getProgress() {
 		
 		if( numberOfRulesToScan() == 1 ){
@@ -151,12 +149,10 @@ public class RuleScanWorker implements WorkerThread{
 		}
 	}
 
-	@Override
 	public State getStatus() {
 		return state;
 	}
 
-	@Override
 	public String getStatusDescription() {
 		
 		if( currentOffset > (numberOfRulesToScan() - 1) ){
@@ -172,12 +168,10 @@ public class RuleScanWorker implements WorkerThread{
 		}
 	}
 
-	@Override
 	public String getTaskDescription() {
 		return "On-Demand Scanner";
 	}
 
-	@Override
 	public void pause() {
 		if( ruleBeingScanned != null && ruleBeingScanned instanceof WorkerThread ){
 			WorkerThread thread = (WorkerThread)ruleBeingScanned;
@@ -189,12 +183,10 @@ public class RuleScanWorker implements WorkerThread{
 		}
 	}
 
-	@Override
 	public boolean reportsProgress() {
 		return true;
 	}
 
-	@Override
 	public void terminate() {
 		state = State.STOPPING;
 		terminate = true;
@@ -207,7 +199,6 @@ public class RuleScanWorker implements WorkerThread{
 		state = State.STOPPED;
 	}
 
-	@Override
 	public void run() {
 		exceptionThrown = null;
 		state = State.STARTING;
@@ -282,7 +273,6 @@ public class RuleScanWorker implements WorkerThread{
 		
 	}
 	
-	@Override
 	public Throwable getException() {
 		return exceptionThrown;
 	}

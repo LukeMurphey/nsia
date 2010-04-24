@@ -1503,7 +1503,6 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		}
 	}
 
-	@Override
 	public Throwable getException() {
 		return exceptionThrown ;
 	}
