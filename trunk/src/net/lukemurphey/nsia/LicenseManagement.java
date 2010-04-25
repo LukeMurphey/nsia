@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class LicenseManagement {
 	
 	public enum Type{
-		DEMO, STANDARD, PARTNER, NON_PROFIT, BETA_TEST, UNDEFINED;
+		DEMO, STANDARD, PARTNER, NON_PROFIT, BETA_TEST, UNDEFINED, FREE;
 	}
 	
 	public enum LicenseStatus{
