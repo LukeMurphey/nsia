@@ -51,5 +51,21 @@
 		  </java>
 	</target>
 	
+    <target name="downloaddefinitions" description="Download the latest definitions set and export into the NSIA directory (so it can be included in the NSIA.jar)">
+    	<property file="sbin/build.properties"></property>
+    	<java classname="net.lukemurphey.nsia.support.DefinitionDownload">
+    		<arg value="${licensekey}" />
+    		<arg value="-f" />
+    		<arg value="../src/net/lukemurphey/nsia/scan/default_definitions.xml" />
+            <classpath>
+              <pathelement location="lib\JSAP-2.0b.jar" />
+              <pathelement location="lib\xmlrpc-2.0.jar" />
+              <pathelement location="lib\commons-codec-1.3.jar" />
+              <pathelement location="java-bin" />
+              <!-- <pathelement path="${java.class.path}"/> -->
+            </classpath>
+    	</java>
+    </target>
+	
 	<target name="buildall" depends="webarchive,jar,zip"/>
 </project>
