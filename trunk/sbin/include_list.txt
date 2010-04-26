@@ -7,6 +7,7 @@ bin/nsia.jar
 bin/install.sh
 bin/install.bat
 etc/config.ini
+etc/init.d/ubuntu/*
 etc/mime.types
 lib/*.jar
 lib/*.war
