@@ -64,7 +64,7 @@ public class SiteGroupEditView extends View {
 	private Form getSiteGroupForm( ){
 		Form form = new Form();
 		
-		form.addField( new Field("Name", new PatternValidator(Pattern.compile("[-a-z0-9 _]{1,32}", Pattern.CASE_INSENSITIVE), "Name is not valid")) );
+		form.addField( new Field("Name", new PatternValidator(Pattern.compile("[-a-z0-9. _]{1,32}", Pattern.CASE_INSENSITIVE), "Name is not valid (can only contain letters, numbers, spaces, periods and underscores)")) );
 		form.addField( new Field("Description") );
 		
 		return form;
