@@ -83,7 +83,7 @@ public class DefinitionsUpdateView extends View {
 	protected boolean process(HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data) throws ViewFailedException, URLInvalidException, IOException, ViewNotFoundException {
 	
 		// 1 -- Go to definitions view if the user pressed cancel
-		if( request.getParameter("Selected") != null && "Cancel".equalsIgnoreCase( request.getParameter("Selected") ) ){
+		if( request.getParameter("Selected") != null && ( "Cancel".equalsIgnoreCase( request.getParameter("Selected") ) || "Ok".equalsIgnoreCase( request.getParameter("Selected") ) ) ){
 			response.sendRedirect(StandardViewList.getURL(DefinitionsView.VIEW_NAME));
 			return true;
 		}
