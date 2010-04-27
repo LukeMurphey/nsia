@@ -1,7 +1,7 @@
 <#macro getattrs attrs>
 	<#if attrs??>
 		<#list attrs as attr>
-			${attr.name}=${attr.value}
+			${attr.name}="${attr.value}"
 		</#list> 
 	</#if>
 </#macro>
