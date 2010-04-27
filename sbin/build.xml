@@ -52,7 +52,7 @@
 	</target>
 	
     <target name="downloaddefinitions" description="Download the latest definitions set and export into the NSIA directory (so it can be included in the NSIA.jar)">
-    	<property file="sbin/build.properties"></property>
+    	<property file="sbin/local.build.properties"></property>
     	<java classname="net.lukemurphey.nsia.support.DefinitionDownload">
     		<arg value="${licensekey}" />
     		<arg value="-f" />
