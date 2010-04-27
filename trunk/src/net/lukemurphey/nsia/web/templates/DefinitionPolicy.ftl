@@ -25,6 +25,13 @@
 </#macro>
 
 <#assign content>
+
+<#if categories?size = 0 >
+    <#assign message>
+        No definitions exist yet. Download updated definitions to get the most current official set.<p><a href="<@url name="definitions_update" />">[Update Definitions Now]</a>
+    </#assign>
+    <@getinfodialog title="No Definitions" message=message />
+<#else>
 <span class="Text_1">Scan Policy Management</span>
 <#if (sitegroup??)>
 <br><span class="LightText">Viewing scan policy for Site Group ${sitegroup.groupName?html}</span>
@@ -37,9 +44,6 @@
 <#if (sitegroup??)>
     <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId?c}">
 </#if>
-<#if categories?size = 0 >
-
-<#else>
     <table class="DataTable" width="80%" summary="Definition categories">
         <thead>
             <tr>
@@ -49,7 +53,7 @@
     <#list categories as category>
         <@policyrow category=category />
     </#list>
-</#if>
+
 
         <tr class="lastRow">
             <td colspan="4">
@@ -62,5 +66,6 @@
         </tr>            
     </table>
 </form>
+</#if>
 </#assign>
 <#include "BaseWithNav.ftl">
