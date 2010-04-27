@@ -74,7 +74,7 @@
     
     <#if ( total_entries >= entries_per_page)>
         
-        <form action="/Definitions" method="Post">
+        <form action="<@url name="definitions_list" />" method="Post">
             <#if ( start_page > 1 )>
                 <input style="width:64px;" class="button" type="submit" name="N" value="Start">&nbsp;
             </#if>
