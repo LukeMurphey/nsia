@@ -403,11 +403,11 @@ public class DefinitionPolicyView extends View {
 					siteGroup = siteGroupManagement.getGroupDescriptor(siteGroupID);
 				}
 				catch( NumberFormatException e ){
-					Dialog.getDialog(response, context, data, "The site-group ID provided is invalid", "SiteGroup ID Invalid", DialogType.WARNING);
+					Dialog.getDialog(response, context, data, "The site-group ID provided is invalid", "Site-Group ID Invalid", DialogType.WARNING);
 					return true;
 				}
 				catch( NotFoundException e ){
-					Dialog.getDialog(response, context, data, "No site-group found with the given ID", "SiteGroup ID Invalid", DialogType.WARNING);
+					Dialog.getDialog(response, context, data, "No site-group found with the given ID", "Site-Group ID Invalid", DialogType.WARNING);
 					return true;
 				}
 			}
