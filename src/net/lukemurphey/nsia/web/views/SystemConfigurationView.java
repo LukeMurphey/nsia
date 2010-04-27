@@ -236,6 +236,14 @@ public class SystemConfigurationView extends View {
 	}
 	
 	private boolean getAsBoolean( String value ) throws FieldValidationFailedException{
+		
+		if( value == null ){
+			return false;
+		}
+		else if( value.equalsIgnoreCase("on")){
+			return true;
+		}
+		
 		try{
 			return Boolean.parseBoolean(value);
 		}
@@ -249,25 +257,25 @@ public class SystemConfigurationView extends View {
 		String name = request.getParameter("ParamID");
 		String value = request.getParameter("ParamValue");
 			
-		if( name != null && value != null ){
+		if( name != null ){
 			
 			ApplicationConfiguration config = Application.getApplication().getApplicationConfiguration();
 			
 			try{
 				// Authentication setup
-				if( ParameterTitles.AUTH_LOGIN_AGGREGATION.equals(name) ){
+				if( value != null && ParameterTitles.AUTH_LOGIN_AGGREGATION.equals(name) ){
 					config.setAuthenticationAttemptAggregationCount( getAsLong(value));
 					context.addMessage("Login aggregation updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.AUTH_LOGIN_BANNER.equals(name) ){
+				else if( value != null && ParameterTitles.AUTH_LOGIN_BANNER.equals(name) ){
 					config.setLoginBanner( value );
 					context.addMessage("Login banner updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.AUTH_LOGIN_FAILURE_LIMIT.equals(name) ){
+				else if( value != null && ParameterTitles.AUTH_LOGIN_FAILURE_LIMIT.equals(name) ){
 					config.setAuthenticationAttemptLimit( getAsLong(value) );
 					context.addMessage("Login failure limit updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.AUTH_PASSWORD_HASH_ITERATIONS.equals(name) ){
+				else if( value != null && ParameterTitles.AUTH_PASSWORD_HASH_ITERATIONS.equals(name) ){
 					config.setHashIterations( getAsLong(value) );
 					context.addMessage("Password hash iteration count updated", MessageSeverity.SUCCESS);
 				}
@@ -277,7 +285,7 @@ public class SystemConfigurationView extends View {
 					config.setAutoDefinitionUpdating( getAsBoolean(value) );
 					context.addMessage("Definitions auto-update updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.SERVER_PORT.equals(name) ){
+				else if( value != null && ParameterTitles.SERVER_PORT.equals(name) ){
 					config.setServerPort( getAsInt(value) );
 					context.addMessage("Server port updated", MessageSeverity.SUCCESS);
 				}
@@ -285,11 +293,11 @@ public class SystemConfigurationView extends View {
 					config.setSslEnabled( getAsBoolean(value) );
 					context.addMessage("SSL setting updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.SERVER_SSL_KEY_PASSWORD.equals(name) ){
+				else if( value != null && ParameterTitles.SERVER_SSL_KEY_PASSWORD.equals(name) ){
 					config.setSslKeyPassword( value );
 					context.addMessage("SSL key password updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.SERVER_SSL_PASSWORD.equals(name) ){
+				else if( value != null && ParameterTitles.SERVER_SSL_PASSWORD.equals(name) ){
 					config.setSslPassword( value );
 					context.addMessage("SSL password updated", MessageSeverity.SUCCESS);
 				}
@@ -302,21 +310,21 @@ public class SystemConfigurationView extends View {
 				}
 				
 				// Session management
-				else if( ParameterTitles.SESSION_IDENTIFIER_LIFETIME.equals(name) ){
+				else if( value != null && ParameterTitles.SESSION_IDENTIFIER_LIFETIME.equals(name) ){
 					config.setSessionIdentifierLifetime( ( getAsLong(value) ) );
 					context.addMessage("Session identifier lifetime updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.SESSION_INACTIVITY_THRESHOLD.equals(name) ){
+				else if( value != null && ParameterTitles.SESSION_INACTIVITY_THRESHOLD.equals(name) ){
 					config.setSessionInactivityThreshold( ( getAsLong(value) ) );
 					context.addMessage("Session inactivity threshold updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.SESSION_LIFETIME.equals(name) ){
+				else if( value != null && ParameterTitles.SESSION_LIFETIME.equals(name) ){
 					config.setSessionLifetime( ( getAsLong(value) ) );
 					context.addMessage("Session lifetime updated", MessageSeverity.SUCCESS);
 				}
 				
 				// Email address setup
-				else if( ParameterTitles.EMAIL_FROM_ADDRESS.equals(name) ){
+				else if( value != null && ParameterTitles.EMAIL_FROM_ADDRESS.equals(name) ){
 					try {
 						config.setEmailFromAddress( EmailAddress.getByAddress(value) );
 						context.addMessage("Email from address updated", MessageSeverity.SUCCESS);
@@ -326,19 +334,19 @@ public class SystemConfigurationView extends View {
 						throw new FieldValidationFailedException("Local part of the email address is invalid");
 					}
 				}
-				else if( ParameterTitles.EMAIL_PASSWORD.equals(name) ){
+				else if( value != null && ParameterTitles.EMAIL_PASSWORD.equals(name) ){
 					config.setEmailPassword( value );
 					context.addMessage("Email password updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.EMAIL_SMTP_PORT.equals(name) ){
+				else if( value != null && ParameterTitles.EMAIL_SMTP_PORT.equals(name) ){
 					config.setEmailSMTPPort( getAsInt( value ) );
 					context.addMessage("Email SMTP port updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.EMAIL_SMTP_SERVER.equals(name) ){
+				else if( value != null && ParameterTitles.EMAIL_SMTP_SERVER.equals(name) ){
 					config.setEmailSMTPServer( value );
 					context.addMessage("SMTP server updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.EMAIL_USERNAME.equals(name) ){
+				else if( value != null && ParameterTitles.EMAIL_USERNAME.equals(name) ){
 					config.setEmailUsername( value );
 					context.addMessage("SMTP username updated", MessageSeverity.SUCCESS);
 				}
@@ -348,29 +356,29 @@ public class SystemConfigurationView extends View {
 					config.setLogServerEnabled( getAsBoolean(value) );
 					context.addMessage("Log setting updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.LOG_FORMAT.equals(name) ){
+				else if( value != null && ParameterTitles.LOG_FORMAT.equals(name) ){
 					config.setLogFormat( value );
 					context.addMessage("Log format updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.LOG_SERVER.equals(name) ){
+				else if( value != null && ParameterTitles.LOG_SERVER.equals(name) ){
 					config.setLogServerAddress( value );
 					context.addMessage("Log server updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.LOG_SERVER_PORT.equals(name) ){
+				else if( value != null && ParameterTitles.LOG_SERVER_PORT.equals(name) ){
 					config.setLogServerPort( getAsInt(value) );
 					context.addMessage("Log server port updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.LOG_TRANSPORT.equals(name) ){
+				else if( value != null && ParameterTitles.LOG_TRANSPORT.equals(name) ){
 					config.setLogServerProtocol(value);
 					context.addMessage("Log transport updated", MessageSeverity.SUCCESS);
 				}
-				else if( ParameterTitles.LICENSE_KEY.equals(name) ){
+				else if( value != null && ParameterTitles.LICENSE_KEY.equals(name) ){
 					config.setLicenseKey(value);
 					context.addMessage("License key updated", MessageSeverity.SUCCESS);
 				}
 				
 				// Scanner configuration
-				else if( ParameterTitles.SCANNER_HTTP_THREADS.equals(name) ){
+				else if( value != null && ParameterTitles.SCANNER_HTTP_THREADS.equals(name) ){
 					config.setMaxHTTPScanThreads( getAsInt(value) );
 					context.addMessage("Scanner HTTP thread limit updated", MessageSeverity.SUCCESS);
 				}
