@@ -359,7 +359,15 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			urls.addAll(urlsTemp);
 		}
 		
+		//	 1.9 -- embed
+		urlsTemp = getUrlAttrs("embed", "code", url, parser, true);
+		
+		if( urlsTemp != null ){
+			urls.addAll(urlsTemp);
+		}
+		
 		//	 1.9 -- Shockwave Flash objects declared in JavaScript (this is the preferred way to load Flash). SWFObject[ ]*\([ ]*"([-0-9.a-z_A-Z/\\]*)
+		//TODO Load Shockware flash references made using the SWFObject 
 		
 		// 2 -- Return the result
 		return urls;
