@@ -233,10 +233,12 @@ public class ScannerController extends Thread{
 								 *   2) The associated site group is disabled (thus rules should no longer be scanned) 
 								 */
 							}
+							
 							// 2.2 -- Scan rules where the rule has changed and the result data needs to updated accordingly (i.e. the scan data is for an older version of the rule)
-							else if( scanDataObsolete ){
+							else if( scanDataObsolete && appRes.getApplicationConfiguration().isRescanOnEditEnabled() ){
 								dispatchScanner( ruleId );
 							}
+							
 							// 2.3 -- Scan rules where the scan data has expired (and need re-scanning)
 							else if( (System.currentTimeMillis() - lastScanned.getTime())/1000 > scanFrequency ){
 								dispatchScanner( ruleId );
