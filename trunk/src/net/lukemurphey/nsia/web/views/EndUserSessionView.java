@@ -101,7 +101,7 @@ public class EndUserSessionView extends View {
 			
 			// 4 -- Post a message if the session is invalid
 			if( sessionInfo.getSessionStatus() != SessionStatus.SESSION_NULL ){
-				Dialog.getDialog("No session exists with the given identifier", "Session Tracking Number Invalid", DialogType.WARNING, new Link("Return to the session list", UserSessionsView.getURL()));
+				Dialog.getDialog(response, context, data, "No session exists with the given identifier", "Session Tracking Number Invalid", DialogType.WARNING, new Link("Return to the session list", UserSessionsView.getURL()));
 				return true;
 			}
 			
