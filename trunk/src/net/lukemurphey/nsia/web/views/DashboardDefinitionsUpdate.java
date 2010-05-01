@@ -181,7 +181,7 @@ public class DashboardDefinitionsUpdate extends View {
 				// Re-check if the definitions changed
 				definitionsChanged()
 			) || (
-				// since the last time we checked or we haven't check in a while
+				// Re check if we haven't check in a while and are not already checking
 				checkingVersion == false
 				&& needsUpdateCheck() ) ){
 			checkerThread = new VersionChecker();
