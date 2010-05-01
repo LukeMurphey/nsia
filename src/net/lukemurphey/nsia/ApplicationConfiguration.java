@@ -935,6 +935,35 @@ public class ApplicationConfiguration {
 	}
 	
 	/**
+	 * Enable or disable whether or not rules that are edited should be re-scanned (as opposed to waiting for the next scan cycle).
+	 * @param enable
+	 * @return
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
+	public void setRescanOnEditEnabled( boolean enable ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
+		if( enable ){
+			appParams.setParameter("Scanner.ReScanOnEdit", String.valueOf(1));
+		}
+		else{
+			appParams.setParameter("Scanner.ReScanOnEdit", String.valueOf(0));
+		}
+		
+	}
+	
+	/**
+	 * Return a boolean determining whether or not rules that are edited should be re-scanned (as opposed to waiting for the next scan cycle).
+	 * @return
+	 * @throws InputValidationException 
+	 * @throws SQLException 
+	 * @throws NoDatabaseConnectionException 
+	 */
+	public boolean isRescanOnEditEnabled() throws NoDatabaseConnectionException, SQLException, InputValidationException{
+		return appParams.getParameter("Scanner.ReScanOnEdit", 0) == 1;
+	}
+	
+	/**
 	 * Gets an identifier that can be used to uniquely identify this instance. The ID is generated if one does not yet exist yet.
 	 * @return
 	 * @throws NoDatabaseConnectionException
