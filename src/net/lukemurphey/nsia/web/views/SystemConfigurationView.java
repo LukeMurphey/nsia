@@ -61,7 +61,8 @@ public class SystemConfigurationView extends View {
 		EMAIL_PASSWORD("email_password"),
 		EMAIL_SMTP_PORT("email_smtp_port"),
 		
-		SCANNER_HTTP_THREADS("scanner_http_threads");
+		SCANNER_HTTP_THREADS("scanner_http_threads"),
+		SCANNER_RESCAN_EDITED_RULES("scanner_rescan_edited_rules");
 		
 		private String name;
 		
@@ -382,6 +383,11 @@ public class SystemConfigurationView extends View {
 					config.setMaxHTTPScanThreads( getAsInt(value) );
 					context.addMessage("Scanner HTTP thread limit updated", MessageSeverity.SUCCESS);
 				}
+				
+				else if( ParameterTitles.SCANNER_RESCAN_EDITED_RULES.equals(name) ){
+					config.setRescanOnEditEnabled( getAsBoolean(value) );
+					context.addMessage("Scanner re-scan edited rules setting updated", MessageSeverity.SUCCESS);
+				}
 			}
 			catch(NoDatabaseConnectionException e){
 				throw new ViewFailedException(e);
@@ -520,6 +526,7 @@ public class SystemConfigurationView extends View {
 			// 9 -- Add the scanner options
 			Vector<Parameter> scanner_options = new Vector<Parameter>();
 			scanner_options.add( new Parameter("Maximum HTTP Scan Threads", appConfig.getMaxHTTPScanThreads(), ParameterTitles.SCANNER_HTTP_THREADS.getName(), ParameterType.INTEGER) );
+			scanner_options.add( new Parameter("Re-Scan Rules Automatically After Editing", appConfig.isRescanOnEditEnabled(), ParameterTitles.SCANNER_RESCAN_EDITED_RULES.getName(), ParameterType.BOOL) );
 			data.put("scanner_options", scanner_options);
 			
 			TemplateLoader.renderToResponse("SystemConfiguration.ftl", data, response);
