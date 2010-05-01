@@ -229,7 +229,7 @@ public class ApplicationConfiguration {
 	 * @throws InputValidationException
 	 */
 	public int getMaxHTTPScanThreads() throws NoDatabaseConnectionException, SQLException, InputValidationException{
-		return (int)appParams.getParameter("Administration.HTTPScanThreads", 10);
+		return (int)appParams.getParameter("Administration.HTTPScanThreads", 2);
 	}
 	
 	/**
