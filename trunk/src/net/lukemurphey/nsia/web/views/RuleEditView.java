@@ -225,8 +225,9 @@ public class RuleEditView extends View {
 			}
 		}
 		else{
+			//Set the default scan frequency to 12 hours
 			scanFrequencyUnits = 3600;
-			scanFrequencyValue = 1;
+			scanFrequencyValue = 8;
 		}
 		
 		data.put("scanFrequencyUnits", scanFrequencyUnits);
