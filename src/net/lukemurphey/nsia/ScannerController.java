@@ -213,10 +213,12 @@ public class ScannerController extends Thread{
 							
 							Timestamp lastScanned;
 
-							if( lastScanResult != null ) //If a scan result was found
+							if( lastScanResult != null ){ //If a scan result was found
 								lastScanned = lastScanResult.getScanTime();
-							else
+							}
+							else{
 								lastScanned = new Timestamp(0);
+							}
 
 							SiteGroupDescriptor siteGroupDescriptor = null;
 							for( int c = 0; c < siteGroupDescriptors.length; c++){
