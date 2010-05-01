@@ -27,22 +27,68 @@ import net.lukemurphey.nsia.web.templates.TemplateLoader;
 
 public class DashboardDefinitionsUpdate extends View {
 
+	// Indicates that time that definitions were last checked
 	private static long lastChecked = 0;
+	
+	// Indicates if newer definitions exist
 	private static boolean newerAvailable = false;
+	
+	// This thread performs a check to determine if newer definitions exist
 	private static Thread checkerThread;
+	
+	// Indicates if a thread is currently checking to see if newer definitions exist
 	private static boolean checkingVersion = false;
+	
+	// The date of the currently installed definitions
 	private static Date currentDefinitionsDate = null;
+	
+	// The version identifier of the definitions set that is available
 	private static DefinitionVersionID currentDefinitionsID = null;
+	
+	/*
+	 * The version identifier of the definitions currently installed.
+	 * This field is populated by the checker thread when it performs a version check
+	 */
 	private static DefinitionVersionID loadedVersionID = null;
 	
-	
+	// The default frequency to check for new definitions
 	public static final int CHECK_FREQUENCY_SECS = 30 * 60; //Half an hour
 	
 	public DashboardDefinitionsUpdate() {
 		super("DashboardPanel/UpdatedDefinitions", "dashboard_panel_definition_updates");
 		isNewerVersionAvailable(); // This kicks off the definitions update check
 	}
-
+	
+	/**
+	 * Indicates whether the application currently has an official definition set installed.
+	 * @return
+	 */
+	private boolean hasOfficialDefinitions(){
+		Application application = Application.getApplication();
+		
+		try {
+			if( application.getApplicationParameters().doesParameterExist("_DefinitionDate") == false
+					|| application.getApplicationParameters().doesParameterExist("_DefinitionVersion") == false ){
+				
+				return false;
+			}
+		} catch (InputValidationException e) {
+			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+		} catch (NoDatabaseConnectionException e) {
+			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+		} catch (SQLException e) {
+			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * This class performs a check against the most current release of definitions from threatfactor.com and the currently installed
+	 * set to determine if a newer set is available.
+	 * @author Luke
+	 *
+	 */
 	private class VersionChecker extends Thread {
 		public void run(){
 			checkingVersion = true;
@@ -76,14 +122,22 @@ public class DashboardDefinitionsUpdate extends View {
 	}
 	
 	/**
-	 * Determines if the definitions changed since the last time that the check was performed.
+	 * Determines if the installed set of definitions changed since the last time that the check was performed.
 	 * @return
 	 */
 	protected boolean definitionsChanged(){
+		
+		// If the system does not have any official definitions then the definition set cannot change
+		if( hasOfficialDefinitions() == false ){
+			return false;
+		}
+		
+		// Return true if the loaded version ID is null (since we cannot continue otherwise)
 		if( loadedVersionID == null ){
 			return true;
 		}
 		
+		// Compare the installed definition set ID to the version ID that we have cached
 		try{
 			DefinitionArchive archive = DefinitionArchive.getArchive();
 			if( loadedVersionID.equals( archive.getVersionID() ) == false ){
@@ -109,10 +163,27 @@ public class DashboardDefinitionsUpdate extends View {
 		return false;
 	}
 	
+	/**
+	 * Returns a bolean indicating if a definition update check is required.
+	 * @return
+	 */
+	private boolean needsUpdateCheck(){
+		return lastChecked < (System.currentTimeMillis() - CHECK_FREQUENCY_SECS * 1000);
+	}
+	
+	/**
+	 * Returns a boolean indicating if newer definitions are available from threatfactor.com
+	 * @return
+	 */
 	protected synchronized boolean isNewerVersionAvailable(){
-		if( definitionsChanged() || (
+		
+		if( (
+				// Re-check if the definitions changed
+				definitionsChanged()
+			) || (
+				// since the last time we checked or we haven't check in a while
 				checkingVersion == false
-				&& lastChecked < (System.currentTimeMillis() - CHECK_FREQUENCY_SECS * 1000) ) ){
+				&& needsUpdateCheck() ) ){
 			checkerThread = new VersionChecker();
 			checkerThread.setName("Definitions Update Version Checker");
 			checkerThread.start();
