@@ -394,7 +394,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	}
 	
 	/**
-	 * Perform a scan using mulitiple threads. This method creates multiple ScanRunner instances to perform actual scans.
+	 * Perform a scan using multiple threads. This method creates multiple ScanRunner instances to perform actual scans.
 	 * @param sigs
 	 * @param maxThreads
 	 * @param findings
@@ -1323,8 +1323,6 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		seedUrls.clear();
 		addSeedUrls(urls);
 	}
-	
-	
 	
 	public synchronized boolean baseline() throws SQLException, NoDatabaseConnectionException, DefinitionSetLoadException, InputValidationException, ScriptException, IOException{
 		Connection conn = null;
