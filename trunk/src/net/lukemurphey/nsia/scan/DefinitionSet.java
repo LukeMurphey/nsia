@@ -709,7 +709,9 @@ public class DefinitionSet {
 						if( matched == true ){
 							
 							if( definitionPolicySet != null ){
-								if( definitionPolicySet.getPolicyAction(siteGroupID, ruleID, sig.getName(), sig.getCategoryName(), sig.getSubCategoryName(), httpResponse.getLocation()) != DefinitionPolicyAction.EXCLUDE ){
+								if( definitionPolicySet.getPolicyAction(siteGroupID, ruleID, sig.getName(), sig.getCategoryName(), sig.getSubCategoryName(), httpResponse.getLocation()) != DefinitionPolicyAction.EXCLUDE
+									&& definitionPolicySet.getPolicyAction(siteGroupID, ruleID, sig.getName(), sig.getCategoryName(), sig.getSubCategoryName(), httpResponse.getRequestedLocation()) != DefinitionPolicyAction.EXCLUDE
+								   ){
 									definitionMatches.add( new DefinitionMatch(sig.getFullName(), sig.getMessage(), sig.severity, sig.getLocalID()) );
 								}
 							}
