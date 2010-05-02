@@ -393,6 +393,12 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		}
 	}
 	
+	/**
+	 * Perform a scan using mulitiple threads. This method creates multiple ScanRunner instances to perform actual scans.
+	 * @param sigs
+	 * @param maxThreads
+	 * @param findings
+	 */
 	private void multiThreadedScan(DefinitionSet sigs, int maxThreads, Vector<HttpDefinitionScanResult> findings ){
 		
 		// 1 -- Initialize the scanner
@@ -531,6 +537,11 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		}
 	}
 	
+	/**
+	 * The ScanRunner performs a scan and retrieves the result.
+	 * @author Luke
+	 *
+	 */
 	private class ScanRunner extends Thread{
 		
 		private HttpSignatureScanResultWithParser result;
@@ -589,6 +600,11 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		}
 	}
 	
+	/**
+	 * Records the result of a scan.
+	 * @author Luke
+	 *
+	 */
 	private class ScanRecord{
 		private URL url;
 		private HttpDefinitionScanResult parentScanResult;
@@ -615,6 +631,15 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		}
 	}
 	
+	/**
+	 * Extracts all URLs from tags with the defined attribute.
+	 * @param tag
+	 * @param attribute
+	 * @param parentUrl
+	 * @param htmlDocumentParser
+	 * @param alwaysInclude
+	 * @return
+	 */
 	private Vector<URL> getUrlAttrs(String tag, String attribute, URL parentUrl, Parser htmlDocumentParser, boolean alwaysInclude){
 		
 		try{
@@ -638,6 +663,14 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		}
 	}
 	
+	/**
+	 * Gets a list of URLs built from paths included in the given attribute (like "href", "src", etc.).
+	 * @param nodesList The list of nodes to search
+	 * @param attribute The name of the attribute to find URLs in (like "href" or "src")
+	 * @param parentUrl The URL of the parent, will be used to create absolute URLs from relative ones.
+	 * @param alwaysInclude WIll include URL in the list even if the URL does not match the given domain.
+	 * @return
+	 */
 	private Vector<URL> getUrlAttrs(NodeList nodesList, String attribute, URL parentUrl, boolean alwaysInclude){
 		
 		Vector<URL> referenceList = new Vector<URL>();
@@ -686,11 +719,12 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		return referenceList;
 	}
 	
+	/**
+	 * Returns a boolean indicating if the hostname is valid.
+	 * @param hostname
+	 * @return
+	 */
 	private boolean hostnameIsValid( String hostname ){
-		//Pattern pattern = Pattern.compile( "[-0-9a-zA-Z]+");
-		
-		//Matcher matcher = new Matcher(hostname);
-		
 		return Pattern.matches("[-.0-9a-zA-Z]+", hostname);
 	}
 	
