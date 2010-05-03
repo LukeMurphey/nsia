@@ -6,7 +6,7 @@
 
 <#if (!groups?? | groups?size = 0)>
     <#assign message>
-        No groups exist yet. <p><a href="<@url name="user_editor" args=["New"] />">[Create Group Now]</a>
+        No groups exist yet. <p><a href="<@url name="group_editor" args=["New"] />">[Create Group Now]</a>
     </#assign>
     <@getinfodialog message=message title="No Groups Exist Yet" />
 <#else>
