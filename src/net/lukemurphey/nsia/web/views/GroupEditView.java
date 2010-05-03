@@ -104,7 +104,7 @@ public class GroupEditView extends View {
 							int groupID = groupManager.addGroup(name, description);
 							context.addMessage("Group created successfully", MessageSeverity.SUCCESS);
 							group = groupManager.getGroupDescriptor(groupID);
-							response.sendRedirect( GroupEditView.getURL(group) );
+							response.sendRedirect( GroupView.getURL(group) );
 							return true;
 						}
 						
@@ -119,7 +119,7 @@ public class GroupEditView extends View {
 										new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
 								
 								context.addMessage("Group updated successfully", MessageSeverity.SUCCESS);
-								response.sendRedirect( GroupEditView.getURL(group) );
+								response.sendRedirect( GroupView.getURL(group) );
 								return true;
 							}
 							else{
