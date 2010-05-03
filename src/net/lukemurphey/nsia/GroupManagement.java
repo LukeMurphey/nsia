@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.regex.*;
 import java.util.*;
 
+import net.lukemurphey.nsia.UserManagement.UserDescriptor;
+
 /**
  * This class manages user groups; or collections of users for the purposes of establishing access control lists. 
  * @author luke
@@ -488,6 +490,65 @@ public class GroupManagement {
 	}
 	
 	/**
+	 * Get the users that are members of the given group.
+	 * @param groupID
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
+	public UserDescriptor[] getMembers( int groupID ) throws NoDatabaseConnectionException, SQLException{
+		
+		Vector<Integer> users = new Vector<Integer>(); 
+		
+		// 0 -- Precondition check
+		
+		//	 0.1 -- Database connection must be present
+		Connection connection = null;
+		
+		// 1 -- Determine if the user is associated with the group
+		PreparedStatement associationQuery = null;
+		ResultSet results = null;
+		try{
+			connection = appRes.getDatabaseConnection( Application.DatabaseAccessType.PERMISSIONS );
+			associationQuery = connection.prepareStatement("Select UserID from GroupUsersMap where GroupID = ?");
+			associationQuery.setInt(1, groupID);
+			
+			results = associationQuery.executeQuery();
+			
+			while( results.next() ){
+				users.add( results.getInt("UserID") );
+			}
+		}
+		finally{
+			if(associationQuery != null)
+				associationQuery.close();
+			
+			if( results != null )
+				results.close();
+			
+			if (connection != null )
+				connection.close();
+		}
+		
+		// 2 -- Get the user descriptors from the IDs
+		UserManagement userMgmt = new UserManagement(appRes);
+		Vector<UserDescriptor> userDescriptors = new Vector<UserDescriptor>();
+		
+		for (Integer userID : users) {
+			try {
+				userDescriptors.add( userMgmt.getUserDescriptor(userID) );
+			} catch (NotFoundException e) {
+				// User ID exists in the GroupUsersMap but not in the user's list, ignore and move on 
+			}
+		}
+		
+		UserDescriptor[] usersArray = new UserDescriptor[userDescriptors.size()];
+		userDescriptors.toArray(usersArray);
+		
+		return usersArray;
+	}
+	
+	/**
 	 * Determines if the given user ID is associated with (that is, a member of) the given group.
 	 * @param userId
 	 * @param groupId
@@ -501,22 +562,22 @@ public class GroupManagement {
 		//	 0.1 -- Database connection must be present
 		Connection connection = null;
 		
-		// 1 -- Detemine if the user is associated with the group
+		// 1 -- Determine if the user is associated with the group
 		PreparedStatement associationQuery = null;
 		ResultSet results = null;
 		try{
 			connection = appRes.getDatabaseConnection( Application.DatabaseAccessType.PERMISSIONS );
-		associationQuery = connection.prepareStatement("Select * from GroupUsersMap where GroupID = ? and UserID =?");
-		associationQuery.setInt(1, groupId);
-		associationQuery.setInt(2, userId);
-		
-		results = associationQuery.executeQuery();
-		
-		if( results.next() )
-			return true;
-		else
-			return false;
-		}
+			associationQuery = connection.prepareStatement("Select * from GroupUsersMap where GroupID = ? and UserID =?");
+			associationQuery.setInt(1, groupId);
+			associationQuery.setInt(2, userId);
+			
+			results = associationQuery.executeQuery();
+			
+			if( results.next() )
+				return true;
+			else
+				return false;
+			}
 		finally{
 			if(associationQuery != null)
 				associationQuery.close();
