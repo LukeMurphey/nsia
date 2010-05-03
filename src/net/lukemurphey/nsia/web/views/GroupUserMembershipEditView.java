@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.GroupManagement;
+import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.UserManagement;
+import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
 import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
@@ -26,16 +28,16 @@ import net.lukemurphey.nsia.web.ViewNotFoundException;
 import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
 import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 
-public class UserGroupMembershipEditView extends View {
+public class GroupUserMembershipEditView extends View {
 
-	public final static String VIEW_NAME = "user_edit_membership";
+	public final static String VIEW_NAME = "group_edit_membership";
 	
-	public UserGroupMembershipEditView() {
-		super("User/Edit/Membership", VIEW_NAME, Pattern.compile("[0-9]+"));
+	public GroupUserMembershipEditView() {
+		super("Group/Edit/Membership", VIEW_NAME, Pattern.compile("[0-9]+"));
 	}
 
 	public static String getURL( UserDescriptor user ) throws URLInvalidException{
-		UserGroupMembershipEditView view = new UserGroupMembershipEditView();
+		GroupUserMembershipEditView view = new GroupUserMembershipEditView();
 		
 		return view.createURL(user.getUserID());
 	}
@@ -47,31 +49,33 @@ public class UserGroupMembershipEditView extends View {
 			throws ViewFailedException, URLInvalidException, IOException,
 			ViewNotFoundException {
 
-		// 1 -- Get the user
-		int userID;
-		UserManagement userMgmt = new UserManagement(Application.getApplication());
-		UserDescriptor user = null;
+		// 1 -- Get the group
+		int groupID;
+		GroupManagement groupMgmt = new GroupManagement(Application.getApplication());
+		GroupDescriptor group = null;
 		
 		try{
-			userID = Integer.valueOf( args[0] );
-			user = userMgmt.getUserDescriptor(userID);
+			groupID = Integer.valueOf( args[0] );
+			group = groupMgmt.getGroupDescriptor(groupID);
 		} catch(NumberFormatException e){
-			Dialog.getDialog(response, context, data, "User ID is not valid", "User ID Invalid", DialogType.WARNING);
+			Dialog.getDialog(response, context, data, "Group ID is not valid", "Group ID Invalid", DialogType.WARNING);
 			return true;
 		}  catch(NotFoundException e){
-			Dialog.getDialog(response, context, data, "No user was found with the given ID", "User Not Found", DialogType.WARNING);
+			Dialog.getDialog(response, context, data, "No group was found with the given ID", "Group Not Found", DialogType.WARNING);
 			return true;
 		} catch (SQLException e) {
 			throw new ViewFailedException(e);
 		} catch (NoDatabaseConnectionException e) {
 			throw new ViewFailedException(e);
+		} catch (InputValidationException e) {
+			throw new ViewFailedException(e);
 		}
 		
 		// 2 -- Check permissions
 		try {
-			if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.Membership.Edit", "Edit group membership for user ID " + user.getUserID() + " (" + user.getUserName() + ")") == false ){
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.Membership.Edit", "Edit group membership for group ID " + group.getGroupId() + " (" + group.getGroupName() + ")") == false ){
 				context.addMessage("You do not have permission to update the group membership for user accounts", MessageSeverity.WARNING);
-				response.sendRedirect( UserView.getURL(user) );
+				response.sendRedirect( GroupEditView.getURL(group) );
 				return true;
 			}
 		} catch (GeneralizedException e) {
@@ -79,40 +83,50 @@ public class UserGroupMembershipEditView extends View {
 		}
 		
 		// 3 -- Get the groups included into the list and add or remove from the account as necessary
-		String includedGroupString = request.getParameter("IncludedGroups");
-		String[] includedGroups = includedGroupString.split(",");
+		String includedUserString = request.getParameter("IncludedUsers");
+		
+		// Don't bother continuing if the included user string is null
+		if( includedUserString == null ){
+			response.sendRedirect( GroupView.getURL(group) );
+			return true;
+		}
+		
+		String[] includedUsers = includedUserString.split(",");
 		GroupManagement groupManager = new GroupManagement(Application.getApplication());
+		UserManagement userMgmt = new UserManagement(Application.getApplication());
 		boolean updated = false;
 		
-		// Determine the desired operation for each group included
-		for( int c = 0; c < includedGroups.length; c++ ){
-			int groupId = -1;
+		// Determine the desired operation for each user included
+		for( int c = 0; c < includedUsers.length; c++ ){
+			int userId = -1;
 			
 			try{
-				groupId = Integer.parseInt( includedGroups[c] );
+				userId = Integer.parseInt( includedUsers[c] );
 			}catch(NumberFormatException e){
 				//Do nothing, the number is not a valid format and will be skipped
 			}
 			
 			// Determine if the associated check was marked (indicating the command to add membership) or unmarked (no membership); then adjust as necessary
 			try{
-				if( groupId >= 0 ){
+				if( userId >= 0 ){
 					
-					if( request.getParameter( includedGroups[c] ) != null ){
-						groupManager.addUserToGroup( userID, groupId );
+					UserDescriptor user = userMgmt.getUserDescriptor(userId);
+					
+					if( request.getParameter( includedUsers[c] ) != null ){
+						groupManager.addUserToGroup( userId, group.getGroupId() );
 						updated = true;
 						Application.getApplication().logEvent(EventLogMessage.Category.USER_ADDED_TO_GROUP, new EventLogField[]{
-								new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
+								new EventLogField( EventLogField.FieldName.GROUP_ID, group.getGroupId() ),
 								new EventLogField( EventLogField.FieldName.TARGET_USER_ID, user.getUserID() ),
 								new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),
 								new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getSessionInfo().getUserId() )} );
 						
 					}
 					else{
-						groupManager.removeUserFromGroup( userID, groupId );
+						groupManager.removeUserFromGroup( user.getUserID(), group.getGroupId() );
 						updated = true;
 						Application.getApplication().logEvent(EventLogMessage.Category.USER_REMOVED_FROM_GROUP, new EventLogField[]{
-								new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
+								new EventLogField( EventLogField.FieldName.GROUP_ID, group.getGroupId() ),
 								new EventLogField( EventLogField.FieldName.TARGET_USER_ID, user.getUserID() ),
 								new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),
 								new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getSessionInfo().getUserId() )});
@@ -132,8 +146,8 @@ public class UserGroupMembershipEditView extends View {
 			context.addMessage("Group membership updated", MessageSeverity.SUCCESS);
 		}
 		
-		// 4 -- Redirect to the user view
-		response.sendRedirect( UserView.getURL(user) );
+		// 4 -- Redirect to the group view
+		response.sendRedirect( GroupView.getURL(group) );
 		return true;
 	}
 

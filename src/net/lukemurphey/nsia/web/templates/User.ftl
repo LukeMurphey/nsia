@@ -96,7 +96,7 @@
                             </#if>
                          </td>
                          <td>
-                            <a href="<@url name="group_editor" args=["Edit", group.ID] />">${group.ID} [View]</a>
+                            <a href="<@url name="group" args=[group.ID] />">${group.ID} [View]</a>
                          </td>
                          <td><@truncate_chars length=32>${group.description?html}</@truncate_chars></td>
                     </tr>

@@ -210,8 +210,10 @@ public class GroupEditView extends View {
 		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 		breadcrumbs.add(  new Link("Group Management", GroupListView.getURL()) );
 		
+		
 		if( group != null ){
-			breadcrumbs.add(  new Link("Edit Group: " + group.getGroupName(), GroupEditView.getURL(group)) );
+			breadcrumbs.add(  new Link("Group: " + group.getGroupName(), GroupView.getURL(group)) );
+			breadcrumbs.add(  new Link("Edit", GroupEditView.getURL(group) ) );
 			data.put("title", "Group: " + group);
 		}
 		else{
