@@ -20,11 +20,11 @@
         <#list groups as group>
         <tr class="Background1">
             <td>${group.groupId?c}</td>
-            <td><a href="GroupManagement?GroupID=${group.groupId?c}">
+            <td><a href="<@url name="group" args=[group.groupId?c] />">
                 <#if group.groupState = ACTIVE >
-                    <@iconlink url=geturl("group_editor", "Edit", group.groupId) imageURL="/media/img/16_Group" imageAlt="Enabled" text="${group.groupName?html}" />
+                    <@iconlink url=geturl("group", group.groupId) imageURL="/media/img/16_Group" imageAlt="Enabled" text="${group.groupName?html}" />
                 <#else>
-                    <@iconlink url=geturl("group_editor", "Edit", group.groupId) imageURL="/media/img/16_GroupDisabled" imageAlt="Disabled" text="${group.groupName?html}" />
+                    <@iconlink url=geturl("group", group.groupId) imageURL="/media/img/16_GroupDisabled" imageAlt="Disabled" text="${group.groupName?html}" />
                 </#if>
             </td>
             <td><#if group.groupState = ACTIVE >Enabled<#else>Disabled</#if>&nbsp;&nbsp;</td>
