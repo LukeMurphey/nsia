@@ -5,6 +5,7 @@
 <#assign content>
     <div><span class="Text_1">Group Management</span>
     <br><span class="LightText"><#if group??>Edit<#else>Create New</#if> Group</span>
+    <p></p>
     <#if (form_errors??)>
     <@getFormErrors form_errors=form_errors />
     </#if>
