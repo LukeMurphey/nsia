@@ -360,7 +360,7 @@ public class RightsEditView extends View {
 				group = groupMgmt.getGroupDescriptor(subjectID);
 				data.put("group", group);
 				breadcrumbs.add( new Link("Group Management", GroupListView.getURL() ) );
-				breadcrumbs.add( new Link("Edit Group: " + group.getGroupName(), GroupEditView.getURL(group)) );
+				breadcrumbs.add( new Link("Group: " + group.getGroupName(), GroupView.getURL(group)) );
 				breadcrumbs.add( new Link("Rights", RightsEditView.getURL(group) ) );
 				
 				data.put("menu", Menu.getGroupMenuItems(context, group));
