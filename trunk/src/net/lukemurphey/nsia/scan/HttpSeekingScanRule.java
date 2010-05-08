@@ -1,8 +1,10 @@
 package net.lukemurphey.nsia.scan;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -297,7 +299,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		this.restrictToDomain = restrictTo;
 	}
 	
-	private Vector<URL> extractUrls(URL url, Parser parser){
+	private Vector<URL> extractUrls(URL url, Parser parser) throws UnsupportedEncodingException{
 		
 		// 1 -- Extract all references from the document parse by the given parser
 		Vector<URL> urls = new Vector<URL>();
@@ -398,8 +400,9 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	 * @param sigs
 	 * @param maxThreads
 	 * @param findings
+	 * @throws UnsupportedEncodingException 
 	 */
-	private void multiThreadedScan(DefinitionSet sigs, int maxThreads, Vector<HttpDefinitionScanResult> findings ){
+	private void multiThreadedScan(DefinitionSet sigs, int maxThreads, Vector<HttpDefinitionScanResult> findings ) throws UnsupportedEncodingException{
 		
 		// 1 -- Initialize the scanner
 		
@@ -413,7 +416,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		
 		// 1.1 -- Add all of preset URLs to the list
 		for( URL url : this.seedUrls){
-			urls.add(url.toString());
+			urls.add( URLDecoder.decode(url.toString(), "UTF-8") );
 			pending.add( new ScanRecord(url) );
 		}
 		
@@ -639,8 +642,9 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	 * @param htmlDocumentParser
 	 * @param alwaysInclude
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
-	private Vector<URL> getUrlAttrs(String tag, String attribute, URL parentUrl, Parser htmlDocumentParser, boolean alwaysInclude){
+	private Vector<URL> getUrlAttrs(String tag, String attribute, URL parentUrl, Parser htmlDocumentParser, boolean alwaysInclude) throws UnsupportedEncodingException{
 		
 		try{
 			//LinkExtractionVisitor visitor = new LinkExtractionVisitor(parentUrl, true);
@@ -670,8 +674,9 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	 * @param parentUrl The URL of the parent, will be used to create absolute URLs from relative ones.
 	 * @param alwaysInclude WIll include URL in the list even if the URL does not match the given domain.
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
-	private Vector<URL> getUrlAttrs(NodeList nodesList, String attribute, URL parentUrl, boolean alwaysInclude){
+	private Vector<URL> getUrlAttrs(NodeList nodesList, String attribute, URL parentUrl, boolean alwaysInclude) throws UnsupportedEncodingException{
 		
 		Vector<URL> referenceList = new Vector<URL>();
 		
@@ -693,7 +698,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 						currentItem = currentItem.substring(0, fragmentOffset);
 					}
 					
-					URL newURL = new URL(parentUrl, currentItem.trim());
+					URL newURL = new URL(parentUrl, URLDecoder.decode(currentItem.trim(), "UTF-8") );
 					
 					if(  newURL.getHost() != null && hostnameIsValid(newURL.getHost()) ){ //This check was added because the scanner kept trying to scan "http://:". Unable to determine the exact root cause but it seems to be related to  
 						//Add the entry to the list of URLs
@@ -793,7 +798,11 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			}
 			
 			// 2 -- Scan the seed URLs
-			multiThreadedScan(sigs, maxScanThreads, findings);
+			try {
+				multiThreadedScan(sigs, maxScanThreads, findings);
+			} catch (UnsupportedEncodingException e) {
+				throw new ScanException("Cannot perform a scan since the encoding required to decode URLs is not-supported by the runtime", e);
+			}
 			
 			// 3 -- Determine if any of the scan attempts failed
 			ScanResultCode resultCode = null;
