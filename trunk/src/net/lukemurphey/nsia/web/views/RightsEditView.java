@@ -335,10 +335,7 @@ public class RightsEditView extends View {
 			// 2 -- Prepare the page content
 			Shortcuts.addDashboardHeaders(request, response, data);
 			
-			//	 2.1 -- Get the menu
-			data.put("menu", Menu.getGenericMenu(context));
-			
-			//	 2.2  -- Get the breadcrumbs
+			//	 2.1  -- Get the breadcrumbs and the menu
 			Vector<Link> breadcrumbs = new Vector<Link>();
 			breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 			
@@ -354,6 +351,8 @@ public class RightsEditView extends View {
 				breadcrumbs.add( new Link("User Management", UsersView.getURL()) );
 				breadcrumbs.add( new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
 				breadcrumbs.add( new Link("Rights", RightsEditView.getURL(user) ) );
+				
+				data.put("menu", Menu.getUserMenuItems(context, user));
 			}
 			else{
 				GroupManagement groupMgmt = new GroupManagement(Application.getApplication());
@@ -363,6 +362,8 @@ public class RightsEditView extends View {
 				breadcrumbs.add( new Link("Group Management", GroupListView.getURL() ) );
 				breadcrumbs.add( new Link("Edit Group: " + group.getGroupName(), GroupEditView.getURL(group)) );
 				breadcrumbs.add( new Link("Rights", RightsEditView.getURL(group) ) );
+				
+				data.put("menu", Menu.getGroupMenuItems(context, group));
 			}
 			
 			data.put("breadcrumbs", breadcrumbs);
