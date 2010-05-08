@@ -36,7 +36,7 @@ public class ExceptionDeleteView extends View {
 	public static final String VIEW_NAME = "exception_delete";
 	
 	public ExceptionDeleteView() {
-		super("Exception/Delete", VIEW_NAME, Pattern.compile("[0-9]?"));
+		super("Exception/Delete", VIEW_NAME, Pattern.compile("[0-9]*"));
 	}
 	
 	public static String getURL( int exceptionID ) throws URLInvalidException{
