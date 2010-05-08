@@ -13,9 +13,9 @@
      <table>
         <tr class="Background0">
             <td class="Text_3">Group ID</td>
-            <td class="Text_3">Group Name</td>
+            <td width="250" class="Text_3">Group Name</td>
             <td class="Text_3">Status</td>
-            <td class="Text_3">Group Description</td>
+            <td width="450" class="Text_3">Group Description</td>
         </tr>
         <#list groups as group>
         <tr class="Background1">
