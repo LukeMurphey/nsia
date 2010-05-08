@@ -214,7 +214,7 @@ public class GroupEditView extends View {
 		if( group != null ){
 			breadcrumbs.add(  new Link("Group: " + group.getGroupName(), GroupView.getURL(group)) );
 			breadcrumbs.add(  new Link("Edit", GroupEditView.getURL(group) ) );
-			data.put("title", "Group: " + group);
+			data.put("title", "Group: " + group.getGroupName());
 		}
 		else{
 			breadcrumbs.add(  new Link("New Group", createURL("New")) );
