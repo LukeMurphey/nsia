@@ -9,7 +9,7 @@
         <table>
             <tr class="Background1">
                 <td width="150" class="Text_3">User ID</td>
-                <td>${user.userID?c}</td>
+                <td width="200">${user.userID?c}</td>
             </tr>
             <tr class="Background1">
                 <td class="Text_3">Username</td>
@@ -77,11 +77,11 @@
                 <input type="hidden" name="UserID" value="${user.userID?c}">
                 <input type="hidden" name="Action" value="SetGroup">
             
-                <table>
+                <table width="600">
                     <tr class="Background0">
-                        <td class="Text_3">Group Name</td>
+                        <td width="200" class="Text_3">Group Name</td>
                         <td class="Text_3">GroupID</td>
-                        <td class="Text_3">Group Description</td>
+                        <td width="300" class="Text_3">Group Description</td>
                     </tr>
                     
                 <#list groups as group>
