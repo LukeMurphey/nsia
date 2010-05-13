@@ -8,6 +8,6 @@
  
 importPackage(Packages.ThreatScript);
 
-function analyze( httpResponse, operation, variables, environment, defaultRule ){
-    return new Result( false, "Definition matched the input");
+function analyze( httpResponse, operation, environment ){
+    return new Result( false, "Definition did not match the input");
 }
