@@ -19,19 +19,43 @@ public class HttpResponseData  {
 		GET, POST, DELETE, HEAD, PUT, TRACE
 	}
 	
+	//Data that was included as part of the response body in the HTTP response
 	private DataSpecimen responseBody;
+	
+	//The HTTP headers returned
 	private Header[] headers;
+	
+	//The response code from the HTTP response
 	private int responseCode;
+	
+	//The query string used to perform the HTTP request
 	private String queryString;
+	
+	//The status line resulting from the HTTP request
 	private StatusLine statusLine;
+	
+	//The method used to perform the HTTP request
 	private Method method;
+	
+	//The parser used to review the HTML returned in the HTTP response
 	private Parser parser = null;
+	
+	//The original location that was (or will be) requested
 	private String originalLocation;
+	
+	//The final location (following any redirects performed)
 	private String finalLocation;
 	
+	//The maximum number of bytes that will be downloaded
+	private int sizeLimit = DEFAULT_LENGTH_LIMIT;
+	
+	//The default maximum number of bytes that will be downloaded
 	private static final int DEFAULT_LENGTH_LIMIT = 1048576; //1 MB
 	
+	//A regular expression to find the encoding of the returned data
 	private static final Pattern REGEX_GET_ENCODING = Pattern.compile("[-a-zA-Z_ 0-9/;]*charset=[ ]*([-a-zA-Z_0-9]*)");
+	
+	//A regular expression to find the content-type of the returned data
 	private static final Pattern REGEX_CONTENT_TYPE = Pattern.compile("[-.+a-zA-Z0-9]+/[-.+a-zA-Z0-9]+");
 	
 	public HttpResponseData(HttpMethod httpMethod ) throws URIException{
@@ -62,7 +86,7 @@ public class HttpResponseData  {
 			
 			InputStream responseBodyStream = httpMethod.getResponseBodyAsStream();
 			
-			byte[] responseBodyBytes = new byte[DEFAULT_LENGTH_LIMIT];
+			byte[] responseBodyBytes = new byte[sizeLimit];
 			int bytesRead = 0;
 			int bytesReadTotal = 0;
 			boolean downloadComplete = false;
@@ -154,6 +178,26 @@ public class HttpResponseData  {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Set the maximum amount of data that will be downloaded.
+	 * @param sizeLimit
+	 */
+	public void setSizeLimit(int sizeLimit ){
+		if( sizeLimit < 0){
+			throw new IllegalArgumentException("The maximum download size limit must be greater than zero");
+		}
+		
+		this.sizeLimit = sizeLimit;
+	}
+	
+	/**
+	 * Get the maximum amount of data that will be downloaded.
+	 * @return
+	 */
+	public int getSizeLimit(){
+		return sizeLimit;
 	}
 	
 	/**
