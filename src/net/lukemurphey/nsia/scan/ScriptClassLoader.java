@@ -1,6 +1,14 @@
 package net.lukemurphey.nsia.scan;
 
+import net.lukemurphey.nsia.scan.scriptenvironment.DeleteMethod;
+import net.lukemurphey.nsia.scan.scriptenvironment.GetMethod;
+import net.lukemurphey.nsia.scan.scriptenvironment.HeadMethod;
+import net.lukemurphey.nsia.scan.scriptenvironment.OptionsMethod;
+import net.lukemurphey.nsia.scan.scriptenvironment.PostMethod;
+import net.lukemurphey.nsia.scan.scriptenvironment.PutMethod;
 import net.lukemurphey.nsia.scan.scriptenvironment.Result;
+import net.lukemurphey.nsia.scan.scriptenvironment.TraceMethod;
+
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -40,6 +48,16 @@ public class ScriptClassLoader extends ClassLoader {
 				temp.put("ThreatScript.Result", Result.class.getName());
 				temp.put("HTTP.URL", URL.class.getName());
 				temp.put("HTTP.TagNameFilter", org.htmlparser.filters.TagNameFilter.class.getName());
+				
+				//Web request methods
+				temp.put("HTTP.GetRequest", GetMethod.class.getName());
+				temp.put("HTTP.PostRequest", PostMethod.class.getName());
+				temp.put("HTTP.DeleteRequest", DeleteMethod.class.getName());
+				temp.put("HTTP.PutRequest", PutMethod.class.getName());
+				temp.put("HTTP.TraceRequest", TraceMethod.class.getName());
+				temp.put("HTTP.HeadRequest", HeadMethod.class.getName());
+				temp.put("HTTP.OptionsRequest", OptionsMethod.class.getName());
+				
 				temp.put("ThreatScript.DataAnalysis", ScriptSignatureUtils.class.getName() );
 				
 				SHORTCUTS = temp;
