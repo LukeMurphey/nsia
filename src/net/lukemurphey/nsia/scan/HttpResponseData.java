@@ -49,6 +49,9 @@ public class HttpResponseData  {
 	//The maximum number of bytes that will be downloaded
 	private int sizeLimit = DEFAULT_LENGTH_LIMIT;
 	
+	//Indicates if the download limit was reached
+	private boolean hitDownloadLimit = false;
+	
 	//The default maximum number of bytes that will be downloaded
 	private static final int DEFAULT_LENGTH_LIMIT = 1048576; //1 MB
 	
@@ -63,6 +66,10 @@ public class HttpResponseData  {
 	}
 	
 	public HttpResponseData(HttpMethod httpMethod, String serverAddress ) throws URIException{
+		this( httpMethod, httpMethod.getURI().toString(), DEFAULT_LENGTH_LIMIT );
+	}
+	
+	public HttpResponseData(HttpMethod httpMethod, String serverAddress, int downloadSizeLimit ) throws URIException{
 
 		// 0 -- Precondition Checks
 		
@@ -72,6 +79,8 @@ public class HttpResponseData  {
 		}
 		
 		// 1 -- Initialize the class
+		setSizeLimit(downloadSizeLimit);
+		
 		headers = httpMethod.getResponseHeaders();
 		try {
 			
@@ -107,6 +116,7 @@ public class HttpResponseData  {
 					//Determine if we hit the limit on the amount of input allowed
 					if( bytesRead == responseBodyBytes.length){
 						downloadComplete = true;
+						hitDownloadLimit = true;
 					}
 					
 					bytesReadTotal += bytesRead;
@@ -184,12 +194,20 @@ public class HttpResponseData  {
 	 * Set the maximum amount of data that will be downloaded.
 	 * @param sizeLimit
 	 */
-	public void setSizeLimit(int sizeLimit ){
+	private void setSizeLimit(int sizeLimit ){
 		if( sizeLimit < 0){
 			throw new IllegalArgumentException("The maximum download size limit must be greater than zero");
 		}
 		
 		this.sizeLimit = sizeLimit;
+	}
+	
+	/**
+	 * Return a boolean if the download limit was reached.
+	 * @return
+	 */
+	public boolean wasDownloadLimitReached(){
+		return hitDownloadLimit;
 	}
 	
 	/**
