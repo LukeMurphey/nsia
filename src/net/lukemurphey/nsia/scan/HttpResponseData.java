@@ -33,7 +33,10 @@ public class HttpResponseData  {
 	
 	private static final Pattern REGEX_GET_ENCODING = Pattern.compile("[-a-zA-Z_ 0-9/;]*charset=[ ]*([-a-zA-Z_0-9]*)");
 	private static final Pattern REGEX_CONTENT_TYPE = Pattern.compile("[-.+a-zA-Z0-9]+/[-.+a-zA-Z0-9]+");
-	//private static final Pattern REGEX_CONTENT_TYPE = Pattern.compile("[a-zA-Z]+");
+	
+	public HttpResponseData(HttpMethod httpMethod ) throws URIException{
+		this( httpMethod, httpMethod.getURI().toString() );
+	}
 	
 	public HttpResponseData(HttpMethod httpMethod, String serverAddress ) throws URIException{
 
@@ -65,17 +68,25 @@ public class HttpResponseData  {
 			boolean downloadComplete = false;
 			
 			while( downloadComplete == false ){
-				bytesRead = responseBodyStream.read( responseBodyBytes, bytesReadTotal, Math.min(1024, responseBodyBytes.length - bytesReadTotal));
 				
-				if( bytesRead <= 0 ){
+				//If the stream is null then stop trying to download more bytes from it
+				if( responseBodyStream == null ){
 					downloadComplete = true;
 				}
-				
-				if( bytesRead == responseBodyBytes.length){
-					downloadComplete = true;
+				else{
+					bytesRead = responseBodyStream.read( responseBodyBytes, bytesReadTotal, Math.min(1024, responseBodyBytes.length - bytesReadTotal));
+					
+					if( bytesRead <= 0 ){
+						downloadComplete = true;
+					}
+					
+					//Determine if we hit the limit on the amount of input allowed
+					if( bytesRead == responseBodyBytes.length){
+						downloadComplete = true;
+					}
+					
+					bytesReadTotal += bytesRead;
 				}
-				
-				bytesReadTotal += bytesRead;
 			}
 			
 			if( bytesReadTotal > 0 ){
@@ -99,7 +110,6 @@ public class HttpResponseData  {
 		queryString = httpMethod.getQueryString();
 		statusLine = httpMethod.getStatusLine();
 		originalLocation = serverAddress;
-
 		
 		if( httpMethod instanceof GetMethod ){
 			method = Method.GET;
@@ -121,6 +131,9 @@ public class HttpResponseData  {
 		}
 	}
 	
+	/**
+	 * Determine the encoding of the data provided.
+	 */
 	private void autoSetEncoding(){
 		//Try to get the encoding as returned by the server
 		String encodingHeader = getHeaderValue("Content-Type");
@@ -143,14 +156,27 @@ public class HttpResponseData  {
 		}
 	}
 	
+	/**
+	 * Get the HTTP response code.
+	 * @return
+	 */
 	public int getResponseCode(){
 		return responseCode;
 	}
 	
+	/**
+	 * Get the specimen that contains the data downloaded from the given URL.
+	 * @return
+	 */
 	public DataSpecimen getDataSpecimen(){
 		return responseBody;
 	}
 	
+	/**
+	 * Get a parser that will allow moving up the HTML tree.
+	 * @return
+	 * @throws ParserException
+	 */
 	public Parser getDocumentParser() throws ParserException{
 
 		parser = new Parser();
@@ -165,13 +191,13 @@ public class HttpResponseData  {
 		return parser;
 	}
 	
+	/**
+	 * Get the query string used to make the HTTP request.
+	 * @return
+	 */
 	public String getQueryString(){
 		return queryString;
 	}
-	
-	/*public URI getURI(){
-		return uri;
-	}*/
 	
 	/**
 	 * This method provides information about the original location requested. This differs from the actual location because redirects
@@ -189,10 +215,18 @@ public class HttpResponseData  {
 		return finalLocation;
 	}
 	
+	/**
+	 * Get the status line for the given request.
+	 * @return
+	 */
 	public StatusLine getStatusLine(){
 		return statusLine;
 	}
 	
+	/**
+	 * Get the response as bytes.
+	 * @return
+	 */
 	public byte[] getResponseAsBytes(){
 		if( responseBody != null ){
 			return responseBody.getBytes();
@@ -202,6 +236,11 @@ public class HttpResponseData  {
 		}
 	}
 	
+	/**
+	 * Get the value of the header for the given name.
+	 * @param headerName
+	 * @return
+	 */
 	public String getHeaderValue( String headerName ){
 		for( int c = 0; c < headers.length; c++){
 			if( headers[c].getName().matches(headerName) )
@@ -211,6 +250,10 @@ public class HttpResponseData  {
 		return null;
 	}
 	
+	/**
+	 * Get the response as a string. The encoding will have been discovered automatically (but may be incorrect if the dat set is small and the server failed to indicate the encoding).
+	 * @return
+	 */
 	public String getResponseAsString(){
 		if( responseBody != null ){
 			return responseBody.getString();
@@ -220,6 +263,11 @@ public class HttpResponseData  {
 		}
 	}
 	
+	/**
+	 * Get the content-type of the string. Note that the content-type will be automatically discovered based on the file contents
+	 * and may be incorrect if the amount of data is small and the server failed to include the content-type in the response.
+	 * @return
+	 */
 	public String getContentType(){
 		if( responseBody != null ){
 			return responseBody.getContentType();
@@ -229,6 +277,10 @@ public class HttpResponseData  {
 		}
 	}
 	
+	/**
+	 * Get the HTTP request method used.
+	 * @return
+	 */
 	public Method getMethod(){
 		return method;
 	}
