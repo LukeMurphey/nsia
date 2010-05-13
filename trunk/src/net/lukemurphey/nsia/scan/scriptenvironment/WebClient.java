@@ -152,9 +152,11 @@ public class WebClient {
 	 */
 	public class HttpResult{
 		HttpResponseData httpResponse;
+		boolean timeOutReached = false;
 		
-		public HttpResult( HttpResponseData response ){
+		public HttpResult( HttpResponseData response, boolean timeOutReached ){
 			httpResponse = response;
+			this.timeOutReached = timeOutReached;
 		}
 		
 		public String getResponseBodyAsString(){
@@ -192,6 +194,18 @@ public class WebClient {
 		public int getResponseCode(){
 			return httpResponse.getResponseCode();
 		}
+		
+		public boolean sizeLimitReached(){
+			return httpResponse.wasDownloadLimitReached();
+		}
+		
+		/**
+		 * Indicates if time-out was reached.
+		 * @return
+		 */
+		public boolean timeOutReached(){
+			return timeOutReached;
+		}
 	}
 	
 	/**
@@ -226,14 +240,6 @@ public class WebClient {
 	}
 	
 	/**
-	 * Indicates if time-out was reached.
-	 * @return
-	 */
-	public boolean timeOutReached(){
-		return timeOutReached;
-	}
-	
-	/**
 	 * Run the web-client on the given URL and return the result.
 	 * @return
 	 * @throws HttpException
@@ -256,7 +262,7 @@ public class WebClient {
 			HttpResponseData httpResponse = new HttpResponseData(method);
 			httpMethodMutex.notify();
 			method.releaseConnection();
-			return new HttpResult(httpResponse);
+			return new HttpResult(httpResponse, timeOutReached);
 		}
 	}
 	
