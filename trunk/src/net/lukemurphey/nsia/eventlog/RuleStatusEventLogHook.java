@@ -3,7 +3,7 @@ package net.lukemurphey.nsia.eventlog;
 import java.util.Vector;
 
 import net.lukemurphey.nsia.Application;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.response.Action;
 import net.lukemurphey.nsia.response.ActionFailedException;
 
@@ -56,7 +56,7 @@ public class RuleStatusEventLogHook extends EventLogHook {
 		try{
 			
 			// 2 -- Perform the action if the event is for a rule status change and the identifier matches
-			if( message.getCategory() == Category.RULE_REJECTED || message.getCategory() == Category.RULE_FAILED ){
+			if( message.getEventType() == EventType.RULE_REJECTED || message.getEventType() == EventType.RULE_FAILED ){
 				EventLogField field = message.getField(EventLogField.FieldName.RULE_ID);
 				
 				if( field != null && field.getDescription().equals( ruleIDString ) ){

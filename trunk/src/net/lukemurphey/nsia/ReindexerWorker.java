@@ -90,7 +90,7 @@ public class ReindexerWorker implements WorkerThread {
 				
 				// Stop if shutdown was requested
 				if(shutdown == true ){
-					EventLogMessage message = new EventLogMessage(EventLogMessage.Category.TASK_TERMINATED);
+					EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.TASK_TERMINATED);
 					message.addField(new EventLogField(EventLogField.FieldName.TASK, "Database Reindexer"));
 					Application.getApplication().logEvent(message);
 				}
@@ -106,7 +106,7 @@ public class ReindexerWorker implements WorkerThread {
 				catch(SQLException e){
 					exceptionThrown = e;
 					
-					EventLogMessage message = new EventLogMessage(EventLogMessage.Category.TASK_FAILED);
+					EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.TASK_FAILED);
 					message.addField(new EventLogField(EventLogField.FieldName.TASK, "Database Reindexer"));
 					message.addField(new EventLogField(EventLogField.FieldName.MESSAGE, "Exception thrown while defragmenting index " + indexer.getIndexName() ));
 					Application.getApplication().logExceptionEvent(message, e);
@@ -117,7 +117,7 @@ public class ReindexerWorker implements WorkerThread {
 		catch(NoDatabaseConnectionException e){
 			exceptionThrown = e;
 			
-			EventLogMessage message = new EventLogMessage(EventLogMessage.Category.TASK_FAILED);
+			EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.TASK_FAILED);
 			message.addField(new EventLogField(EventLogField.FieldName.TASK, "Database Reindexer"));
 			message.addField(new EventLogField(EventLogField.FieldName.MESSAGE, "Exception thrown while attempting to get database connection in order to defragement indexes; indexer will exit"));
 			Application.getApplication().logExceptionEvent(message, e);
@@ -131,7 +131,7 @@ public class ReindexerWorker implements WorkerThread {
 			}
 			catch(SQLException e){
 				
-				EventLogMessage message = new EventLogMessage(EventLogMessage.Category.INTERNAL_ERROR);
+				EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.INTERNAL_ERROR);
 				message.addField(new EventLogField(EventLogField.FieldName.TASK, "Database Reindexer"));
 				message.addField(new EventLogField(EventLogField.FieldName.MESSAGE, "Exception thrown while attempting to close database connection"));
 				Application.getApplication().logExceptionEvent(message, e);
@@ -139,7 +139,7 @@ public class ReindexerWorker implements WorkerThread {
 		}
 		
 		// Send a log message indicating that the indexes were defragmented
-		EventLogMessage message = new EventLogMessage(EventLogMessage.Category.TASK_COMPLETED);
+		EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.TASK_COMPLETED);
 		message.addField(new EventLogField(EventLogField.FieldName.TASK, "Database Reindexer"));
 		message.addField(new EventLogField(EventLogField.FieldName.MESSAGE, "" + currentProgress + " of " + total + " indexes defragmented" ));
 		Application.getApplication().logEvent(message);

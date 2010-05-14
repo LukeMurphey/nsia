@@ -75,13 +75,13 @@ abstract public class ApiHandler {
 			}
 			
 		} catch (InputValidationException e1) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionId ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionId ) );
 			throw new GeneralizedException();
 		} catch (SQLException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e1  );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e1  );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e1 );
 			throw new GeneralizedException();
 		}
 		
@@ -185,7 +185,7 @@ abstract public class ApiHandler {
 			
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, fields );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, fields );
 						
 				return true;
 			}
@@ -194,41 +194,41 @@ abstract public class ApiHandler {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, fields );
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, fields );
 					
 					throw new InsufficientPermissionException();
 				}
 			}
 			else if( acl.getRight() == AccessControlDescriptor.Action.PERMIT ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, fields );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, fields );
 				
 				return true;
 			}
 			else if( acl.getRight() == AccessControlDescriptor.Action.DENY ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, fields );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, fields );
 				
 				throw new InsufficientPermissionException();
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, fields );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, fields );
 				
 				throw new InsufficientPermissionException();
 			}
 			
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NotFoundException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 		
@@ -248,13 +248,13 @@ abstract public class ApiHandler {
 		try {
 			sessionInfo = sessionManagement.getSessionInfo(sessionIdentifier);
 		} catch (InputValidationException e1) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e1 );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e1 );
 			throw new GeneralizedException();
 		}
 		
@@ -262,10 +262,10 @@ abstract public class ApiHandler {
 		try {
 			user = userManagement.getUserDescriptor( sessionInfo.getUserId());
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NotFoundException e) {
 			throw new NoSessionException(SessionStatus.SESSION_NULL);
@@ -286,7 +286,7 @@ abstract public class ApiHandler {
 
 		//	 0.3 -- Make sure the user name is valid
 		if( userName == null ){
-			appRes.logEvent(EventLogMessage.Category.USER_NAME_NULL,
+			appRes.logEvent(EventLogMessage.EventType.USER_NAME_NULL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID , requesterUserId ) );
 			
@@ -295,7 +295,7 @@ abstract public class ApiHandler {
 		
 		if( userName.length() == 0 ){
 			
-			appRes.logEvent(EventLogMessage.Category.USER_NAME_EMPTY,
+			appRes.logEvent(EventLogMessage.EventType.USER_NAME_EMPTY,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID , requesterUserId ) );
 			
@@ -307,7 +307,7 @@ abstract public class ApiHandler {
 		
 		if( !matcher.matches() ){
 			
-			appRes.logEvent(EventLogMessage.Category.USER_NAME_ILLEGAL,
+			appRes.logEvent(EventLogMessage.EventType.USER_NAME_ILLEGAL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID , requesterUserId ),
 					new EventLogField( FieldName.TARGET_USER_NAME , requesterUserId ));
@@ -328,7 +328,7 @@ abstract public class ApiHandler {
 		//	 0.3 -- Make sure the user name is valid
 		if( groupName == null ){
 			
-			appRes.logEvent(EventLogMessage.Category.GROUP_NAME_NULL,
+			appRes.logEvent(EventLogMessage.EventType.GROUP_NAME_NULL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID , requesterUserId ) );
 			
@@ -337,7 +337,7 @@ abstract public class ApiHandler {
 		
 		if( groupName.length() == 0 ){
 			
-			appRes.logEvent(EventLogMessage.Category.GROUP_NAME_EMPTY,
+			appRes.logEvent(EventLogMessage.EventType.GROUP_NAME_EMPTY,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID , requesterUserId ) );
 			
@@ -349,7 +349,7 @@ abstract public class ApiHandler {
 		
 		if( !matcher.matches() ){
 			
-			appRes.logEvent(EventLogMessage.Category.GROUP_NAME_ILLEGAL,
+			appRes.logEvent(EventLogMessage.EventType.GROUP_NAME_ILLEGAL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID , requesterUserId ),
 					new EventLogField( FieldName.GROUP_NAME , groupName ) );
@@ -404,7 +404,7 @@ abstract public class ApiHandler {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -419,7 +419,7 @@ abstract public class ApiHandler {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Create" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -431,7 +431,7 @@ abstract public class ApiHandler {
 				}
 			else if( acl.getCreatePermission() == AccessControlDescriptor.Action.PERMIT ){
 								
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -443,7 +443,7 @@ abstract public class ApiHandler {
 			}
 			else if( acl.getCreatePermission() == AccessControlDescriptor.Action.DENY ){
 								
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -455,7 +455,7 @@ abstract public class ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -467,13 +467,13 @@ abstract public class ApiHandler {
 			}
 			
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch( NotFoundException e){
 			return false;
@@ -526,7 +526,7 @@ abstract public class ApiHandler {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 		
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -541,7 +541,7 @@ abstract public class ApiHandler {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Execute" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -553,7 +553,7 @@ abstract public class ApiHandler {
 				}
 			else if( acl.getExecutePermission() == AccessControlDescriptor.Action.PERMIT ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -565,7 +565,7 @@ abstract public class ApiHandler {
 			}
 			else if( acl.getExecutePermission() == AccessControlDescriptor.Action.DENY ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -577,7 +577,7 @@ abstract public class ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -589,13 +589,13 @@ abstract public class ApiHandler {
 			}
 			
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch( NotFoundException e){
 			return false;
@@ -647,7 +647,7 @@ abstract public class ApiHandler {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -663,7 +663,7 @@ abstract public class ApiHandler {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Modify"),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -675,7 +675,7 @@ abstract public class ApiHandler {
 				}
 			else if( acl.getModifyPermission() == AccessControlDescriptor.Action.PERMIT ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -687,7 +687,7 @@ abstract public class ApiHandler {
 			}
 			else if( acl.getModifyPermission() == AccessControlDescriptor.Action.DENY ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -699,7 +699,7 @@ abstract public class ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -711,13 +711,13 @@ abstract public class ApiHandler {
 			}
 			
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch( NotFoundException e){
 			return false;
@@ -768,7 +768,7 @@ abstract public class ApiHandler {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Control" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -782,7 +782,7 @@ abstract public class ApiHandler {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Control" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -793,7 +793,7 @@ abstract public class ApiHandler {
 				}
 			else if( acl.getControlPermission() == AccessControlDescriptor.Action.PERMIT ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Control" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -804,7 +804,7 @@ abstract public class ApiHandler {
 			}
 			else if( acl.getControlPermission() == AccessControlDescriptor.Action.DENY ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Control" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -815,7 +815,7 @@ abstract public class ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Control" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -826,13 +826,13 @@ abstract public class ApiHandler {
 			}
 			
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch( NotFoundException e){
 			return false;
@@ -884,7 +884,7 @@ abstract public class ApiHandler {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 	
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Delete" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -898,7 +898,7 @@ abstract public class ApiHandler {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Delete" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -909,7 +909,7 @@ abstract public class ApiHandler {
 				}
 			else if( acl.getDeletePermission() == AccessControlDescriptor.Action.PERMIT ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Delete" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -920,7 +920,7 @@ abstract public class ApiHandler {
 			}
 			else if( acl.getDeletePermission() == AccessControlDescriptor.Action.DENY ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Delete" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -931,7 +931,7 @@ abstract public class ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Delete" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -942,13 +942,13 @@ abstract public class ApiHandler {
 			}
 			
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch( NotFoundException e){
 			return false;
@@ -999,7 +999,7 @@ abstract public class ApiHandler {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Read" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -1013,7 +1013,7 @@ abstract public class ApiHandler {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Read" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -1024,7 +1024,7 @@ abstract public class ApiHandler {
 				}
 			else if( acl.getReadPermission() == AccessControlDescriptor.Action.PERMIT ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Read" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -1035,7 +1035,7 @@ abstract public class ApiHandler {
 			}
 			else if( acl.getReadPermission() == AccessControlDescriptor.Action.DENY ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Read" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -1046,7 +1046,7 @@ abstract public class ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Read" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -1057,13 +1057,13 @@ abstract public class ApiHandler {
 			}
 			
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch( NotFoundException e){
 			return false;

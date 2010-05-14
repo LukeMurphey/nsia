@@ -62,13 +62,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			return exceptionManagement.deletePolicy(exceptionID);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -88,13 +88,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -102,7 +102,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -123,13 +123,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -137,7 +137,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -158,13 +158,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -172,7 +172,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -193,13 +193,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -207,7 +207,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -226,10 +226,10 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -237,7 +237,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -258,13 +258,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -272,7 +272,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -293,13 +293,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -307,7 +307,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -328,13 +328,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -342,7 +342,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -363,13 +363,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -377,7 +377,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -401,13 +401,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -415,7 +415,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -439,13 +439,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -453,7 +453,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -477,13 +477,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -491,7 +491,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -515,13 +515,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -529,7 +529,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch (SQLException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -546,13 +546,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			return DefinitionPolicySet.getPolicySetForSiteGroup(connection, siteGroupId);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 		finally{
@@ -561,7 +561,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch(SQLException e){
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -578,13 +578,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			return DefinitionPolicySet.getPolicySetForSiteGroup(connection, siteGroupId, ruleID);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 		finally{
@@ -593,7 +593,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch(SQLException e){
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -609,10 +609,10 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			return DefinitionPolicySet.getPolicySet(connection);
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		finally{
@@ -621,7 +621,7 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 					connection.close();
 				}
 				catch(SQLException e){
-					appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -638,13 +638,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			return defMgr.clearCategoryDescriptors(siteGroupID, categoryName );
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -660,13 +660,13 @@ public class ApiDefinitionPolicyManagement extends ApiHandler{
 			return defMgr.clearSubCategoryDescriptors(siteGroupID, categoryName, subCategoryName );
 		
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}

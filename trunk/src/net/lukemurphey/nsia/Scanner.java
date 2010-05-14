@@ -127,9 +127,9 @@ public class Scanner extends Thread{
 			scanResult.saveToDatabase(connection,ruleId);
 			
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 		} catch (Exception e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 		}
 		finally{
 			try{

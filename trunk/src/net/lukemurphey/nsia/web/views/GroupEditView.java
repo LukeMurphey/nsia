@@ -112,7 +112,7 @@ public class GroupEditView extends View {
 						else{
 							if( groupManager.updateGroupInfo(group.getGroupId(), name, description) ){
 								
-								Application.getApplication().logEvent(EventLogMessage.Category.GROUP_MODIFIED, new EventLogField[]{
+								Application.getApplication().logEvent(EventLogMessage.EventType.GROUP_MODIFIED, new EventLogField[]{
 										new EventLogField( EventLogField.FieldName.GROUP_ID, group.getGroupId() ),
 										new EventLogField( EventLogField.FieldName.GROUP_NAME, group.getGroupName() ),
 										new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
@@ -124,7 +124,7 @@ public class GroupEditView extends View {
 							}
 							else{
 								
-								Application.getApplication().logEvent(EventLogMessage.Category.OPERATION_FAILED, new EventLogField[]{
+								Application.getApplication().logEvent(EventLogMessage.EventType.OPERATION_FAILED, new EventLogField[]{
 										new EventLogField( EventLogField.FieldName.GROUP_ID, group.getGroupId() ),
 										new EventLogField( EventLogField.FieldName.GROUP_NAME, group.getGroupName() ),
 										new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),

@@ -383,7 +383,7 @@ public class SiteGroupView extends View {
 			
 		}
 		catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}
 		catch(DuplicateEntryException e){
@@ -403,7 +403,7 @@ public class SiteGroupView extends View {
 			
 			rulesString.append("]");
 			
-			Application.getApplication().logExceptionEvent( new EventLogMessage(EventLogMessage.Category.OPERATION_FAILED,
+			Application.getApplication().logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.OPERATION_FAILED,
 					new EventLogField[]{
 						new EventLogField( FieldName.OPERATION, "Scan rule" ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),

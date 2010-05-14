@@ -17,7 +17,7 @@ import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.Definition;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionArchiveException;
@@ -39,16 +39,16 @@ public class ApiDefinitionSet extends ApiHandler {
 		try{
 			archive = DefinitionArchive.getArchive();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} catch (DefinitionSetLoadException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 		
@@ -67,16 +67,16 @@ public class ApiDefinitionSet extends ApiHandler {
 		try{
 			archive = DefinitionArchive.getArchive(ignoreLoadErrors);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} catch (DefinitionSetLoadException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 		
@@ -231,23 +231,23 @@ public class ApiDefinitionSet extends ApiHandler {
 		try {
 			archive.updateDefinition(definition, definitionID);
 			
-			appRes.logEvent(EventLogMessage.Category.DEFINITIONS_UPDATED, new EventLogField[]{
+			appRes.logEvent(EventLogMessage.EventType.DEFINITIONS_UPDATED, new EventLogField[]{
 					new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
 					new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
 
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (DisallowedOperationException e) {
-			appRes.logEvent( EventLogMessage.Category.OPERATION_FAILED, new EventLogField(FieldName.MESSAGE, e.getMessage() ) );
+			appRes.logEvent( EventLogMessage.EventType.OPERATION_FAILED, new EventLogField(FieldName.MESSAGE, e.getMessage() ) );
 			throw e;
 		} catch (Exception e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.OPERATION_FAILED, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.OPERATION_FAILED, e );
 			throw new GeneralizedException();
 		} 
 	}
@@ -266,26 +266,26 @@ public class ApiDefinitionSet extends ApiHandler {
 		try {
 			int definitionID = archive.addDefinition(definition);
 			
-			appRes.logEvent(EventLogMessage.Category.DEFINITIONS_ADDED, new EventLogField[]{
+			appRes.logEvent(EventLogMessage.EventType.DEFINITIONS_ADDED, new EventLogField[]{
 					new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
 					new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
 
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (DisallowedOperationException e) {
-			appRes.logEvent( EventLogMessage.Category.OPERATION_FAILED, new EventLogField(FieldName.MESSAGE, e.getMessage() ) );
+			appRes.logEvent( EventLogMessage.EventType.OPERATION_FAILED, new EventLogField(FieldName.MESSAGE, e.getMessage() ) );
 			throw e;
 		} catch (DuplicateEntryException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.OPERATION_FAILED, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.OPERATION_FAILED, e );
 			throw e;
 		} catch (Exception e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.OPERATION_FAILED, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.OPERATION_FAILED, e );
 			throw new GeneralizedException();
 		} 
 	}
@@ -313,22 +313,22 @@ public class ApiDefinitionSet extends ApiHandler {
 		try {
 			archive.removeByID(definitionID);
 			
-			appRes.logEvent(EventLogMessage.Category.DEFINITIONS_DELETED, new EventLogField[]{
+			appRes.logEvent(EventLogMessage.EventType.DEFINITIONS_DELETED, new EventLogField[]{
 					new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (DisallowedOperationException e) {
-			appRes.logEvent( EventLogMessage.Category.OPERATION_FAILED, new EventLogField(FieldName.MESSAGE, e.getMessage() ) );
+			appRes.logEvent( EventLogMessage.EventType.OPERATION_FAILED, new EventLogField(FieldName.MESSAGE, e.getMessage() ) );
 			throw e;
 		} catch (Exception e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.OPERATION_FAILED, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.OPERATION_FAILED, e );
 			throw new GeneralizedException();
 		} 
 	}
@@ -393,11 +393,11 @@ public class ApiDefinitionSet extends ApiHandler {
 				throw new GeneralizedException();//No session information found for the user
 			}
 		} catch(NoDatabaseConnectionException e){
-			appRes.logExceptionEvent(new EventLogMessage(Category.INTERNAL_ERROR), e);
+			appRes.logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR), e);
 		} catch(InputValidationException e){
-			appRes.logExceptionEvent(new EventLogMessage(Category.INTERNAL_ERROR), e);
+			appRes.logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR), e);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(new EventLogMessage(Category.INTERNAL_ERROR), e);
+			appRes.logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR), e);
 		}
 		
 		if( userId > -1 ){
@@ -506,7 +506,7 @@ public class ApiDefinitionSet extends ApiHandler {
 		
 		
 		// 1 -- Perform the operation
-		appRes.logEvent(EventLogMessage.Category.DEFINITIONS_EXPORTED, new EventLogField[]{
+		appRes.logEvent(EventLogMessage.EventType.DEFINITIONS_EXPORTED, new EventLogField[]{
 				new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 				new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
 		
@@ -532,7 +532,7 @@ public class ApiDefinitionSet extends ApiHandler {
 		
 		
 		// 1 -- Perform the operation
-		appRes.logEvent(EventLogMessage.Category.DEFINITIONS_EXPORTED, new EventLogField[]{
+		appRes.logEvent(EventLogMessage.EventType.DEFINITIONS_EXPORTED, new EventLogField[]{
 				new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 				new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
 		
@@ -563,13 +563,13 @@ public class ApiDefinitionSet extends ApiHandler {
 		try {
 			archive.updateDefinitions(xmlString, replaceOfficialOnly);
 			
-			appRes.logEvent(EventLogMessage.Category.DEFINITIONS_UPDATED, new EventLogField[]{
+			appRes.logEvent(EventLogMessage.EventType.DEFINITIONS_UPDATED, new EventLogField[]{
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 					new EventLogField( EventLogField.FieldName.IMPORT_SOURCE, "Local file" )} );
 			
 		} catch (DefinitionArchiveException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw e;
 		} 
 	}

@@ -29,7 +29,7 @@ import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 
 /**
  * This class acts as wrapper around the classes that perform authentication and session management. Class methods
@@ -72,10 +72,10 @@ public class ApiSessionManagement extends ApiHandler{
 		//	 0.1 -- Username cannot be null or empty
 		if( userName == null || userName.length() == 0 ){
 			if( clientData == null){
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY);
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY);
 			}
 			else{
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			}
 			
 			return null;
@@ -86,22 +86,22 @@ public class ApiSessionManagement extends ApiHandler{
 		Matcher matcher = nameRegex.matcher(userName);
 		if( !matcher.matches() ){
 			if( clientData == null)
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY);
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY);
 			else
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
-			appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
+			appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
 			return null;
 		}
 		
 		//	 0.3 -- Username must not be overly long (this makes SQL injection more difficult)
 		if( userName.length() > UserManagement.USERNAME_LENGTH ){
 			if( clientData == null)
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY);
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY);
 			else
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
-			appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_LENGTH_EXCESSIVE, new EventLogField( FieldName.LENGTH, userName.length()), new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
+			appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_LENGTH_EXCESSIVE, new EventLogField( FieldName.LENGTH, userName.length()), new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
 			return null;
 		}
 		
@@ -115,19 +115,19 @@ public class ApiSessionManagement extends ApiHandler{
 		try {
 			result = localPasswordAuth.authenticate(userName, passwordAuth, clientData);
 		} catch (NoSuchAlgorithmException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (NumericalOverflowException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 		
@@ -135,55 +135,55 @@ public class ApiSessionManagement extends ApiHandler{
 		//	 1.2 -- Make a decision on the result
 		if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_ACCOUNT_ADMINISTRATIVELY_LOCKED ){
 			if( clientData == null)
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			else
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ) , new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ) , new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_ACCOUNT_BRUTE_FORCE_LOCKED ){
 			if( clientData == null)
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_USERNAME_BLOCKED, new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_USERNAME_BLOCKED, new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
 			else
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_USERNAME_BLOCKED, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_USERNAME_BLOCKED, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_ACCOUNT_DISABLED ){
 			if( clientData == null)
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			else
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_FAILED ){//This should not be returned
 			if( clientData == null)
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_PASSWORD_WRONG, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_PASSWORD_WRONG, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			else
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_PASSWORD_WRONG, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_PASSWORD_WRONG, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_INVALID_PASSWORD ){
 			if( clientData == null)
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_PASSWORD_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_PASSWORD_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			else
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_PASSWORD_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_PASSWORD_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_INVALID_USER ){
 			if( clientData == null)
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			else
-				appRes.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				appRes.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_SUCCESS ){
 			
-			EventLogMessage message = new EventLogMessage(EventLogMessage.Category.AUTHENTICATION_SUCCESS, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+			EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.AUTHENTICATION_SUCCESS, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			
 			// Get the session information in order to add additional details
 			try{
@@ -192,7 +192,7 @@ public class ApiSessionManagement extends ApiHandler{
 				message.addField( new EventLogField(FieldName.SESSION_TRACKING_NUMBER, sessionInfo.getTrackingNumber()) );
 			}
 			catch(Exception e){
-				appRes.logExceptionEvent(Category.INTERNAL_ERROR, e);
+				appRes.logExceptionEvent(EventType.INTERNAL_ERROR, e);
 			}
 
 			if( clientData != null){
@@ -204,7 +204,7 @@ public class ApiSessionManagement extends ApiHandler{
 			return result.getSessionIdentifier();
 		}
 		else{
-			appRes.logEvent( EventLogMessage.Category.INTERNAL_ERROR, new EventLogField( FieldName.MESSAGE, "Invalid authentication result code"  ));
+			appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField( FieldName.MESSAGE, "Invalid authentication result code"  ));
 			return null;
 		}
 	}
@@ -228,19 +228,19 @@ public class ApiSessionManagement extends ApiHandler{
 		try {
 			sessionInfo = sessionManagement.getSessionInfo( sessionIdentifier );
 		} catch (InputValidationException e1) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			return false;
 		} catch (SQLException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e1 );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e1 );
 			throw new GeneralizedException();
 		}
 		
 		//	 1.2 -- Get the session status and exit if the SID is not tied to a valid session
 		if( sessionInfo.getSessionStatus() == SessionStatus.SESSION_NULL ){
-			appRes.logEvent(EventLogMessage.Category.SESSION_INVALID_TERMINATION_ATTEMPT, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_INVALID_TERMINATION_ATTEMPT, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			return false;
 		}
 		
@@ -253,12 +253,12 @@ public class ApiSessionManagement extends ApiHandler{
 					userDescriptor = userManagement.getUserDescriptor(sessionInfo.getUserId());
 				}
 				catch( NotFoundException e){
-					appRes.logEvent(EventLogMessage.Category.SESSION_ENDED,
+					appRes.logEvent(EventLogMessage.EventType.SESSION_ENDED,
 							new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ),
 							new EventLogField( FieldName.SOURCE_USER_NAME, sessionInfo.getUserName() ) );
 					return true;
 				}
-				appRes.logEvent(EventLogMessage.Category.SESSION_ENDED,
+				appRes.logEvent(EventLogMessage.EventType.SESSION_ENDED,
 						new EventLogField( FieldName.TARGET_USER_NAME, userDescriptor.getUserName()),
 						new EventLogField( FieldName.TARGET_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, sessionInfo.getUserName()),
@@ -266,17 +266,17 @@ public class ApiSessionManagement extends ApiHandler{
 				return true;
 			}
 			else{
-				appRes.logEvent(EventLogMessage.Category.SESSION_INVALID_TERMINATION_ATTEMPT, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+				appRes.logEvent(EventLogMessage.EventType.SESSION_INVALID_TERMINATION_ATTEMPT, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 				return false;
 			}
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			return false;
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -305,19 +305,19 @@ public class ApiSessionManagement extends ApiHandler{
 		try {
 			sessionInfo = sessionManagement.getSessionInfo( trackingNumber );
 		} catch (InputValidationException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e1 );
 			return false;
 		} catch (SQLException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e1 );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e1 );
 			throw new GeneralizedException();
 		}
 		
 		//	 1.2 -- Get the session status and exit if the SID is not tied to a valid session
 		if( sessionInfo.getSessionStatus() == SessionStatus.SESSION_NULL ){
-			appRes.logEvent(EventLogMessage.Category.SESSION_INVALID_TERMINATION_ATTEMPT, new EventLogField( FieldName.SESSION_TRACKING_NUMBER, trackingNumber ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_INVALID_TERMINATION_ATTEMPT, new EventLogField( FieldName.SESSION_TRACKING_NUMBER, trackingNumber ) );
 			return false;
 		}
 		
@@ -331,13 +331,13 @@ public class ApiSessionManagement extends ApiHandler{
 					userDescriptor = userManagement.getUserDescriptor(sessionInfo.getUserId());
 				}
 				catch( NotFoundException e){
-					appRes.logEvent(EventLogMessage.Category.SESSION_ENDED, 
+					appRes.logEvent(EventLogMessage.EventType.SESSION_ENDED, 
 							new EventLogField( FieldName.SOURCE_USER_NAME, sessionInfo.getUserName()),
 							new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
 					return true;
 				}
 				
-				appRes.logEvent(EventLogMessage.Category.SESSION_ENDED,
+				appRes.logEvent(EventLogMessage.EventType.SESSION_ENDED,
 						new EventLogField( FieldName.TARGET_USER_NAME, userDescriptor.getUserName()),
 						new EventLogField( FieldName.TARGET_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, sessionInfo.getUserName()),
@@ -345,17 +345,17 @@ public class ApiSessionManagement extends ApiHandler{
 				return true;
 			}
 			else{
-				appRes.logEvent(EventLogMessage.Category.SESSION_INVALID_TERMINATION_ATTEMPT, new EventLogField( FieldName.SESSION_TRACKING_NUMBER, trackingNumber ) );
+				appRes.logEvent(EventLogMessage.EventType.SESSION_INVALID_TERMINATION_ATTEMPT, new EventLogField( FieldName.SESSION_TRACKING_NUMBER, trackingNumber ) );
 				return false;
 			}
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			return false;
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e  );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e  );
 			throw new GeneralizedException();
 		}
 	}
@@ -372,27 +372,27 @@ public class ApiSessionManagement extends ApiHandler{
 		try {
 			sessionInfo = sessionManagement.getSessionInfo( sessionIdentifier );
 		} catch (InputValidationException e1) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e1 );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e1 );
 			throw new GeneralizedException();
 		}
 		
 		if( sessionInfo.getSessionStatus() == SessionStatus.SESSION_EXPIRED ){
-			appRes.logEvent( EventLogMessage.Category.SESSION_INACTIVITY_EXPIRED, new EventLogField(FieldName.TARGET_USER_NAME, sessionInfo.getUserName()), new EventLogField(FieldName.TARGET_USER_ID, sessionInfo.getUserId()), new EventLogField(FieldName.SESSION_TRACKING_NUMBER, sessionInfo.getTrackingNumber()) );
+			appRes.logEvent( EventLogMessage.EventType.SESSION_INACTIVITY_EXPIRED, new EventLogField(FieldName.TARGET_USER_NAME, sessionInfo.getUserName()), new EventLogField(FieldName.TARGET_USER_ID, sessionInfo.getUserId()), new EventLogField(FieldName.SESSION_TRACKING_NUMBER, sessionInfo.getTrackingNumber()) );
 		}
 		else if( sessionInfo.getSessionStatus() == SessionStatus.SESSION_HIJACKED ){
-			appRes.logEvent( EventLogMessage.Category.SESSION_HIJACKED, new EventLogField(FieldName.TARGET_USER_NAME, sessionInfo.getUserName()), new EventLogField(FieldName.TARGET_USER_ID, sessionInfo.getUserId()), new EventLogField(FieldName.SESSION_TRACKING_NUMBER, sessionInfo.getTrackingNumber()) );
+			appRes.logEvent( EventLogMessage.EventType.SESSION_HIJACKED, new EventLogField(FieldName.TARGET_USER_NAME, sessionInfo.getUserName()), new EventLogField(FieldName.TARGET_USER_ID, sessionInfo.getUserId()), new EventLogField(FieldName.SESSION_TRACKING_NUMBER, sessionInfo.getTrackingNumber()) );
 		}
 		else if( sessionInfo.getSessionStatus() == SessionStatus.SESSION_INACTIVE ){
-			appRes.logEvent( EventLogMessage.Category.SESSION_INACTIVITY_EXPIRED, new EventLogField(FieldName.TARGET_USER_NAME, sessionInfo.getUserName()), new EventLogField(FieldName.TARGET_USER_ID, sessionInfo.getUserId()), new EventLogField(FieldName.SESSION_TRACKING_NUMBER, sessionInfo.getTrackingNumber()) );
+			appRes.logEvent( EventLogMessage.EventType.SESSION_INACTIVITY_EXPIRED, new EventLogField(FieldName.TARGET_USER_NAME, sessionInfo.getUserName()), new EventLogField(FieldName.TARGET_USER_ID, sessionInfo.getUserId()), new EventLogField(FieldName.SESSION_TRACKING_NUMBER, sessionInfo.getTrackingNumber()) );
 		}
 		else if( sessionInfo.getSessionStatus() == SessionStatus.SESSION_LIFETIME_EXCEEDED ){
-			appRes.logEvent( EventLogMessage.Category.SESSION_MAX_TIME_EXCEEDED, new EventLogField(FieldName.TARGET_USER_NAME, sessionInfo.getUserName()), new EventLogField(FieldName.TARGET_USER_ID, sessionInfo.getUserId()), new EventLogField(FieldName.SESSION_TRACKING_NUMBER, sessionInfo.getTrackingNumber()) );;
+			appRes.logEvent( EventLogMessage.EventType.SESSION_MAX_TIME_EXCEEDED, new EventLogField(FieldName.TARGET_USER_NAME, sessionInfo.getUserName()), new EventLogField(FieldName.TARGET_USER_ID, sessionInfo.getUserId()), new EventLogField(FieldName.SESSION_TRACKING_NUMBER, sessionInfo.getTrackingNumber()) );;
 		}
 		
 		return sessionInfo.getSessionStatus().getStatusId();
@@ -422,16 +422,16 @@ public class ApiSessionManagement extends ApiHandler{
 		try {
 			newSessionIdentifier = sessionManagement.refreshSessionIdentifier( sessionIdentifier, resetActivity );
 		} catch (NoSuchAlgorithmException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 		
@@ -466,7 +466,7 @@ public class ApiSessionManagement extends ApiHandler{
 				acl = accessControl.getUserRight(sessionInfo.getUserId(), "Users.Sessions.Delete", true);
 				
 			}catch(NotFoundException e){
-				appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+				appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 				throw new GeneralizedException();
 			}
 			
@@ -480,7 +480,7 @@ public class ApiSessionManagement extends ApiHandler{
 			if( acl == null )
 				return -1;
 			else if( acl.getRight() == AccessControlDescriptor.Action.PERMIT ){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT,
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT,
 						new EventLogField( FieldName.OPERATION, "Discard user sessions"),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName),
 						new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId()),
@@ -488,7 +488,7 @@ public class ApiSessionManagement extends ApiHandler{
 				return sessionManagement.disableUserSessions( userId );
 			}
 			else if( acl.getRight() == AccessControlDescriptor.Action.DENY ){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY,
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY,
 						new EventLogField( FieldName.OPERATION, "Discard user sessions"),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName),
 						new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId()),
@@ -497,7 +497,7 @@ public class ApiSessionManagement extends ApiHandler{
 				throw new InsufficientPermissionException();
 			}
 			else{
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT,
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT,
 						new EventLogField( FieldName.OPERATION, "Discard user sessions"),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName),
 						new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId()),
@@ -507,16 +507,16 @@ public class ApiSessionManagement extends ApiHandler{
 			}
 			
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (NotFoundException e) {
 			
-			appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT,
+			appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT,
 					new EventLogField( FieldName.OPERATION, "Discard user sessions"),
 					new EventLogField( FieldName.SOURCE_USER_NAME, sessionInfo.getUserName()),
 					new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId()),
@@ -561,7 +561,7 @@ public class ApiSessionManagement extends ApiHandler{
 				acl = accessControl.getUserRight(sessionInfo.getUserId(), "Users.Sessions.View", true);
 			
 			}catch(NotFoundException e){
-				appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+				appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 				throw new GeneralizedException();
 			}
 			
@@ -574,35 +574,35 @@ public class ApiSessionManagement extends ApiHandler{
 			
 			//Determine if the permissions are sufficient to allow access
 			if (user.isUnrestricted())
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_NAME, userName), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_NAME, userName), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
 			else if( acl == null )
 				return null;
 			else if( acl.getRight() == AccessControlDescriptor.Action.PERMIT ){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_NAME, userName), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_NAME, userName), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
 			}
 			else if( acl.getRight() == AccessControlDescriptor.Action.DENY ){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_NAME, userName), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_NAME, userName), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
 				throw new InsufficientPermissionException();
 			}
 			else{
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_NAME, userName), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_NAME, userName), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
 				throw new InsufficientPermissionException();
 			}
 			
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 		catch (NotFoundException e) {
 			if( sessionInfo != null )
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
 			else
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT,  new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_ID, "Unknown" ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT,  new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_ID, "Unknown" ) );
 			
 			throw new InsufficientPermissionException();
 		}
@@ -612,13 +612,13 @@ public class ApiSessionManagement extends ApiHandler{
 		try {
 			currentSessions = sessionManagement.getCurrentSessions();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 		

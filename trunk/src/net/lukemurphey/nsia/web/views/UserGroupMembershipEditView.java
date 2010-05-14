@@ -101,7 +101,7 @@ public class UserGroupMembershipEditView extends View {
 					if( request.getParameter( includedGroups[c] ) != null ){
 						groupManager.addUserToGroup( userID, groupId );
 						updated = true;
-						Application.getApplication().logEvent(EventLogMessage.Category.USER_ADDED_TO_GROUP, new EventLogField[]{
+						Application.getApplication().logEvent(EventLogMessage.EventType.USER_ADDED_TO_GROUP, new EventLogField[]{
 								new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 								new EventLogField( EventLogField.FieldName.TARGET_USER_ID, user.getUserID() ),
 								new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),
@@ -111,7 +111,7 @@ public class UserGroupMembershipEditView extends View {
 					else{
 						groupManager.removeUserFromGroup( userID, groupId );
 						updated = true;
-						Application.getApplication().logEvent(EventLogMessage.Category.USER_REMOVED_FROM_GROUP, new EventLogField[]{
+						Application.getApplication().logEvent(EventLogMessage.EventType.USER_REMOVED_FROM_GROUP, new EventLogField[]{
 								new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 								new EventLogField( EventLogField.FieldName.TARGET_USER_ID, user.getUserID() ),
 								new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),

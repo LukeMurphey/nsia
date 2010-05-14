@@ -3,7 +3,7 @@ package net.lukemurphey.nsia.eventlog;
 import java.util.Vector;
 
 import net.lukemurphey.nsia.Application;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.response.Action;
 import net.lukemurphey.nsia.response.ActionFailedException;
 
@@ -43,7 +43,7 @@ public class SystemStatusEventLogHook extends EventLogHook {
 		
 		try{
 			// 2 -- Make sure the event is a system event
-			if( message.getCategory() == Category.SCANNER_STOPPED ){
+			if( message.getEventType() == EventType.SCANNER_STOPPED ){
 				//Perform action
 				action.execute(message);
 			}

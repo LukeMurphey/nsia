@@ -243,13 +243,13 @@ public class XmlrpcScannerController extends XmlrpcHandler{
 			try {
 				return httpScanRule.saveToDatabase();
 			} catch (IllegalStateException e) {
-				appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+				appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 				throw new GeneralizedException(e);
 			} catch (SQLException e) {
-				appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+				appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 				throw new GeneralizedException(e);
 			} catch (NoDatabaseConnectionException e) {
-				appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+				appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 				throw new GeneralizedException(e);
 			}
 		}

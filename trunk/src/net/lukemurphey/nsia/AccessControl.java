@@ -727,7 +727,7 @@ public class AccessControl {
 				rights.add(  getRight( userId, right, false, resolveUserGroupPermissions ) ) ;
 			}
 			catch(NotFoundException e){
-				appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+				appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			}
 		}
 		

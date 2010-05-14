@@ -64,7 +64,7 @@ public class SiteGroupEnableView extends View {
 			// 1 -- Enable the group
 			if( siteGroupManagement.enableGroup( groupId ) ){
 				
-				app.logEvent(EventLogMessage.Category.SITE_GROUP_REENABLED,
+				app.logEvent(EventLogMessage.EventType.SITE_GROUP_REENABLED,
 						new EventLogField( FieldName.SITE_GROUP_ID, groupId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() )
@@ -74,7 +74,7 @@ public class SiteGroupEnableView extends View {
 			}
 			else{
 				
-				app.logEvent(EventLogMessage.Category.SITE_GROUP_ID_INVALID,
+				app.logEvent(EventLogMessage.EventType.SITE_GROUP_ID_INVALID,
 						new EventLogField( FieldName.SITE_GROUP_ID, groupId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() )
@@ -83,27 +83,15 @@ public class SiteGroupEnableView extends View {
 				return true;
 			}
 		}catch (SQLException e){
-			app.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			app.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new ViewFailedException(e);
 		}catch (NoDatabaseConnectionException e) {
-			app.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			app.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new ViewFailedException(e);
 		}catch (InputValidationException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			app.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new ViewFailedException(e);
-		} /*catch (NotFoundException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (InsufficientPermissionException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (GeneralizedException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		} catch (NoSessionException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
-			throw new ViewFailedException(e);
-		}*/
+		}
 	}
 	
 	@Override

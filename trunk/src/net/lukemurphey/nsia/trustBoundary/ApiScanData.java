@@ -80,14 +80,14 @@ public class ApiScanData extends ApiHandler{
 
 			return siteGroupScanResults;
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		catch (ScanResultLoadFailureException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -122,10 +122,10 @@ public class ApiScanData extends ApiHandler{
 			
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}
 		/*} catch (ScanRuleLoadFailureException e) {
@@ -133,7 +133,7 @@ public class ApiScanData extends ApiHandler{
 			throw new GeneralizedException(e);
 		}*/
 		catch(InputValidationException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 
@@ -152,15 +152,15 @@ public class ApiScanData extends ApiHandler{
 			return ScanResultLoader.getEntryInfo(ruleId);
 		}
 		catch(NoDatabaseConnectionException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		catch(SQLException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		}
 		catch(InputValidationException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -178,15 +178,15 @@ public class ApiScanData extends ApiHandler{
 			return ScanResultLoader.getMaxEntry(ruleId);
 		}
 		catch(NoDatabaseConnectionException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		catch(SQLException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		}
 		catch(InputValidationException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -204,15 +204,15 @@ public class ApiScanData extends ApiHandler{
 			return ScanResultLoader.getMinEntry(ruleId);
 		}
 		catch(NoDatabaseConnectionException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		catch(SQLException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		}
 		catch(InputValidationException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -231,19 +231,19 @@ public class ApiScanData extends ApiHandler{
 			return results;
 		}
 		catch(NoDatabaseConnectionException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		catch(SQLException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		}
 		catch(InputValidationException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 		catch (ScanResultLoadFailureException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -262,15 +262,15 @@ public class ApiScanData extends ApiHandler{
 			return results;
 		}
 		catch(NoDatabaseConnectionException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		catch(SQLException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		}
 		catch (ScanResultLoadFailureException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -289,15 +289,15 @@ public class ApiScanData extends ApiHandler{
 			return results;
 		}
 		catch(NoDatabaseConnectionException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		catch(SQLException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		}
 		catch (ScanResultLoadFailureException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -315,15 +315,15 @@ public class ApiScanData extends ApiHandler{
 			return rules;
 		}
 		catch(NoDatabaseConnectionException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		catch(SQLException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		}
 		catch(ScanRuleLoadFailureException e){
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -362,15 +362,15 @@ public class ApiScanData extends ApiHandler{
 			//checkRead(sessionIdentifier, scanRule.getObjectId());
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			Application.getApplication().logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException(e);
 		} catch (ScanRuleLoadFailureException e) {
 			throw new GeneralizedException(e);
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		}
 		
@@ -401,16 +401,16 @@ public class ApiScanData extends ApiHandler{
 			
 			return scanResult;
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (ScanResultLoadFailureException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -434,10 +434,10 @@ public class ApiScanData extends ApiHandler{
 		try {
 			return scanData.getRuleType( ruleId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -460,10 +460,10 @@ public class ApiScanData extends ApiHandler{
 		try {
 			return HttpDefinitionScanResult.getSignatureMatchSeverities(resultId);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -489,13 +489,13 @@ public class ApiScanData extends ApiHandler{
 		try {
 			scanResult = scanData.getScanResult( resultId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (ScanResultLoadFailureException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 		
@@ -513,10 +513,10 @@ public class ApiScanData extends ApiHandler{
 		try {
 			return HttpSeekingScanResult.getScanResultInfo(scanResultID, filter, this.appRes);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -533,10 +533,10 @@ public class ApiScanData extends ApiHandler{
 		try {
 			return HttpDefinitionScanResult.getSignatureMatches(parentScanResultID);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -559,10 +559,10 @@ public class ApiScanData extends ApiHandler{
 		try {
 			return HttpSeekingScanResult.getDiscoveredContentTypes(scanResultID);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -587,13 +587,13 @@ public class ApiScanData extends ApiHandler{
 		try {
 			scanResult = scanData.getLastScanResult( ruleId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (ScanResultLoadFailureException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 		
@@ -631,13 +631,13 @@ public class ApiScanData extends ApiHandler{
 			return rule.saveNewRuleToDatabase(siteGroupId);
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -677,16 +677,16 @@ public class ApiScanData extends ApiHandler{
 			return rule.saveToDatabase();
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}catch (ScanRuleLoadFailureException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -726,13 +726,13 @@ public class ApiScanData extends ApiHandler{
 			
 			return rule.saveNewRuleToDatabase(siteGroupId);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -775,13 +775,13 @@ public class ApiScanData extends ApiHandler{
 			
 			return rule.saveToDatabase();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -820,16 +820,16 @@ public class ApiScanData extends ApiHandler{
 
 			return httpScan.saveNewRuleToDatabase( siteGroupId );
 		} catch (IllegalStateException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -872,16 +872,16 @@ public class ApiScanData extends ApiHandler{
 			
 			httpScan.saveToDatabase( ruleId );
 		} catch (IllegalStateException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -976,23 +976,23 @@ public class ApiScanData extends ApiHandler{
 				try {
 					scan.saveToDatabase();
 				} catch (IllegalStateException e) {
-					appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+					appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 					throw new GeneralizedException();
 				} catch (SQLException e) {
-					appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+					appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 					throw new GeneralizedException();
 				} catch (NoDatabaseConnectionException e) {
-					appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+					appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 					throw new GeneralizedException();
 				}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 		
@@ -1025,16 +1025,16 @@ public class ApiScanData extends ApiHandler{
 			return removeSuccess;
 			
 		} catch (SQLException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e1);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e1);
 			throw new GeneralizedException();
 		} catch (IllegalStateException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 		
@@ -1073,10 +1073,10 @@ public class ApiScanData extends ApiHandler{
 			checkModify(sessionIdentifier, desc.getGroupId(), "Update HTTP header rule for rule " + ruleId );
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
@@ -1141,13 +1141,13 @@ public class ApiScanData extends ApiHandler{
 			try {
 				scan.saveToDatabase();
 			} catch (IllegalStateException e) {
-				appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+				appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 				throw new GeneralizedException();
 			} catch (SQLException e) {
-				appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+				appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 				throw new GeneralizedException();
 			} catch (NoDatabaseConnectionException e) {
-				appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+				appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 				throw new GeneralizedException();
 			}
 		
@@ -1208,16 +1208,16 @@ public class ApiScanData extends ApiHandler{
 			ScanRule rule = ScanRuleLoader.getScanRule(ruleId);
 			rule.delete();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} catch (ScanRuleLoadFailureException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 		
@@ -1242,10 +1242,10 @@ public class ApiScanData extends ApiHandler{
 			ruleId = HttpStaticScanRule.resolveRuleId( headerRuleId );
 		}
 		catch( SQLException e ){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
@@ -1267,10 +1267,10 @@ public class ApiScanData extends ApiHandler{
 			return scanData.getLastSignaturesMatched(count);
 		}
 		catch( SQLException e ){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}

@@ -91,14 +91,14 @@ public class AccessControlDeleteView extends View {
 			
 			if( "User".equalsIgnoreCase( args[1] ) ){
 				accessControl.deleteUserPermissions(subjectID, objectId);
-				Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.TARGET_USER_ID , subjectID ) );
+				Application.getApplication().logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.TARGET_USER_ID , subjectID ) );
 				context.addMessage("ACL successfully deleted", MessageSeverity.SUCCESS);
 				response.sendRedirect(AccessControlView.getURL(objectId));
 				return true;
 			}
 			else{
 				accessControl.deleteGroupPermissions(subjectID, objectId);
-				Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.GROUP_ID , subjectID ) );
+				Application.getApplication().logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.GROUP_ID , subjectID ) );
 				context.addMessage("ACL successfully deleted", MessageSeverity.SUCCESS);
 				response.sendRedirect(AccessControlView.getURL(objectId));
 				return true;

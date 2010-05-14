@@ -71,10 +71,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -82,7 +82,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -101,10 +101,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -112,7 +112,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -131,10 +131,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -142,7 +142,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -161,10 +161,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -172,7 +172,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -191,10 +191,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -202,7 +202,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -221,10 +221,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -232,7 +232,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -251,10 +251,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -262,7 +262,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -281,10 +281,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -292,7 +292,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -314,10 +314,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		finally{
@@ -326,7 +326,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -348,10 +348,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -359,7 +359,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -381,10 +381,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -392,7 +392,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -415,10 +415,10 @@ public class ExceptionEditView extends View {
 			filter.saveToDatabase(connection);
 		
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} finally{
 			if( connection != null ){
@@ -426,7 +426,7 @@ public class ExceptionEditView extends View {
 					connection.close();
 				}
 				catch (SQLException e) {
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}

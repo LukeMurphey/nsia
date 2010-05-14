@@ -13,7 +13,7 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.scriptenvironment.Debug;
 import net.lukemurphey.nsia.scan.scriptenvironment.StringUtils;
 import net.lukemurphey.nsia.scan.scriptenvironment.Result;
@@ -329,7 +329,7 @@ public class ScriptDefinition extends Definition {
 			try {
 				data = SavedScriptData.load( connection, scanRuleID, this.toString(), uniqueResourceName);
 			} catch (IOException e) {
-				EventLogMessage message = new EventLogMessage(Category.SCAN_ENGINE_EXCEPTION);
+				EventLogMessage message = new EventLogMessage(EventType.SCAN_ENGINE_EXCEPTION);
 				message.addField(new EventLogField(EventLogField.FieldName.DEFINITION_NAME, this.name));
 				
 				if( this.id >= 0 ){
@@ -341,7 +341,7 @@ public class ScriptDefinition extends Definition {
 				return new SavedScriptData(scanRuleID, this.name);
 			} catch (ClassNotFoundException e) {
 				
-				EventLogMessage message = new EventLogMessage(Category.SCAN_ENGINE_EXCEPTION);
+				EventLogMessage message = new EventLogMessage(EventType.SCAN_ENGINE_EXCEPTION);
 				message.addField(new EventLogField(EventLogField.FieldName.DEFINITION_NAME, this.name));
 				
 				if( this.id >= 0 ){
@@ -897,7 +897,7 @@ public class ScriptDefinition extends Definition {
 				}
 				else{
 					//The object cannot be written to the database, it is not Serializable or Externalizable
-					EventLogMessage message = new EventLogMessage(Category.DEFINITION_ERROR);
+					EventLogMessage message = new EventLogMessage(EventType.DEFINITION_ERROR);
 					message.addField(new EventLogField(EventLogField.FieldName.DEFINITION_NAME, definitionName));
 					message.addField(new EventLogField(EventLogField.FieldName.MESSAGE, "The field named \"" + pair.getName() + "\" could not be saved to the database because it is neither Serializable or Externalizable"));
 					message.addField(new EventLogField(EventLogField.FieldName.VALUE, pair.getName()));

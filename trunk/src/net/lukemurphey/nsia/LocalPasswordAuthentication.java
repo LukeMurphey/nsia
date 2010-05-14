@@ -192,22 +192,22 @@ public class LocalPasswordAuthentication extends Authentication{
 		try {
 			maximumLoginAttempts = appRes.getApplicationConfiguration().getAuthenticationAttemptLimit();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SYSTEM_PARAMETER_NAME_ILLEGAL, new EventLogField(EventLogField.FieldName.PARAMETER, "Security.MaximumAuthenticationAttemptLimit" ));
+			appRes.logEvent(EventLogMessage.EventType.SYSTEM_PARAMETER_NAME_ILLEGAL, new EventLogField(EventLogField.FieldName.PARAMETER, "Security.MaximumAuthenticationAttemptLimit" ));
 		}
 		long aggregationTime = DEFAULT_AUTHENTICATION_AGGREGATION_PERIOD_SECONDS;
 		
 		try{
 			aggregationTime = appRes.getApplicationConfiguration().getAuthenticationAttemptAggregationCount();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.SYSTEM_PARAMETER_NAME_ILLEGAL, new EventLogField(EventLogField.FieldName.PARAMETER, "Security.AuthenticationAttemptAggregationPeriod" ));
+			appRes.logEvent(EventLogMessage.EventType.SYSTEM_PARAMETER_NAME_ILLEGAL, new EventLogField(EventLogField.FieldName.PARAMETER, "Security.AuthenticationAttemptAggregationPeriod" ));
 		}
 		
 		long actualAttempts = getAuthenticationFailedCount( username, aggregationTime);

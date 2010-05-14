@@ -26,7 +26,7 @@ import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.web.templates.TemplateLoader;
 import net.lukemurphey.nsia.web.views.DashboardDefinitionErrorsPanel;
 import net.lukemurphey.nsia.web.views.DashboardDefinitionsUpdate;
@@ -147,7 +147,7 @@ public class Shortcuts {
 			
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, fields );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, fields );
 				return true;
 			}
 			else if( acl == null ){
@@ -155,31 +155,31 @@ public class Shortcuts {
 					return false;
 				}
 				else{
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, fields );
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, fields );
 					return false;
 				}
 			}
 			else if( acl.getRight() == AccessControlDescriptor.Action.PERMIT ){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, fields );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, fields );
 				return true;
 			}
 			else if( acl.getRight() == AccessControlDescriptor.Action.DENY ){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, fields );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, fields );
 				return false;
 			}
 			else{
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, fields );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, fields );
 				return false;
 			}
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NotFoundException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -271,7 +271,7 @@ public class Shortcuts {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -286,7 +286,7 @@ public class Shortcuts {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Create" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -298,7 +298,7 @@ public class Shortcuts {
 				}
 			else if( acl.getCreatePermission() == AccessControlDescriptor.Action.PERMIT ){
 								
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -310,7 +310,7 @@ public class Shortcuts {
 			}
 			else if( acl.getCreatePermission() == AccessControlDescriptor.Action.DENY ){
 								
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -322,7 +322,7 @@ public class Shortcuts {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -334,10 +334,10 @@ public class Shortcuts {
 			}
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch( NotFoundException e){
 			return false;
@@ -429,7 +429,7 @@ public class Shortcuts {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 		
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -444,7 +444,7 @@ public class Shortcuts {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Execute" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -456,7 +456,7 @@ public class Shortcuts {
 				}
 			else if( acl.getExecutePermission() == AccessControlDescriptor.Action.PERMIT ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -468,7 +468,7 @@ public class Shortcuts {
 			}
 			else if( acl.getExecutePermission() == AccessControlDescriptor.Action.DENY ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -480,7 +480,7 @@ public class Shortcuts {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -492,10 +492,10 @@ public class Shortcuts {
 			}
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			return false;
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			return false;
 		} catch( NotFoundException e){
 			return false;
@@ -587,7 +587,7 @@ public class Shortcuts {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -603,7 +603,7 @@ public class Shortcuts {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Modify"),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -615,7 +615,7 @@ public class Shortcuts {
 				}
 			else if( acl.getModifyPermission() == AccessControlDescriptor.Action.PERMIT ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -627,7 +627,7 @@ public class Shortcuts {
 			}
 			else if( acl.getModifyPermission() == AccessControlDescriptor.Action.DENY ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -639,7 +639,7 @@ public class Shortcuts {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -651,10 +651,10 @@ public class Shortcuts {
 			}
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch( NotFoundException e){
 			return false;
@@ -746,7 +746,7 @@ public class Shortcuts {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Control" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -760,7 +760,7 @@ public class Shortcuts {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Control" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -771,7 +771,7 @@ public class Shortcuts {
 				}
 			else if( acl.getControlPermission() == AccessControlDescriptor.Action.PERMIT ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Control" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -782,7 +782,7 @@ public class Shortcuts {
 			}
 			else if( acl.getControlPermission() == AccessControlDescriptor.Action.DENY ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Control" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -793,7 +793,7 @@ public class Shortcuts {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Control" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -804,10 +804,10 @@ public class Shortcuts {
 			}
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch( NotFoundException e){
 			return false;
@@ -899,7 +899,7 @@ public class Shortcuts {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 	
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Delete" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -913,7 +913,7 @@ public class Shortcuts {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Delete" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -924,7 +924,7 @@ public class Shortcuts {
 				}
 			else if( acl.getDeletePermission() == AccessControlDescriptor.Action.PERMIT ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Delete" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -935,7 +935,7 @@ public class Shortcuts {
 			}
 			else if( acl.getDeletePermission() == AccessControlDescriptor.Action.DENY ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Delete" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -946,7 +946,7 @@ public class Shortcuts {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Delete" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -957,10 +957,10 @@ public class Shortcuts {
 			}
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch( NotFoundException e){
 			return false;
@@ -1052,7 +1052,7 @@ public class Shortcuts {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Read" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -1066,7 +1066,7 @@ public class Shortcuts {
 					return false;
 				else{
 					
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Read" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -1077,7 +1077,7 @@ public class Shortcuts {
 				}
 			else if( acl.getReadPermission() == AccessControlDescriptor.Action.PERMIT ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Read" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -1088,7 +1088,7 @@ public class Shortcuts {
 			}
 			else if( acl.getReadPermission() == AccessControlDescriptor.Action.DENY ){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Read" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -1099,7 +1099,7 @@ public class Shortcuts {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 						new EventLogField( FieldName.MESSAGE, annotation ),
 						new EventLogField( FieldName.OPERATION, "Read" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
@@ -1110,10 +1110,10 @@ public class Shortcuts {
 			}
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch( NotFoundException e){
 			return false;
@@ -1252,7 +1252,7 @@ public class Shortcuts {
 					user_options.add( new Link("[Logout]", LogoutView.getURL()) );
 					user_options.add( new Link("[Change Password]", UserPasswordUpdateView.getURL(context.getUser())) );
 				} catch (URLInvalidException e) {
-					Application.getApplication().getEventLog().logExceptionEvent(new EventLogMessage(Category.WEB_ERROR), e);
+					Application.getApplication().getEventLog().logExceptionEvent(new EventLogMessage(EventType.WEB_ERROR), e);
 				}
 				
 				data.put("upperbar_options", user_options);

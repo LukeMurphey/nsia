@@ -42,13 +42,13 @@ public class RequestContext {
 			try {
 				user = getUserInfo(session_info.getUserId());
 			}catch (SQLException e){
-				Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+				Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 				//throw new ViewFailedException(e);
 			}catch (NoDatabaseConnectionException e) {
-				Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+				Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 				//throw new ViewFailedException(e);
 			}catch (NotFoundException e) {
-				Application.getApplication().logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+				Application.getApplication().logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 				//throw new ViewFailedException(e);
 			}
 		}

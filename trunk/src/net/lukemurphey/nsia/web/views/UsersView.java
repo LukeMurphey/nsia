@@ -78,10 +78,10 @@ public class UsersView extends View {
 			
 			users = userManagement.getUserDescriptors( );
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new ViewFailedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new ViewFailedException(e);
 		}
 		

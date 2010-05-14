@@ -44,13 +44,13 @@ public class ApiAccessControl extends ApiHandler {
 			else
 				sessionStatus = sessionInfo.getSessionStatus();
 		} catch (InputValidationException e1) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e1 );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e1 );
 			throw new GeneralizedException();
 		}
 		
@@ -72,10 +72,10 @@ public class ApiAccessControl extends ApiHandler {
 		try {
 			return accessControl.getUserPermissions( userId, objectId, resolveUserGroupPermissions );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -102,10 +102,10 @@ public class ApiAccessControl extends ApiHandler {
 		try {
 			return accessControl.getGroupPermissions( groupId, objectId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -136,16 +136,16 @@ public class ApiAccessControl extends ApiHandler {
 		try {
 			long id = accessControl.setPermissions( objectPermissionDescriptor);
 			if( id >= 0 )
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET, new EventLogField( FieldName.OBJECT_ID,  id ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_SET, new EventLogField( FieldName.OBJECT_ID,  id ) );
 			else
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET_FAILED );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_SET_FAILED );
 			
 			return id;
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -171,19 +171,19 @@ public class ApiAccessControl extends ApiHandler {
 		// 1 -- Perform the operation
 		try {
 			if( accessControl.deleteUserPermissions( userId, objectId) ){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.TARGET_USER_ID , userId ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.TARGET_USER_ID , userId ) );
 				return true;
 			}
 			else{
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.TARGET_USER_ID , userId ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.TARGET_USER_ID , userId ) );
 				return false;
 			}
 
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -209,18 +209,18 @@ public class ApiAccessControl extends ApiHandler {
 		// 1 -- Perform the operation
 		try {
 			if( accessControl.deleteGroupPermissions( groupId, objectId ) ){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.GROUP_ID , groupId ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.GROUP_ID , groupId ) );
 				return true;
 			}
 			else{
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.GROUP_ID , groupId ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField( FieldName.OBJECT_ID, objectId), new EventLogField( FieldName.GROUP_ID , groupId ) );
 				return false;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -244,18 +244,18 @@ public class ApiAccessControl extends ApiHandler {
 		// 1 -- Perform the operation
 		try {
 			if( accessControl.deleteGroupRight( groupId, rightName )){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField( FieldName.RIGHT, rightName), new EventLogField( FieldName.GROUP_ID , groupId ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField( FieldName.RIGHT, rightName), new EventLogField( FieldName.GROUP_ID , groupId ) );
 				return true;
 			}
 			else{
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField( FieldName.RIGHT, rightName), new EventLogField( FieldName.GROUP_ID , groupId ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField( FieldName.RIGHT, rightName), new EventLogField( FieldName.GROUP_ID , groupId ) );
 				return false;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -279,18 +279,18 @@ public class ApiAccessControl extends ApiHandler {
 		// 1 -- Perform the operation
 		try {
 			if( accessControl.deleteUserRight( userId, rightName ) ){
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField( FieldName.RIGHT, rightName), new EventLogField( FieldName.TARGET_USER_ID , userId ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField( FieldName.RIGHT, rightName), new EventLogField( FieldName.TARGET_USER_ID , userId ) );
 				return true;
 			}
 			else{
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField( FieldName.RIGHT, rightName), new EventLogField( FieldName.TARGET_USER_ID , userId ) );
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField( FieldName.RIGHT, rightName), new EventLogField( FieldName.TARGET_USER_ID , userId ) );
 				return false;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -307,13 +307,13 @@ public class ApiAccessControl extends ApiHandler {
 			else
 				sessionStatus = sessionInfo.getSessionStatus();
 		} catch (InputValidationException e1) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e1 );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e1 );
 			throw new GeneralizedException();
 		}
 		
@@ -340,7 +340,7 @@ public class ApiAccessControl extends ApiHandler {
 					allowed = "allow";
 				
 				if( rightDescriptor.getSubjectType() == AccessControlDescriptor.Subject.USER ){
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
 							new EventLogField( EventLogField.FieldName.RIGHT, rightDescriptor.getRightName() ),
 							new EventLogField( EventLogField.FieldName.VALUE, allowed ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, sessionInfo.getUserName() ),
@@ -348,7 +348,7 @@ public class ApiAccessControl extends ApiHandler {
 							new EventLogField( EventLogField.FieldName.TARGET_USER_ID, rightDescriptor.getSubjectId() )} );
 					}
 				else{
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
 							new EventLogField( EventLogField.FieldName.RIGHT, rightDescriptor.getRightName() ),
 							new EventLogField( EventLogField.FieldName.VALUE, allowed ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, sessionInfo.getUserName() ),
@@ -361,10 +361,10 @@ public class ApiAccessControl extends ApiHandler {
 			else
 				return false;
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -394,13 +394,13 @@ public class ApiAccessControl extends ApiHandler {
 			else
 				sessionStatus = sessionInfo.getSessionStatus();
 		} catch (InputValidationException e1) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e1 );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e1 );
 			throw new GeneralizedException();
 		}
 		
@@ -422,10 +422,10 @@ public class ApiAccessControl extends ApiHandler {
 		try {
 			return accessControl.getUserRights( userId, resolveUserGroupPermissions );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -457,13 +457,13 @@ public class ApiAccessControl extends ApiHandler {
 			else
 				sessionStatus = sessionInfo.getSessionStatus();
 		} catch (InputValidationException e1) {
-			appRes.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
+			appRes.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionIdentifier ) );
 			throw new GeneralizedException();
 		} catch (SQLException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e1 );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e1) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e1 );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e1 );
 			throw new GeneralizedException();
 		}
 		
@@ -485,10 +485,10 @@ public class ApiAccessControl extends ApiHandler {
 		try {
 			return accessControl.getUserRight( userId, right, resolveUserGroupPermissions );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -515,10 +515,10 @@ public class ApiAccessControl extends ApiHandler {
 		try {
 			return accessControl.getGroupRight( groupId, right );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -548,29 +548,29 @@ public class ApiAccessControl extends ApiHandler {
 		try {
 			if( accessControl.setPermissions( rightDescriptor) ){
 				if( rightDescriptor.isUser() ){
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField(FieldName.RIGHT, rightDescriptor.getRightName()), new EventLogField(FieldName.TARGET_USER_ID, rightDescriptor.getSubjectId()));
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField(FieldName.RIGHT, rightDescriptor.getRightName()), new EventLogField(FieldName.TARGET_USER_ID, rightDescriptor.getSubjectId()));
 				}
 				else{
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField(FieldName.RIGHT, rightDescriptor.getRightName()), new EventLogField(FieldName.GROUP_ID, rightDescriptor.getSubjectId()));
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET, new EventLogField(FieldName.RIGHT, rightDescriptor.getRightName()), new EventLogField(FieldName.GROUP_ID, rightDescriptor.getSubjectId()));
 				}
 				
 				return true;
 			}
 			else{
 				if( rightDescriptor.isUser() ){
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField(FieldName.RIGHT, rightDescriptor.getRightName()), new EventLogField(FieldName.TARGET_USER_ID, rightDescriptor.getSubjectId()));
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField(FieldName.RIGHT, rightDescriptor.getRightName()), new EventLogField(FieldName.TARGET_USER_ID, rightDescriptor.getSubjectId()));
 				}
 				else{
-					appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField(FieldName.RIGHT, rightDescriptor.getRightName()), new EventLogField(FieldName.GROUP_ID, rightDescriptor.getSubjectId()));
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_UNSET_FAILED, new EventLogField(FieldName.RIGHT, rightDescriptor.getRightName()), new EventLogField(FieldName.GROUP_ID, rightDescriptor.getSubjectId()));
 				}
 				
 				return false;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -594,10 +594,10 @@ public class ApiAccessControl extends ApiHandler {
 		try {
 			return accessControl.getAllAclEntries( objectId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 		

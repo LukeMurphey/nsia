@@ -103,7 +103,7 @@ public class MediaServlet extends HttpServlet {
 		}catch(FileNotFoundException e){
 			handleFileNotFound(inGet, request, response);
 		}catch(Throwable t){
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.WEB_ERROR, t);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.WEB_ERROR, t);
 		}
 		
 	}

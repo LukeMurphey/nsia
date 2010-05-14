@@ -49,7 +49,7 @@ public class ScannerStopView extends View {
 			return true;
 		}
 		
-		Application.getApplication().logEvent( EventLogMessage.Category.SCANNER_STOPPED,
+		Application.getApplication().logEvent( EventLogMessage.EventType.SCANNER_STOPPED,
 				new EventLogField( FieldName.SOURCE_USER_NAME,  context.getSessionInfo().getUserName()),
 				new EventLogField( FieldName.SOURCE_USER_ID, context.getSessionInfo().getUserId() ) );
 		

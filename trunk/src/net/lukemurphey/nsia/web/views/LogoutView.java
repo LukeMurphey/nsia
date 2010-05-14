@@ -54,12 +54,12 @@ public class LogoutView extends View {
 			try {
 				session_mgmt.terminateSession(sessionID);
 			} catch (InputValidationException e) {
-				app.logEvent(EventLogMessage.Category.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionID ) );
+				app.logEvent(EventLogMessage.EventType.SESSION_ID_ILLEGAL, new EventLogField( FieldName.SESSION_ID, sessionID ) );
 			} catch (SQLException e) {
-				app.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+				app.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 				throw new ViewFailedException(e);
 			} catch (NoDatabaseConnectionException e) {
-				app.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+				app.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 				throw new ViewFailedException(e);
 			}
 		}

@@ -49,24 +49,24 @@ public class SetPasswordCommand extends ConsoleCommand {
 			userId = userManagement.getUserID(input[1]);
 		}
 		catch(SQLException e){
-			application.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			application.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			System.out.println("Password could not be set, a SQL exception occurred");
 			return CommandResult.ERROR;
 		}
 		catch(NoDatabaseConnectionException e){
-			application.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			application.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			System.out.println("Password could not be set, no database connection exists");
 			return CommandResult.ERROR;
 		}
 		catch(InputValidationException e){
 			System.out.println("Username is illegal (contains disallowed characters)");
-			application.logEvent(EventLogMessage.Category.USER_NAME_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME,  input[1]) ) ;
+			application.logEvent(EventLogMessage.EventType.USER_NAME_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME,  input[1]) ) ;
 			return CommandResult.ERROR;
 		}
 		
 		if( userId < 0 ){
 			System.out.println("No user exists with the name given");
-			application.logEvent( EventLogMessage.Category.USER_ID_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, input[1]),  new EventLogField( FieldName.TARGET_USER_ID, userId));
+			application.logEvent( EventLogMessage.EventType.USER_ID_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, input[1]),  new EventLogField( FieldName.TARGET_USER_ID, userId));
 			return CommandResult.ERROR;
 		}
 		
@@ -115,22 +115,22 @@ public class SetPasswordCommand extends ConsoleCommand {
 			}
 		catch(SQLException e){
 			System.out.println("Password could not be set, a SQL exception occurred");
-			application.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			application.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			return CommandResult.ERROR;
 		}
 		catch(NoSuchAlgorithmException e){
 			System.out.println("Password could not be set, the hash algorithm is unknown");
-			application.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			application.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			return CommandResult.ERROR;
 		}
 		catch(NoDatabaseConnectionException e){
 			System.out.println("Password could not be set, no database connection exists");
-			application.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			application.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			return CommandResult.ERROR;
 		}
 		catch(InputValidationException e){
 			System.out.println("Password is illegal (contains disallowed characters)");
-			application.logEvent( EventLogMessage.Category.PASSWORD_ILLEGAL, new EventLogField(FieldName.TARGET_USER_ID, userId) );
+			application.logEvent( EventLogMessage.EventType.PASSWORD_ILLEGAL, new EventLogField(FieldName.TARGET_USER_ID, userId) );
 			return CommandResult.ERROR;
 		}
 		

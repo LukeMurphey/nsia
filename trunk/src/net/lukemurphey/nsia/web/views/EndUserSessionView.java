@@ -111,14 +111,14 @@ public class EndUserSessionView extends View {
 			if( sessionManagement.terminateSession(sessionTrackingNumber) ){
 				
 				//Log that the session was terminated
-				Application.getApplication().logEvent(EventLogMessage.Category.SESSION_ENDED,
+				Application.getApplication().logEvent(EventLogMessage.EventType.SESSION_ENDED,
 						new EventLogField( FieldName.TARGET_USER_NAME, userDescriptor.getUserName()),
 						new EventLogField( FieldName.TARGET_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName()),
 						new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ) );
 			}
 			else{
-				Application.getApplication().logEvent(EventLogMessage.Category.SESSION_INVALID_TERMINATION_ATTEMPT,
+				Application.getApplication().logEvent(EventLogMessage.EventType.SESSION_INVALID_TERMINATION_ATTEMPT,
 						new EventLogField( FieldName.SESSION_TRACKING_NUMBER, sessionTrackingNumber ),
 						new EventLogField( FieldName.SESSION_TRACKING_NUMBER, sessionTrackingNumber ));
 			}

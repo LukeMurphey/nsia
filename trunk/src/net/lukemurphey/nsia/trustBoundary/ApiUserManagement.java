@@ -60,13 +60,13 @@ public class ApiUserManagement extends ApiHandler {
 		
 		//	 0.3 -- Make sure the user name is valid
 		if( userName == null ){
-			appRes.logEvent(EventLogMessage.Category.USER_NAME_NULL, new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ), new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ) );
+			appRes.logEvent(EventLogMessage.EventType.USER_NAME_NULL, new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ), new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ) );
 			
 			throw new InputValidationException("Username cannot be null", "username", "null");
 		}
 		
 		if( userName.length() == 0 ){
-			appRes.logEvent(EventLogMessage.Category.USER_NAME_EMPTY, new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ), new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ) );
+			appRes.logEvent(EventLogMessage.EventType.USER_NAME_EMPTY, new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ), new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ) );
 			throw new InputValidationException("Username cannot contain 0 characters", "username", userName);
 		}
 		
@@ -74,7 +74,7 @@ public class ApiUserManagement extends ApiHandler {
 		Matcher matcher = nameRegex.matcher( userName );
 		
 		if( !matcher.matches() ){
-			appRes.logEvent(EventLogMessage.Category.USER_NAME_ILLEGAL, 
+			appRes.logEvent(EventLogMessage.EventType.USER_NAME_ILLEGAL, 
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 					new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
@@ -85,18 +85,18 @@ public class ApiUserManagement extends ApiHandler {
 		try {
 			userManagement.clearAuthFailedCount( userName );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException(e);
 		} catch (NumericalOverflowException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException(e);
 		} catch (InputValidationException e) {
-			appRes.logEvent(EventLogMessage.Category.USER_NAME_EMPTY,
+			appRes.logEvent(EventLogMessage.EventType.USER_NAME_EMPTY,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ) );
 			throw new InputValidationException("Username cannot contain 0 characters", "username", userName);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}
 	}
@@ -131,7 +131,7 @@ public class ApiUserManagement extends ApiHandler {
 		
 		//	 0.2 -- Only allow unrestricted accounts to create other unrestricted accounts
 		if( !userDescriptor.isUnrestricted() && unrestricted == true ){
-			Application.getApplication().logEvent( EventLogMessage.Category.ACCESS_CONTROL_DENY,
+			Application.getApplication().logEvent( EventLogMessage.EventType.ACCESS_CONTROL_DENY,
 					new EventLogField( FieldName.MESSAGE, "Attempt to create unrestricted account from restricted account"),
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId )
@@ -141,14 +141,14 @@ public class ApiUserManagement extends ApiHandler {
 			
 		//	 0.3 -- Make sure the user name is valid
 		if( userName == null ){
-			appRes.logEvent(EventLogMessage.Category.USER_NAME_NULL,
+			appRes.logEvent(EventLogMessage.EventType.USER_NAME_NULL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ) );
 			throw new InputValidationException("Username cannot be null", "username", "null");
 		}
 		
 		if( userName.length() == 0 ){
-			appRes.logEvent(EventLogMessage.Category.USER_NAME_EMPTY,
+			appRes.logEvent(EventLogMessage.EventType.USER_NAME_EMPTY,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ) );
 			throw new InputValidationException("Username cannot contain 0 characters", "username", userName);
@@ -158,7 +158,7 @@ public class ApiUserManagement extends ApiHandler {
 		Matcher matcher = nameRegex.matcher( userName );
 		
 		if( !matcher.matches() ){
-			appRes.logEvent(EventLogMessage.Category.USER_NAME_ILLEGAL,
+			appRes.logEvent(EventLogMessage.EventType.USER_NAME_ILLEGAL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 					new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
@@ -168,14 +168,14 @@ public class ApiUserManagement extends ApiHandler {
 		
 		//	 0.4 -- Make sure the real name is valid
 		if( realName == null ){
-			appRes.logEvent(EventLogMessage.Category.REAL_NAME_NULL,
+			appRes.logEvent(EventLogMessage.EventType.REAL_NAME_NULL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ) );
 			throw new InputValidationException("Full name cannot be null", "fullname","null" );
 		}
 		
 		if( realName.length() == 0 ){
-			appRes.logEvent(EventLogMessage.Category.REAL_NAME_ILLEGAL,
+			appRes.logEvent(EventLogMessage.EventType.REAL_NAME_ILLEGAL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 					new EventLogField( FieldName.TARGET_USER_NAME, realName ) );
@@ -186,7 +186,7 @@ public class ApiUserManagement extends ApiHandler {
 		Matcher realNameMatcher = realNameRegex.matcher( realName );
 		
 		if( !realNameMatcher.matches() ){
-			appRes.logEvent(EventLogMessage.Category.REAL_NAME_ILLEGAL,
+			appRes.logEvent(EventLogMessage.EventType.REAL_NAME_ILLEGAL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 					new EventLogField( FieldName.TARGET_USER_NAME, realName ) );
@@ -202,7 +202,7 @@ public class ApiUserManagement extends ApiHandler {
 			try {
 				email = EmailAddress.getByAddress( emailAddress );
 			} catch (UnknownHostException e1) {
-				appRes.logEvent( EventLogMessage.Category.EMAIL_UNKNOWN_HOST,
+				appRes.logEvent( EventLogMessage.EventType.EMAIL_UNKNOWN_HOST,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.EMAIL_ADDRESS, emailAddress ) );
@@ -210,7 +210,7 @@ public class ApiUserManagement extends ApiHandler {
 				throw e1;
 			} catch (InvalidLocalPartException e1) {
 				
-				appRes.logEvent( EventLogMessage.Category.EMAIL_LOCAL_PART_INVALID,
+				appRes.logEvent( EventLogMessage.EventType.EMAIL_LOCAL_PART_INVALID,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.EMAIL_ADDRESS, emailAddress ) );
@@ -224,14 +224,14 @@ public class ApiUserManagement extends ApiHandler {
 			
 			String hashAlgorithm = appRes.getApplicationConfiguration().getHashAlgorithm();
 			if( hashAlgorithm == null ){
-				appRes.logEvent(EventLogMessage.Category.INTERNAL_ERROR,
+				appRes.logEvent(EventLogMessage.EventType.INTERNAL_ERROR,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.MESSAGE, "Hash algorithm set to null" ) );
 				
 				throw new IllegalArgumentException("Hash algorithm cannot be null");
 			}else if( hashAlgorithm.length() == 0 ){
-				appRes.logEvent(EventLogMessage.Category.INTERNAL_ERROR,
+				appRes.logEvent(EventLogMessage.EventType.INTERNAL_ERROR,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.MESSAGE, "Hash algorithm is an empty string" ) );
@@ -242,7 +242,7 @@ public class ApiUserManagement extends ApiHandler {
 			long newUserId = userManagement.addAccount( userName, realName, password, hashAlgorithm, iterationCount, email, unrestricted );
 			
 			if( newUserId > 0){
-				appRes.logEvent(EventLogMessage.Category.USER_ADDED,
+				appRes.logEvent(EventLogMessage.EventType.USER_ADDED,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.TARGET_USER_ID, newUserId ),
@@ -251,7 +251,7 @@ public class ApiUserManagement extends ApiHandler {
 				return newUserId;
 			}
 			else{
-				appRes.logEvent(EventLogMessage.Category.OPERATION_FAILED,
+				appRes.logEvent(EventLogMessage.EventType.OPERATION_FAILED,
 					new EventLogField( FieldName.OPERATION, "Add user account" ),
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
@@ -262,19 +262,19 @@ public class ApiUserManagement extends ApiHandler {
 				
 				
 		} catch (NoSuchAlgorithmException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		}
 		
@@ -312,7 +312,7 @@ public class ApiUserManagement extends ApiHandler {
 		//	 0.3 -- Make sure the new password is valid		
 		if( newPasswordLength == 0 ){
 			
-			appRes.logEvent(EventLogMessage.Category.PASSWORD_EMPTY,
+			appRes.logEvent(EventLogMessage.EventType.PASSWORD_EMPTY,
 					new EventLogField( FieldName.TARGET_USER_ID, userId ),
 					new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ) );
@@ -323,7 +323,7 @@ public class ApiUserManagement extends ApiHandler {
 		//	 0.4 -- Make sure the user id is valid
 		if( userId < 0 ){
 			
-			appRes.logEvent(EventLogMessage.Category.USER_ID_ILLEGAL,
+			appRes.logEvent(EventLogMessage.EventType.USER_ID_ILLEGAL,
 					new EventLogField( FieldName.TARGET_USER_ID, userId ),
 					new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ) );
@@ -335,16 +335,16 @@ public class ApiUserManagement extends ApiHandler {
 		try {
 			return userManagement.changePasswordToRandom( userId, newPasswordLength );
 		} catch (NoSuchAlgorithmException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		}
 	}
@@ -382,7 +382,7 @@ public class ApiUserManagement extends ApiHandler {
 		//	 0.3 -- Make sure the new password is valid
 		if( newPassword == null ){
 			
-			appRes.logEvent(EventLogMessage.Category.PASSWORD_NULL,
+			appRes.logEvent(EventLogMessage.EventType.PASSWORD_NULL,
 					new EventLogField( FieldName.TARGET_USER_ID, userId ),
 					new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ) );
@@ -392,7 +392,7 @@ public class ApiUserManagement extends ApiHandler {
 		
 		if( newPassword.length() == 0 ){
 			
-			appRes.logEvent(EventLogMessage.Category.PASSWORD_EMPTY,
+			appRes.logEvent(EventLogMessage.EventType.PASSWORD_EMPTY,
 					new EventLogField( FieldName.TARGET_USER_ID, userId ),
 					new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ) );
@@ -403,7 +403,7 @@ public class ApiUserManagement extends ApiHandler {
 		//	 0.4 -- Make sure the user id is valid
 		if( userId < 0 ){
 			
-			appRes.logEvent(EventLogMessage.Category.PASSWORD_EMPTY,
+			appRes.logEvent(EventLogMessage.EventType.PASSWORD_EMPTY,
 					new EventLogField( FieldName.TARGET_USER_ID, userId ),
 					new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ) );
@@ -417,22 +417,22 @@ public class ApiUserManagement extends ApiHandler {
 			if( !localAuth.checkPassword( sessionUserId, new PasswordAuthenticationValidator( authPassword ) ) )
 				throw new PasswordInvalidException();
 		} catch (NoSuchAlgorithmException e1) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e1 );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e1 );
 			throw new GeneralizedException(e1);
 		} catch (SQLException e1) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e1 );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e1 );
 			throw new GeneralizedException(e1);
 		} catch (InputValidationException e1) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e1 );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e1 );
 			throw new GeneralizedException(e1);
 		} catch (NoDatabaseConnectionException e1) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e1 );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e1 );
 			throw new GeneralizedException(e1);
 		} catch (NumericalOverflowException e1) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e1 );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e1 );
 			throw new GeneralizedException(e1);
 		} catch (NotFoundException e1) {//Current user does not appear to exist
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e1 );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e1 );
 			throw new GeneralizedException(e1);
 		}
 		
@@ -440,16 +440,16 @@ public class ApiUserManagement extends ApiHandler {
 		try {
 			return userManagement.changePassword( userId, newPassword);
 		} catch (NoSuchAlgorithmException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		}
 
@@ -484,7 +484,7 @@ public class ApiUserManagement extends ApiHandler {
 		// 1 -- Perform the operation
 		try{
 			if( userManagement.deleteAccount( userId ) ){
-				appRes.logEvent( EventLogMessage.Category.USER_DELETED,
+				appRes.logEvent( EventLogMessage.EventType.USER_DELETED,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ));
@@ -492,7 +492,7 @@ public class ApiUserManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent( EventLogMessage.Category.USER_ID_INVALID,
+				appRes.logEvent( EventLogMessage.EventType.USER_ID_INVALID,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ));
@@ -500,13 +500,13 @@ public class ApiUserManagement extends ApiHandler {
 				return true;
 			}
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		}
 	}
@@ -542,7 +542,7 @@ public class ApiUserManagement extends ApiHandler {
 		try{
 			if( userManagement.disableAccount( userId ) ){
 				
-				appRes.logEvent( EventLogMessage.Category.USER_DISABLED,
+				appRes.logEvent( EventLogMessage.EventType.USER_DISABLED,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ));
@@ -551,7 +551,7 @@ public class ApiUserManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent( EventLogMessage.Category.USER_ID_INVALID,
+				appRes.logEvent( EventLogMessage.EventType.USER_ID_INVALID,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ));
@@ -559,13 +559,13 @@ public class ApiUserManagement extends ApiHandler {
 				return true;
 			}
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		}
 	}
@@ -593,7 +593,7 @@ public class ApiUserManagement extends ApiHandler {
 		try{
 			if( userManagement.enableAccount( userId ) ){
 				
-				appRes.logEvent( EventLogMessage.Category.USER_REENABLED,
+				appRes.logEvent( EventLogMessage.EventType.USER_REENABLED,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ) );
@@ -601,7 +601,7 @@ public class ApiUserManagement extends ApiHandler {
 				return true;
 			}
 			else{
-				appRes.logEvent( EventLogMessage.Category.USER_ID_INVALID,
+				appRes.logEvent( EventLogMessage.EventType.USER_ID_INVALID,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ) );
@@ -609,13 +609,13 @@ public class ApiUserManagement extends ApiHandler {
 				return true;
 			}
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		}
 	}
@@ -649,10 +649,10 @@ public class ApiUserManagement extends ApiHandler {
 		try {
 			queriedUserDescriptor = userManagement.getUserDescriptor( userId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}
 		
@@ -683,10 +683,10 @@ public class ApiUserManagement extends ApiHandler {
 		try {
 			userDescriptor = userManagement.getUserDescriptors( );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}
 		
@@ -725,13 +725,13 @@ public class ApiUserManagement extends ApiHandler {
 		try {
 			queriedUserDescriptor = userManagement.getUserDescriptor( userName );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}
 		
@@ -767,13 +767,13 @@ public class ApiUserManagement extends ApiHandler {
 		try {
 			return userManagement.getUserID( userName );
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		}catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}
 		
@@ -854,7 +854,7 @@ public class ApiUserManagement extends ApiHandler {
 		//	 0.3 -- Do not allow restricted accounts to create unrestricted accounts
 		if( !userDescriptor.isUnrestricted() && unrestricted == true ){
 			
-			appRes.logEvent( EventLogMessage.Category.ACCESS_CONTROL_DENY,
+			appRes.logEvent( EventLogMessage.EventType.ACCESS_CONTROL_DENY,
 					new EventLogField( FieldName.OPERATION, "Update account to unrestricted" ),
 					new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
@@ -866,7 +866,7 @@ public class ApiUserManagement extends ApiHandler {
 		//	 0.4 -- Make sure the real name is valid
 		if( realName == null ){
 			
-			appRes.logEvent( EventLogMessage.Category.REAL_NAME_NULL,
+			appRes.logEvent( EventLogMessage.EventType.REAL_NAME_NULL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 					new EventLogField( FieldName.TARGET_USER_ID, userId ) );
@@ -876,7 +876,7 @@ public class ApiUserManagement extends ApiHandler {
 		
 		if( realName.length() == 0 ){
 			
-			appRes.logEvent( EventLogMessage.Category.USER_ID_INVALID,
+			appRes.logEvent( EventLogMessage.EventType.USER_ID_INVALID,
 					new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 					new EventLogField( FieldName.REAL_NAME, realName ),
@@ -890,7 +890,7 @@ public class ApiUserManagement extends ApiHandler {
 		
 		if( !realNameMatcher.matches() ){
 			
-			appRes.logEvent( EventLogMessage.Category.USER_ID_INVALID,
+			appRes.logEvent( EventLogMessage.EventType.USER_ID_INVALID,
 					new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 					new EventLogField( FieldName.REAL_NAME, realName ),
@@ -906,7 +906,7 @@ public class ApiUserManagement extends ApiHandler {
 				email = EmailAddress.getByAddress( emailAddress );
 			} catch (UnknownHostException e1) {
 				
-				appRes.logEvent( EventLogMessage.Category.EMAIL_UNKNOWN_HOST,
+				appRes.logEvent( EventLogMessage.EventType.EMAIL_UNKNOWN_HOST,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.EMAIL_ADDRESS, emailAddress ),
@@ -915,7 +915,7 @@ public class ApiUserManagement extends ApiHandler {
 				throw e1;
 			} catch (InvalidLocalPartException e1) {
 				
-				appRes.logEvent( EventLogMessage.Category.EMAIL_LOCAL_PART_INVALID,
+				appRes.logEvent( EventLogMessage.EventType.EMAIL_LOCAL_PART_INVALID,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.EMAIL_ADDRESS, emailAddress ),
@@ -932,7 +932,7 @@ public class ApiUserManagement extends ApiHandler {
 			String hashAlgorithm = appRes.getApplicationConfiguration().getHashAlgorithm();
 			if( hashAlgorithm == null ){
 				
-				appRes.logEvent( EventLogMessage.Category.INTERNAL_ERROR,
+				appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.MESSAGE, "Hash algorithm is null" ),
@@ -941,7 +941,7 @@ public class ApiUserManagement extends ApiHandler {
 				throw new IllegalArgumentException("Hash algorithm cannot be null");
 			}else if( hashAlgorithm.length() == 0 ){
 				
-				appRes.logEvent( EventLogMessage.Category.INTERNAL_ERROR,
+				appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.MESSAGE, "Hash algorithm is an empty string" ),
@@ -954,7 +954,7 @@ public class ApiUserManagement extends ApiHandler {
 			
 			if( updateStatus ){
 				
-				appRes.logEvent( EventLogMessage.Category.USER_MODIFIED,
+				appRes.logEvent( EventLogMessage.EventType.USER_MODIFIED,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ) );
@@ -963,7 +963,7 @@ public class ApiUserManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent( EventLogMessage.Category.USER_ID_INVALID,
+				appRes.logEvent( EventLogMessage.EventType.USER_ID_INVALID,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.OPERATION, "Update user account" ),
@@ -972,16 +972,16 @@ public class ApiUserManagement extends ApiHandler {
 				return false;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException(e);
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		}
 	}
@@ -1049,7 +1049,7 @@ public class ApiUserManagement extends ApiHandler {
 		//	 0.3 -- Do not allow restricted accounts to create unrestricted accounts
 		if( unrestricted != null && !userDescriptor.isUnrestricted() && unrestricted.booleanValue() == true ){
 			
-			appRes.logEvent( EventLogMessage.Category.ACCESS_CONTROL_DENY,
+			appRes.logEvent( EventLogMessage.EventType.ACCESS_CONTROL_DENY,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 					new EventLogField( FieldName.TARGET_USER_ID, userId ) );
@@ -1060,7 +1060,7 @@ public class ApiUserManagement extends ApiHandler {
 		//	 0.4 -- Make sure the real name is valid
 		if( realName == null ){
 			
-			appRes.logEvent( EventLogMessage.Category.REAL_NAME_NULL,
+			appRes.logEvent( EventLogMessage.EventType.REAL_NAME_NULL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 					new EventLogField( FieldName.MESSAGE, "Attempt to set real name to null" ),
@@ -1071,7 +1071,7 @@ public class ApiUserManagement extends ApiHandler {
 		
 		if( realName.length() == 0 ){
 			
-			appRes.logEvent( EventLogMessage.Category.REAL_NAME_ILLEGAL,
+			appRes.logEvent( EventLogMessage.EventType.REAL_NAME_ILLEGAL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 					new EventLogField( FieldName.MESSAGE, "Attempt to set real name to empty string" ),
@@ -1085,7 +1085,7 @@ public class ApiUserManagement extends ApiHandler {
 		
 		if( !realNameMatcher.matches() ){
 			
-			appRes.logEvent( EventLogMessage.Category.REAL_NAME_ILLEGAL,
+			appRes.logEvent( EventLogMessage.EventType.REAL_NAME_ILLEGAL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 					new EventLogField( FieldName.REAL_NAME, realName ),
@@ -1101,7 +1101,7 @@ public class ApiUserManagement extends ApiHandler {
 				email = EmailAddress.getByAddress( emailAddress );
 			} catch (UnknownHostException e1) {
 				
-				appRes.logEvent( EventLogMessage.Category.EMAIL_UNKNOWN_HOST,
+				appRes.logEvent( EventLogMessage.EventType.EMAIL_UNKNOWN_HOST,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ),
@@ -1110,7 +1110,7 @@ public class ApiUserManagement extends ApiHandler {
 				throw e1;
 			} catch (InvalidLocalPartException e1) {
 				
-				appRes.logEvent( EventLogMessage.Category.EMAIL_LOCAL_PART_INVALID,
+				appRes.logEvent( EventLogMessage.EventType.EMAIL_LOCAL_PART_INVALID,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ),
@@ -1126,7 +1126,7 @@ public class ApiUserManagement extends ApiHandler {
 			String hashAlgorithm = appRes.getApplicationConfiguration().getHashAlgorithm();
 			if( hashAlgorithm == null ){
 				
-				appRes.logEvent( EventLogMessage.Category.INTERNAL_ERROR,
+				appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ),
@@ -1135,7 +1135,7 @@ public class ApiUserManagement extends ApiHandler {
 				throw new IllegalArgumentException("Hash algorithm cannot be null");
 			}else if( hashAlgorithm.length() == 0 ){
 				
-				appRes.logEvent( EventLogMessage.Category.INTERNAL_ERROR,
+				appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ),
@@ -1153,7 +1153,7 @@ public class ApiUserManagement extends ApiHandler {
 			
 			if( updateStatus ){
 				
-				appRes.logEvent( EventLogMessage.Category.USER_MODIFIED,
+				appRes.logEvent( EventLogMessage.EventType.USER_MODIFIED,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ),
@@ -1163,7 +1163,7 @@ public class ApiUserManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent( EventLogMessage.Category.OPERATION_FAILED,
+				appRes.logEvent( EventLogMessage.EventType.OPERATION_FAILED,
 						new EventLogField( FieldName.OPERATION, "Update user account" ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
@@ -1172,16 +1172,16 @@ public class ApiUserManagement extends ApiHandler {
 				return false;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException(e);
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		}
 	}
@@ -1223,7 +1223,7 @@ public class ApiUserManagement extends ApiHandler {
 		//	 0.3 -- Do not allow restricted accounts to create unrestricted accounts
 		if( unrestricted != null && !userDescriptor.isUnrestricted() && unrestricted.booleanValue() == true ){
 			
-			appRes.logEvent( EventLogMessage.Category.ACCESS_CONTROL_DENY,
+			appRes.logEvent( EventLogMessage.EventType.ACCESS_CONTROL_DENY,
 					new EventLogField( FieldName.OPERATION, "update account to unrestricted"),
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
@@ -1235,7 +1235,7 @@ public class ApiUserManagement extends ApiHandler {
 		//	 0.4 -- Make sure the real name is valid
 		if( realName == null ){
 			
-			appRes.logEvent( EventLogMessage.Category.REAL_NAME_NULL,
+			appRes.logEvent( EventLogMessage.EventType.REAL_NAME_NULL,
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 					new EventLogField( FieldName.TARGET_USER_ID, userId ) );
@@ -1245,7 +1245,7 @@ public class ApiUserManagement extends ApiHandler {
 		
 		if( realName.length() == 0 ){
 			
-			appRes.logEvent( EventLogMessage.Category.REAL_NAME_ILLEGAL,
+			appRes.logEvent( EventLogMessage.EventType.REAL_NAME_ILLEGAL,
 					new EventLogField( FieldName.MESSAGE, "Real name cannot be an empty string" ),
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
@@ -1259,7 +1259,7 @@ public class ApiUserManagement extends ApiHandler {
 		
 		if( !realNameMatcher.matches() ){
 			
-			appRes.logEvent( EventLogMessage.Category.REAL_NAME_ILLEGAL,
+			appRes.logEvent( EventLogMessage.EventType.REAL_NAME_ILLEGAL,
 					new EventLogField( FieldName.REAL_NAME, realName ),
 					new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 					new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
@@ -1275,7 +1275,7 @@ public class ApiUserManagement extends ApiHandler {
 				email = EmailAddress.getByAddress( emailAddress );
 			} catch (UnknownHostException e1) {
 				
-				appRes.logEvent( EventLogMessage.Category.EMAIL_UNKNOWN_HOST,
+				appRes.logEvent( EventLogMessage.EventType.EMAIL_UNKNOWN_HOST,
 						new EventLogField( FieldName.EMAIL_ADDRESS, emailAddress ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
@@ -1284,7 +1284,7 @@ public class ApiUserManagement extends ApiHandler {
 				throw e1;
 			} catch (InvalidLocalPartException e1) {
 				
-				appRes.logEvent( EventLogMessage.Category.EMAIL_LOCAL_PART_INVALID,
+				appRes.logEvent( EventLogMessage.EventType.EMAIL_LOCAL_PART_INVALID,
 						new EventLogField( FieldName.EMAIL_ADDRESS, emailAddress ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
@@ -1300,7 +1300,7 @@ public class ApiUserManagement extends ApiHandler {
 			String hashAlgorithm = appRes.getApplicationConfiguration().getHashAlgorithm();
 			if( hashAlgorithm == null ){
 				
-				appRes.logEvent( EventLogMessage.Category.INTERNAL_ERROR,
+				appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.MESSAGE, "Hash algorithm is null" ),
@@ -1309,7 +1309,7 @@ public class ApiUserManagement extends ApiHandler {
 				throw new IllegalArgumentException("Hash algorithm cannot be null");
 			}else if( hashAlgorithm.length() == 0 ){
 				
-				appRes.logEvent( EventLogMessage.Category.INTERNAL_ERROR,
+				appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ),
@@ -1327,7 +1327,7 @@ public class ApiUserManagement extends ApiHandler {
 			
 			if( updateStatus ){
 				
-				appRes.logEvent( EventLogMessage.Category.USER_MODIFIED,
+				appRes.logEvent( EventLogMessage.EventType.USER_MODIFIED,
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
 						new EventLogField( FieldName.TARGET_USER_ID, userId ) );
@@ -1336,7 +1336,7 @@ public class ApiUserManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent( EventLogMessage.Category.OPERATION_FAILED,
+				appRes.logEvent( EventLogMessage.EventType.OPERATION_FAILED,
 						new EventLogField( FieldName.OPERATION, "Update user account" ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, requesterUserName ),
 						new EventLogField( FieldName.SOURCE_USER_ID, requesterUserId ),
@@ -1344,16 +1344,16 @@ public class ApiUserManagement extends ApiHandler {
 				return false;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException(e);
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException(e);
 		}
 	}
@@ -1375,10 +1375,10 @@ public class ApiUserManagement extends ApiHandler {
 		try{
 			userDesc = userManagement.getUserDescriptor(userId);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}
 		
@@ -1407,10 +1407,10 @@ public class ApiUserManagement extends ApiHandler {
 		try{
 			userDesc = userManagement.getUserDescriptor(userId);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}
 		
@@ -1428,10 +1428,10 @@ public class ApiUserManagement extends ApiHandler {
 		try {
 			userDescriptors = userManagement.getUserDescriptors( );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException(e);
 		}
 		

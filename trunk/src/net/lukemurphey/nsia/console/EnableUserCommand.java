@@ -39,23 +39,23 @@ public class EnableUserCommand extends ConsoleCommand {
 		}
 		catch(SQLException e){
 			System.out.println("Account could not be enabled, a SQL exception occurred");
-			application.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			application.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			return CommandResult.ERROR;
 		}
 		catch(NoDatabaseConnectionException e){
 			System.out.println("Account could not be enabled, no database connection exists");
-			application.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			application.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			return CommandResult.ERROR;
 		}
 		catch(InputValidationException e){
 			System.out.println("Username is illegal (contains disallowed characters)");
-			application.logEvent(EventLogMessage.Category.USER_NAME_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, input[1]) );
+			application.logEvent(EventLogMessage.EventType.USER_NAME_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, input[1]) );
 			return CommandResult.ERROR;
 		}
 		
 		if( userId < 0 ){
 			System.out.println("No user exists with the name given");
-			application.logEvent(EventLogMessage.Category.USER_NAME_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, input[1]) );
+			application.logEvent(EventLogMessage.EventType.USER_NAME_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, input[1]) );
 			return CommandResult.ERROR;
 		}
 		
@@ -68,17 +68,17 @@ public class EnableUserCommand extends ConsoleCommand {
 		}
 		catch(SQLException e){
 			System.out.println("Account could not be enabled, a SQL exception occurred");
-			application.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			application.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			return CommandResult.ERROR;
 		}
 		catch(NoDatabaseConnectionException e){
 			System.out.println("Account could not be enabled, no database connection exists");
-			application.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			application.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			return CommandResult.ERROR;
 		}
 		catch(InputValidationException e){
 			System.out.println("Username is illegal (contains disallowed characters)");
-			application.logEvent(EventLogMessage.Category.USER_NAME_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME,input[2]) );
+			application.logEvent(EventLogMessage.EventType.USER_NAME_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME,input[2]) );
 			return CommandResult.ERROR;
 		}
 		

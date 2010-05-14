@@ -39,16 +39,16 @@ public class ApiApplicationParameters extends ApiHandler{
 		try {
 			return appRes.getApplicationParameters().getParameter(name, defaultValue);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -69,16 +69,16 @@ public class ApiApplicationParameters extends ApiHandler{
 		try {
 			return appRes.getApplicationParameters().getParameter(name, defaultValue);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -99,16 +99,16 @@ public class ApiApplicationParameters extends ApiHandler{
 		try {
 			appRes.getApplicationParameters().setParameter(name, defaultValue);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -129,16 +129,16 @@ public class ApiApplicationParameters extends ApiHandler{
 		try {
 			appRes.getApplicationParameters().setParameter(name, String.valueOf( defaultValue ));
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -157,16 +157,16 @@ public class ApiApplicationParameters extends ApiHandler{
 		try {
 			return appRes.getApplicationParameters().doesParameterExist( name );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}

@@ -4,7 +4,7 @@ import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
 
@@ -158,7 +158,7 @@ public class DefinitionUpdateWorker extends TimerTask implements WorkerThread  {
 			}
 		}
 		catch(Exception e){
-			EventLogMessage message = new EventLogMessage(Category.TASK_FAILED);
+			EventLogMessage message = new EventLogMessage(EventType.TASK_FAILED);
 			message.addField(new EventLogField(FieldName.TASK, this.getTaskDescription()));
 			Application.getApplication().logExceptionEvent(message, e);
 			exceptionThrown = e;

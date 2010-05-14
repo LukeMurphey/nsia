@@ -7,7 +7,7 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 
 import org.apache.log4j.*;
 import org.apache.log4j.spi.ErrorHandler;
@@ -65,41 +65,41 @@ public class EventLog {
 		}
 		
 		public void error(String message) {
-			EventLog.this.logEvent( new EventLogMessage( Category.LOG_FAILED, new EventLogField(FieldName.MESSAGE, message)), true );
+			EventLog.this.logEvent( new EventLogMessage( EventType.LOG_FAILED, new EventLogField(FieldName.MESSAGE, message)), true );
 		}
 
-		private Category getCategoryFromCode(int errorCode){
+		private EventType getEventTypeFromCode(int errorCode){
 			if( errorCode == LOG_CACHING){
-				return Category.LOGS_BEING_CACHED;
+				return EventType.LOGS_BEING_CACHED;
 			}
 			else if( errorCode == LOG_CACHE_EMPTY){
-				return Category.LOG_CACHE_EMPTY;
+				return EventType.LOG_CACHE_EMPTY;
 			}
 			else if( errorCode == LOG_CACHE_FULL){
-				return Category.LOG_CACHE_FULL;
+				return EventType.LOG_CACHE_FULL;
 			}
 			else if( errorCode == LOG_CACHE_EMPTYING){
-				return Category.LOG_CACHE_EMPTYING;
+				return EventType.LOG_CACHE_EMPTYING;
 			}
 			else if( errorCode == LOG_SERVER_CONNECTION_NOT_ESTABLISHED){
-				return Category.LOG_SERVER_UNAVAILABLE;
+				return EventType.LOG_SERVER_UNAVAILABLE;
 			}
 			else if( errorCode == LOG_SERVER_AVAILABLE){
-				return Category.LOG_SERVER_AVAILABLE;
+				return EventType.LOG_SERVER_AVAILABLE;
 			}
 			else{
-				return Category.LOG_FAILED;
+				return EventType.LOG_FAILED;
 			}
 		}
 		
 		public void error(String message, Exception exception, int code) {
-			Category category = getCategoryFromCode(code);
+			EventType eventType = getEventTypeFromCode(code);
 			
 			if( exception == null ){
-				EventLog.this.logEvent( new EventLogMessage( category, new EventLogField(FieldName.MESSAGE, message)), false );
+				EventLog.this.logEvent( new EventLogMessage( eventType, new EventLogField(FieldName.MESSAGE, message)), false );
 			}
 			else{
-				EventLog.this.logExceptionEvent( new EventLogMessage( category, new EventLogField(FieldName.MESSAGE, message)), exception, false );
+				EventLog.this.logExceptionEvent( new EventLogMessage( eventType, new EventLogField(FieldName.MESSAGE, message)), exception, false );
 			}
 		}
 
@@ -616,7 +616,7 @@ public class EventLog {
 					hook.processEvent(message);
 				}
 				catch(EventLogHookException e){
-					EventLogMessage msg = new EventLogMessage(Category.RESPONSE_ACTION_FAILED);
+					EventLogMessage msg = new EventLogMessage(EventType.RESPONSE_ACTION_FAILED);
 					
 					msg.addField(new EventLogField(FieldName.RESPONSE_ACTION_ID, hook.getEventLogHookID()));
 					msg.addField(new EventLogField(FieldName.RESPONSE_ACTION_NAME, hook.getAction().getDescription()));

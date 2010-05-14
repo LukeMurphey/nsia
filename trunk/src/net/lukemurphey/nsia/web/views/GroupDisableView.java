@@ -77,7 +77,7 @@ public class GroupDisableView extends View {
 				if( groupMgmt.disableGroup(groupID) ){
 					context.addMessage("Group successfully disabled", MessageSeverity.SUCCESS);
 					
-					Application.getApplication().logEvent(EventLogMessage.Category.GROUP_DISABLED, new EventLogField[]{
+					Application.getApplication().logEvent(EventLogMessage.EventType.GROUP_DISABLED, new EventLogField[]{
 							new EventLogField( EventLogField.FieldName.GROUP_ID, groupID ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
@@ -87,7 +87,7 @@ public class GroupDisableView extends View {
 				}
 				else{
 					
-					Application.getApplication().logEvent(EventLogMessage.Category.GROUP_ID_INVALID, new EventLogField[]{
+					Application.getApplication().logEvent(EventLogMessage.EventType.GROUP_ID_INVALID, new EventLogField[]{
 							new EventLogField( EventLogField.FieldName.GROUP_ID, groupID ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );

@@ -38,7 +38,7 @@ public class ShowConfigCommand extends ConsoleCommand {
 			table.add( new String[] { "Database Name/Version:", application.getDatabaseName() + ", " + application.getDatabaseVersion()} );
 			
 		} catch (SQLException e) {
-			application.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			application.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 		} catch (NoDatabaseConnectionException e) {
 			//application.logExceptionEvent(StringTable.MSGID_DATABASE_FAILURE, e);
 		}

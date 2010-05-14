@@ -9,11 +9,11 @@ import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 public class EventLogMessage {
 	
 	/**
-	 * The category class includes all of the potential log messages that can be created.
+	 * The event-type enumeration includes all of the potential log messages that can be created.
 	 * @author Luke Murphey
 	 *
 	 */
-	public enum Category{
+	public enum EventType{
 		USER_ID_ILLEGAL(EventLogSeverity.WARNING, "Input validation failed: User identifier is illegal"), 
 		GROUP_ID_ILLEGAL(EventLogSeverity.WARNING, "Input validation failed: Group identifier is illegal"), 
 		SITE_GROUP_ID_ILLEGAL(EventLogSeverity.WARNING, "Input validation failed: Site group identifier is illegal"), 
@@ -161,7 +161,7 @@ public class EventLogMessage {
 		RESPONSE_ACTION_FAILED(EventLogSeverity.WARNING, "Response Module: Action failed"),
 		STARTUP_ERROR(EventLogSeverity.WARNING, "System: Startup error");
 
-		private Category(EventLogSeverity severity, String name){
+		private EventType(EventLogSeverity severity, String name){
 			this.severity = severity;
 			this.name = name;
 		}
@@ -178,28 +178,28 @@ public class EventLogMessage {
 		}
 	}
 	
-	private Category category;
+	private EventType eventType;
 	private Date date;
 	private Vector<EventLogField> fields = new Vector<EventLogField>();
 	
-	public EventLogMessage (Category category ){
+	public EventLogMessage (EventType eventType ){
 		
 		// 0 -- Precondition check
-		if( category == null ){
-			throw new IllegalArgumentException("The category of the event log message cannot be null");
+		if( eventType == null ){
+			throw new IllegalArgumentException("The event-type of the event log message cannot be null");
 		}
 		
 		
 		// 1 -- Initialize the class
 		this.date = new Date();
-		this.category = category;
+		this.eventType = eventType;
 	}
 	
-	public EventLogMessage (Category category, Date date ){
+	public EventLogMessage (EventType eventType, Date date ){
 		
 		// 0 -- Precondition check
-		if( category == null ){
-			throw new IllegalArgumentException("The category of the event log message cannot be null");
+		if( eventType == null ){
+			throw new IllegalArgumentException("The event-type of the event log message cannot be null");
 		}
 		
 		if( date == null ){
@@ -209,14 +209,14 @@ public class EventLogMessage {
 		
 		// 1 -- Initialize the class
 		this.date = (Date)date.clone();
-		this.category = category;
+		this.eventType = eventType;
 	}
 	
-	public EventLogMessage (Category category, Date date, EventLogField[] fields){
+	public EventLogMessage (EventType eventType, Date date, EventLogField[] fields){
 		
 		// 0 -- Precondition check
-		if( category == null ){
-			throw new IllegalArgumentException("The category of the event log message cannot be null");
+		if( eventType == null ){
+			throw new IllegalArgumentException("The event-type of the event log message cannot be null");
 		}
 		
 		if( date == null ){
@@ -226,18 +226,18 @@ public class EventLogMessage {
 		
 		// 1 -- Initialize the class
 		this.date = (Date)date.clone();
-		this.category = category;
+		this.eventType = eventType;
 		
 		for(int c = 0; c < fields.length; c++){
 			this.fields.add(fields[c]);
 		}
 	}
 	
-	public EventLogMessage (Category category, EventLogField... fields){
+	public EventLogMessage (EventType eventType, EventLogField... fields){
 		
 		// 0 -- Precondition check
-		if( category == null ){
-			throw new IllegalArgumentException("The category of the event log message cannot be null");
+		if( eventType == null ){
+			throw new IllegalArgumentException("The event-type of the event log message cannot be null");
 		}
 		
 		if( fields == null ){
@@ -246,7 +246,7 @@ public class EventLogMessage {
 		
 		// 1 -- Initialize the class
 		this.date = new Date();
-		this.category = category;
+		this.eventType = eventType;
 		
 		for (EventLogField eventlogField : fields) {
 			this.fields.add(eventlogField);
@@ -259,15 +259,15 @@ public class EventLogMessage {
 	}
 	
 	public EventLogSeverity getSeverity(){
-		return category.getSeverity();
+		return eventType.getSeverity();
 	}
 	
-	public Category getCategory(){
-		return category;
+	public EventType getEventType(){
+		return eventType;
 	}
 	
 	public String getMessageName(){
-		return category.getName();
+		return eventType.getName();
 	}
 	
 	/**
@@ -361,10 +361,10 @@ public class EventLogMessage {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/dd/MM HH:mm:ss zzz");
 		
 		buffer.append(dateFormat.format(date));
-		buffer.append(", ").append( category.getSeverity().toString() );
+		buffer.append(", ").append( eventType.getSeverity().toString() );
 		
 		buffer.append("] ");
-		buffer.append( category.name );
+		buffer.append( eventType.name );
 		
 		buffer.append( getFieldsAsString() );
 		

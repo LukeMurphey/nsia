@@ -195,11 +195,11 @@ public class HttpSeekingScanResult extends ScanResult {
 				return contentTypes;
 			}
 			catch(SQLException e){
-				Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+				Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				return null;
 			}
 			catch(NoDatabaseConnectionException e){
-				Application.getApplication().logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+				Application.getApplication().logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 				return null;
 			}
 			finally{
@@ -209,7 +209,7 @@ public class HttpSeekingScanResult extends ScanResult {
 					}
 				}
 				catch(SQLException e){
-					Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+					Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 				}
 			}
 		}
@@ -328,7 +328,7 @@ public class HttpSeekingScanResult extends ScanResult {
 				partialResults = false;
 			}
 			catch(ScanResultLoadFailureException e){
-				Application.getApplication().logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+				Application.getApplication().logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 				partialResults = false;
 			}
 		}

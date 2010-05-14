@@ -48,7 +48,7 @@ public class ScannerStartView extends View {
 			throw new ViewFailedException(e);
 		}
 		
-		Application.getApplication().logEvent( EventLogMessage.Category.SCANNER_STARTED,
+		Application.getApplication().logEvent( EventLogMessage.EventType.SCANNER_STARTED,
 				new EventLogField( FieldName.SOURCE_USER_NAME,  context.getSessionInfo().getUserName()),
 				new EventLogField( FieldName.SOURCE_USER_ID, context.getSessionInfo().getUserId() ) );
 		

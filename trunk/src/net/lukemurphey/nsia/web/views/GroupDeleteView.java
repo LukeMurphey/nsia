@@ -76,7 +76,7 @@ public class GroupDeleteView extends View {
 			try{
 				if( groupMgmt.deleteGroup(groupID) ){
 					
-					Application.getApplication().logEvent(EventLogMessage.Category.GROUP_DELETED, new EventLogField[]{
+					Application.getApplication().logEvent(EventLogMessage.EventType.GROUP_DELETED, new EventLogField[]{
 							new EventLogField( EventLogField.FieldName.GROUP_ID, groupID ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
@@ -87,7 +87,7 @@ public class GroupDeleteView extends View {
 				}
 				else{
 					
-					Application.getApplication().logEvent(EventLogMessage.Category.GROUP_ID_INVALID, new EventLogField[]{
+					Application.getApplication().logEvent(EventLogMessage.EventType.GROUP_ID_INVALID, new EventLogField[]{
 							new EventLogField( EventLogField.FieldName.GROUP_ID, groupID ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );

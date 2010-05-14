@@ -24,7 +24,7 @@ import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor.DefinitionPolicyAction;
 import net.lukemurphey.nsia.scan.HttpDefinitionScanRule.HttpSignatureScanResultWithParser;
 
@@ -230,11 +230,11 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		try {
 			setMaxScanThreads(appRes.getApplicationConfiguration().getMaxHTTPScanThreads());
 		} catch (NoDatabaseConnectionException e) {
-			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+			appRes.getEventLog().logEvent(new EventLogMessage(EventType.INTERNAL_ERROR));
 		} catch (SQLException e) {
-			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+			appRes.getEventLog().logEvent(new EventLogMessage(EventType.INTERNAL_ERROR));
 		} catch (InputValidationException e) {
-			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+			appRes.getEventLog().logEvent(new EventLogMessage(EventType.INTERNAL_ERROR));
 		}
 	}
 	
@@ -247,11 +247,11 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		try {
 			setMaxScanThreads(appRes.getApplicationConfiguration().getMaxHTTPScanThreads());
 		} catch (NoDatabaseConnectionException e) {
-			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+			appRes.getEventLog().logEvent(new EventLogMessage(EventType.INTERNAL_ERROR));
 		} catch (SQLException e) {
-			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+			appRes.getEventLog().logEvent(new EventLogMessage(EventType.INTERNAL_ERROR));
 		} catch (InputValidationException e) {
-			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+			appRes.getEventLog().logEvent(new EventLogMessage(EventType.INTERNAL_ERROR));
 		}
 	}
 
@@ -264,11 +264,11 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		try {
 			setMaxScanThreads(appRes.getApplicationConfiguration().getMaxHTTPScanThreads());
 		} catch (NoDatabaseConnectionException e) {
-			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+			appRes.getEventLog().logEvent(new EventLogMessage(EventType.INTERNAL_ERROR));
 		} catch (SQLException e) {
-			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+			appRes.getEventLog().logEvent(new EventLogMessage(EventType.INTERNAL_ERROR));
 		} catch (InputValidationException e) {
-			appRes.getEventLog().logEvent(new EventLogMessage(Category.INTERNAL_ERROR));
+			appRes.getEventLog().logEvent(new EventLogMessage(EventType.INTERNAL_ERROR));
 		}
 	}
 	
@@ -390,7 +390,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		}
 		
 		public void uncaughtException(Thread t, Throwable e){
-			EventLogMessage message = new EventLogMessage(Category.SCAN_ENGINE_EXCEPTION, new EventLogField(FieldName.RULE_ID, scanRuleId ), new EventLogField(FieldName.URL, url.toString() ));
+			EventLogMessage message = new EventLogMessage(EventType.SCAN_ENGINE_EXCEPTION, new EventLogField(FieldName.RULE_ID, scanRuleId ), new EventLogField(FieldName.URL, url.toString() ));
 			appRes.logExceptionEvent(message, e);
 		}
 	}

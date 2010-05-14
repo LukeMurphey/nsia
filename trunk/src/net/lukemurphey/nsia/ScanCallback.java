@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.*;
 
 public class ScanCallback {
@@ -86,13 +86,13 @@ public class ScanCallback {
 			EventLogMessage logMessage;
 			
 			if( deviations > 0 ){
-				logMessage = new EventLogMessage(Category.RULE_REJECTED);
+				logMessage = new EventLogMessage(EventType.RULE_REJECTED);
 			}
 			else if( resultCode == ScanResultCode.SCAN_FAILED || resultCode == ScanResultCode.UNREADY ){
-				logMessage = new EventLogMessage(Category.RULE_FAILED);
+				logMessage = new EventLogMessage(EventType.RULE_FAILED);
 			}
 			else{
-				logMessage = new EventLogMessage(Category.RULE_ACCEPTED);
+				logMessage = new EventLogMessage(EventType.RULE_ACCEPTED);
 			}
 			
 			if( message != null ){
@@ -110,9 +110,9 @@ public class ScanCallback {
 					logMessage.addField(new EventLogField(FieldName.SITE_GROUP_ID, siteGroupID));
 				}
 			} catch (SQLException e) {
-				application.logExceptionEvent(new EventLogMessage(EventLogMessage.Category.SQL_EXCEPTION), e);
+				application.logExceptionEvent(new EventLogMessage(EventLogMessage.EventType.SQL_EXCEPTION), e);
 			} catch (NoDatabaseConnectionException e) {
-				application.logExceptionEvent(new EventLogMessage(EventLogMessage.Category.SQL_EXCEPTION), e);
+				application.logExceptionEvent(new EventLogMessage(EventLogMessage.EventType.SQL_EXCEPTION), e);
 			}
 			
 			logMessage.addField(new EventLogField(FieldName.RULE_TYPE, ruleType));

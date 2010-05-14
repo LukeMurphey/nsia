@@ -89,7 +89,7 @@ public class DefinitionsImportView extends View {
 							archive.updateDefinitions(xmlString, false);
 							
 							// Log that the import occurred
-							Application.getApplication().logEvent(EventLogMessage.Category.DEFINITIONS_UPDATED, new EventLogField[]{
+							Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITIONS_UPDATED, new EventLogField[]{
 									new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),
 									new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getSessionInfo().getUserId() ),
 									new EventLogField( EventLogField.FieldName.IMPORT_SOURCE, "Local file" )} );
