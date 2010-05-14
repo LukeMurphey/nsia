@@ -29,7 +29,7 @@ import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.Definition.Severity;
 
 public class HttpDefinitionScanRule extends ScanRule{
@@ -308,7 +308,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 				}
 
 			} catch (InvalidDefinitionException e) {
-				appRes.logExceptionEvent(EventLogMessage.Category.SCAN_ENGINE_EXCEPTION, e);
+				appRes.logExceptionEvent(EventLogMessage.EventType.SCAN_ENGINE_EXCEPTION, e);
 				throw new ScanException("Scan failed: InvalidSignatureException (" + e.getMessage() +  ")", e);
 			} catch (HttpException e) {
 				boolean isRedirectLoop = e.getMessage().startsWith("Circular redirect");
@@ -342,10 +342,10 @@ public class HttpDefinitionScanRule extends ScanRule{
 			return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_COMPLETED, new java.sql.Timestamp(System.currentTimeMillis()), url, results, this.scanRuleId ), null );
 
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new ScanException("Scan failed: NoDatabaseConnectionException", e);
 		} catch(SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new ScanException("Scan failed: SQLException", e);
 		} 
 	}
@@ -353,7 +353,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 	private void logDefinitionMatch( String signatureName, int signatureID, String url, long ruleID, Severity severity){
 		
 		if( appRes != null ){
-			EventLogMessage message = new EventLogMessage(Category.DEFINITION_MATCH);
+			EventLogMessage message = new EventLogMessage(EventType.DEFINITION_MATCH);
 			
 			message.addField(new EventLogField(FieldName.DEFINITION_NAME, signatureName));
 			

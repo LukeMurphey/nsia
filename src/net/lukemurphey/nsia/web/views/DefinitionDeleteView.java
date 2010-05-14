@@ -81,7 +81,7 @@ public class DefinitionDeleteView extends View{
 				DefinitionArchive archive = DefinitionArchive.getArchive();
 				archive.removeByID(definitionID);
 				
-				Application.getApplication().logEvent(EventLogMessage.Category.DEFINITIONS_DELETED, new EventLogField[]{
+				Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITIONS_DELETED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );

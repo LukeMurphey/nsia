@@ -94,13 +94,13 @@ public class WebConsoleServlet extends HttpServlet {
 			if( handled == false ){
 				response.resetBuffer();
 				response.setStatus(404);
-				Application.getApplication().logEvent(EventLogMessage.Category.WEB_INFO_LOG,  new EventLogField( EventLogField.FieldName.MESSAGE, "Resource not found (404)"), new EventLogField( EventLogField.FieldName.URL, request.getServletPath()) );
+				Application.getApplication().logEvent(EventLogMessage.EventType.WEB_INFO_LOG,  new EventLogField( EventLogField.FieldName.MESSAGE, "Resource not found (404)"), new EventLogField( EventLogField.FieldName.URL, request.getServletPath()) );
 				Dialog.getDialog(response, context, Shortcuts.getMapWithBasics(context, request), "The resource you are looking for was not found", "Not Found (404)", DialogType.WARNING, new Link("Return to the Main Dashboard", StandardViewList.getURL("main_dashboard")));
 			}
 		}
 		catch(Throwable t){
 			t.printStackTrace();
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.WEB_ERROR, t);
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.WEB_ERROR, t);
 			showServerErrorDialog(request,response, new RequestContext());
 		}
 		

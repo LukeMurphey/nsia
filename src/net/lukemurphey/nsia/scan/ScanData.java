@@ -334,7 +334,7 @@ public class ScanData  {
 					}
 				}
 				catch(ScanResultLoadFailureException e){
-					application.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+					application.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 				}
 				
 			}

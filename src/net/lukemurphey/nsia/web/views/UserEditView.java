@@ -154,7 +154,7 @@ public class UserEditView extends View {
 							
 							//	 0.2 -- Only allow unrestricted accounts to create other unrestricted accounts
 							if( !context.getUser().isUnrestricted() && unrestricted == true ){
-								Application.getApplication().logEvent( EventLogMessage.Category.ACCESS_CONTROL_DENY,
+								Application.getApplication().logEvent( EventLogMessage.EventType.ACCESS_CONTROL_DENY,
 										new EventLogField( FieldName.MESSAGE, "Attempt to create unrestricted account from restricted account"),
 										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserName() )
@@ -167,7 +167,7 @@ public class UserEditView extends View {
 							if( userID > 0){
 								user = userManager.getUserDescriptor(userID);
 								
-								Application.getApplication().logEvent(EventLogMessage.Category.USER_ADDED,
+								Application.getApplication().logEvent(EventLogMessage.EventType.USER_ADDED,
 										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
 										new EventLogField( FieldName.TARGET_USER_ID, userID ),
@@ -175,7 +175,7 @@ public class UserEditView extends View {
 								context.addMessage("User created successfully", MessageSeverity.SUCCESS);
 							}
 							else{
-								Application.getApplication().logEvent(EventLogMessage.Category.OPERATION_FAILED,
+								Application.getApplication().logEvent(EventLogMessage.EventType.OPERATION_FAILED,
 									new EventLogField( FieldName.OPERATION, "Add user account" ),
 									new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 									new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
@@ -193,7 +193,7 @@ public class UserEditView extends View {
 							//	 3.3.1 -- Do not allow restricted accounts to create unrestricted accounts
 							if( unrestricted && !context.getUser().isUnrestricted() ){
 								
-								Application.getApplication().logEvent( EventLogMessage.Category.ACCESS_CONTROL_DENY,
+								Application.getApplication().logEvent( EventLogMessage.EventType.ACCESS_CONTROL_DENY,
 										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
 										new EventLogField( FieldName.TARGET_USER_NAME, user.getUserName() ),
@@ -204,7 +204,7 @@ public class UserEditView extends View {
 							
 							else if( userManager.updateAccountEx(user.getUserID(), name, fullname, emailAddress, unrestricted)){
 								
-								Application.getApplication().logEvent(EventLogMessage.Category.USER_MODIFIED,
+								Application.getApplication().logEvent(EventLogMessage.EventType.USER_MODIFIED,
 										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
 										new EventLogField( FieldName.TARGET_USER_NAME, user.getUserName() ),
@@ -216,7 +216,7 @@ public class UserEditView extends View {
 							}
 							else{
 								
-								Application.getApplication().logEvent(EventLogMessage.Category.OPERATION_FAILED,
+								Application.getApplication().logEvent(EventLogMessage.EventType.OPERATION_FAILED,
 										new EventLogField( FieldName.OPERATION, "Update user account" ),
 										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),

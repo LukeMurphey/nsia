@@ -65,10 +65,10 @@ public class ScannerController extends Thread{
 		try {
 			enterScanningLoop();
 		} catch (SQLException e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			return;
 		} catch (Exception e) {
-			Application.getApplication().logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			return;
 		}
 	}
@@ -208,7 +208,7 @@ public class ScannerController extends Thread{
 								lastScanResult = ScanResultLoader.getLastScanResult( ruleId );
 							}
 							catch(ScanResultLoadFailureException e){
-								appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+								appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 							}
 							
 							Timestamp lastScanned;

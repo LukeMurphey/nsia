@@ -57,7 +57,7 @@ public class UserDisableView extends View {
 			
 			if( userManagement.disableAccount( userID ) ){
 				
-				app.logEvent(EventLogMessage.Category.USER_DISABLED,
+				app.logEvent(EventLogMessage.EventType.USER_DISABLED,
 						new EventLogField( FieldName.TARGET_USER_ID, userID ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() )
@@ -67,7 +67,7 @@ public class UserDisableView extends View {
 			}
 			else{
 				
-				app.logEvent(EventLogMessage.Category.USER_ID_INVALID,
+				app.logEvent(EventLogMessage.EventType.USER_ID_INVALID,
 						new EventLogField( FieldName.TARGET_USER_ID, userID ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() )
@@ -76,13 +76,13 @@ public class UserDisableView extends View {
 				return true;
 			}
 		}catch (SQLException e){
-			app.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			app.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new ViewFailedException(e);
 		}catch (NoDatabaseConnectionException e) {
-			app.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			app.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new ViewFailedException(e);
 		}catch (InputValidationException e) {
-			app.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			app.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new ViewFailedException(e);
 		}
 	}

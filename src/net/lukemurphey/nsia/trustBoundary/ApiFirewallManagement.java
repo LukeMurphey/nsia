@@ -173,10 +173,10 @@ public class ApiFirewallManagement extends ApiHandler {
 		try {
 			firewall.addFirewallRule( firewallRule );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -202,10 +202,10 @@ public class ApiFirewallManagement extends ApiHandler {
 		try{
 			firewall.removeFirewallRule( ruleId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}

@@ -13,7 +13,7 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionSet;
 import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
@@ -73,11 +73,11 @@ public class DashboardDefinitionsUpdate extends View {
 				return false;
 			}
 		} catch (InputValidationException e) {
-			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 		} catch (NoDatabaseConnectionException e) {
-			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 		} catch (SQLException e) {
-			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 		}
 		
 		return true;
@@ -102,17 +102,17 @@ public class DashboardDefinitionsUpdate extends View {
 				currentDefinitionsID = DefinitionArchive.getLatestAvailableDefinitionSetID();
 			}
 			catch( DefinitionSetLoadException e ){
-				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 			} catch (SQLException e) {
-				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 			} catch (NoDatabaseConnectionException e) {
-				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 			} catch (InputValidationException e) {
-				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 			} catch (XmlRpcException e) {
-				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 			} catch (IOException e) {
-				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 			}
 			finally{
 				checkingVersion = false;
@@ -148,16 +148,16 @@ public class DashboardDefinitionsUpdate extends View {
 			}
 		}
 		catch( DefinitionSetLoadException e ){
-			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 		}
 		catch (SQLException e) {
-			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 		}
 		catch (NoDatabaseConnectionException e) {
-			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 		}
 		catch (InputValidationException e) {
-			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR) , e);
+			Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 		}
 		
 		return false;

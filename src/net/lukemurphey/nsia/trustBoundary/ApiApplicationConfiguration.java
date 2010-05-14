@@ -16,7 +16,7 @@ import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 
 public class ApiApplicationConfiguration extends ApiHandler{
 	
@@ -32,14 +32,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setAuthenticationAttemptAggregationCount(value);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "Authentication Attempt Aggregation Count"), 
 				new EventLogField(FieldName.VALUE, value),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -52,10 +52,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getAuthenticationAttemptAggregationCount();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -70,14 +70,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setAuthenticationAttemptLimit(value);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "Authentication Attempt Limit"), 
 				new EventLogField(FieldName.VALUE, value),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -90,10 +90,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getAuthenticationAttemptLimit();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -108,14 +108,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setHashAlgorithm(value);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "Authentication Hash Algorithm"), 
 				new EventLogField(FieldName.VALUE, value),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -128,10 +128,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getHashAlgorithm();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -146,14 +146,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setHashIterations(value);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "Authentication Hash Iteration Count"), 
 				new EventLogField(FieldName.VALUE, value),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -166,10 +166,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getHashIterations();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -182,10 +182,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getHttpClientId();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -198,10 +198,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getKeystore();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -216,14 +216,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setLoginBanner(value);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "Login Banner"), 
 				new EventLogField(FieldName.VALUE, value),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -236,10 +236,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getLoginBanner();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -254,14 +254,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setServerPort(value);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "Server Port"), 
 				new EventLogField(FieldName.VALUE, value),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -274,10 +274,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getServerPort();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -292,14 +292,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setSessionIdentifierLifetime(value);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "Session Identifier Lifetime"), 
 				new EventLogField(FieldName.VALUE, value),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -312,10 +312,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getSessionIdentifierLifetime();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -330,14 +330,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setSessionInactivityThreshold(value);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "Session Inactivity Threshold"), 
 				new EventLogField(FieldName.VALUE, value),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -351,10 +351,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getSessionInactivityThreshold();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -369,14 +369,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setSessionLifetime(value);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "Maximum Session Lifetime"), 
 				new EventLogField(FieldName.VALUE, value),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -389,10 +389,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getSessionLifetime();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -407,14 +407,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setSslKeyPassword(password);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "SSL Key Password"), 
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
 				new EventLogField(FieldName.SOURCE_USER_ID, userDesc.getUserID())) );
@@ -428,14 +428,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setSslPassword(password);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "SSL Password"), 
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
 				new EventLogField(FieldName.SOURCE_USER_ID, userDesc.getUserID())) );
@@ -447,10 +447,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getSslKeyPassword();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -466,14 +466,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 			appRes.getApplicationConfiguration().setLogFormat(logFormat);
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "Log Format"), 
 				new EventLogField(FieldName.VALUE, logFormat),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -486,10 +486,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getLogFormat();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -502,10 +502,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getSslPassword();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -518,10 +518,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getLogServerAddress();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -535,10 +535,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 			appRes.getApplicationConfiguration().setLogServerAddress(value);
 			appRes.getEventLog().setLogServer( value );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -549,10 +549,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getLogServerPort();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -566,10 +566,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 			appRes.getApplicationConfiguration().setLogServerPort(value);
 			appRes.getEventLog().setLogServerPort( value );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -582,14 +582,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setSslEnabled(value);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "SSL Enabled"), 
 				new EventLogField(FieldName.VALUE, String.valueOf( value) ),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -602,10 +602,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().isSslEnabled();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -620,14 +620,14 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setLicenseKey(value);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
-		appRes.logEvent(new EventLogMessage( Category.CONFIGURATION_CHANGE,
+		appRes.logEvent(new EventLogMessage( EventType.CONFIGURATION_CHANGE,
 				new EventLogField(FieldName.PARAMETER, "License Key"), 
 				new EventLogField(FieldName.VALUE, value),
 				new EventLogField(FieldName.SOURCE_USER_NAME, userDesc.getUserName()),
@@ -641,10 +641,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getLicenseKey();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -658,10 +658,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getLicense(dontBlock);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -679,10 +679,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getLicense();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -696,10 +696,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setLogServerProtocol(protocol);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -711,10 +711,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getLogServerProtocol();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -728,10 +728,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getLogServerEnabled();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -745,10 +745,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setLogServerEnabled(enable);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} 
 	}
@@ -760,10 +760,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getAutoDefinitionUpdating();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -776,10 +776,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setAutoDefinitionUpdating(enable);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} 
 	}
@@ -791,20 +791,20 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getEmailFromAddress();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
 		} catch (UnknownHostException e) {
 			//This exception should not happen because an invalid email address should never be saved in the first place
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			return null;
 		} catch (InvalidLocalPartException e) {
 			//This exception should not happen because an invalid email address should never be saved in the first place
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			return null;
 		}
 	}
@@ -815,10 +815,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setEmailFromAddress(emailAddress);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} 
 	}
@@ -830,10 +830,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getEmailPassword();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -846,10 +846,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setEmailPassword(password);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} 
 	}
@@ -861,10 +861,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getEmailSMTPServer();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -877,10 +877,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setEmailSMTPServer(smtpServer);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} 
 	}
@@ -892,10 +892,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getEmailUsername();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -908,10 +908,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setEmailUsername(username);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} 
 	}
@@ -923,10 +923,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getEmailSMTPPort();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
 			throw new GeneralizedException();
@@ -939,10 +939,10 @@ public class ApiApplicationConfiguration extends ApiHandler{
 		try {
 			appRes.getApplicationConfiguration().setEmailSMTPPort(port);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		} 
 	}

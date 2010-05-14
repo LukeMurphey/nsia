@@ -51,7 +51,7 @@ public class DefinitionsExportView extends View {
 		}
 		
 		// 2 -- Export the definitions
-		Application.getApplication().logEvent(EventLogMessage.Category.DEFINITIONS_EXPORTED, new EventLogField[]{
+		Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITIONS_EXPORTED, new EventLogField[]{
 				new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),
 				new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getSessionInfo().getUserId() )} );
 		

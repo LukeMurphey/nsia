@@ -16,10 +16,10 @@ public class CommonEventExpressionMessageFormatter extends MessageFormatter {
 		cee.addExtensionField( new ExtensionField( CommonEventExpressionField.VENDOR, Application.APPLICATION_VENDOR ) );
 		cee.addExtensionField( new ExtensionField( CommonEventExpressionField.PRODUCT, Application.APPLICATION_NAME ) );
 		cee.addExtensionField( new ExtensionField( CommonEventExpressionField.PRODUCT_VERSION, Application.getVersion() ) );
-		cee.addExtensionField( new ExtensionField( "category_id", Integer.toString(message.getCategory().ordinal()) ) );
-		cee.addExtensionField( new ExtensionField( CommonEventExpressionField.CATEGORY, message.getCategory().getName() ) );
-		cee.addExtensionField( new ExtensionField( CommonEventExpressionField.SYSLOG_PRIORITY, String.valueOf( message.getCategory().getSeverity().getSyslogEquivalent() ) ) );
-		cee.addExtensionField( new ExtensionField( EventLogField.FieldName.SEVERITY.getSimpleNameFormat(), String.valueOf( message.getCategory().getSeverity().toString() ) ) );
+		cee.addExtensionField( new ExtensionField( CommonEventExpressionField.EVENT_ID, Integer.toString(message.getEventType().ordinal()) ) );
+		cee.addExtensionField( new ExtensionField( "event", message.getEventType().getName() ) );
+		cee.addExtensionField( new ExtensionField( CommonEventExpressionField.SYSLOG_PRIORITY, String.valueOf( message.getEventType().getSeverity().getSyslogEquivalent() ) ) );
+		cee.addExtensionField( new ExtensionField( EventLogField.FieldName.SEVERITY.getSimpleNameFormat(), String.valueOf( message.getEventType().getSeverity().toString() ) ) );
 		
 		// 2 -- Add each additional field, try to match up the field name with one of the default fields if possible
 		for(int c = 0; c < fields.length; c++){

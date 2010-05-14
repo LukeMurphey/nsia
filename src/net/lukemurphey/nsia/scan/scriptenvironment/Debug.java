@@ -5,7 +5,7 @@ import net.lukemurphey.nsia.eventlog.EventLog;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.Definition;
 
 /**
@@ -40,7 +40,7 @@ public class Debug {
 		// 1 -- Create the log message
 		EventLog log = Application.getApplication().getEventLog();
 		
-		EventLogMessage eventLogMessage = new EventLogMessage(Category.DEFINITION_DEBUG_MESSAGE,
+		EventLogMessage eventLogMessage = new EventLogMessage(EventType.DEFINITION_DEBUG_MESSAGE,
 				new EventLogField(FieldName.MESSAGE, message),
 				new EventLogField(FieldName.DEFINITION_ID, definition.getID()),
 				new EventLogField(FieldName.DEFINITION_REVISION, definition.getRevision()),

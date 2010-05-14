@@ -34,10 +34,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getEntries( filter );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -52,10 +52,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getEntry( entryId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -70,10 +70,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getEntriesCount();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -88,10 +88,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getEntriesCount(filter);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -106,10 +106,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getMaxEntryID();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -124,10 +124,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getMaxEntryID(contentFilter, severityFilter);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -142,10 +142,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getMaxEntryID(contentFilter);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -160,10 +160,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getMaxEntryID( severityFilter );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -178,10 +178,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getMinEntryID();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -196,10 +196,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getMinEntryID(contentFilter, severityFilter);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -214,10 +214,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getMinEntryID(contentFilter);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -232,10 +232,10 @@ public class ApiEventLogViewer extends ApiHandler {
 		try {
 			return logViewer.getMinEntryID( severityFilter );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}

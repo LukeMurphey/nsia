@@ -116,7 +116,7 @@ public abstract class EventLogHook implements Serializable{
 			}
 			catch(InvalidClassException e){
 				//This occurs when a class was modified and is different from the version that provided the serialized data.
-				EventLogMessage message = new EventLogMessage(EventLogMessage.Category.INTERNAL_ERROR);
+				EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.INTERNAL_ERROR);
 				message.addField(new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to load the event log hook for ID \"" + hookID + "\"") );
 				Application.getApplication().logExceptionEvent(message, e);
 			}
@@ -124,14 +124,14 @@ public abstract class EventLogHook implements Serializable{
 		catch(ClassNotFoundException e){
 			//Note that class was not found
 			e.printStackTrace();
-			EventLogMessage message = new EventLogMessage(EventLogMessage.Category.INTERNAL_ERROR);
+			EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.INTERNAL_ERROR);
 			message.addField(new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to instantiate the event log hook for ID \"" + hookID + "\"") );
 			Application.getApplication().logExceptionEvent(message, e);
 		}
 		catch(IOException e){
 			//Note that class was not loaded
 			e.printStackTrace();
-			EventLogMessage message = new EventLogMessage(EventLogMessage.Category.INTERNAL_ERROR);
+			EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.INTERNAL_ERROR);
 			message.addField(new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to instantiate the event log hook for ID \"" + hookID + "\"") );
 			Application.getApplication().logExceptionEvent(message, e);
 		}

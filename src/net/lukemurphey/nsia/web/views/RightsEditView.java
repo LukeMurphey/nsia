@@ -135,7 +135,7 @@ public class RightsEditView extends View {
 		try{
 			if( accessControl.setRight(rightDescriptor) ){
 				if( rightDescriptor.getSubjectType() == AccessControlDescriptor.Subject.USER ){
-					Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
+					Application.getApplication().logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
 							new EventLogField( EventLogField.FieldName.RIGHT, rightDescriptor.getRightName() ),
 							new EventLogField( EventLogField.FieldName.VALUE, allowed ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
@@ -143,7 +143,7 @@ public class RightsEditView extends View {
 							new EventLogField( EventLogField.FieldName.TARGET_USER_ID, rightDescriptor.getSubjectId() )} );
 					}
 				else{
-					Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
+					Application.getApplication().logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
 							new EventLogField( EventLogField.FieldName.RIGHT, rightDescriptor.getRightName() ),
 							new EventLogField( EventLogField.FieldName.VALUE, allowed ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),

@@ -25,7 +25,7 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.extension.ArgumentFieldsInvalidException;
 import net.lukemurphey.nsia.extension.FieldLayout;
 import net.lukemurphey.nsia.extension.PrototypeField;
@@ -82,8 +82,8 @@ public abstract class Action implements Serializable  {
 				vars.add( new MessageVariable( "$" + field.getName().getSimpleNameFormat(), field.getDescription() )  );
 			}
 			
-			vars.add( new MessageVariable( "$Category", logMessage.getCategory().getName()) );
-			vars.add( new MessageVariable( "$CategoryID", Integer.toString( logMessage.getCategory().ordinal()) ) );
+			vars.add( new MessageVariable( "$EventType", logMessage.getEventType().getName()) );
+			vars.add( new MessageVariable( "$EventTypeID", Integer.toString( logMessage.getEventType().ordinal()) ) );
 			vars.add( new MessageVariable( "$SeverityID", Integer.toString( logMessage.getSeverity().getSyslogEquivalent()) ) );
 			vars.add( new MessageVariable( "$Severity", logMessage.getSeverity().toString() ) );
 			vars.add( new MessageVariable( "$Date", logMessage.getDate().toString() ) );
@@ -99,8 +99,8 @@ public abstract class Action implements Serializable  {
 				vars.add( new MessageVariable( "${" + field.getName().getSimpleNameFormat() + "}", field.getDescription() )  );
 			}
 			
-			vars.add( new MessageVariable( "${Category}", logMessage.getCategory().getName()) );
-			vars.add( new MessageVariable( "${CategoryID}", Integer.toString( logMessage.getCategory().ordinal()) ) );
+			vars.add( new MessageVariable( "${EventType}", logMessage.getEventType().getName()) );
+			vars.add( new MessageVariable( "${EventTypeID}", Integer.toString( logMessage.getEventType().ordinal()) ) );
 			vars.add( new MessageVariable( "${SeverityID}", Integer.toString( logMessage.getSeverity().getSyslogEquivalent()) ) );
 			vars.add( new MessageVariable( "${Severity}", logMessage.getSeverity().toString() ) );
 			vars.add( new MessageVariable( "${Date}", logMessage.getDate().toString() ) );
@@ -123,9 +123,9 @@ public abstract class Action implements Serializable  {
 				writer.flush();
 				return writer.getBuffer().toString();
 			} catch (IOException e) {
-				Application.getApplication().logExceptionEvent(new EventLogMessage(Category.RESPONSE_ACTION_FAILED), e);
+				Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.RESPONSE_ACTION_FAILED), e);
 			} catch (TemplateException e) {
-				Application.getApplication().logExceptionEvent(new EventLogMessage(Category.RESPONSE_ACTION_FAILED), e);
+				Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.RESPONSE_ACTION_FAILED), e);
 			}
 			
 			return null;

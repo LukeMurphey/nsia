@@ -264,7 +264,7 @@ public final class Application {
 		try {
 			eventlog.loadHooks();
 		} catch (SQLException e) {
-			logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 		}
 		
 		scannerController = new ScannerController( this );
@@ -819,21 +819,21 @@ public final class Application {
 			
 		} catch (SQLException e) {
 			if( appRes.eventlog != null ){
-				appRes.eventlog.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
+				appRes.eventlog.logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
 			}
 			else{
 				e.printStackTrace();
 			}
 		} catch (InputValidationException e) {
 			if( appRes.eventlog != null ){
-				appRes.eventlog.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
+				appRes.eventlog.logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
 			}
 			else{
 				e.printStackTrace();
 			}
 		} catch (Exception e) {
 			if( appRes.eventlog != null ){
-				appRes.eventlog.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
+				appRes.eventlog.logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.STARTUP_ERROR, new EventLogField(FieldName.MESSAGE, "Error noted when configuring external logging")), e); 
 			}
 			else{
 				e.printStackTrace();
@@ -841,7 +841,7 @@ public final class Application {
 		}
 		
 		appRes.eventlog.setLoggingLevel(EventLogSeverity.DEBUG);
-		appRes.logEvent( new EventLogMessage(EventLogMessage.Category.APPLICATION_STARTED, new EventLogField(FieldName.VERSION, Application.getVersion())));
+		appRes.logEvent( new EventLogMessage(EventLogMessage.EventType.APPLICATION_STARTED, new EventLogField(FieldName.VERSION, Application.getVersion())));
 		
 		// Launch console listener for accepting command line commands
 		if( runMode == RunMode.CLI ){
@@ -870,11 +870,11 @@ public final class Application {
 			System.err.println("Database connection unavailable");
 			System.exit(-1);
 		} catch (SQLException e) {
-			logExceptionEvent( new EventLogMessage( EventLogMessage.Category.SQL_EXCEPTION ), e);
+			logExceptionEvent( new EventLogMessage( EventLogMessage.EventType.SQL_EXCEPTION ), e);
 			System.err.println("SQL exception prevented retrieval of application parameter (Administration.EnableSSL)");
 			System.exit(-1);
 		} catch (InputValidationException e) {
-			logEvent( new EventLogMessage( EventLogMessage.Category.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "message = input validation failure getting parameter 'Administration.EnableSSL', defaulting to disabled") ));
+			logEvent( new EventLogMessage( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "message = input validation failure getting parameter 'Administration.EnableSSL', defaulting to disabled") ));
 		}
 		
 		// 1.2 -- Get the server port
@@ -882,7 +882,7 @@ public final class Application {
 		try {
 			serverPort = appConfig.getServerPort();
 		} catch (InputValidationException e) {
-			logEvent( new EventLogMessage( EventLogMessage.Category.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "message = server port input validation failure, defaulting to port 8080") ));
+			logEvent( new EventLogMessage( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "message = server port input validation failure, defaulting to port 8080") ));
 		} catch (NoDatabaseConnectionException e) {
 			System.err.println("Database connection unavailable");
 			System.exit(-1);
@@ -1543,7 +1543,7 @@ public final class Application {
 			try {
 				connection = connectionBroker.getConnection();
 			} catch (SQLException e) {
-				logExceptionEvent( new EventLogMessage(EventLogMessage.Category.SQL_EXCEPTION, new Date()), e);
+				logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.SQL_EXCEPTION, new Date()), e);
 				throw new NoDatabaseConnectionException(e);
 			}
 
@@ -1553,28 +1553,28 @@ public final class Application {
 	
 	/**
 	 * Log the given exception using the event log that is setup by the given application class instance.
-	 * @param category
+	 * @param eventType
 	 * @param field
 	 */
-	public void logEvent( EventLogMessage.Category category, EventLogField ... fields ){
-		eventlog.logEvent(new EventLogMessage(category, fields));
+	public void logEvent( EventLogMessage.EventType eventType, EventLogField ... fields ){
+		eventlog.logEvent(new EventLogMessage(eventType, fields));
 	}
 	
 	/**
 	 * Log the given exception using the event log that is setup by the given application class instance.
-	 * @param category
+	 * @param eventType
 	 */
-	public void logEvent( EventLogMessage.Category category ){
-		eventlog.logEvent(new EventLogMessage(category));
+	public void logEvent( EventLogMessage.EventType eventType ){
+		eventlog.logEvent(new EventLogMessage(eventType));
 	}
 	
 	/**
 	 * Log the given exception using the event log that is setup by the given application class instance.
-	 * @param category
+	 * @param eventType
 	 * @param t
 	 */
-	public void logExceptionEvent( EventLogMessage.Category category, Throwable t ){
-		eventlog.logExceptionEvent(new EventLogMessage(category), t);
+	public void logExceptionEvent( EventLogMessage.EventType eventType, Throwable t ){
+		eventlog.logExceptionEvent(new EventLogMessage(eventType), t);
 	}
 	
 	/**

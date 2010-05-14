@@ -49,13 +49,13 @@ public class ApiGroupManagement extends ApiHandler {
 		try {
 			return groupManagement.getGroupID( groupName );
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -93,7 +93,7 @@ public class ApiGroupManagement extends ApiHandler {
 			
 			int newGroupId = groupManagement.addGroup( groupName, groupDescription );
 			if( newGroupId > -1 ){
-				appRes.logEvent(EventLogMessage.Category.GROUP_ADDED,
+				appRes.logEvent(EventLogMessage.EventType.GROUP_ADDED,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName()),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID()),
 						new EventLogField( FieldName.GROUP_ID, newGroupId) );
@@ -102,7 +102,7 @@ public class ApiGroupManagement extends ApiHandler {
 			}
 			else{
 
-				appRes.logEvent(EventLogMessage.Category.OPERATION_FAILED, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.OPERATION_FAILED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.OPERATION, "Add new group" ),
 						new EventLogField( EventLogField.FieldName.GROUP_NAME, groupName ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
@@ -111,16 +111,16 @@ public class ApiGroupManagement extends ApiHandler {
 				return -1;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -159,7 +159,7 @@ public class ApiGroupManagement extends ApiHandler {
 			boolean updateStatus = groupManagement.updateGroupInfo( groupId, groupName, groupDescription );
 			if( updateStatus ){
 				
-				appRes.logEvent(EventLogMessage.Category.GROUP_MODIFIED, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.GROUP_MODIFIED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.GROUP_NAME, groupName ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
@@ -169,7 +169,7 @@ public class ApiGroupManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.OPERATION_FAILED, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.OPERATION_FAILED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.OPERATION, "Update group" ),
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
@@ -178,13 +178,13 @@ public class ApiGroupManagement extends ApiHandler {
 				return false;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -212,7 +212,7 @@ public class ApiGroupManagement extends ApiHandler {
 		try{
 			if( groupManagement.disableGroup( groupId ) ){
 				
-				appRes.logEvent(EventLogMessage.Category.GROUP_DISABLED, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.GROUP_DISABLED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
@@ -221,7 +221,7 @@ public class ApiGroupManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.GROUP_ID_INVALID, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.GROUP_ID_INVALID, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
@@ -229,10 +229,10 @@ public class ApiGroupManagement extends ApiHandler {
 				return true;
 			}
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -250,7 +250,7 @@ public class ApiGroupManagement extends ApiHandler {
 		try{
 			if( groupManagement.deleteGroup( groupId ) ){
 				
-				appRes.logEvent(EventLogMessage.Category.GROUP_DELETED, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.GROUP_DELETED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
@@ -259,7 +259,7 @@ public class ApiGroupManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.GROUP_ID_INVALID, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.GROUP_ID_INVALID, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
@@ -267,10 +267,10 @@ public class ApiGroupManagement extends ApiHandler {
 				return true;
 			}
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -298,7 +298,7 @@ public class ApiGroupManagement extends ApiHandler {
 		try{
 			if( groupManagement.enableGroup( groupId ) ){
 
-				appRes.logEvent(EventLogMessage.Category.GROUP_REENABLED, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.GROUP_REENABLED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
@@ -307,7 +307,7 @@ public class ApiGroupManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.GROUP_ID_INVALID, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.GROUP_ID_INVALID, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
@@ -316,10 +316,10 @@ public class ApiGroupManagement extends ApiHandler {
 				return true;
 			}
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -343,13 +343,13 @@ public class ApiGroupManagement extends ApiHandler {
 		try{
 			groupDesc = groupManagement.getGroupDescriptor(groupId);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
@@ -385,13 +385,13 @@ public class ApiGroupManagement extends ApiHandler {
 		try {
 			groupDescriptor = groupManagement.getGroupDescriptor( groupId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
@@ -423,13 +423,13 @@ public class ApiGroupManagement extends ApiHandler {
 		try {
 			groupDescriptor = groupManagement.getGroupDescriptor( groupName );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
@@ -452,13 +452,13 @@ public class ApiGroupManagement extends ApiHandler {
 		try {
 			return groupManagement.getGroupMembership( userId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -488,7 +488,7 @@ public class ApiGroupManagement extends ApiHandler {
 		try{
 			if( groupManagement.addUserToGroup( userId, groupId )){
 				
-				appRes.logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_SET, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.TARGET_USER_ID, userId ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
@@ -498,7 +498,7 @@ public class ApiGroupManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.OPERATION_FAILED, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.OPERATION_FAILED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.OPERATION, "Add user to group" ),
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.TARGET_USER_ID, userId ),
@@ -508,12 +508,12 @@ public class ApiGroupManagement extends ApiHandler {
 				return false;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		}
 		catch (NotFoundException e) {
 			
-			appRes.logEvent(EventLogMessage.Category.OPERATION_FAILED, new EventLogField[]{
+			appRes.logEvent(EventLogMessage.EventType.OPERATION_FAILED, new EventLogField[]{
 					new EventLogField( EventLogField.FieldName.OPERATION, "Add user to group" ),
 					new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 					new EventLogField( EventLogField.FieldName.MESSAGE, "Group not found" ),
@@ -523,7 +523,7 @@ public class ApiGroupManagement extends ApiHandler {
 			
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -553,7 +553,7 @@ public class ApiGroupManagement extends ApiHandler {
 		try {
 			if( groupManagement.removeUserFromGroup( userId, groupId ) ){
 				
-				appRes.logEvent(EventLogMessage.Category.USER_REMOVED_FROM_GROUP, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.USER_REMOVED_FROM_GROUP, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.TARGET_USER_ID, userId ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
@@ -563,7 +563,7 @@ public class ApiGroupManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.OPERATION_FAILED, new EventLogField[]{
+				appRes.logEvent(EventLogMessage.EventType.OPERATION_FAILED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.OPERATION, "Remove user from group" ),
 						new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 						new EventLogField( EventLogField.FieldName.TARGET_USER_ID, userId ),
@@ -574,11 +574,11 @@ public class ApiGroupManagement extends ApiHandler {
 			}
 			
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NotFoundException e) {
 			
-			appRes.logEvent(EventLogMessage.Category.OPERATION_FAILED, new EventLogField[]{
+			appRes.logEvent(EventLogMessage.EventType.OPERATION_FAILED, new EventLogField[]{
 					new EventLogField( EventLogField.FieldName.OPERATION, "Remove user from group" ),
 					new EventLogField( EventLogField.FieldName.GROUP_ID, groupId ),
 					new EventLogField( EventLogField.FieldName.MESSAGE, "Group not found" ),
@@ -588,7 +588,7 @@ public class ApiGroupManagement extends ApiHandler {
 			
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
@@ -611,13 +611,13 @@ public class ApiGroupManagement extends ApiHandler {
 		try{
 			groupDesc= groupManagement.getGroupDescriptor(groupId);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
@@ -651,13 +651,13 @@ public class ApiGroupManagement extends ApiHandler {
 		try {
 			groupDescriptors = groupManagement.getGroupDescriptors( );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
@@ -673,13 +673,13 @@ public class ApiGroupManagement extends ApiHandler {
 		try {
 			groupDescriptors = groupManagement.getGroupDescriptors( );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		

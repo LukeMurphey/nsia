@@ -71,13 +71,13 @@ public class ApiSiteGroupManagement extends ApiHandler {
 		try {
 			return siteGroupManagement.getGroupID( groupName );
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -116,7 +116,7 @@ public class ApiSiteGroupManagement extends ApiHandler {
 			int newGroupId = siteGroupManagement.addGroup( groupName, groupDescription );
 			if( newGroupId > -1 ){
 				
-				appRes.logEvent(EventLogMessage.Category.SITE_GROUP_ADDED,
+				appRes.logEvent(EventLogMessage.EventType.SITE_GROUP_ADDED,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 						new EventLogField( FieldName.SITE_GROUP_NAME, groupName ),
@@ -126,7 +126,7 @@ public class ApiSiteGroupManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.OPERATION_FAILED,
+				appRes.logEvent(EventLogMessage.EventType.OPERATION_FAILED,
 						new EventLogField( FieldName.OPERATION, "Add new site group" ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
@@ -135,16 +135,16 @@ public class ApiSiteGroupManagement extends ApiHandler {
 				return -1;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -183,7 +183,7 @@ public class ApiSiteGroupManagement extends ApiHandler {
 			boolean updateStatus = siteGroupManagement.updateGroupInfo( groupId, groupName, groupDescription );
 			if( updateStatus ){
 				
-				appRes.logEvent(EventLogMessage.Category.SITE_GROUP_MODIFIED,
+				appRes.logEvent(EventLogMessage.EventType.SITE_GROUP_MODIFIED,
 						new EventLogField( FieldName.SITE_GROUP_ID, groupId ),
 						new EventLogField( FieldName.SITE_GROUP_NAME, groupName ) ,
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
@@ -194,7 +194,7 @@ public class ApiSiteGroupManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.OPERATION_FAILED, new EventLogField[] {
+				appRes.logEvent(EventLogMessage.EventType.OPERATION_FAILED, new EventLogField[] {
 						new EventLogField( FieldName.OPERATION, "Update site group" ),
 						new EventLogField( FieldName.SITE_GROUP_ID, groupId ),
 						new EventLogField( FieldName.SITE_GROUP_NAME, groupName ) ,
@@ -205,16 +205,16 @@ public class ApiSiteGroupManagement extends ApiHandler {
 				return false;
 			}
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -241,7 +241,7 @@ public class ApiSiteGroupManagement extends ApiHandler {
 		try{
 			if( siteGroupManagement.deleteGroup( groupId ) ){
 				
-				appRes.logEvent(EventLogMessage.Category.SITE_GROUP_DELETED,
+				appRes.logEvent(EventLogMessage.EventType.SITE_GROUP_DELETED,
 						new EventLogField( FieldName.SITE_GROUP_ID, groupId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )
@@ -251,7 +251,7 @@ public class ApiSiteGroupManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.SITE_GROUP_ID_INVALID,
+				appRes.logEvent(EventLogMessage.EventType.SITE_GROUP_ID_INVALID,
 						new EventLogField( FieldName.SITE_GROUP_ID, groupId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )
@@ -260,13 +260,13 @@ public class ApiSiteGroupManagement extends ApiHandler {
 				return true;
 			}
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -293,7 +293,7 @@ public class ApiSiteGroupManagement extends ApiHandler {
 		try{
 			if( siteGroupManagement.disableGroup( groupId ) ){
 				
-				appRes.logEvent(EventLogMessage.Category.SITE_GROUP_DISABLED,
+				appRes.logEvent(EventLogMessage.EventType.SITE_GROUP_DISABLED,
 						new EventLogField( FieldName.SITE_GROUP_ID, groupId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ) );
@@ -302,7 +302,7 @@ public class ApiSiteGroupManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.SITE_GROUP_ID_INVALID,
+				appRes.logEvent(EventLogMessage.EventType.SITE_GROUP_ID_INVALID,
 						new EventLogField( FieldName.SITE_GROUP_ID, groupId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ) );
@@ -310,13 +310,13 @@ public class ApiSiteGroupManagement extends ApiHandler {
 				return true;
 			}
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -344,7 +344,7 @@ public class ApiSiteGroupManagement extends ApiHandler {
 		try{
 			if( siteGroupManagement.enableGroup( groupId ) ){
 				
-				appRes.logEvent(EventLogMessage.Category.SITE_GROUP_REENABLED,
+				appRes.logEvent(EventLogMessage.EventType.SITE_GROUP_REENABLED,
 						new EventLogField( FieldName.SITE_GROUP_ID, groupId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ) );
@@ -353,7 +353,7 @@ public class ApiSiteGroupManagement extends ApiHandler {
 			}
 			else{
 				
-				appRes.logEvent(EventLogMessage.Category.SITE_GROUP_ID_INVALID,
+				appRes.logEvent(EventLogMessage.EventType.SITE_GROUP_ID_INVALID,
 						new EventLogField( FieldName.SITE_GROUP_ID, groupId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ) );
@@ -361,13 +361,13 @@ public class ApiSiteGroupManagement extends ApiHandler {
 				return true;
 			}
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -397,13 +397,13 @@ public class ApiSiteGroupManagement extends ApiHandler {
 		try {
 			groupDescriptor = siteGroupManagement.getGroupDescriptor( groupId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 
@@ -435,13 +435,13 @@ public class ApiSiteGroupManagement extends ApiHandler {
 		try {
 			groupDescriptor = siteGroupManagement.getGroupDescriptor( groupName );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		
@@ -472,13 +472,13 @@ public class ApiSiteGroupManagement extends ApiHandler {
 		try {
 			groupDescriptors = siteGroupManagement.getGroupDescriptors( );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 		

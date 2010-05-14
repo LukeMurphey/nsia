@@ -101,13 +101,13 @@ public class ApiActions extends ApiHandler {
 			try {
 				hook.saveToDatabase();
 			} catch (SQLException e) {
-				appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+				appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 				throw new GeneralizedException();
 			} catch (IOException e) {
-				appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+				appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 				throw new GeneralizedException();
 			} catch (NoDatabaseConnectionException e) {
-				appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+				appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 				throw new GeneralizedException();
 			}
 			
@@ -150,13 +150,13 @@ public class ApiActions extends ApiHandler {
 		
 			appRes.getEventLog().addHook(hook);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (IOException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -172,13 +172,13 @@ public class ApiActions extends ApiHandler {
 		
 			appRes.getEventLog().addHook(hook);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (IOException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -194,13 +194,13 @@ public class ApiActions extends ApiHandler {
 		
 			appRes.getEventLog().addHook(hook);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (IOException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -223,13 +223,13 @@ public class ApiActions extends ApiHandler {
 		// 1 -- Delete the action
 		try{
 			appRes.getEventLog().deleteHook(hookID);
-			EventLogMessage message = new EventLogMessage(EventLogMessage.Category.RESPONSE_ACTION_DELETED, new EventLogField(EventLogField.FieldName.RESPONSE_ACTION_ID, hookID));
+			EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.RESPONSE_ACTION_DELETED, new EventLogField(EventLogField.FieldName.RESPONSE_ACTION_ID, hookID));
 			appRes.logEvent(message);
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 		

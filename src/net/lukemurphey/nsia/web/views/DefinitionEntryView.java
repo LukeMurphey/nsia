@@ -86,7 +86,7 @@ public class DefinitionEntryView extends View {
 			if( localID >= 0 ){
 				archive.updateDefinition(definition);
 				
-				Application.getApplication().logEvent(EventLogMessage.Category.DEFINITIONS_UPDATED, new EventLogField[]{
+				Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITIONS_UPDATED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.DEFINITION_ID, definition.getID() ),
 						new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
@@ -96,7 +96,7 @@ public class DefinitionEntryView extends View {
 			else{
 				int definitionID = archive.addDefinition(definition);
 				
-				Application.getApplication().logEvent(EventLogMessage.Category.DEFINITIONS_ADDED, new EventLogField[]{
+				Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITIONS_ADDED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
 						new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
@@ -117,7 +117,7 @@ public class DefinitionEntryView extends View {
 		}
 		
 		// 3 -- Log the result
-		Application.getApplication().logEvent(EventLogMessage.Category.DEFINITIONS_UPDATED, new EventLogField[]{
+		Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITIONS_UPDATED, new EventLogField[]{
 				new EventLogField( EventLogField.FieldName.DEFINITION_ID, definition.getID() ),
 				new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
 				new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),

@@ -46,7 +46,7 @@ public class ScannerCommand extends ConsoleCommand {
 		}
 		else if( scannerController != null  ){
 			System.out.print("Starting scanner...");
-			application.logEvent(EventLogMessage.Category.SCANNER_STARTED);
+			application.logEvent(EventLogMessage.EventType.SCANNER_STARTED);
 			scannerController.enableScanning();
 			System.out.println("Done");
 		}
@@ -64,7 +64,7 @@ public class ScannerCommand extends ConsoleCommand {
 		}
 		else{
 			System.out.print("Stopping scanner...");
-			application.logEvent(EventLogMessage.Category.SCANNER_STOPPED);
+			application.logEvent(EventLogMessage.EventType.SCANNER_STOPPED);
 			scannerController.disableScanning();
 			int milliseconds = 0;
 			while( scannerController.getScanningState() == ScannerController.ScannerState.PAUSING && milliseconds < 5000){

@@ -8,7 +8,7 @@ import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.ScanException;
 import net.lukemurphey.nsia.scan.ScanResult;
 import net.lukemurphey.nsia.scan.ScanRule;
@@ -237,20 +237,20 @@ public class RuleScanWorker implements WorkerThread{
 				}
 				currentOffset++;
 			} catch(ScanRuleLoadFailureException e){
-				Application.getApplication().logExceptionEvent( new EventLogMessage( Category.TASK_FAILED, new EventLogField(FieldName.TASK, getStatusDescription()) ), e);
+				Application.getApplication().logExceptionEvent( new EventLogMessage( EventType.TASK_FAILED, new EventLogField(FieldName.TASK, getStatusDescription()) ), e);
 				exceptionThrown = e;
 			} catch (ScanException e) {
 				exceptionThrown = e;
-				Application.getApplication().logExceptionEvent( new EventLogMessage( Category.TASK_FAILED, new EventLogField(FieldName.TASK, getStatusDescription()) ), e);
+				Application.getApplication().logExceptionEvent( new EventLogMessage( EventType.TASK_FAILED, new EventLogField(FieldName.TASK, getStatusDescription()) ), e);
 			} catch (NotFoundException e) {
 				exceptionThrown = e;
-				Application.getApplication().logExceptionEvent( new EventLogMessage( Category.TASK_FAILED, new EventLogField(FieldName.TASK, getStatusDescription()) ), e);
+				Application.getApplication().logExceptionEvent( new EventLogMessage( EventType.TASK_FAILED, new EventLogField(FieldName.TASK, getStatusDescription()) ), e);
 			} catch (NoDatabaseConnectionException e) {
 				exceptionThrown = e;
-				Application.getApplication().logExceptionEvent( new EventLogMessage( Category.DATABASE_FAILURE, new EventLogField(FieldName.TASK, getStatusDescription()) ), e);
+				Application.getApplication().logExceptionEvent( new EventLogMessage( EventType.DATABASE_FAILURE, new EventLogField(FieldName.TASK, getStatusDescription()) ), e);
 			} catch (SQLException e) {
 				exceptionThrown = e;
-				Application.getApplication().logExceptionEvent( new EventLogMessage( Category.SQL_EXCEPTION, new EventLogField(FieldName.TASK, getStatusDescription()) ), e);
+				Application.getApplication().logExceptionEvent( new EventLogMessage( EventType.SQL_EXCEPTION, new EventLogField(FieldName.TASK, getStatusDescription()) ), e);
 			}
 		}
 		

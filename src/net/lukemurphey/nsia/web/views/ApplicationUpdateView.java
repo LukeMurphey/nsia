@@ -39,9 +39,9 @@ public class ApplicationUpdateView extends View {
 		try {
 			return VersionManagement.getNewestVersionAvailableID( dontBlock );
 		} catch (XmlRpcException e) {
-			Application.getApplication().logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			Application.getApplication().logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 		} catch (IOException e) {
-			Application.getApplication().logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			Application.getApplication().logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 		}
 		
 		return null;

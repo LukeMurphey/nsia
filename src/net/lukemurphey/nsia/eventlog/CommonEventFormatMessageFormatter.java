@@ -8,7 +8,7 @@ public class CommonEventFormatMessageFormatter extends MessageFormatter {
 
 	@Override
 	public String formatMessage(EventLogMessage message) {
-		CommonEventFormatMessage cef = new CommonEventFormatMessage(  Application.APPLICATION_VENDOR, Application.APPLICATION_NAME, Application.getVersion(), Integer.toString(message.getCategory().ordinal()), message.getCategory().getName(), message.getCategory().getSeverity().getSyslogEquivalent() );
+		CommonEventFormatMessage cef = new CommonEventFormatMessage(  Application.APPLICATION_VENDOR, Application.APPLICATION_NAME, Application.getVersion(), Integer.toString(message.getEventType().ordinal()), message.getEventType().getName(), message.getEventType().getSeverity().getSyslogEquivalent() );
 		
 		EventLogField[] fields = message.getFields();
 		

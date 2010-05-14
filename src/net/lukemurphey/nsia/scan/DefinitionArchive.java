@@ -29,7 +29,7 @@ import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionType;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
 
@@ -476,7 +476,7 @@ public class DefinitionArchive {
 			
 		}
 		catch(Exception e){
-			Application.getApplication().logExceptionEvent( new EventLogMessage(Category.INTERNAL_ERROR, new EventLogField( FieldName.MESSAGE, "Error observed when checking for new definitions")), e);
+			Application.getApplication().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField( FieldName.MESSAGE, "Error observed when checking for new definitions")), e);
 		}
 		
 		return false;

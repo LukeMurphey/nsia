@@ -105,7 +105,7 @@ public class SiteGroupEditView extends View {
 							
 							if( siteGroupID > -1 ){
 								
-								Application.getApplication().logEvent(EventLogMessage.Category.SITE_GROUP_ADDED,
+								Application.getApplication().logEvent(EventLogMessage.EventType.SITE_GROUP_ADDED,
 										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
 										new EventLogField( FieldName.SITE_GROUP_NAME, name ),
@@ -115,7 +115,7 @@ public class SiteGroupEditView extends View {
 							}
 							else{
 								
-								Application.getApplication().logEvent(EventLogMessage.Category.OPERATION_FAILED,
+								Application.getApplication().logEvent(EventLogMessage.EventType.OPERATION_FAILED,
 										new EventLogField( FieldName.OPERATION, "Add new site group" ),
 										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
@@ -131,7 +131,7 @@ public class SiteGroupEditView extends View {
 						else{
 							if( siteGroupManager.updateGroupInfo(siteGroup.getGroupId(), name, description) ){
 
-								Application.getApplication().logEvent(EventLogMessage.Category.SITE_GROUP_MODIFIED,
+								Application.getApplication().logEvent(EventLogMessage.EventType.SITE_GROUP_MODIFIED,
 										new EventLogField( FieldName.SITE_GROUP_ID, siteGroup.getGroupId() ),
 										new EventLogField( FieldName.SITE_GROUP_NAME, siteGroup.getGroupName() ) ,
 										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
@@ -145,7 +145,7 @@ public class SiteGroupEditView extends View {
 							}
 							else{
 								
-								Application.getApplication().logEvent(EventLogMessage.Category.OPERATION_FAILED, new EventLogField[] {
+								Application.getApplication().logEvent(EventLogMessage.EventType.OPERATION_FAILED, new EventLogField[] {
 										new EventLogField( FieldName.OPERATION, "Update site group" ),
 										new EventLogField( FieldName.SITE_GROUP_ID, siteGroup.getGroupId() ),
 										new EventLogField( FieldName.SITE_GROUP_NAME, siteGroup.getGroupName() ) ,

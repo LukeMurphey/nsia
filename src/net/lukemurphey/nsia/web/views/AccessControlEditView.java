@@ -110,10 +110,10 @@ public class AccessControlEditView extends View {
 		long id = accessControl.setPermissions(objectPermissionDesc);
 		
 		if(id > 0 ){
-			Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET, new EventLogField( FieldName.OBJECT_ID,  id ) );
+			Application.getApplication().logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_SET, new EventLogField( FieldName.OBJECT_ID,  id ) );
 		}
 		else{
-			Application.getApplication().logEvent(EventLogMessage.Category.ACCESS_CONTROL_ENTRY_SET_FAILED );
+			Application.getApplication().logEvent(EventLogMessage.EventType.ACCESS_CONTROL_ENTRY_SET_FAILED );
 		}
 		
 		context.addMessage("Access control list entry successfully updated", MessageSeverity.SUCCESS);

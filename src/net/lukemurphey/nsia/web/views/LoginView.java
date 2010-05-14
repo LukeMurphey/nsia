@@ -29,7 +29,7 @@ import net.lukemurphey.nsia.SessionManagement.SessionInfo;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
@@ -206,10 +206,10 @@ public class LoginView extends View {
 		//	 0.1 -- Username cannot be null or empty
 		if( userName == null || userName.length() == 0 ){
 			if( clientData == null){
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY);
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY);
 			}
 			else{
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			}
 			
 			return null;
@@ -220,22 +220,22 @@ public class LoginView extends View {
 		Matcher matcher = nameRegex.matcher(userName);
 		if( !matcher.matches() ){
 			if( clientData == null)
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY);
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY);
 			else
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
-			app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
+			app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
 			return null;
 		}
 		
 		//	 0.3 -- Username must not be overly long (this makes SQL injection more difficult)
 		if( userName.length() > UserManagement.USERNAME_LENGTH ){
 			if( clientData == null)
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY);
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY);
 			else
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_EMPTY, new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
-			app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_LENGTH_EXCESSIVE, new EventLogField( FieldName.LENGTH, userName.length()), new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
+			app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_LENGTH_EXCESSIVE, new EventLogField( FieldName.LENGTH, userName.length()), new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
 			return null;
 		}
 		
@@ -249,19 +249,19 @@ public class LoginView extends View {
 		try {
 			result = localPasswordAuth.authenticate(userName, passwordAuth, clientData);
 		} catch (NoSuchAlgorithmException e) {
-			app.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			app.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new ViewFailedException(e);
 		} catch (SQLException e) {
-			app.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			app.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new ViewFailedException(e);
 		} catch (InputValidationException e) {
-			app.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			app.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new ViewFailedException(e);
 		} catch (NoDatabaseConnectionException e) {
-			app.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			app.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new ViewFailedException(e);
 		} catch (NumericalOverflowException e) {
-			app.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			app.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new ViewFailedException(e);
 		}
 		
@@ -269,55 +269,55 @@ public class LoginView extends View {
 		//	 1.2 -- Make a decision on the result
 		if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_ACCOUNT_ADMINISTRATIVELY_LOCKED ){
 			if( clientData == null)
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			else
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ) , new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ) , new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_ACCOUNT_BRUTE_FORCE_LOCKED ){
 			if( clientData == null)
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_USERNAME_BLOCKED, new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_USERNAME_BLOCKED, new EventLogField( FieldName.TARGET_USER_NAME, userName ) );
 			else
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_USERNAME_BLOCKED, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_USERNAME_BLOCKED, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_ACCOUNT_DISABLED ){
 			if( clientData == null)
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			else
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_ACCOUNT_DISABLED, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_FAILED ){//This should not be returned
 			if( clientData == null)
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_PASSWORD_WRONG, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_PASSWORD_WRONG, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			else
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_PASSWORD_WRONG, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_PASSWORD_WRONG, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_INVALID_PASSWORD ){
 			if( clientData == null)
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_PASSWORD_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_PASSWORD_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			else
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_PASSWORD_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_PASSWORD_ILLEGAL, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_INVALID_USER ){
 			if( clientData == null)
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			else
-				app.logEvent(EventLogMessage.Category.AUTHENTICATION_FAILED_USERNAME_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
+				app.logEvent(EventLogMessage.EventType.AUTHENTICATION_FAILED_USERNAME_INVALID, new EventLogField( FieldName.TARGET_USER_NAME, userName ), new EventLogField( FieldName.SOURCE_ADDRESS, clientData.getSourceAddress().toString() ) );
 			
 			return null;
 		}
 		else if( result.getAuthenticationStatus() == AuthenticationResult.AUTH_SUCCESS ){
 			
-			EventLogMessage message = new EventLogMessage(EventLogMessage.Category.AUTHENTICATION_SUCCESS, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
+			EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.AUTHENTICATION_SUCCESS, new EventLogField( FieldName.TARGET_USER_NAME, userName ));
 			
 			// Get the session information in order to add additional details
 			try{
@@ -327,7 +327,7 @@ public class LoginView extends View {
 				message.addField( new EventLogField(FieldName.SESSION_TRACKING_NUMBER, sessionInfo.getTrackingNumber()) );
 			}
 			catch(Exception e){
-				app.logExceptionEvent(Category.INTERNAL_ERROR, e);
+				app.logExceptionEvent(EventType.INTERNAL_ERROR, e);
 			}
 
 			if( clientData != null){
@@ -339,7 +339,7 @@ public class LoginView extends View {
 			return result.getSessionIdentifier();
 		}
 		else{
-			app.logEvent( EventLogMessage.Category.INTERNAL_ERROR, new EventLogField( FieldName.MESSAGE, "Invalid authentication result code"  ));
+			app.logEvent( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField( FieldName.MESSAGE, "Invalid authentication result code"  ));
 			return null;
 		}
 	}

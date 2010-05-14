@@ -82,11 +82,11 @@ public class ApiScannerController extends ApiHandler{
 			return DefinitionErrorList.errorsNoted(appRes);
 		}
 		catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 		catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -108,11 +108,11 @@ public class ApiScannerController extends ApiHandler{
 			return DefinitionErrorList.load(appRes);
 		}
 		catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		}
 		catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -158,7 +158,7 @@ public class ApiScannerController extends ApiHandler{
 			
 		}
 		catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}
 		catch(DuplicateEntryException e){
@@ -178,7 +178,7 @@ public class ApiScannerController extends ApiHandler{
 			
 			rulesString.append("]");
 			
-			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.OPERATION_FAILED,
+			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.OPERATION_FAILED,
 					new EventLogField[]{
 						new EventLogField( FieldName.OPERATION, "Scan rule" ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
@@ -214,11 +214,11 @@ public class ApiScannerController extends ApiHandler{
 			ScanResult scanResult = scannerController.scanRule( ruleId, archiveResults );
 			return scanResult;
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (Exception e) {//TODO Replace this exception with code that will log it (for potential remediation) 
 			
-			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.OPERATION_FAILED,
+			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.OPERATION_FAILED,
 					new EventLogField[]{
 						new EventLogField( FieldName.OPERATION, "Scan rule" ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
@@ -255,11 +255,11 @@ public class ApiScannerController extends ApiHandler{
 			// 1 -- Perform the operation
 			return ScanRule.deleteRule( ruleId );
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (Exception e) {
 			
-			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.OPERATION_FAILED,
+			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.OPERATION_FAILED,
 					new EventLogField[]{
 						new EventLogField( FieldName.OPERATION, "Delete rule" ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
@@ -298,10 +298,10 @@ public class ApiScannerController extends ApiHandler{
 			ScanResult[] scanResults = scannerController.scanSiteGroup( siteGroupId, archiveResults );
 			return scanResults;
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (Exception e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.OPERATION_FAILED, e);//"operation = scan site group, username = " + userDescriptor.getUserName() + ", user ID = " + userDescriptor.getUserId() + ", site group ID = " + siteGroupId );
+			appRes.logExceptionEvent(EventLogMessage.EventType.OPERATION_FAILED, e);//"operation = scan site group, username = " + userDescriptor.getUserName() + ", user ID = " + userDescriptor.getUserId() + ", site group ID = " + siteGroupId );
 			throw new GeneralizedException();
 		}
 	}
@@ -328,11 +328,11 @@ public class ApiScannerController extends ApiHandler{
 			ScanResult[] scanResults = scannerController.scanAllRules( archiveResults );
 			return scanResults;
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (Exception e) {
 			
-			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.OPERATION_FAILED,
+			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.OPERATION_FAILED,
 					new EventLogField[]{
 						new EventLogField( FieldName.OPERATION, "Scan all rules" ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
@@ -366,11 +366,11 @@ public class ApiScannerController extends ApiHandler{
 			
 			return scanResults;
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (Exception e) {
 			
-			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.OPERATION_FAILED,
+			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.OPERATION_FAILED,
 					new EventLogField[]{
 						new EventLogField( FieldName.OPERATION, "Scan expired rules" ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
@@ -404,11 +404,11 @@ public class ApiScannerController extends ApiHandler{
 			
 			return scanResults;
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (Exception e) {
 			
-			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.Category.OPERATION_FAILED,
+			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.OPERATION_FAILED,
 					new EventLogField[]{
 						new EventLogField( FieldName.OPERATION, "Scan updated rules" ),
 						new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
@@ -433,7 +433,7 @@ public class ApiScannerController extends ApiHandler{
 		//	0.1 -- Permission and right check
 		checkRight( sessionIdentifier, "System.ControlScanner");
 		UserDescriptor userDescriptor = getUserInfo( sessionIdentifier );
-		appRes.logEvent( EventLogMessage.Category.SCANNER_STOPPED,
+		appRes.logEvent( EventLogMessage.EventType.SCANNER_STOPPED,
 				new EventLogField( FieldName.SOURCE_USER_NAME,  userDescriptor.getUserName()),
 				new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ) );
 		
@@ -456,7 +456,7 @@ public class ApiScannerController extends ApiHandler{
 		checkRight( sessionIdentifier, "System.ControlScanner");
 		UserDescriptor userDescriptor = getUserInfo( sessionIdentifier );
 		
-		appRes.logEvent( EventLogMessage.Category.SCANNER_STARTED,
+		appRes.logEvent( EventLogMessage.EventType.SCANNER_STARTED,
 				new EventLogField( FieldName.SOURCE_USER_NAME,  userDescriptor.getUserName()),
 				new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ) );
 		
@@ -543,7 +543,7 @@ public class ApiScannerController extends ApiHandler{
 		// 1 -- Perform the operation
 		scannerController.setMaxScanThreads( threadCount );
 
-		appRes.logEvent( new EventLogMessage(EventLogMessage.Category.CONFIGURATION_CHANGE,
+		appRes.logEvent( new EventLogMessage(EventLogMessage.EventType.CONFIGURATION_CHANGE,
 							new EventLogField[]{
 								new EventLogField( FieldName.PARAMETER, "Maximum thread count" ),
 								new EventLogField( FieldName.VALUE, threadCount ),
@@ -596,7 +596,7 @@ public class ApiScannerController extends ApiHandler{
 		// 1 -- Perform the operation
 		scannerController.setPollingLoopFrequency( pollingFrequency );
 		
-		appRes.logEvent( new EventLogMessage(EventLogMessage.Category.CONFIGURATION_CHANGE,
+		appRes.logEvent( new EventLogMessage(EventLogMessage.EventType.CONFIGURATION_CHANGE,
 							new EventLogField[]{
 								new EventLogField( FieldName.PARAMETER, "Polling frequency" ),
 								new EventLogField( FieldName.VALUE, pollingFrequency ),

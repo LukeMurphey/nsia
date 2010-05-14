@@ -52,7 +52,7 @@ public class WebServicesCommand extends ConsoleCommand {
 				manager.startListener();
 			}catch(Exception e){
 				System.out.println("Server could not be started, exception occurred");
-				application.logEvent( EventLogMessage.Category.OPERATION_FAILED, new EventLogField( FieldName.OPERATION, "Start web services") );
+				application.logEvent( EventLogMessage.EventType.OPERATION_FAILED, new EventLogField( FieldName.OPERATION, "Start web services") );
 			}
 			System.out.println("Done");
 		}

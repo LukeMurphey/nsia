@@ -59,10 +59,10 @@ public class LicenseCheckWorker implements WorkerThread{
 		try{
 			appRes.getApplicationConfiguration().getLicense();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			exceptionThrown = e;
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			exceptionThrown = e;
 		} catch (InputValidationException e) {
 			exceptionThrown = e;

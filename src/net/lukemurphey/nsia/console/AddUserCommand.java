@@ -121,7 +121,7 @@ public class AddUserCommand extends ConsoleCommand {
 				newUserId = userManagement.addAccount(input[1], input[2], password, hashAlgorithm, iterationCount, null, unrestricted);
 			
 			if( newUserId > 0){
-				application.logEvent(EventLogMessage.Category.USER_ADDED,
+				application.logEvent(EventLogMessage.EventType.USER_ADDED,
 						new EventLogField[] {
 							new EventLogField( EventLogField.FieldName.TARGET_USER_NAME, input[1]),
 							new EventLogField( EventLogField.FieldName.TARGET_USER_ID, newUserId) } );
@@ -129,7 +129,7 @@ public class AddUserCommand extends ConsoleCommand {
 				System.out.println("Successfully added user \"" + input[1] + "\" as user ID = " + newUserId);
 			}
 			else{
-				application.logEvent(EventLogMessage.Category.OPERATION_FAILED,
+				application.logEvent(EventLogMessage.EventType.OPERATION_FAILED,
 						new EventLogField[] {
 							new EventLogField( EventLogField.FieldName.OPERATION, "Add new user"),
 							new EventLogField( EventLogField.FieldName.TARGET_USER_NAME, input[1] ) } );

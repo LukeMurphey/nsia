@@ -18,7 +18,7 @@ public class MimeType {
 			}
 		}
 		catch(IOException e){
-			Application.getApplication().logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			Application.getApplication().logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 		}
 		
 		return typeMap;

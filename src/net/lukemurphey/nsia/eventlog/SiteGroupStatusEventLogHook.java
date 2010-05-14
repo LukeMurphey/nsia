@@ -3,7 +3,7 @@ package net.lukemurphey.nsia.eventlog;
 import java.util.Vector;
 
 import net.lukemurphey.nsia.Application;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.response.Action;
 import net.lukemurphey.nsia.response.ActionFailedException;
 
@@ -56,7 +56,7 @@ public class SiteGroupStatusEventLogHook extends EventLogHook {
 		
 		try{
 			// 2 -- Stop if the scope of the event is a SiteGroup and the event matches
-			if( message.getCategory() == Category.RULE_REJECTED || message.getCategory() == Category.RULE_FAILED ){
+			if( message.getEventType() == EventType.RULE_REJECTED || message.getEventType() == EventType.RULE_FAILED ){
 				EventLogField field = message.getField(EventLogField.FieldName.SITE_GROUP_ID);
 				
 				if( field != null && field.getDescription().equals( siteGroupID ) ){

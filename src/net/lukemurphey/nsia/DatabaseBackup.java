@@ -14,7 +14,7 @@ import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 
 
 public class DatabaseBackup implements WorkerThread{
@@ -194,20 +194,20 @@ public class DatabaseBackup implements WorkerThread{
 		
 		//	 5.1 -- The task encountered an error while executing
 		if( exceptionThrown != null ){
-			EventLogMessage message = new EventLogMessage(Category.TASK_FAILED, new EventLogField(FieldName.TASK, "Database Backup") );
+			EventLogMessage message = new EventLogMessage(EventType.TASK_FAILED, new EventLogField(FieldName.TASK, "Database Backup") );
 			message.addField(new EventLogField(FieldName.MESSAGE, "Exception thrown while backing up database"));
 			Application.getApplication().logExceptionEvent(message, exceptionThrown);
 		}
 		
 		//	 5.2 -- The task was stopped
 		else if(stop == true){
-			EventLogMessage message = new EventLogMessage(Category.TASK_TERMINATED, new EventLogField(FieldName.TASK, "Database Backup") );
+			EventLogMessage message = new EventLogMessage(EventType.TASK_TERMINATED, new EventLogField(FieldName.TASK, "Database Backup") );
 			Application.getApplication().logEvent(message);
 		}
 		
 		//	 5.3 -- The task completed successfully
 		else{
-			EventLogMessage message = new EventLogMessage(Category.TASK_COMPLETED, new EventLogField(FieldName.TASK, "Database Backup") );
+			EventLogMessage message = new EventLogMessage(EventType.TASK_COMPLETED, new EventLogField(FieldName.TASK, "Database Backup") );
 			message.addField(new EventLogField(FieldName.MESSAGE, "Database backup successful"));
 			message.addField(new EventLogField(FieldName.FILE, backupFile));
 			Application.getApplication().logEvent(message);

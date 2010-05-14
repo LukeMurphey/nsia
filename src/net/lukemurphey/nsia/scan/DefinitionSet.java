@@ -727,13 +727,13 @@ public class DefinitionSet {
 				}
 				catch( InvalidDefinitionException e ){
 					//Log the error and move on if requested
-					Application.getApplication().logExceptionEvent( new EventLogMessage( EventLogMessage.Category.SCAN_ENGINE_EXCEPTION, new EventLogField(FieldName.RULE_ID, ruleID) ), e);
+					Application.getApplication().logExceptionEvent( new EventLogMessage( EventLogMessage.EventType.SCAN_ENGINE_EXCEPTION, new EventLogField(FieldName.RULE_ID, ruleID) ), e);
 				} catch (DefinitionEvaluationException e) {
 					if( e.getDefinitionID() >= 0){
-						Application.getApplication().logExceptionEvent( new EventLogMessage( EventLogMessage.Category.SCAN_ENGINE_EXCEPTION, new EventLogField(FieldName.RULE_ID, ruleID), new EventLogField(FieldName.DEFINITION_ID, e.getDefinitionID()), new EventLogField(FieldName.DEFINITION_NAME, e.getDefinitionName()) ), e);
+						Application.getApplication().logExceptionEvent( new EventLogMessage( EventLogMessage.EventType.SCAN_ENGINE_EXCEPTION, new EventLogField(FieldName.RULE_ID, ruleID), new EventLogField(FieldName.DEFINITION_ID, e.getDefinitionID()), new EventLogField(FieldName.DEFINITION_NAME, e.getDefinitionName()) ), e);
 					}
 					else{
-						Application.getApplication().logExceptionEvent( new EventLogMessage( EventLogMessage.Category.SCAN_ENGINE_EXCEPTION, new EventLogField(FieldName.RULE_ID, ruleID) ), e);
+						Application.getApplication().logExceptionEvent( new EventLogMessage( EventLogMessage.EventType.SCAN_ENGINE_EXCEPTION, new EventLogField(FieldName.RULE_ID, ruleID) ), e);
 					}
 				}
 			}

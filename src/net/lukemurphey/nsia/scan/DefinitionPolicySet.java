@@ -8,7 +8,7 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor.DefinitionPolicyAction;
 import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor.DefinitionPolicyScope;
 
@@ -55,7 +55,7 @@ public class DefinitionPolicySet {
 				try {
 					filterSet.definitionPolicies.add( DefinitionPolicyDescriptor.loadFromResult(result) );
 				} catch (MalformedURLException e) {
-					Application.getApplication().logExceptionEvent(new EventLogMessage(Category.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Invalid URL was observed when loading definition policy")), e);
+					Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Invalid URL was observed when loading definition policy")), e);
 				}
 			}
 			
@@ -90,7 +90,7 @@ public class DefinitionPolicySet {
 				try {
 					filterSet.definitionPolicies.add( DefinitionPolicyDescriptor.loadFromResult(result) );
 				} catch (MalformedURLException e) {
-					Application.getApplication().logExceptionEvent(new EventLogMessage(Category.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Invalid URL was observed when loading definition policy")), e);
+					Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Invalid URL was observed when loading definition policy")), e);
 				}
 			}
 			
@@ -124,7 +124,7 @@ public class DefinitionPolicySet {
 				try {
 					filterSet.definitionPolicies.add( DefinitionPolicyDescriptor.loadFromResult(result) );
 				} catch (MalformedURLException e) {
-					Application.getApplication().logExceptionEvent(new EventLogMessage(Category.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Invalid URL was observed when loading definition policy")), e);
+					Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Invalid URL was observed when loading definition policy")), e);
 				}
 			}
 			
@@ -161,7 +161,7 @@ public class DefinitionPolicySet {
 				try {
 					filterSet.definitionPolicies.add( DefinitionPolicyDescriptor.loadFromResult(result) );
 				} catch (MalformedURLException e) {
-					Application.getApplication().logExceptionEvent(new EventLogMessage(Category.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Invalid URL was observed when loading definition policy")), e);
+					Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Invalid URL was observed when loading definition policy")), e);
 				}
 			}
 			

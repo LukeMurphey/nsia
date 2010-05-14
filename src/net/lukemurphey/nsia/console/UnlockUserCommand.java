@@ -38,23 +38,23 @@ public class UnlockUserCommand extends ConsoleCommand {
 			System.out.println("Account unlocked, authentication failed count cleared");
 		}
 		catch(SQLException e){
-			application.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e);
+			application.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			System.out.println("Account could not be unlocked, a SQL exception occurred");
 			return CommandResult.ERROR;
 		}
 		catch(NoDatabaseConnectionException e){
-			application.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			application.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			System.out.println("Account could not be unlocked, no database connection exists");
 			return CommandResult.ERROR;
 		}
 		catch(InputValidationException e){
 			System.out.println("Username is illegal (contains disallowed characters)");
-			application.logEvent(EventLogMessage.Category.USER_NAME_ILLEGAL, new EventLogField(FieldName.TARGET_USER_NAME, input[1] ) );
+			application.logEvent(EventLogMessage.EventType.USER_NAME_ILLEGAL, new EventLogField(FieldName.TARGET_USER_NAME, input[1] ) );
 			return CommandResult.ERROR;
 		}
 		catch (NumericalOverflowException e) {
 			System.out.println("Account could not be unlocked, numerical overflow exception");
-			application.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e);
+			application.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
 			return CommandResult.ERROR;
 		} 
 		

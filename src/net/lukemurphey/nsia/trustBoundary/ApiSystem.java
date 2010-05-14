@@ -182,10 +182,10 @@ public class ApiSystem extends ApiHandler{
 		try{
 			return appRes.getDatabaseName();
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -205,10 +205,10 @@ public class ApiSystem extends ApiHandler{
 		try{
 			return appRes.getDatabaseVersion();
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -228,10 +228,10 @@ public class ApiSystem extends ApiHandler{
 		try{
 			return appRes.getDatabaseDriverVersion();
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -251,10 +251,10 @@ public class ApiSystem extends ApiHandler{
 		try{
 			return appRes.getDatabaseDriverName();
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -273,10 +273,10 @@ public class ApiSystem extends ApiHandler{
 		try{
 			return appRes.getDatabaseMetaData();
 		}catch (SQLException e){
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		}catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -435,7 +435,7 @@ public class ApiSystem extends ApiHandler{
 		
 		UserDescriptor userDescriptor = getUserInfo( sessionIdentifier );		
 		
-		appRes.logEvent(EventLogMessage.Category.APPLICATION_SHUTTING_DOWN,
+		appRes.logEvent(EventLogMessage.EventType.APPLICATION_SHUTTING_DOWN,
 				new EventLogField( FieldName.SOURCE_USER_NAME, userDescriptor.getUserName()),
 				new EventLogField( FieldName.SOURCE_USER_ID, userDescriptor.getUserID()),
 				new EventLogField( FieldName.UPTIME, GenericUtils.getTimeDescription(appRes.getUptime()/1000) ));
@@ -460,10 +460,10 @@ public class ApiSystem extends ApiHandler{
 		try {
 			return appRes.getSqlWarnings();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent(EventLogMessage.Category.DATABASE_FAILURE, e);
+			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
 		}
 	}
@@ -480,16 +480,16 @@ public class ApiSystem extends ApiHandler{
 		try {
 			return appRes.getApplicationConfiguration().getLoginBanner();
 		} catch (SQLException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.SQL_EXCEPTION, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
 		} catch (InputValidationException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.DATABASE_FAILURE, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.DATABASE_FAILURE, e );
 			throw new GeneralizedException();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -506,7 +506,7 @@ public class ApiSystem extends ApiHandler{
 		try {
 			return appRes.getManagerStatus();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -524,7 +524,7 @@ public class ApiSystem extends ApiHandler{
 		try {
 			return appRes.getMetricsData();
 		} catch (IllegalArgumentException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -538,10 +538,10 @@ public class ApiSystem extends ApiHandler{
 		try {
 			return VersionManagement.getNewestVersionAvailableID( dontBlock );
 		} catch (XmlRpcException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (IOException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}
@@ -550,10 +550,10 @@ public class ApiSystem extends ApiHandler{
 		try {
 			return VersionManagement.isNewerVersionAvailableID( dontBlock );
 		} catch (XmlRpcException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (IOException e) {
-			appRes.logExceptionEvent( EventLogMessage.Category.INTERNAL_ERROR, e );
+			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		}
 	}

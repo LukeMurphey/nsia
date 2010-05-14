@@ -117,7 +117,7 @@ public class UserPasswordUpdateView extends View {
 					String newPassword = request.getParameter("Password");
 					userManager.changePassword(user, newPassword);
 					
-					Application.getApplication().logEvent(EventLogMessage.Category.USER_PASSWORD_CHANGED, new EventLogField[]{
+					Application.getApplication().logEvent(EventLogMessage.EventType.USER_PASSWORD_CHANGED, new EventLogField[]{
 							new EventLogField( EventLogField.FieldName.TARGET_USER_NAME, user.getUserName() ),
 							new EventLogField( EventLogField.FieldName.TARGET_USER_ID, user.getUserID() ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),

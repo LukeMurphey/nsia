@@ -14,7 +14,7 @@ import net.lukemurphey.nsia.eventlog.MessageFormatter;
 import net.lukemurphey.nsia.eventlog.MessageFormatterFactory;
 import net.lukemurphey.nsia.eventlog.SyslogNGAppender;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.eventlog.EventLogMessage.Category;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 
 public class ApplicationConfiguration {
 
@@ -106,7 +106,7 @@ public class ApplicationConfiguration {
 		
 		//	 1.1 -- Determine the hash iteration count
 		if( hashIterationCount < 1 ){
-			application.logEvent( EventLogMessage.Category.INTERNAL_ERROR, new EventLogField( FieldName.MESSAGE, "Hash iteration count parameter is invalid (" + hashIterationCount + ")" ) );
+			application.logEvent( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField( FieldName.MESSAGE, "Hash iteration count parameter is invalid (" + hashIterationCount + ")" ) );
 		}
 		return appParams.getParameter( "Security.PasswordHashIterations", DEFAULT_PASSWORD_ITERATION_COUNT );
 	}
@@ -397,11 +397,11 @@ public class ApplicationConfiguration {
 		if( maximumSessionSecs < 1 ) // Session lifetime is disabled
 			return -1;
 		else if( maximumSessionSecs > 1000000L ){ //Session lifetime is too long (may result in a numerical overflow)
-			application.logEvent( EventLogMessage.Category.ILLEGAL_CONFIG, new EventLogField( FieldName.MESSAGE,"Maximum session time too long (" + maximumSessionSecs + ")" ) );
+			application.logEvent( EventLogMessage.EventType.ILLEGAL_CONFIG, new EventLogField( FieldName.MESSAGE,"Maximum session time too long (" + maximumSessionSecs + ")" ) );
 			return 1000000L;
 		}
 		else if( maximumSessionSecs < 300 ){ // Session lifetime is too short (less than 5 minutes)
-			application.logEvent( EventLogMessage.Category.ILLEGAL_CONFIG, new EventLogField( FieldName.MESSAGE, "Maximum session time too short (" + maximumSessionSecs + ")" ) );
+			application.logEvent( EventLogMessage.EventType.ILLEGAL_CONFIG, new EventLogField( FieldName.MESSAGE, "Maximum session time too short (" + maximumSessionSecs + ")" ) );
 			return DEFAULT_SESSION_LIFETIME;
 		}
 		else
@@ -752,7 +752,7 @@ public class ApplicationConfiguration {
 			license = LicenseManagement.getKeyInfo(key);
 		}
 		catch(LicenseValidationException e){
-			application.logExceptionEvent(Category.LICENSE_VALIDATION_FAILURE, e);
+			application.logExceptionEvent(EventType.LICENSE_VALIDATION_FAILURE, e);
 			
 			license = LicenseDescriptor.uncheckedLicense(key);
 		}
