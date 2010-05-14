@@ -167,7 +167,7 @@ public class CommonEventExpressionMessage {
 		}
 	}
 	
-	private static final String DELIMINATOR = ",";
+	private static final String DELIMINATOR = ", ";
 	
 	//Extension fields
 	Vector<ExtensionField> extensionFields = new Vector<ExtensionField>();
