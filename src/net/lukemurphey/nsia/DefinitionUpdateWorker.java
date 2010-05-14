@@ -15,7 +15,7 @@ public class DefinitionUpdateWorker extends TimerTask implements WorkerThread  {
 	private State state = State.INITIALIZED;
 	
 	private int startTime;
-	private static int EXPECTED_MAX_TIME = 20000;
+	private static int EXPECTED_MAX_TIME = 40000;
 	private static int THIRD = (EXPECTED_MAX_TIME / 3);
 	private DefinitionVersionID versionID = null;
 	private boolean checkingForNewDefinitions = false;
