@@ -2,7 +2,7 @@
 <#include "GetDialog.ftl">
 
 <#macro getref reference name>
-    <a href="${reference.type.urlPrefix}${reference.value}"> ${name?html} ${reference.value?html}</a><br/>
+    <a target="_blank" href="${reference.type.urlPrefix}${reference.value}"> ${name?html} ${reference.value?html}</a><br/>
 </#macro>
 
 <#macro ruleselectrow name description typearg >
@@ -41,6 +41,12 @@
                     <td>&nbsp;</td>
                     <td>   
                         <table>
+                            <#if definition.official>
+                            <tr>
+                                <td><img style="margin: 0px" src="/media/img/16_Bullet_arrow"></td>
+                                <td><a target="_blank" href="http://ThreatFactor.com/Products/NSIA/DefinitionReference/${definition.ID}">ThreatFactor.com Definition Writeup: ${definition.ID}</a><br/></td>
+                           </tr>
+                            </#if>
                             <#list definition.references as reference>
                             <tr>
                                 <td><img style="margin: 0px" src="/media/img/16_Bullet_arrow"></td>
