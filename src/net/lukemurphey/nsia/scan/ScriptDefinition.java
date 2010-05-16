@@ -57,9 +57,13 @@ public class ScriptDefinition extends Definition {
 		SCAN, BASELINE
 	}
 	
-	public static final String DEFAULT_ENGINE= "ECMAScript";
+	//The default scripting language
+	public static final String DEFAULT_ENGINE = "ECMAScript";
 	
+	//The following regular expression finds comments in the ThreatScript
 	private static final Pattern COMMENTS_REGEX = Pattern.compile("(/\\*.*?\\*/)|(//.*$)", Pattern.MULTILINE | Pattern.DOTALL);
+	
+	//The following regular expression find the meta options in the comments
 	private static final Pattern OPTION_REGEX = Pattern.compile("(Version|Name|ID|Message|Reference|Severity|Invasive)[ ]*\\:[ ]*([-\\w.\"/\\\\ (),?%=]+)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 	
 	public static ScriptDefinition parse(String script) throws InvalidDefinitionException{
@@ -181,22 +185,34 @@ public class ScriptDefinition extends Definition {
 			while( optionsMatcher.find() ){
 				String name = optionsMatcher.group(1);
 				String value = optionsMatcher.group(2);
+				
+				//Get the version
 				if( name.equalsIgnoreCase( "Version" ) ){
 					version = stripLeadingQuotes( value );
 				}
+				
+				//Get the name
 				else if( name.equalsIgnoreCase( "Name" ) ){
 					completeName = stripLeadingQuotes( value );
 				}
+				
+				//Get the ID
 				else if( name.equalsIgnoreCase( "ID" ) ){
 					identifier = stripLeadingQuotes( value );
 				}
+				
+				//Get the default message
 				else if( name.equalsIgnoreCase( "Message" ) ){
 					message = stripLeadingQuotes( value );
 				}
+				
+				//Get any references
 				else if( name.equalsIgnoreCase( "Reference" ) ){
 					Reference reference = Reference.parse( stripLeadingQuotes( value ) );
 					references.add(reference);
 				}
+				
+				//Determine if the definition is invasive
 				else if( name.equalsIgnoreCase( "Invasive" ) ){
 					String tmpValue = stripLeadingQuotes( value );
 					
@@ -210,6 +226,8 @@ public class ScriptDefinition extends Definition {
 						throw new InvalidDefinitionException("The invasive flag is invalid (must be either \"true\" or \"false\")");
 					}
 				}
+				
+				//Get the severity
 				else if( name.equalsIgnoreCase( "Severity" ) ){
 					String severity = stripLeadingQuotes( value );
 					if( severity.equalsIgnoreCase("Low")){
@@ -309,7 +327,6 @@ public class ScriptDefinition extends Definition {
 			throw new IllegalArgumentException("The scan result cannot be null");
 		}
 		
-		
 		// 1 -- Baseline the scan result
 		return baseline( scanResult.getRuleID(), scanResult.getScanResultID(), scanResult.getSpecimenDescription() );
 	}
@@ -322,40 +339,58 @@ public class ScriptDefinition extends Definition {
 		return isInvasive;
 	}
 	
+	/**
+	 * Get the saved script data.
+	 * @param connection
+	 * @param scanRuleID
+	 * @param uniqueResourceName
+	 * @return
+	 * @throws SQLException
+	 */
 	private SavedScriptData getSavedScriptData( Connection connection, long scanRuleID, String uniqueResourceName ) throws SQLException{
 		SavedScriptData data = null;
 		
-			
-			try {
-				data = SavedScriptData.load( connection, scanRuleID, this.toString(), uniqueResourceName);
-			} catch (IOException e) {
-				EventLogMessage message = new EventLogMessage(EventType.SCAN_ENGINE_EXCEPTION);
-				message.addField(new EventLogField(EventLogField.FieldName.DEFINITION_NAME, this.name));
-				
-				if( this.id >= 0 ){
-					message.addField(new EventLogField(EventLogField.FieldName.DEFINITION_ID, this.id));
-				}
-				
-				Application.getApplication().logExceptionEvent(message, e);
-				
-				return new SavedScriptData(scanRuleID, this.name);
-			} catch (ClassNotFoundException e) {
-				
-				EventLogMessage message = new EventLogMessage(EventType.SCAN_ENGINE_EXCEPTION);
-				message.addField(new EventLogField(EventLogField.FieldName.DEFINITION_NAME, this.name));
-				
-				if( this.id >= 0 ){
-					message.addField(new EventLogField(EventLogField.FieldName.DEFINITION_ID, this.id));
-				}
-				
-				Application.getApplication().logExceptionEvent(message, e);
-				
-				return new SavedScriptData(scanRuleID, this.name);
+		try {
+			data = SavedScriptData.load( connection, scanRuleID, this.toString(), uniqueResourceName);
+		} catch (IOException e) {
+			EventLogMessage message = new EventLogMessage(EventType.SCAN_ENGINE_EXCEPTION);
+			message.addField(new EventLogField(EventLogField.FieldName.DEFINITION_NAME, this.name));
+
+			if( this.id >= 0 ){
+				message.addField(new EventLogField(EventLogField.FieldName.DEFINITION_ID, this.id));
 			}
+
+			Application.getApplication().logExceptionEvent(message, e);
+
+			return new SavedScriptData(scanRuleID, this.name);
+		} catch (ClassNotFoundException e) {
+
+			EventLogMessage message = new EventLogMessage(EventType.SCAN_ENGINE_EXCEPTION);
+			message.addField(new EventLogField(EventLogField.FieldName.DEFINITION_NAME, this.name));
+
+			if( this.id >= 0 ){
+				message.addField(new EventLogField(EventLogField.FieldName.DEFINITION_ID, this.id));
+			}
+
+			Application.getApplication().logExceptionEvent(message, e);
+
+			return new SavedScriptData(scanRuleID, this.name);
+		}
 		
 		return data;
 	}
 
+	/**
+	 * Baseline the scan rule based on the findings in the given scan result ID.
+	 * @param scanRuleID
+	 * @param scanResultID
+	 * @param uniqueResourceName
+	 * @return
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 * @throws ScriptException
+	 * @throws IOException
+	 */
 	private boolean baseline( long scanRuleID, long scanResultID, String uniqueResourceName ) throws SQLException, NoDatabaseConnectionException, ScriptException, IOException{
 		Connection connection = null;
 		boolean baselineComplete = false;
@@ -527,7 +562,6 @@ public class ScriptDefinition extends Definition {
 			throw new IllegalArgumentException("The HTTP response argument must not be null");
 		}
 		
-		
 		// 1 -- Setup the environment
 		SavedScriptData data;
 		
@@ -548,7 +582,7 @@ public class ScriptDefinition extends Definition {
 		Invocable invocable = (Invocable)scriptEngine;
 		Result result = performAnalysis(MAX_SCRIPT_RUNTIME, invocable, httpResponse, variables, env, ruleId );
 		
-		//	 2.3 -- Save the state variables
+		//	 2.2 -- Save the state variables
 		if( data != null ){
 			try {
 				data.save(connection, httpResponse.getDataSpecimen().getFilename());
@@ -568,15 +602,35 @@ public class ScriptDefinition extends Definition {
 	    return result;
 	}
 	
+	/**
+	 * This thread calls the ThreatScript using a new thread (so it can be terminated).
+	 * @author Luke
+	 *
+	 */
 	private class InvokerThread extends Thread{
+		
+		//The function to be invoked
 		private Invocable invocable;
+		
+		//The result object from the call
 		private Result result = null;
+		
+		//The HTTP response data that was passed to the thread
 		private HttpResponseData httpResponse;
+		
+		//The variables that were passed to the thread
 		private Variables variables;
+		
+		//The environment that was passed to the thread
 		private Environment env;
 		
+		//Contains any exceptions generated when executing the function
 		private Throwable e = null;
+		
+		//Indicates if the thread is running
 		private boolean isRunning = false;
+		
+		//Mutex used to prevent multi-thread access to the invocable function 
 		private Object mutex = new Object();
 		
 		public InvokerThread(Invocable invocable, HttpResponseData httpResponse, Variables variables, Environment env){
@@ -611,19 +665,36 @@ public class ScriptDefinition extends Definition {
 			
 		}
 		
+		/**
+		 * Indicates if the thread is still running.
+		 * @return
+		 */
 		public boolean isRunning(){
 			return isRunning;
 		}
 		
+		/**
+		 * Gets the result from the invocable function.
+		 * @return
+		 */
 		public Result getResult(){
 			return result;
 		}
 		
+		/**
+		 * Get any exceptions thrown by the invocable function.
+		 * @return
+		 */
 		public Throwable getThrowable(){
 			return e;
 		}
 	}
 	
+	/**
+	 * The environment class stores values that script definitions need to store.
+	 * @author Luke
+	 *
+	 */
 	private class Environment{
 		private SavedScriptData data;
 		
@@ -688,9 +759,17 @@ public class ScriptDefinition extends Definition {
 	 *
 	 */
 	protected static class SavedScriptData{
+		
+		//The rule ID associated with this saved script data
 		private long ruleId;
+		
+		//The name of the rule associated with this saved script data
 		private String definitionName;
+		
+		//The values stored for this script
 		private Vector<NameValuePair> pairs = new Vector<NameValuePair>();
+		
+		//This boolean indicates if any of the items have been changes in the data 
 		private boolean itemsChanged = false;
 		
 		public SavedScriptData( long ruleId, String definitionName){
@@ -698,6 +777,17 @@ public class ScriptDefinition extends Definition {
 			this.definitionName = definitionName;
 		}
 		
+		/**
+		 * Load the saved script data.
+		 * @param connection
+		 * @param ruleId
+		 * @param definitionName
+		 * @param uniqueResourceName
+		 * @return
+		 * @throws SQLException
+		 * @throws IOException
+		 * @throws ClassNotFoundException
+		 */
 		public static SavedScriptData load( Connection connection, long ruleId, String definitionName, String uniqueResourceName) throws SQLException, IOException, ClassNotFoundException{
 			PreparedStatement statement = null;
 			ResultSet results = null;
@@ -746,14 +836,27 @@ public class ScriptDefinition extends Definition {
 			return env;
 		}
 		
+		/**
+		 * Get the rule ID associated with this saved script data.
+		 * @return
+		 */
 		public long getRuleID(){
 			return ruleId;
 		}
 
+		/**
+		 * Get the definition name associated with this saved script data.
+		 * @return
+		 */
 		public String getDefinitionName(){
 			return definitionName;
 		}
 		
+		/**
+		 * Get the value associated with the given name.
+		 * @param name
+		 * @return
+		 */
 		public NameValuePair get(String name){
 			synchronized ( pairs ){
 				Iterator<NameValuePair> iterator = pairs.iterator();
@@ -770,6 +873,10 @@ public class ScriptDefinition extends Definition {
 			}
 		}
 		
+		/**
+		 * Remove the value at the given index.
+		 * @param location
+		 */
 		public void remove( int location ){
 			synchronized ( pairs ){
 				itemsChanged = true;
@@ -777,6 +884,10 @@ public class ScriptDefinition extends Definition {
 			}
 		}
 		
+		/**
+		 * Remove the value associated with the given name.
+		 * @param name
+		 */
 		public void remove( String name ){
 			synchronized ( pairs ){
 				removeInternal(name);
@@ -797,6 +908,9 @@ public class ScriptDefinition extends Definition {
 			}
 		}
 		
+		/**
+		 * Remove all values.
+		 */
 		public void removeAll( ){
 			synchronized ( pairs ){
 				itemsChanged = true;
@@ -804,6 +918,11 @@ public class ScriptDefinition extends Definition {
 			}
 		}
 		
+		/**
+		 * Set the value of the name specified.
+		 * @param name
+		 * @param value
+		 */
 		public void set( String name, Serializable value ){
 			synchronized ( pairs ){
 				removeInternal(name);
@@ -812,6 +931,11 @@ public class ScriptDefinition extends Definition {
 			}
 		}
 		
+		/**
+		 * Set the value of the name specified.
+		 * @param name
+		 * @param value
+		 */
 		public void set( String name, Externalizable value ){
 			synchronized ( pairs ){
 				itemsChanged = true;
@@ -819,6 +943,13 @@ public class ScriptDefinition extends Definition {
 			}
 		}
 		
+		/**
+		 * Save the saved script data to the database.
+		 * @param connection
+		 * @param uniqueResourceName
+		 * @throws SQLException
+		 * @throws IOException
+		 */
 		public synchronized void save( Connection connection, String uniqueResourceName) throws SQLException, IOException{
 			if( itemsChanged == true ){
 				
@@ -832,6 +963,14 @@ public class ScriptDefinition extends Definition {
 			}
 		}
 		
+		/**
+		 * Delete old items so that they are recognized as no longer current.
+		 * @param connection
+		 * @param ruleId
+		 * @param definitionName
+		 * @param uniqueResourceName
+		 * @throws SQLException
+		 */
 		private static void invalidateOldItems( Connection connection, long ruleId, String definitionName, String uniqueResourceName ) throws SQLException{
 			PreparedStatement statement = null;
 			
@@ -857,6 +996,16 @@ public class ScriptDefinition extends Definition {
 			}
 		}
 		
+		/**
+		 * Persist the given entry to the database.
+		 * @param pair
+		 * @param connection
+		 * @param ruleId
+		 * @param definitionName
+		 * @param uniqueResourceName
+		 * @throws SQLException
+		 * @throws IOException
+		 */
 		private static void saveItem( NameValuePair pair, Connection connection, long ruleId, String definitionName, String uniqueResourceName ) throws SQLException, IOException{
 			
 			// 0 -- Precondition check: don't attempt to save the value if it is null
@@ -919,6 +1068,11 @@ public class ScriptDefinition extends Definition {
 		}
 	}
 	
+	/**
+	 * This class represents a name/value pair.
+	 * @author Luke
+	 *
+	 */
 	protected static class NameValuePair{
 		private int pairId = -1;
 		private String name;
