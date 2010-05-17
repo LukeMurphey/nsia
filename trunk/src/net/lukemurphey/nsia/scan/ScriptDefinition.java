@@ -45,11 +45,19 @@ import java.sql.*;
  */
 public class ScriptDefinition extends Definition {
 
+	//The maximum amount of time the script is allowed to run
 	private static final int MAX_SCRIPT_RUNTIME = 10000;
+	
+	//The maximum time a script terminate is allowed
 	private static final int MAX_SCRIPT_TERMINATE_RUNTIME = 10000;
+	
+	//The code to be executed
 	private String script;
+	
+	//The type of scripting engine to execute
 	private String scriptingEngine;
-	//private ScriptEngine scriptEngine;
+	
+	//Whether or not the definition is invasive (may cause permanent effects on the scanned resources)
 	private boolean isInvasive = false;
 	
 	/**
