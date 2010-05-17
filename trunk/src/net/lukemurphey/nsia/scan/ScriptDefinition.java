@@ -46,8 +46,10 @@ import java.sql.*;
 public class ScriptDefinition extends Definition {
 
 	private static final int MAX_SCRIPT_RUNTIME = 10000;
+	private static final int MAX_SCRIPT_TERMINATE_RUNTIME = 10000;
 	private String script;
-	private ScriptEngine scriptEngine;
+	private String scriptingEngine;
+	//private ScriptEngine scriptEngine;
 	private boolean isInvasive = false;
 	
 	/**
@@ -93,6 +95,7 @@ public class ScriptDefinition extends Definition {
 	private ScriptDefinition( String script, String scriptingEngine) throws InvalidDefinitionException{
 		this(script, null, -1);
 	}
+	
 	private ScriptDefinition( String script, String scriptingEngine, int localID) throws InvalidDefinitionException{
 		
 		// 0 -- Precondition Check
@@ -103,46 +106,15 @@ public class ScriptDefinition extends Definition {
 		}
 		
 		definitionType = "ThreatScript";
+		this.script = script;
+		this.scriptingEngine = scriptingEngine;
 		
-		// 1 -- Initialize the scripting engine
-		ScriptEngineManager sem = new ScriptEngineManager();
+		//Make sure the script parses
+		getScriptEngine();
 		
-		//	 1.1 -- Set the context such that the script class loader will be used.
-		Context context = Context.enter();
-		context.setApplicationClassLoader(new ScriptClassLoader());
-		//context.setClassShutter(new ScriptClassShutter());
-		
-		//	 1.2 -- Get the relevant engine
-		if( scriptingEngine == null ){
-			scriptEngine = sem.getEngineByName(DEFAULT_ENGINE);
-		}
-		else
-		{
-			scriptEngine = sem.getEngineByName(scriptingEngine);
-		}
-		
-		//	 1.3 -- Exit the context
-		Context.exit();
-
-		
-		// 2 -- Try to compile the script
+		// Populate the local variables from the comments
 		this.id = -1;
 		populateDetailsFromComments( script );
-		this.script = script;
-		
-		//	 2.1 -- Throw an exception if the identifier was not set
-		/*if(this.id == -1){
-			throw new InvalidDefinitionException("The definition script does not have a valid ID");
-		}*/
-		
-		//	 2.2 -- Try to compile the script; throw an exception if the script could not be compiled
-		try{
-			scriptEngine.eval(script);
-		}
-		catch(ScriptException e){
-			throw new InvalidDefinitionException("The definition script does not appear to be valid (the scripting engine rejected it)", e);
-		}
-		
 		this.localId = localID;
 	}
 
@@ -159,6 +131,45 @@ public class ScriptDefinition extends Definition {
 		}
 		
 		return value;
+	}
+	
+	/**
+	 * Get a scripting engine to be used in the analysis
+	 * @return
+	 * @throws InvalidDefinitionException
+	 */
+	private ScriptEngine getScriptEngine( ) throws InvalidDefinitionException{
+		
+		// 1 -- Initialize the scripting engine
+		ScriptEngineManager sem = new ScriptEngineManager();
+		ScriptEngine scriptEngine = null;
+		
+		// 2 -- Set the context such that the script class loader will be used.
+		Context context = Context.enter();
+		context.setApplicationClassLoader(new ScriptClassLoader());
+		//context.setClassShutter(new ScriptClassShutter());
+		
+		// 3 -- Get the relevant engine
+		if( scriptingEngine == null ){
+			scriptEngine = sem.getEngineByName(DEFAULT_ENGINE);
+		}
+		else
+		{
+			scriptEngine = sem.getEngineByName(scriptingEngine);
+		}
+		
+		// Exit the context
+		Context.exit();
+		
+		// 4 -- Try to compile the script; throw an exception if the script could not be compiled
+		try{
+			scriptEngine.eval(script);
+		}
+		catch(ScriptException e){
+			throw new InvalidDefinitionException("The definition script does not appear to be valid (the scripting engine rejected it)", e);
+		}
+		
+		return scriptEngine;
 	}
 	
 	/**
@@ -319,8 +330,9 @@ public class ScriptDefinition extends Definition {
 	 * @throws NoDatabaseConnectionException
 	 * @throws ScriptException
 	 * @throws IOException 
+	 * @throws InvalidDefinitionException 
 	 */
-	public boolean baseline( ScanResult scanResult ) throws SQLException, NoDatabaseConnectionException, ScriptException, IOException{
+	public boolean baseline( ScanResult scanResult ) throws SQLException, NoDatabaseConnectionException, ScriptException, IOException, InvalidDefinitionException{
 		
 		// 0 -- Precondition check
 		if( scanResult == null ){
@@ -390,14 +402,14 @@ public class ScriptDefinition extends Definition {
 	 * @throws NoDatabaseConnectionException
 	 * @throws ScriptException
 	 * @throws IOException
+	 * @throws InvalidDefinitionException 
 	 */
-	private boolean baseline( long scanRuleID, long scanResultID, String uniqueResourceName ) throws SQLException, NoDatabaseConnectionException, ScriptException, IOException{
+	private boolean baseline( long scanRuleID, long scanResultID, String uniqueResourceName ) throws SQLException, NoDatabaseConnectionException, ScriptException, IOException, InvalidDefinitionException{
 		Connection connection = null;
 		boolean baselineComplete = false;
 		
 		try{
 			connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
-			
 			
 			// 1 -- Setup the environment
 			SavedScriptData data = getSavedScriptData(connection, scanRuleID, uniqueResourceName);
@@ -407,7 +419,7 @@ public class ScriptDefinition extends Definition {
 			// 2 -- Execute the script
 			
 			//	 2.1 -- Call the baseline method
-			Invocable invocable = (Invocable)scriptEngine;
+			Invocable invocable = (Invocable)getScriptEngine();
 			
 			try {
 				Object result = invocable.invokeFunction("baseline", env );
@@ -482,6 +494,59 @@ public class ScriptDefinition extends Definition {
 	}
 	
 	/**
+	 * Represents the result of calling terminate on a script definition.
+	 * @author Luke
+	 *
+	 */
+	private enum TerminateResult{
+		NO_TERMINATE_DECLARED, TERMINATED_SUCCESSFULLY, TERMINATE_UNSUCCESSFUL;
+	}
+	
+	/**
+	 * Attempts to terminate a script-definition by calling the terminate function.
+	 * @param invocable
+	 * @param maxRuntime
+	 * @param ruleID
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	private TerminateResult terminate( Invocable invocable, int maxRuntime, long ruleID ){
+		
+		TerminatorThread terminatorThread = new TerminatorThread( invocable );
+		terminatorThread.setName("ScriptDefinition " + this.getFullName() + " (terminate call)" );
+		
+		synchronized (terminatorThread.mutex) {
+			try {
+				terminatorThread.start();
+				terminatorThread.mutex.wait(maxRuntime);
+			} catch (InterruptedException e1) {
+				//Thread was forcibly awoken, ignore this and let the thread complete
+			}
+			finally{
+				//Force it to terminate if the thread is still running
+				if( terminatorThread.isRunning() ){
+					terminatorThread.stop(); //Yes, it is deprecated, but the script runtime does not have a function to shutdown the script so this is the only way.
+					return TerminateResult.TERMINATE_UNSUCCESSFUL;
+				}
+			}
+		}
+		
+		//Log an error if the terminate function failed
+		if( terminatorThread.getThrowable() != null ){
+			DefinitionErrorList.logError(this.getFullName(), this.revision, "Runtime exception", "Rule ID " + ruleID , this.id, this.localId);
+		}
+		
+		// Return a value indicating if the terminate function was called.
+		if( terminatorThread.declaresTerminate() ){
+			return TerminateResult.TERMINATED_SUCCESSFULLY;
+		}
+		else{
+			return TerminateResult.NO_TERMINATE_DECLARED;
+		}
+		
+	}
+	
+	/**
 	 * Dispatches a thread to perform an analysis of the given HTTP response and returns the result. The analysis
 	 * thread is terminated if it fails to complete within a the time set according to the maxRuntime argument.
 	 * No limit is used if the maxRuntime argument is set to 0.  
@@ -519,11 +584,27 @@ public class ScriptDefinition extends Definition {
 					thread.start();
 					thread.mutex.wait(maxRuntime);
 				} catch (InterruptedException e1) {
-					//Thread was forceably awoken, ignore this and let the thread complete
+					//Thread was forcibly awoken, ignore this and let the thread complete
+				} catch(Throwable t){
+					t.printStackTrace();
 				}
+				
 			}
 			
 			//If the thread is still running, then log that the script failed to complete within the defined time period
+			if( thread.isRunning() ){
+				//First, let's try to call the terminate function (if it exists)
+				TerminateResult terminateResult = terminate(invocable, MAX_SCRIPT_TERMINATE_RUNTIME, ruleId);
+				
+				if( terminateResult == TerminateResult.TERMINATED_SUCCESSFULLY ){
+					DefinitionErrorList.logError(this.getFullName(), this.revision, "Execution exceeded limit (but was terminated successfully using terminate call)", "Rule ID " + ruleId , this.id, this.localId);
+				}
+				else if( terminateResult == TerminateResult.TERMINATE_UNSUCCESSFUL ){
+					DefinitionErrorList.logError(this.getFullName(), this.revision, "Execution exceeded limit and terminate request timed out", "Rule ID " + ruleId , this.id, this.localId);
+				}
+			}
+			
+			//Log the error and force the thread to stop if it is still running
 			if( thread.isRunning() ){
 				thread.stop(); //This function is deprecated, however, it is the only way to terminate this thread since the script engine does not have a method for terminating execution
 				DefinitionErrorList.logError(this.getFullName(), this.revision, "Execution exceeded limit", "Rule ID " + ruleId , this.id, this.localId);
@@ -573,6 +654,15 @@ public class ScriptDefinition extends Definition {
 			throw new DefinitionEvaluationException("The serialized data could not be loaded from the database for the definition (rule ID " + ruleId + ", definition \"" + this.getFullName() + "\")", e);
 		}
 		
+		ScriptEngine scriptEngine;
+		
+		//Throw an exception if the definition is not valid
+		try {
+			scriptEngine = getScriptEngine();
+		} catch (InvalidDefinitionException e) {
+			throw new DefinitionEvaluationException("Definition is invalid", e);
+		}
+		
 		Environment env = new Environment(data);
 		populateBindings(scriptEngine);
 		
@@ -603,13 +693,89 @@ public class ScriptDefinition extends Definition {
 	}
 	
 	/**
+	 * This class ised to call the terminate function on the script definitions if necessary
+	 * @author Luke
+	 *
+	 */
+	private class TerminatorThread extends Thread{
+		
+		//The object that contains the invocable functions
+		private Invocable invocable;
+		
+		//Contains any exceptions generated when executing the function
+		private Throwable e = null;
+		
+		//Indicates if the script declares a terminate function
+		private boolean terminateExists = true;
+		
+		//Indicates if the thread is still running (completed it's terminate call)
+		private boolean isRunning = false;
+		
+		//The mutual exclusion used to enforce thread safety and call notify on
+		private Object mutex = new Object();
+		
+		public TerminatorThread(Invocable invocable){
+			this.invocable = invocable;
+		}
+		
+		@Override
+		public void run(){
+
+			try{
+				isRunning = true;
+				invocable.invokeFunction("terminate");
+				terminateExists = true;
+			} catch (NoSuchMethodException e) {
+				terminateExists = false;
+			} catch(ScriptException e){
+				this.e = e;
+			} catch (Exception e) {
+				this.e = e;
+			} catch (Throwable e) {
+				this.e = e;
+			}
+			finally{
+				isRunning = false;
+
+				synchronized (mutex) {
+					mutex.notifyAll();
+				}
+			}
+		}
+		
+		/**
+		 * Indicates if the thread is still running.
+		 * @return
+		 */
+		public boolean isRunning(){
+			return isRunning;
+		}
+		
+		/**
+		 * Get any exceptions thrown by the invocable function.
+		 * @return
+		 */
+		public Throwable getThrowable(){
+			return e;
+		}
+		
+		/**
+		 * Indicates if the invocable declares a terminate function.
+		 * @return
+		 */
+		public boolean declaresTerminate(){
+			return terminateExists;
+		}
+	}
+	
+	/**
 	 * This thread calls the ThreatScript using a new thread (so it can be terminated).
 	 * @author Luke
 	 *
 	 */
 	private class InvokerThread extends Thread{
 		
-		//The function to be invoked
+		//The object that contains the invocable functions
 		private Invocable invocable;
 		
 		//The result object from the call
