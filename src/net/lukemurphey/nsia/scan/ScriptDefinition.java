@@ -38,7 +38,7 @@ import java.sql.*;
  * class will monitor the execution of the script at runtime and terminate it if it runs too long. Any detected error will be reported to
  * the event logging sub-system.
  * 
- * ScriptDefinition will populate the scripts namespace with objects reguired for execution. For security reasons a custom class-loader will
+ * ScriptDefinition will populate the scripts namespace with objects required for execution. For security reasons a custom class-loader will
  * be used that restricts the classes that can be loaded and uses simplified names for the packages.
  * @author Luke
  * 
