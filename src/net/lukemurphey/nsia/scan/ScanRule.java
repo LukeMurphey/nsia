@@ -21,6 +21,9 @@ public abstract class ScanRule implements HashtableSerialization{
 	public static final String RULE_TYPE = "";
 	protected ScanCallback callback = null;
 	
+	protected Timestamp created;
+	protected Timestamp modified;
+	
 	protected long objectId;
 	public static final int RULE_STATE_ACTIVE = 1;
 	public static final int RULE_STATE_INACTIVE = 2;
@@ -459,11 +462,16 @@ public abstract class ScanRule implements HashtableSerialization{
 		
 		try{
 			connection = appRes.getDatabaseConnection(Application.DatabaseAccessType.SCANNER);
-			statement = connection.prepareStatement("Insert into ScanRule (SiteGroupID, ScanFrequency, RuleType, State) values (?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareStatement("Insert into ScanRule (SiteGroupID, ScanFrequency, RuleType, State, Created, Modified) values (?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setLong(1, siteGroupId);
 			statement.setLong(2, scanFrequency);
 			statement.setString(3, ruletype);
 			statement.setInt(4, ruleState);
+			
+			created = new Timestamp(new java.util.Date().getTime());
+			
+			statement.setTimestamp(5, created);
+			statement.setTimestamp(6, created);
 			
 			if( statement.executeUpdate() < 1 )
 				return -1;
