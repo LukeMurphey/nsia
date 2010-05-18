@@ -470,6 +470,8 @@ public class DerbyDatabaseInitializer extends DatabaseInitializer {
 					"NotifyThreshold INTEGER default NULL," +
 					"NotifyTimePeriod INTEGER default NULL," +
 					"RuleVersion INTEGER default NULL," +
+					"Created TIMESTAMP default NULL," +
+					"Modified TIMESTAMP default NULL," +
 					"PRIMARY KEY  (ScanRuleID)" +
 			")");
 

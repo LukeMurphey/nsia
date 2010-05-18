@@ -215,6 +215,8 @@ public class HttpStaticScanRule extends ScanRule {
 			
 			int scanFrequency = generalRuleResult.getInt("ScanFrequency");
 			this.scanFrequency = scanFrequency;
+			this.created = generalRuleResult.getTimestamp("Created");
+			this.modified = generalRuleResult.getTimestamp("Modified");
 			
 			// 1.3 -- Load the header rules
 			headerStatement = connection.prepareStatement("Select * from HttpHeaderScanRule where ScanRuleID = ?");
@@ -1109,10 +1111,11 @@ public class HttpStaticScanRule extends ScanRule {
 			
 			
 			// 4 -- Save the generic rule attributes
-			generalStatement = connection.prepareStatement("Update ScanRule set ScanFrequency = ?, ScanDataObsolete = ? where ScanRuleID = ?");
+			generalStatement = connection.prepareStatement("Update ScanRule set ScanFrequency = ?, ScanDataObsolete = ?, Modified = ? where ScanRuleID = ?");
 			generalStatement.setInt( 1, this.getScanFrequency() );
 			generalStatement.setBoolean( 2, true);
-			generalStatement.setLong( 3, scanRuleId );
+			generalStatement.setTimestamp( 3, new Timestamp(new java.util.Date().getTime()) );
+			generalStatement.setLong( 4, scanRuleId );
 			generalStatement.executeUpdate();
 			
 			return this.scanRuleId;
