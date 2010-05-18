@@ -18,16 +18,34 @@ public class SyslogNGAppender extends AppenderSkeleton {
 		TCP, UDP
 	}
 	
+	//The protocol used to transmit the log message
 	private Protocol protocol = null;
+	
+	//The server to submit the log messages to
 	private String server = null;
+	
+	//The default port to use for sending the log messages
 	private int port = 514;
+	
+	//The cache of the log messages
 	private Vector<LoggingEvent> messageCache = new Vector<LoggingEvent>();
+	
+	//The socket to use for sending the log messages
 	private SocketWrapper socket = null;
+	
+	//The timestamp of the last connection attempt
 	private long lastConnectionAttempt= -1;
+	
+	//The delay between a connection failure and an attempt to transmit the log messages again
 	private static int RECONNECT_DELAY = 60000;
+	
+	//The maximum size of the log message buffer
 	private int maxBufferSize = 8000;
 	
+	//Indicates the connection failed
 	private boolean connectionErrorNoted = false;
+	
+	//Indicates whether the cache maximum size was reached
 	private boolean maxCacheErrorNoted = false;
 	
 	/**
@@ -36,26 +54,45 @@ public class SyslogNGAppender extends AppenderSkeleton {
 	 *
 	 */
 	private static class SocketWrapper{
-		private static final int NONE = 0;
-		private static final int UDP = 1;
-		private static final int TCP = 2;
-		
+
+		//The TCP socket
 		private Socket tcpSocket = null;
+		
+		//The UDP socket
 		private DatagramSocket udpSocket = null;
 		
+		//Default port to use
 		private int udpPort = 514;
+		
+		//The address to send the logs to
 		private InetAddress udpAddress = null;
 		
 		private SocketWrapper(){
 			//Only instantiable within this class
 		}
 		
+		/**
+		 * Create a TCP socket to the log server.
+		 * @param serverAddress
+		 * @param port
+		 * @return
+		 * @throws UnknownHostException
+		 * @throws IOException
+		 */
 		public static SocketWrapper createTCPSocket(String serverAddress, int port) throws UnknownHostException, IOException{
 			SocketWrapper wrapper = new SocketWrapper();
 			wrapper.tcpSocket = new Socket(serverAddress, port);
 			return wrapper;
 		}
 		
+		/**
+		 * Create a UDP socket to the log server.
+		 * @param serverAddress
+		 * @param port
+		 * @return
+		 * @throws UnknownHostException
+		 * @throws IOException
+		 */
 		public static SocketWrapper createUDPSocket(String serverAddress, int port) throws UnknownHostException, IOException{
 			SocketWrapper wrapper = new SocketWrapper();
 			
@@ -67,6 +104,10 @@ public class SyslogNGAppender extends AppenderSkeleton {
 			return wrapper;
 		}
 		
+		/**
+		 * Close the socket connection.
+		 * @throws IOException
+		 */
 		public void close() throws IOException{
 			if( tcpSocket != null ){
 				tcpSocket.close();
@@ -77,18 +118,28 @@ public class SyslogNGAppender extends AppenderSkeleton {
 			}
 		}
 		
-		public int socketType(){
+		/**
+		 * Get the socket type being used.
+		 * @return
+		 */
+		public Protocol socketType(){
 			if( tcpSocket != null ){
-				return TCP;
+				return Protocol.TCP;
 			}
 			else if(udpSocket != null){
-				return UDP;
+				return Protocol.UDP;
 			}
 			else{
-				return NONE;
+				return null;
 			}
 		}
 		
+		/**
+		 * Send the given log message to the server.
+		 * @param message
+		 * @return
+		 * @throws IOException
+		 */
 		public boolean sendMessage(String message) throws IOException{
 			byte[] bytes = message.getBytes();
 			
@@ -117,7 +168,6 @@ public class SyslogNGAppender extends AppenderSkeleton {
 		setProtocol(protocol);
 	}
 	
-	
 	public SyslogNGAppender( String server, int port, int maxCacheSize, Protocol protocol){
 		setPort(port);
 		setServer(server);
@@ -125,6 +175,10 @@ public class SyslogNGAppender extends AppenderSkeleton {
 		setProtocol(protocol);
 	}
 
+	/**
+	 * Set the maximum size of the cache (before discarding the messages)
+	 * @param maxCache
+	 */
 	public void setMaxCacheSize( int maxCache ){
 		if( maxCache >= 0 ){
 			maxBufferSize = maxCache;
@@ -134,10 +188,18 @@ public class SyslogNGAppender extends AppenderSkeleton {
 		}
 	}
 	
+	/**
+	 * Set the port to send the log messages to.
+	 * @param port
+	 */
 	public void setPort(int port) {
 		this.port = port;
 	}
 
+	/**
+	 * Set the protocol to use to send the log messages to the server.
+	 * @param protocol
+	 */
 	private void setProtocol(Protocol protocol){
 		if( protocol == null ){
 			throw new IllegalArgumentException("The protocol cannot be null");
@@ -146,34 +208,72 @@ public class SyslogNGAppender extends AppenderSkeleton {
 		this.protocol = protocol;
 	}
 	
+	/**
+	 * Get the protocol to use to send the log messages to the server.
+	 * @return
+	 */
+	public Protocol getProtocol(){
+		return socket.socketType();
+	}
+	
+	/**
+	 * Get the port to use when sending the log messages to the server.
+	 * @return
+	 */
 	public int getPort() {
 		return this.port;
 	}
 	
+	/**
+	 * Set the server to send the log messages to.
+	 * @param server
+	 */
 	public void setServer(String server){
 		this.server = server;
 	}
 	
+	/**
+	 * Get the server to send the log messages to.
+	 * @return
+	 */
 	public String getServer(){
 		return server;
 	}
 	
+	/**
+	 * Get the maximum size of the cache (before discarding the messages)
+	 * @return
+	 */
 	public int getMaxCacheSize(){
 		return maxBufferSize;
 	}
 	
+	/**
+	 * Returns a boolean indicating if the max cache size was reached.
+	 * @return
+	 */
 	public boolean maxCacheReached(){
 		return maxCacheErrorNoted;
 	}
 	
+	/**
+	 * Returns a boolean indicating if the log server is accepting the log messages.
+	 * @return
+	 */
 	public boolean isLogServerResponding(){
 		return !connectionErrorNoted;
 	}
 	
+	/**
+	 * Get the number of messages currently cached.
+	 */
 	public int getCachedMessageCount(){
 		return messageCache.size();
 	}
 	
+	/**
+	 * Activate the options defined.
+	 */
 	public void activateOptions() {
 		try {
 			if(protocol == Protocol.TCP){
@@ -227,6 +327,10 @@ public class SyslogNGAppender extends AppenderSkeleton {
 
 	}
 	
+	/**
+	 * Add the given log message to the cache.
+	 * @param event
+	 */
 	private void addToCache( LoggingEvent event ){
 		if( messageCache.size() < maxBufferSize ){
 			messageCache.add(event);
@@ -240,6 +344,11 @@ public class SyslogNGAppender extends AppenderSkeleton {
 		}
 	}
 	
+	/**
+	 * Submit the given log message.
+	 * @param event
+	 * @return
+	 */
 	private synchronized boolean sendEvent(LoggingEvent event){
 		try{
 
