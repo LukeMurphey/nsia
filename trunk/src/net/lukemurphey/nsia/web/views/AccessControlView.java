@@ -159,13 +159,13 @@ public class AccessControlView extends View {
 	                if( subject.startsWith("group") ){
 	                	isUser = false;
 	                    groupId = Integer.parseInt(subject.substring(5));
-	                    objectPermissionDescriptor = accessControl.getGroupPermissions( groupId, objectId);
+	                    objectPermissionDescriptor = accessControl.getGroupPermissions( groupId, objectId );
 	                    
 	                }
 	                else if( subject.startsWith("user") ){
 	                	isUser = true;
 	                    userId = Integer.parseInt(subject.substring(4));
-	                    objectPermissionDescriptor = accessControl.getUserPermissions( userId, objectId, false);
+	                    objectPermissionDescriptor = accessControl.getUserPermissions( userId, objectId, false );
 	                }
 	            }
 	            catch(NumberFormatException e){
