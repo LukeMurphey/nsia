@@ -651,8 +651,6 @@ public class ScannerController extends Thread{
 		calendar.add(Calendar.MINUTE, -SCAN_EDIT_DELAY_MINUTES);
 		Timestamp earliestCreate = new Timestamp(calendar.getTime().getTime());
 		
-		System.out.println("earliestCreate:" + earliestCreate);
-		
 		ruleStatement.setTimestamp(1, earliestCreate);
 		ruleStatement.setTimestamp(2, earliestCreate);
 		ruleStatement.setLong(3, siteGroupID);
@@ -680,8 +678,6 @@ public class ScannerController extends Thread{
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MINUTE, -SCAN_EDIT_DELAY_MINUTES);
 		Timestamp earliestCreate = new Timestamp(calendar.getTime().getTime());
-		
-		System.out.println("earliestCreate:" + earliestCreate);
 		
 		ruleStatement.setTimestamp(1, earliestCreate);
 		ruleStatement.setTimestamp(2, earliestCreate);
