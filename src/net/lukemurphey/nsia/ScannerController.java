@@ -33,7 +33,7 @@ public class ScannerController extends Thread{
 	 * scanned. Additionally, this prevents a rule from being double-scanned when a user manually
 	 * scans the rule after creating it.
 	 */
-	private static int SCAN_EDIT_DELAY_MINUTES = 5;
+	private static int SCAN_EDIT_DELAY_MINUTES = 3;
 	
 	private Application appRes;
 	private long loopFrequency = 10000; //10 seconds
