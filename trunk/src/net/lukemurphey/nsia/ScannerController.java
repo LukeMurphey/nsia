@@ -27,8 +27,16 @@ public class ScannerController extends Thread{
 	private boolean activelyScanning = false;
 	private boolean shutdownScanner = false;
 	
+	/*
+	 * The minimum amount of time that must elapse before the rule is automatically scanned.
+	 * This delay gives the user some time to continue editing the rule before it is automatically
+	 * scanned. Additionally, this prevents a rule from being double-scanned when a user manually
+	 * scans the rule after creating it.
+	 */
+	private static int SCAN_EDIT_DELAY_MINUTES = 5;
+	
 	private Application appRes;
-	private long loopFrequency = 10000;//10 seconds
+	private long loopFrequency = 10000; //10 seconds
 	
 	protected Vector<Thread> scanThreads = new Vector<Thread>();
 	
@@ -192,8 +200,8 @@ public class ScannerController extends Thread{
 					SiteGroupManagement.SiteGroupDescriptor[] siteGroupDescriptors = groupManagement.getGroupDescriptors();
 
 					try{
-
-						ruleStatement = connection.prepareStatement("Select * from ScanRule where State = 1");
+						
+						ruleStatement = getRuleScanStatement(connection, false);
 						ruleResults = ruleStatement.executeQuery();		
 
 						while( ruleResults.next() ){
@@ -417,13 +425,17 @@ public class ScannerController extends Thread{
 		
 		try{
 			connection = appRes.getDatabaseConnection(Application.DatabaseAccessType.SCANNER);
-			if( connection == null )
-				throw new NoDatabaseConnectionException();
 			
-			ruleStatement = connection.prepareStatement("Select * from ScanRule where State = 1");
+			if( connection == null ){
+				throw new NoDatabaseConnectionException();
+			}
+			
+			ruleStatement = getRuleScanStatement(connection, false);
+			
 			ruleResults = ruleStatement.executeQuery();	
 			
 			while( ruleResults.next() ){
+				
 				long ruleId = ruleResults.getLong("ScanRuleID");
 				long scanFrequency = ruleResults.getLong("ScanFrequency");
 				boolean scanDataObsolete = ruleResults.getBoolean("ScanDataObsolete");
@@ -433,32 +445,57 @@ public class ScannerController extends Thread{
 				
 				// 2.1 -- Scan rules where the rule has changed and the result data needs to updated accordingly (i.e. the scan data is for an older version of the rule)
 				if( scanDataObsolete ){
+					
 					Scanner scanner = new Scanner(appRes);
+					
+					//Perform the scan if the scanner successfully loaded the rule
 					if( scanner.prepareScan( ruleId ) ){
+						
+						//Perform the scan
 						ScanResult scanResult = scanner.doScan();
+						
 						if( scanResult != null ){
+							
+							//Add the scan results to the list
 							scanResults.add(scanResult);
+							
+							//Save the results if they should be auto-saved
 							if(autoSaveResults){
+								
 								Connection conn = appRes.getDatabaseConnection(Application.DatabaseAccessType.SCANNER);
 								scanResult.saveToDatabase(conn, ruleId);
-								if( conn != null )
+								
+								if( conn != null ){
 									conn.close();
+								}
 							}
 						}
 					}
 				}
 				// 2.2 -- Scan rules where the scan data has expired (and need re-scanning)
 				else if( (System.currentTimeMillis() - lastScanned.getTime())/1000 > scanFrequency ){
+					
 					Scanner scanner = new Scanner(appRes);
+					
 					if( scanner.prepareScan( ruleId ) ){
+						
+						//Perform the scan
 						ScanResult scanResult = scanner.doScan();
+						
 						if( scanResult != null ){
+							
+							//Add the scan results to the list
 							scanResults.add(scanResult);
+							
+							//Save the results if they should be auto-saved
 							if(autoSaveResults){
+								
 								Connection conn = appRes.getDatabaseConnection(Application.DatabaseAccessType.SCANNER);
 								scanResult.saveToDatabase( conn, ruleId);
-								if( conn != null)
+								
+								if( conn != null){
 									conn.close();
+								}
 							}
 						}
 					}
@@ -496,6 +533,7 @@ public class ScannerController extends Thread{
 	 * @throws Exception
 	 */
 	public ScanResult[] scanUpdatedRules( boolean autoSaveResults ) throws Exception{
+		
 		// 0 -- Precondition check
 		
 		//	 0.1 -- Make sure a database connection is available
@@ -508,20 +546,23 @@ public class ScannerController extends Thread{
 		try{
 			connection = appRes.getDatabaseConnection( Application.DatabaseAccessType.SCANNER );
 			
-			if( connection == null )
+			if( connection == null ){
 				throw new NoDatabaseConnectionException();
+			}
 				
-			statement = connection.prepareStatement("Select * from ScanRule where ScanDataObsolete <> 0");
+			statement = getRuleScanStatement(connection, true);
 			result = statement.executeQuery();
 			
 			//	 1.1 -- Get the number of rules scanned
 			int rulesScannedCount = 0;
 			
-			while (result.next())
+			while (result.next()){
 				rulesScannedCount++;
+			}
 			
-			if(rulesScannedCount == 0 )
+			if(rulesScannedCount == 0 ){
 				return null;
+			}
 			
 			//	 1.2 -- Scan the rules
 			result.first();
@@ -536,8 +577,10 @@ public class ScannerController extends Thread{
 				scanner.prepareScan( scanRuleId );
 				
 				ScanResult scanResult = scanner.doScan();
-				if( autoSaveResults )
+				
+				if( autoSaveResults ){
 					scanResult.saveToDatabase(connection, scanRuleId );
+				}
 				
 				scanResults[c] = scanResult;
 			}
@@ -588,6 +631,65 @@ public class ScannerController extends Thread{
 	}
 	
 	/**
+	 * Get a SQL statement that will retrieve the scan rules to be scanned for the given site-group
+	 * @param connection
+	 * @param siteGroupID
+	 * @return
+	 * @throws SQLException
+	 */
+	private PreparedStatement getRuleScanStatement( Connection connection, boolean filterToObsoleted, long siteGroupID ) throws SQLException{
+		PreparedStatement ruleStatement = connection.prepareStatement("Select * from ScanRule where State = 1 and ScanDataObsolete <> 0 and (created = null or created < ?) and (modified = null or modified < ?) and SiteGroupID = ?");
+		
+		if( filterToObsoleted ){
+			ruleStatement = connection.prepareStatement("Select * from ScanRule where State = 1 and ScanDataObsolete <> 0 and (created = null or created < ?) and (modified = null or modified < ?) and SiteGroupID = ?");
+		}
+		else{
+			ruleStatement = connection.prepareStatement("Select * from ScanRule where State = 1 and (created = null or created < ?) and (modified = null or modified < ?) and SiteGroupID = ?");
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MINUTE, -SCAN_EDIT_DELAY_MINUTES);
+		Timestamp earliestCreate = new Timestamp(calendar.getTime().getTime());
+		
+		System.out.println("earliestCreate:" + earliestCreate);
+		
+		ruleStatement.setTimestamp(1, earliestCreate);
+		ruleStatement.setTimestamp(2, earliestCreate);
+		ruleStatement.setLong(3, siteGroupID);
+		
+		return ruleStatement;
+	}
+	
+	/**
+	 * Get a SQL statement that will retrieve the scan rules to be scanned.
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	private PreparedStatement getRuleScanStatement( Connection connection, boolean filterToObsoleted ) throws SQLException{
+		
+		PreparedStatement ruleStatement;
+		
+		if( filterToObsoleted ){
+			ruleStatement = connection.prepareStatement("Select * from ScanRule where State = 1 and ScanDataObsolete <> 0 and (created is null or created < ?) and (modified is null or modified < ?)");
+		}
+		else{
+			ruleStatement = connection.prepareStatement("Select * from ScanRule where State = 1 and (created is null or created < ?) and (modified is null or modified < ?)");
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MINUTE, -SCAN_EDIT_DELAY_MINUTES);
+		Timestamp earliestCreate = new Timestamp(calendar.getTime().getTime());
+		
+		System.out.println("earliestCreate:" + earliestCreate);
+		
+		ruleStatement.setTimestamp(1, earliestCreate);
+		ruleStatement.setTimestamp(2, earliestCreate);
+		
+		return ruleStatement;
+	}
+	
+	/**
 	 * Method causes all rules to be scanned.
 	 * @param autoSaveResults Store the results in the database.
 	 * @return
@@ -596,6 +698,7 @@ public class ScannerController extends Thread{
 	 * @throws Exception
 	 */
 	public ScanResult[] scanAllRules( boolean autoSaveResults ) throws Exception{
+		
 		// 0 -- Precondition check
 		Connection connection = null; // Will be checked in try body
 		
@@ -609,10 +712,12 @@ public class ScannerController extends Thread{
 		try{
 			connection = appRes.getDatabaseConnection(Application.DatabaseAccessType.SCANNER);
 			
-			if( connection == null )
+			if( connection == null ){
 				throw new NoDatabaseConnectionException();
+			}
 			
-			ruleStatement = connection.prepareStatement("Select * from ScanRule where State = 1");
+			ruleStatement = getRuleScanStatement(connection, false); 
+			
 			ruleResults = ruleStatement.executeQuery();		
 			
 			while( ruleResults.next() ){
@@ -674,11 +779,11 @@ public class ScannerController extends Thread{
 		try{
 			connection = appRes.getDatabaseConnection(Application.DatabaseAccessType.SCANNER);
 			
-			if( connection == null )
+			if( connection == null ){
 				throw new NoDatabaseConnectionException();
+			}
 			
-			ruleStatement = connection.prepareStatement("Select * from ScanRule where State = 1 and SiteGroupID = ?");
-			ruleStatement.setLong(1, siteGroupId);
+			ruleStatement = getRuleScanStatement(connection, false, siteGroupId);
 			
 			ruleResults = ruleStatement.executeQuery();		
 			Vector<ScanResult> scanResults = new Vector<ScanResult>();
