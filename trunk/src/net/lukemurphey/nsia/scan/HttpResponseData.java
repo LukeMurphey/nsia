@@ -66,7 +66,7 @@ public class HttpResponseData  {
 	}
 	
 	public HttpResponseData(HttpMethod httpMethod, String serverAddress ) throws URIException{
-		this( httpMethod, httpMethod.getURI().toString(), DEFAULT_LENGTH_LIMIT );
+		this( httpMethod, serverAddress, DEFAULT_LENGTH_LIMIT );
 	}
 	
 	public HttpResponseData(HttpMethod httpMethod, String serverAddress, int downloadSizeLimit ) throws URIException{
