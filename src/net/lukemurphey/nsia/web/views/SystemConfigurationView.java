@@ -16,6 +16,7 @@ import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.InvalidLocalPartException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.GenericUtils.SMTPEncryption;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -60,6 +61,7 @@ public class SystemConfigurationView extends View {
 		EMAIL_USERNAME("email_username"),
 		EMAIL_PASSWORD("email_password"),
 		EMAIL_SMTP_PORT("email_smtp_port"),
+		EMAIL_SMTP_ENCRYPTION("email_smtp_encryption"),
 		
 		SCANNER_HTTP_THREADS("scanner_http_threads"),
 		SCANNER_RESCAN_EDITED_RULES("scanner_rescan_edited_rules");
@@ -351,6 +353,10 @@ public class SystemConfigurationView extends View {
 					config.setEmailUsername( value );
 					context.addMessage("SMTP username updated", MessageSeverity.SUCCESS);
 				}
+				else if( value != null && ParameterTitles.EMAIL_SMTP_ENCRYPTION.equals(name) ){
+					config.setEmailSMTPEncryption( SMTPEncryption.valueOf(value) );
+					context.addMessage("SMTP encryption setting updated", MessageSeverity.SUCCESS);
+				}
 				
 				// Log configuration
 				else if( ParameterTitles.LOG_ENABLED.equals(name) ){
@@ -517,6 +523,15 @@ public class SystemConfigurationView extends View {
 			email_options.add( new Parameter("SMTP Username", appConfig.getEmailUsername(), ParameterTitles.EMAIL_USERNAME.getName(), ParameterType.TEXT) );
 			email_options.add( new Parameter("SMTP Password", appConfig.getEmailPassword(), ParameterTitles.EMAIL_PASSWORD.getName(), ParameterType.PASSWORD) );
 			email_options.add( new Parameter("SMTP Port", appConfig.getEmailSMTPPort(), ParameterTitles.EMAIL_SMTP_PORT.getName(), ParameterType.INTEGER) );
+			
+			SelectParamValue[] smtp_encryption = new SelectParamValue[4];
+			smtp_encryption[0] = new SelectParamValue(SMTPEncryption.NONE.toString(), "None");
+			smtp_encryption[1] = new SelectParamValue(SMTPEncryption.STARTTLS.toString(), "StartTLS");
+			smtp_encryption[2] = new SelectParamValue(SMTPEncryption.TLS.toString(), "TLS");
+			smtp_encryption[3] = new SelectParamValue(SMTPEncryption.SSL.toString(), "SSL");
+			
+			email_options.add( new Parameter("SMTP Encryption", appConfig.getEmailSMTPEncryption().toString(), ParameterTitles.EMAIL_SMTP_ENCRYPTION.getName(), smtp_encryption) );
+			
 			data.put("email_options", email_options);
 
 			if( request.getParameter("ParamID") != null ){
