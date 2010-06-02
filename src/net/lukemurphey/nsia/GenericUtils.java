@@ -14,10 +14,11 @@ import java.util.zip.ZipOutputStream;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
-
+import javax.mail.Authenticator;
 
 /**
  * This class contains a series of general methods that are intended to be be used at various locations within an application. 
@@ -58,6 +59,11 @@ public class GenericUtils {
 		return newArray;
 	}
 	
+	/**
+	 * Get a string version of time (like "10 mins").
+	 * @param secs
+	 * @return
+	 */
 	public static String getTimeDescription( long secs ){
 		double doubleSecs = secs;
 		DecimalFormat twoPlaces = new DecimalFormat("0.00");
@@ -193,6 +199,12 @@ public class GenericUtils {
 		return( path.delete() );
 	}
 	
+	/**
+	 * Get the percentage progress based on how long the event is intended to take.
+	 * @param expectedMaxTime
+	 * @param startTime
+	 * @return
+	 */
 	static public int twoStateProgress(int expectedMaxTime, int startTime ){
 		int currentTime = (int)System.currentTimeMillis();
 		int third = (expectedMaxTime / 3);
@@ -211,12 +223,19 @@ public class GenericUtils {
 		
 	}
 	
+	/**
+	 * Send an email.
+	 * @param toAddress
+	 * @param subject
+	 * @param body
+	 * @throws MessagingException
+	 */
 	public static void sendMail( EmailAddress toAddress, String subject, String body ) throws MessagingException {
 		Application app = Application.getApplication();
 		ApplicationConfiguration config = app.getApplicationConfiguration();
 		
 		try {
-			sendMail( toAddress, subject, body, config.getEmailFromAddress(), config.getEmailSMTPServer(), config.getEmailUsername(), config.getEmailPassword(), config.getEmailSMTPPort());
+			sendMail( toAddress, subject, body, config.getEmailFromAddress(), config.getEmailSMTPServer(), config.getEmailUsername(), config.getEmailPassword(), config.getEmailSMTPPort(), config.getEmailSMTPEncryption() );
 		} catch (UnknownHostException e) {
 			throw new MessagingException("Host is unknown", e);
 		} catch (NoDatabaseConnectionException e) {
@@ -230,13 +249,57 @@ public class GenericUtils {
 		}
 	}
 	
-	public static void sendMail(EmailAddress toAddress, String subject, String body, EmailAddress fromAddress, String smtpServer, String username, String password, int port ) throws MessagingException { 
+	/**
+	 * Represents the type encryption used for the SMTP connection.
+	 * @author Luke
+	 *
+	 */
+	public enum SMTPEncryption{
+		NONE, SSL, STARTTLS, TLS;
+	}
+	
+	/**
+	 * The authenticator used to perform SMTP authentication.
+	 * @author Luke
+	 *
+	 */
+	private static class SMTPAuthenticator extends javax.mail.Authenticator {
+		
+		private String username;
+		private String password;
+		
+		public SMTPAuthenticator( String username, String password ){
+			this.username = username;
+			this.password = password;
+		}
+		
+		public PasswordAuthentication getPasswordAuthentication()
+		{
+			return new PasswordAuthentication( this.username, this.password );
+		}
+	}
+	
+	/**
+	 * Send an email.
+	 * @param toAddress
+	 * @param subject
+	 * @param body
+	 * @param fromAddress
+	 * @param smtpServer
+	 * @param username
+	 * @param password
+	 * @param port
+	 * @param encryption
+	 * @throws MessagingException
+	 */
+	public static void sendMail(EmailAddress toAddress, String subject, String body, EmailAddress fromAddress, String smtpServer, String username, String password, int port, SMTPEncryption encryption ) throws MessagingException { 
 	    
 		// Make sure the SMTP server and from address was defined
 		if( smtpServer == null || fromAddress == null ){
 			return;
 		}
 		
+		// Set up the properties
 		Properties props = new Properties();
 	    props.put("mail.smtp.host", smtpServer);
 	    props.put("mail.from", fromAddress.toString());
@@ -246,7 +309,33 @@ public class GenericUtils {
 	    	props.put("mail.smtp.auth", "true");
 	    }
 	    
-	    Session session = Session.getInstance(props, null);
+	    // Enable encryption as necessary
+	    if( encryption == SMTPEncryption.STARTTLS){
+	    	props.put("mail.smtp.starttls.enable", "true");
+	    }
+	    else if( encryption == SMTPEncryption.SSL){
+	    	props.put("mail.smtp.ssl", "true");
+	    	//session.setProtocolForAddress("rfc822", "smtps");
+	    }
+	    
+	    Session session = null;
+	    
+	    //Finish setting up encryption
+	    if( encryption == SMTPEncryption.SSL || encryption == SMTPEncryption.STARTTLS || encryption == SMTPEncryption.TLS){
+	    	props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+	    	props.put("mail.smtp.socketFactory.fallback", "false");
+	    	props.put("mail.smtp.socketFactory.port", Integer.toString(port));
+	    	props.setProperty("mail.smtp.quitwait", "false");
+	    	
+	    	System.getSecurityManager(); // An instance of SecurityManager
+	    	Authenticator auth = new SMTPAuthenticator( username, password );
+	    	session = Session.getInstance(props, auth);
+	    	//session.setDebug(true);
+	    }
+	    else{
+	    	session = Session.getInstance(props, null);
+	    }
+	    
 	    MimeMessage msg = new MimeMessage(session);
 	    msg.setFrom();
 	    msg.setRecipients(Message.RecipientType.TO, toAddress.toString());
@@ -264,6 +353,12 @@ public class GenericUtils {
 	    transport.close();
 	}
 	
+	/**
+	 * Add the number of days from the given date.
+	 * @param aDate
+	 * @param noOfDays
+	 * @return
+	 */
 	public static Date addOrSubstractDaysFromDate( Date aDate, int noOfDays) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(aDate);
