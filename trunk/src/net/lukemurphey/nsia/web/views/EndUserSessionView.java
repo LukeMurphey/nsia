@@ -124,7 +124,7 @@ public class EndUserSessionView extends View {
 			}
 			
 			context.addMessage("Session successfully terminated", MessageSeverity.SUCCESS);
-			response.sendRedirect( UsersView.getURL() );
+			response.sendRedirect( UserSessionsView.getURL() );
 			
 		} catch (InputValidationException e) {
 			throw new ViewFailedException(e);
