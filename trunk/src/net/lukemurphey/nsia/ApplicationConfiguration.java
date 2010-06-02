@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import net.lukemurphey.nsia.GenericUtils.SMTPEncryption;
 import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
 import net.lukemurphey.nsia.LicenseManagement.LicenseStatus;
 import net.lukemurphey.nsia.eventlog.EventLogField;
@@ -904,7 +905,7 @@ public class ApplicationConfiguration {
 	 * @throws InputValidationException
 	 */
 	public String getEmailPassword() throws NoDatabaseConnectionException, SQLException, InputValidationException{
-		return appParams.getParameter("Administration.EmailUsername", null);
+		return appParams.getParameter("Administration.EmailPassword", null);
 	}
 	
 	/**
@@ -932,6 +933,42 @@ public class ApplicationConfiguration {
 	 */
 	public int getEmailSMTPPort() throws NoDatabaseConnectionException, SQLException, InputValidationException{
 		return (int)appParams.getParameter("Administration.EmailSMTPPort", 25);
+	}
+	
+	/**
+	 * Set the SMTP encryption to be used for sending emails.
+	 * @param enc
+	 * @throws InputValidationException
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
+	public void setEmailSMTPEncryption( SMTPEncryption enc ) throws InputValidationException, SQLException, NoDatabaseConnectionException{
+		if( enc == null ){
+			enc = SMTPEncryption.NONE;
+		}
+		
+		appParams.setParameter("Administration.EmailSMTPEncryption", enc.toString().toUpperCase());
+	}
+	
+	/**
+	 * Get the SMTP encryption to be used for sending emails.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
+	public SMTPEncryption getEmailSMTPEncryption() throws NoDatabaseConnectionException, SQLException, InputValidationException{
+		
+		String setting = appParams.getParameter("Administration.EmailSMTPEncryption", "NONE");
+		
+		SMTPEncryption enc = SMTPEncryption.valueOf( setting.toUpperCase() );
+		
+		if( enc == null ){
+			return SMTPEncryption.NONE;
+		}
+		else{
+			return enc;
+		}
 	}
 	
 	/**
