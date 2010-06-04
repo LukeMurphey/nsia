@@ -3,8 +3,7 @@
 
 <#assign content>
 	<#assign message>
-	<p>
-	${login_banner}
+	${login_banner?replace("\n", "<br/>")}
 	<p>
 		<form method="post" action="${request.thisURL}">
 			<input class="button" type="submit" value="Accept" name="BannerCheck">
