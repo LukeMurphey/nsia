@@ -35,11 +35,23 @@ public class ScannerController extends Thread{
 	 */
 	private static int SCAN_EDIT_DELAY_MINUTES = 3;
 	
+	/*
+	 * Defines the amount of time the scanner should wait when first coming online. This is done
+	 * in order to allow the host OS to get it's network interfaces up. Otherwise, all websites
+	 * may look like they are offline since the network is not yet prepared.
+	 */
+	private static int DEFAULT_SCANNER_START_DELAY = 30 * 1000;
+	
+	// The application objects that contains the context and resources
 	private Application appRes;
+	
+	// The frequency to check for new scan jobs requiring dispatch.
 	private long loopFrequency = 10000; //10 seconds
 	
+	// The threads that are performing the scans.
 	protected Vector<Thread> scanThreads = new Vector<Thread>();
 	
+	// Defines the various states that the scanenr may be in.
 	public enum ScannerState{
 		PAUSED,
 		STARTING,
@@ -48,7 +60,6 @@ public class ScannerController extends Thread{
 		TERMINATED,
 		PAUSING
 	}
-	
 	
 	public ScannerController(Application applicationResources){
 		super("Scanner Controller");
@@ -71,6 +82,17 @@ public class ScannerController extends Thread{
 	
 	public void run(){
 		try {
+			//Start the scanner enabled if it should be setup to scan by default
+			scanningEnabled = appRes.getApplicationConfiguration().isDefaultScanningEnabled();
+			
+			/*
+			 * Delay starting the scanner immediately. Sometimes, the host OS will still be bringing the interfaces online and we don't want
+			 * this to look like the sites are offline.
+			 */
+			if( scanningEnabled ){
+				sleep(DEFAULT_SCANNER_START_DELAY);
+			}
+			
 			enterScanningLoop();
 		} catch (SQLException e) {
 			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e );
