@@ -1001,6 +1001,34 @@ public class ApplicationConfiguration {
 	}
 	
 	/**
+	 * Enable or disable whether or not the scanner is enabled by default.
+	 * @param enable
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
+	public void setDefaultScanningEnabled( boolean enable ) throws NoDatabaseConnectionException, SQLException, InputValidationException{
+		if( enable ){
+			appParams.setParameter("Scanner.DefaultEnabled", String.valueOf(1));
+		}
+		else{
+			appParams.setParameter("Scanner.DefaultEnabled", String.valueOf(0));
+		}
+	}
+	
+	/**
+	 * Return a boolean determining whether or not the scanner is on by default.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
+	public boolean isDefaultScanningEnabled() throws NoDatabaseConnectionException, SQLException, InputValidationException{
+		return appParams.getParameter("Scanner.DefaultEnabled", 0) == 1;
+	}
+	
+	/**
 	 * Gets an identifier that can be used to uniquely identify this instance. The ID is generated if one does not yet exist yet.
 	 * @return
 	 * @throws NoDatabaseConnectionException
