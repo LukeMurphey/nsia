@@ -127,7 +127,7 @@
 			<fileset dir="${dpkgdir}/" includes="**/*" />
 		</chown>
 		
-		<chgrp owner="root">
+		<chgrp group="root">
 			<fileset dir="${dpkgdir}/" includes="**/*" />
 		</chgrp>
 		
@@ -138,7 +138,7 @@
 		</exec>
 
 		<!-- 7: Copy the resulting file to bin -->
-		<copy file="${dpkgdir}/nsia-${version}.deb" tofile="bin/nsia-${version}.deb" />
+		<move file="${dpkgdir}/nsia-${version}.deb" tofile="bin/nsia-${version}.deb" />
 		
 	</target>
 	
