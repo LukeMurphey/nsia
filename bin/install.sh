@@ -31,7 +31,7 @@ echo
 echo
 echo "Step 2 of 4: Make sure that NSIA has not been configured yet"
 echo "---------------------------------------------------"
-if [ -d Database ]
+if [ -d database ]
 then
 	echo "NSIA appears to have been installed already. This install script can only be run when NSIA has not been started yet."
 	exit 1
