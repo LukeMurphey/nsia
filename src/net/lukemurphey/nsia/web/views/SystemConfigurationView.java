@@ -64,7 +64,8 @@ public class SystemConfigurationView extends View {
 		EMAIL_SMTP_ENCRYPTION("email_smtp_encryption"),
 		
 		SCANNER_HTTP_THREADS("scanner_http_threads"),
-		SCANNER_RESCAN_EDITED_RULES("scanner_rescan_edited_rules");
+		SCANNER_RESCAN_EDITED_RULES("scanner_rescan_edited_rules"),
+		SCANNER_SCAN_DEFAULT_ENABLED("scanner_scan_default_enabled");
 		
 		private String name;
 		
@@ -392,7 +393,11 @@ public class SystemConfigurationView extends View {
 				
 				else if( ParameterTitles.SCANNER_RESCAN_EDITED_RULES.equals(name) ){
 					config.setRescanOnEditEnabled( getAsBoolean(value) );
-					context.addMessage("Scanner re-scan edited rules setting updated", MessageSeverity.SUCCESS);
+					context.addMessage("Scanner re-scan setting updated", MessageSeverity.SUCCESS);
+				}
+				else if( ParameterTitles.SCANNER_SCAN_DEFAULT_ENABLED.equals(name) ){
+					config.setDefaultScanningEnabled( getAsBoolean(value) );
+					context.addMessage("Scanner default setting updated", MessageSeverity.SUCCESS);
 				}
 			}
 			catch(NoDatabaseConnectionException e){
@@ -542,6 +547,7 @@ public class SystemConfigurationView extends View {
 			Vector<Parameter> scanner_options = new Vector<Parameter>();
 			scanner_options.add( new Parameter("Maximum HTTP Scan Threads", appConfig.getMaxHTTPScanThreads(), ParameterTitles.SCANNER_HTTP_THREADS.getName(), ParameterType.INTEGER) );
 			scanner_options.add( new Parameter("Re-Scan Rules Automatically After Editing", appConfig.isRescanOnEditEnabled(), ParameterTitles.SCANNER_RESCAN_EDITED_RULES.getName(), ParameterType.BOOL) );
+			scanner_options.add( new Parameter("Scanner Default State", appConfig.isDefaultScanningEnabled(), ParameterTitles.SCANNER_SCAN_DEFAULT_ENABLED.getName(), ParameterType.BOOL) );
 			data.put("scanner_options", scanner_options);
 			
 			TemplateLoader.renderToResponse("SystemConfiguration.ftl", data, response);
