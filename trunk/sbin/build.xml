@@ -114,18 +114,26 @@
         <!-- 3.4: populate the init.d directory -->
         <copy file="etc/init.d/ubuntu/nsia.sh" tofile="${dpkgdir}/nsia-${version}/etc/init.d/nsia" />
 
-		<!-- 4: Set owner to root -->
+		<!-- 4: Set scripts to executable -->
+		<chmod file="${dpkgdir}/nsia-${version}/etc/init.d/nsia" perm="755" />
+		<chmod file="${dpkgdir}/nsia-${version}/opt/nsia/bin/run.sh" perm="755" />
+		<chmod file="${dpkgdir}/nsia-${version}/DEBIAN/postinst" perm="755" />
+		<chmod file="${dpkgdir}/nsia-${version}/DEBIAN/postrm" perm="755" />
+		<chmod file="${dpkgdir}/nsia-${version}/DEBIAN/preinst" perm="755" />
+		<chmod file="${dpkgdir}/nsia-${version}/DEBIAN/prerm" perm="755" />
+		
+		<!-- 5: Set owner to root -->
 		<chown owner="root">
 			<fileset dir="${dpkgdir}/" includes="**/*" />
 		</chown>
 		
-		<!-- 5: Call dpkg -->
-		<exec executable="dpkg" dir="${dpkgdir}/nsia-${version}" osfamily="unix">
+		<!-- 6: Call dpkg -->
+		<exec executable="dpkg" dir="${dpkgdir}" osfamily="unix">
 			<arg value="-b"/>
 			<arg value="nsia-${version}"/>
 		</exec>
 
-		<!-- 6: Copy the resulting file to bin -->
+		<!-- 7: Copy the resulting file to bin -->
 		<copy file="${dpkgdir}/nsia-${version}.deb" tofile="bin/nsia-${version}.deb" />
 		
 	</target>
