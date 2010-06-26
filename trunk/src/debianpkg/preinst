@@ -16,6 +16,11 @@ set -e
 
 case "$1" in
     install|upgrade)
+    if [ -f /etc/init.d/nsia ]
+    then
+    	/etc/init.d/nsia stop
+    	sleep 5
+    fi
     ;;
 
     abort-upgrade)
