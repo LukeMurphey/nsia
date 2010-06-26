@@ -127,6 +127,10 @@
 			<fileset dir="${dpkgdir}/" includes="**/*" />
 		</chown>
 		
+		<chgrp owner="root">
+			<fileset dir="${dpkgdir}/" includes="**/*" />
+		</chgrp>
+		
 		<!-- 6: Call dpkg -->
 		<exec executable="dpkg" dir="${dpkgdir}" osfamily="unix">
 			<arg value="-b"/>
