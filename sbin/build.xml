@@ -67,5 +67,68 @@
     	</java>
     </target>
 	
+	<target name="dpkgclean" description="Clean the files created by the Debian package creator">
+		<delete dir="java-bin/dpkg" />
+	</target>
+	
+	<target name="dpkg" description="Create a Debian package">
+		<property name="version" value="0.9.1" />
+		<property name="dpkgdir" value="java-bin/dpkg" />
+		
+		<!-- 1: Create root directory -->
+		<mkdir dir="${dpkgdir}/nsia-${version}" />
+		
+	    <!-- 2: Copy directory structure -->
+		<copy todir="${dpkgdir}/nsia-${version}/DEBIAN">
+			<fileset dir="src/debianpkg">
+				<exclude name="**/.svn/" />
+			</fileset>
+		</copy>
+		
+		<!-- 3: Add the necessary files -->
+		
+		<!-- 3.1: populate the bin directory -->
+        <copy todir="${dpkgdir}/nsia-${version}/opt/nsia/bin">
+            <fileset dir="bin" defaultexcludes="true">
+                <exclude name="**/.svn/" />
+            	<include name="nsia.jar" />
+            	<include name="run.sh" />
+            </fileset>
+        </copy>
+		
+		<!-- 3.2: populate the lib directory -->
+		<copy todir="${dpkgdir}/nsia-${version}/opt/nsia/lib">
+			  <fileset dir="lib" defaultexcludes="false">
+			    <exclude name="**/.svn/" />
+		      </fileset>
+		</copy>
+		
+        <!-- 3.3: populate the etc directory -->
+        <copy todir="${dpkgdir}/nsia-${version}/opt/nsia/etc">
+              <fileset dir="etc" defaultexcludes="false">
+                <exclude name="**/.svn/" />
+              	<exclude name="**/init.d/" />
+              </fileset>
+        </copy>
+		
+        <!-- 3.4: populate the init.d directory -->
+        <copy file="etc/init.d/ubuntu/nsia.sh" tofile="${dpkgdir}/nsia-${version}/etc/init.d/nsia" />
+
+		<!-- 4: Set owner to root -->
+		<chown owner="root">
+			<fileset dir="${dpkgdir}/" includes="**/*" />
+		</chown>
+		
+		<!-- 5: Call dpkg -->
+		<exec executable="dpkg" dir="${dpkgdir}/nsia-${version}" osfamily="unix">
+			<arg value="-b"/>
+			<arg value="nsia-${version}"/>
+		</exec>
+
+		<!-- 6: Copy the resulting file to bin -->
+		<copy file="${dpkgdir}/nsia-${version}.deb" tofile="bin/nsia-${version}.deb" />
+		
+	</target>
+	
 	<target name="buildall" depends="webarchive,jar,zip"/>
 </project>
