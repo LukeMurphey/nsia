@@ -1,5 +1,0 @@
-nsia (0.9.1-1) unstable; urgency=low
-
-  * Added ability to set the default state of the scanner (so it will automatically start when the scanner starts)
-
- -- Luke Murphey <luke@threatfactor.com>  Fri, 26 Jun 2010 01:25:00 +0500
