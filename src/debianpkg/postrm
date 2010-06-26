@@ -21,6 +21,20 @@ set -e
 
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+    
+    # Remove the startup script
+    if [ -f /etc/init.d/nsia ]
+	then
+    	update-rc.d -f nsia remove 2>/dev/null
+    	rm -f /etc/init.d/nsia
+    fi
+    
+    # Remove the application directory 
+    if [ -d /opt/nsia/ ]
+	then
+    	rm -rf /opt/nsia/
+    fi
+    
     ;;
 
     *)
