@@ -32,12 +32,30 @@ public class Upgrader {
 		this.app = application;
 	}
 	
+	public int peformUpgrades() throws UpgradeFailureException{
+		
+		// 1 -- Get the schema version so that we can determine which upgraders to run
+		SchemaVersion schemaVersion = new SchemaVersion(app);
+		
+		// 2 -- Get the upgraders that perform changes past the given version
+		List<UpgradeProcessor> list = null;
+		if( schemaVersion == null ){
+			list = UpgraderList.getInstance().getList();
+		}
+		else{
+			list = UpgraderList.getInstance().getList( schemaVersion.getMajor(), schemaVersion.getMinor(), schemaVersion.getRevision() );
+		}
+		
+		// 3 -- Perform the upgrade
+		return peformUpgrades( list );
+	}
+	
 	/**
 	 * Performs all necessary upgrades.
 	 * @return A integer indicating how many upgrades were performed.
 	 * @throws UpgradeFailureException
 	 */
-	public int peformUpgrades() throws UpgradeFailureException{
+	public int peformUpgrades( List<UpgradeProcessor> list ) throws UpgradeFailureException{
 		
 		// 1 -- Determine if an upgrade is necessary
 		if( isUpgradeNecessary() == false ){
@@ -47,19 +65,6 @@ public class Upgrader {
 		// 2 -- Perform the relevant upgraders
 		int upgradesDone = 0;
 		
-		//	 2.1 -- Get the schema version so that we can determine which upgraders to run
-		SchemaVersion schemaVersion = new SchemaVersion(app);
-		
-		//	 2.2 -- Get the upgraders that perform changes past the given version
-		List<UpgradeProcessor> list = null;
-		if( schemaVersion == null ){
-			list = UpgraderList.getInstance().getList();
-		}
-		else{
-			list = UpgraderList.getInstance().getList( schemaVersion.getMajor(), schemaVersion.getMinor(), schemaVersion.getRevision() );
-		}
-		
-		//	 2.3 -- Execute the current upgraders
 		for (UpgradeProcessor upgradeProcessor : list) {
 			if( upgradeProcessor.doUpgrade() ){
 				upgradesDone = upgradesDone + 1;
