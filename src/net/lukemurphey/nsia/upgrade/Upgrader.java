@@ -17,7 +17,20 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
  */
 public class Upgrader {
 
+	private Application app = null;
+	
 	private static Pattern versionRegex = Pattern.compile("([0-9]+)[.]([0-9]+)[.]([0-9]+)");
+	
+	public Upgrader(Application application){
+		
+		// 0 -- Precondition check
+		if( application == null ){
+			throw new IllegalArgumentException("The application reference cannot be null");
+		}
+		
+		// 1 -- Initialize the class
+		this.app = application;
+	}
 	
 	/**
 	 * Performs all necessary upgrades.
@@ -35,15 +48,15 @@ public class Upgrader {
 		int upgradesDone = 0;
 		
 		//	 2.1 -- Get the schema version so that we can determine which upgraders to run
-		SchemaVersion schemaVersion = new SchemaVersion(Application.getApplication());
+		SchemaVersion schemaVersion = new SchemaVersion(app);
 		
 		//	 2.2 -- Get the upgraders that perform changes past the given version
 		List<UpgradeProcessor> list = null;
 		if( schemaVersion == null ){
-			list = UpgraderList.getList();
+			list = UpgraderList.getInstance().getList();
 		}
 		else{
-			list = UpgraderList.getList( schemaVersion.getMajor(), schemaVersion.getMinor(), schemaVersion.getRevision() );
+			list = UpgraderList.getInstance().getList( schemaVersion.getMajor(), schemaVersion.getMinor(), schemaVersion.getRevision() );
 		}
 		
 		//	 2.3 -- Execute the current upgraders
@@ -65,7 +78,6 @@ public class Upgrader {
 	 */
 	private void setSchemaVersion() throws UpgradeFailureException{
 		
-		Application app = Application.getApplication();
 		ApplicationConfiguration appConfig = app.getApplicationConfiguration();
 		
 		try {
