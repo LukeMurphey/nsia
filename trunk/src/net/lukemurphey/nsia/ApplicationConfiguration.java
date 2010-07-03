@@ -1029,6 +1029,28 @@ public class ApplicationConfiguration {
 	}
 	
 	/**
+	 * Set the version of the database schema.
+	 * @param schemaVersion
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
+	public void setDatabaseSchemaVersion( String schemaVersion ) throws NoDatabaseConnectionException, SQLException, InputValidationException{
+		appParams.setParameter("Administration.DatabaseSchemaVersion", schemaVersion);
+	}
+	
+	/**
+	 * Get the version of the database schema.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
+	public String getDatabaseSchemaVersion() throws NoDatabaseConnectionException, SQLException, InputValidationException{
+		return appParams.getParameter("Administration.DatabaseSchemaVersion", null);
+	}
+	
+	/**
 	 * Gets an identifier that can be used to uniquely identify this instance. The ID is generated if one does not yet exist yet.
 	 * @return
 	 * @throws NoDatabaseConnectionException
