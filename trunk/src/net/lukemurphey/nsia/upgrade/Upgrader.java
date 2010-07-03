@@ -78,12 +78,48 @@ public class Upgrader {
 	}
 	
 	/**
+	 * Performs all necessary upgrades.
+	 * @param list
+	 * @param major
+	 * @param minor
+	 * @param revision
+	 * @return
+	 * @throws UpgradeFailureException
+	 */
+	public int peformUpgrades( List<UpgradeProcessor> list, int major, int minor, int revision ) throws UpgradeFailureException{
+		
+		// 1 -- Determine if an upgrade is necessary
+		if( isUpgradeNecessary( major, minor, revision ) == false ){
+			return 0;
+		}
+		
+		// 2 -- Perform the relevant upgraders
+		int upgradesDone = 0;
+		
+		for (UpgradeProcessor upgradeProcessor : list) {
+			if( upgradeProcessor.doUpgrade( ) ){
+				upgradesDone = upgradesDone + 1;
+			}
+		}
+		
+		// 3 -- Save the database schema version
+		setSchemaVersion();
+		
+		return upgradesDone;
+	}
+	
+	/**
 	 * Sets the application database schema version to the current version identifier.
 	 * @throws UpgradeFailureException
 	 */
 	private void setSchemaVersion() throws UpgradeFailureException{
 		
 		ApplicationConfiguration appConfig = app.getApplicationConfiguration();
+		
+		// No application configuration is available, thus we cannot set the schema version
+		if( appConfig == null ){
+			return;
+		}
 		
 		try {
 			appConfig.setDatabaseSchemaVersion( Application.VERSION_MAJOR + "." + Application.VERSION_MINOR + "." + Application.VERSION_REVISION );
@@ -156,7 +192,6 @@ public class Upgrader {
 	public boolean isUpgradeNecessary() throws UpgradeFailureException{
 		
 		// 1 -- Determine the current database schema version
-		Application app = Application.getApplication();
 		ApplicationConfiguration appConfig = app.getApplicationConfiguration();
 		
 		// 2 -- Get the current version
@@ -169,6 +204,11 @@ public class Upgrader {
 			throw new UpgradeFailureException(e);
 		} catch (InputValidationException e) {
 			throw new UpgradeFailureException(e);
+		}
+		
+		// If no schema version exists, then run the upgraders
+		if( ver == null ){
+			return true;
 		}
 		
 		int major = 0;
@@ -184,13 +224,26 @@ public class Upgrader {
 		}
 		
 		// 4 -- Compare the current application version to the database schema
+		return isUpgradeNecessary(major, minor, revision);
+		
+	}
+	
+	/**
+	 * Determines if an upgrade operation is necessary.
+	 * @param major
+	 * @param minor
+	 * @param revision
+	 * @return
+	 * @throws UpgradeFailureException
+	 */
+	public boolean isUpgradeNecessary( int major, int minor, int revision ) throws UpgradeFailureException{
+		// Compare the current application version to the database schema
 		if( Application.VERSION_MAJOR != major || Application.VERSION_MINOR != minor || Application.VERSION_REVISION != revision ){
 			return true;
 		}
 		else{
 			return false;
 		}
-		
 	}
 	
 }
