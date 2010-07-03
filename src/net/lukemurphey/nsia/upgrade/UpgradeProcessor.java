@@ -35,7 +35,7 @@ public abstract class UpgradeProcessor implements Comparable<UpgradeProcessor> {
 	 * Perform the upgrade process. Returns a boolean indicating if the upgrade was necessary and applied.
 	 * @return
 	 */
-	public abstract boolean doUpgrade();
+	public abstract boolean doUpgrade() throws UpgradeFailureException;
 
 	public int compareTo(UpgradeProcessor other) {
 		return compareTo( other.version_major, other.version_minor, other.version_revision );
@@ -64,6 +64,13 @@ public abstract class UpgradeProcessor implements Comparable<UpgradeProcessor> {
 		return 0;
 	}
 	
+	/**
+	 * Determines if this upgrader is intended to upgrade the schema to a version later than the given version (that is, this upgrader should be executed against the system with the given version)..
+	 * @param other_version_major
+	 * @param other_version_minor
+	 * @param other_version_revision
+	 * @return
+	 */
 	public boolean isBefore( int other_version_major, int other_version_minor, int other_version_revision) {
 		if( compareTo( other_version_major, other_version_minor, other_version_revision ) < 0 ){
 			return true;
@@ -73,6 +80,13 @@ public abstract class UpgradeProcessor implements Comparable<UpgradeProcessor> {
 		}
 	}
 	
+	/**
+	 * Determines if this upgrader is intended to upgrade the schema to a version prior than the given version (that is, this upgrader should not be executed against the system with the given version).
+	 * @param other_version_major
+	 * @param other_version_minor
+	 * @param other_version_revision
+	 * @return
+	 */
 	public boolean isAfter( int other_version_major, int other_version_minor, int other_version_revision) {
 		if( compareTo( other_version_major, other_version_minor, other_version_revision ) > 0 ){
 			return true;
@@ -82,6 +96,19 @@ public abstract class UpgradeProcessor implements Comparable<UpgradeProcessor> {
 		}
 	}
 
+	/**
+	 * Determines if the schema upgrader has a version at all. If not, then this upgrader should be executed every time an upgrade is requested.
+	 * @return
+	 */
+	public boolean hasVersion(){
+		if( version_major == 0 && version_minor == 0 && version_revision == 0 ){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	
 	/**
 	 * Compare the two upgrader processors to each other.
 	 * @param o1
