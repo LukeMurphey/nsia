@@ -8,9 +8,6 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
-
-
-
 import net.lukemurphey.nsia.ApplicationStateMonitor.ApplicationStateDataPoint;
 import net.lukemurphey.nsia.DatabaseInitializer.DatabaseInitializationState;
 import net.lukemurphey.nsia.WorkerThread.State;
@@ -23,6 +20,8 @@ import net.lukemurphey.nsia.eventlog.MessageFormatter;
 import net.lukemurphey.nsia.eventlog.MessageFormatterFactory;
 import net.lukemurphey.nsia.eventlog.SyslogNGAppender;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.upgrade.UpgradeFailureException;
+import net.lukemurphey.nsia.upgrade.Upgrader;
 
 import org.apache.commons.dbcp.*;
 
@@ -45,7 +44,7 @@ public final class Application {
 	
 	public static final int VERSION_MAJOR = 0;
 	public static final int VERSION_MINOR = 9;
-	public static final int VERSION_REVISION = 1;
+	public static final int VERSION_REVISION = 2;
 	public static final String VERSION_STATUS = null;
 	public static final String DATABASE_LOCATION = "../var/database";
 	
@@ -260,6 +259,21 @@ public final class Application {
 		// 5 -- Create the application parameter and configuration manager
 		appConfig = new ApplicationConfiguration( this );
 		eventlog.setApplication(this);
+		
+		// 6 -- Perform the upgrade if requested
+		try {
+			Upgrader upgrader = new Upgrader(this);
+			upgrader.peformUpgrades();
+		} catch (UpgradeFailureException e) {
+			logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
+			System.err.println("An error occurred while performing the upgrade");
+		}
+		
+		// If the upgrade option was provided, then the application should terminate after performing the upgrade option
+		if( commandLineData.getBoolean("upgrade", false) ){
+			shutdown(true);
+			System.exit(0);
+		}
 		
 		try {
 			eventlog.loadHooks();
@@ -706,17 +720,25 @@ public final class Application {
 			
 		jsap.registerParameter(opt2);*/
 		
-		// 2 -- GUI mode option (-gui)
+		// 4 -- GUI mode option (-gui)
 		Switch sw2 = new Switch("gui").setShortFlag('g').setLongFlag("gui");
 		sw2.setHelp("Starts the application with the GUI interface");
 		
 		jsap.registerParameter(sw2);
 		
-		// 3 -- Service mode option (-service)
+		// 5 -- Service mode option (-service)
 		Switch sw3 = new Switch("service").setShortFlag('s').setLongFlag("service");
 		sw3.setHelp("Starts the application in service mode");
 		
 		jsap.registerParameter(sw3);
+		
+		// 6 -- Upgrade schema option
+		Switch sw4 = new Switch("upgrade")
+        		.setShortFlag('u')
+        		.setLongFlag("upgrade");
+		sw4.setHelp("Perform database schema upgrades and exit");
+		
+		jsap.registerParameter(sw4);
 		
 		// Return the processor
 		return jsap;
@@ -902,7 +924,7 @@ public final class Application {
 	 *
 	 */
 	public void shutdown(){
-		shutdown( ShutdownRequestSource.UNSPECIFIED );
+		shutdown( ShutdownRequestSource.UNSPECIFIED, false );
 	}
 	
 	/**
@@ -965,9 +987,25 @@ public final class Application {
 	
 	/**
 	 * Causes the application to shut itself down and terminate.
+	 * @param shutdownCommandSource
+	 */
+	public void shutdown( ShutdownRequestSource shutdownCommandSource ){
+		shutdown( shutdownCommandSource, true );
+	}
+	
+	/**
+	 * Causes the application to shut itself down and terminate.
+	 * @param shutdownCommandSource
+	 */
+	public void shutdown( boolean hideOutput ){
+		shutdown( ShutdownRequestSource.UNSPECIFIED, true );
+	}
+	
+	/**
+	 * Causes the application to shut itself down and terminate.
 	 *
 	 */
-	public void shutdown( ShutdownRequestSource shutdownCommandSource ){ // NOPMD by luke on 5/26/07 10:47 AM
+	public void shutdown( ShutdownRequestSource shutdownCommandSource, boolean hideOutput ){ // NOPMD by luke on 5/26/07 10:47 AM
 		
 		synchronized( shutdownInProgress ){
 			
@@ -977,12 +1015,18 @@ public final class Application {
 			}
 			
 			shutdownInProgress = Boolean.TRUE;
-			reindexer.terminate();
-			timer.cancel();
 			
-			if( shutdownCommandSource == ShutdownRequestSource.API ){
+			if( reindexer != null ){
+				reindexer.terminate();
+			}
+			
+			if( timer != null ){
+				timer.cancel();
+			}
+			
+			if( !hideOutput && shutdownCommandSource == ShutdownRequestSource.API ){
 				System.out.print("System is shutting down (received shutdown command from API interface)...");
-			}else if( shutdownCommandSource == ShutdownRequestSource.UNSPECIFIED ){
+			}else if( !hideOutput && shutdownCommandSource == ShutdownRequestSource.UNSPECIFIED ){
 				System.out.print("System is shutting down...");
 			}
 			
@@ -1031,7 +1075,9 @@ public final class Application {
 				}
 			}
 			
-			System.out.println("Done");
+			if( !hideOutput){
+				System.out.println("Done");
+			}
 			
 			// 6 -- Shutdown console listeners
 			/*
