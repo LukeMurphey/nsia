@@ -468,7 +468,7 @@ public class SystemConfigurationView extends View {
 			// 5 -- Add the Session configuration options
 			Vector<Parameter> session_options = new Vector<Parameter>();
 			session_options.add( new Parameter("Session Inactivity Threshold", appConfig.getSessionInactivityThreshold(), ParameterTitles.SESSION_INACTIVITY_THRESHOLD.getName(), ParameterType.INTEGER) );
-			session_options.add( new Parameter("Maximum Session Identifier Lifetime", appConfig.getSessionLifetime(), ParameterTitles.SESSION_IDENTIFIER_LIFETIME.getName(), ParameterType.INTEGER) );
+			session_options.add( new Parameter("Maximum Session Lifetime", appConfig.getSessionLifetime(), ParameterTitles.SESSION_LIFETIME.getName(), ParameterType.INTEGER) );
 			session_options.add( new Parameter("Session Identifier Lifetime", appConfig.getSessionIdentifierLifetime(), ParameterTitles.SESSION_IDENTIFIER_LIFETIME.getName(), ParameterType.INTEGER) );
 			data.put("session_options", session_options);
 
