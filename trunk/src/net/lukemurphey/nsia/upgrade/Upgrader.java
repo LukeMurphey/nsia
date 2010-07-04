@@ -162,11 +162,13 @@ public class Upgrader {
 			}
 			
 			// 3 -- Parse the version
-			Matcher m = versionRegex.matcher(ver);
-			if( m.groupCount() == 3 ){
-				major = Integer.parseInt( m.group(0) );
-				minor = Integer.parseInt( m.group(1) );
-				revision = Integer.parseInt( m.group(2) );
+			if( ver != null ){
+				Matcher m = versionRegex.matcher(ver);
+				if( m.matches() && m.groupCount() == 3 ){
+					major = Integer.parseInt( m.group(1) );
+					minor = Integer.parseInt( m.group(2) );
+					revision = Integer.parseInt( m.group(3) );
+				}
 			}
 		}
 		
@@ -217,10 +219,10 @@ public class Upgrader {
 		
 		// 3 -- Parse the version
 		Matcher m = versionRegex.matcher(ver);
-		if( m.groupCount() == 3 ){
-			major = Integer.parseInt( m.group(0) );
-			minor = Integer.parseInt( m.group(1) );
-			revision = Integer.parseInt( m.group(2) );
+		if( m.matches() && m.groupCount() == 3 ){
+			major = Integer.parseInt( m.group(1) );
+			minor = Integer.parseInt( m.group(2) );
+			revision = Integer.parseInt( m.group(3) );
 		}
 		
 		// 4 -- Compare the current application version to the database schema
