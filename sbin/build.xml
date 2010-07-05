@@ -55,7 +55,7 @@
 	
     <target name="downloaddefinitions" description="Download the latest definitions set and export into the NSIA directory (so it can be included in the NSIA.jar)">
     	<java classname="net.lukemurphey.nsia.support.DefinitionDownload">
-    		<arg value="${licensekey}" />
+    		<arg value="${value.build.licensekey}" />
     		<arg value="-f" />
     		<arg value="../src/net/lukemurphey/nsia/scan/default_definitions.xml" />
             <classpath>
@@ -69,16 +69,16 @@
     </target>
 	
 	<target name="dpkgclean" description="Clean the files created by the Debian package creator">
-		<delete dir="java-bin/dpkg" />
+		<delete dir="${value.build.debianpackage.directory}" />
 	</target>
 	
 	<target name="dpkg" description="Create a Debian package">
 		
 		<!-- 1: Create root directory -->
-		<mkdir dir="${dpkgdir}/nsia-${version}" />
+		<mkdir dir="${value.build.debianpackage.directory}/nsia-${value.build.version}" />
 		
 	    <!-- 2: Copy directory structure -->
-		<copy todir="${dpkgdir}/nsia-${version}/DEBIAN">
+		<copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/DEBIAN">
 			<fileset dir="src/debianpkg">
 				<exclude name="**/.svn/" />
 			</fileset>
@@ -87,7 +87,7 @@
 		<!-- 3: Add the necessary files -->
 		
 		<!-- 3.1: populate the bin directory -->
-        <copy todir="${dpkgdir}/nsia-${version}/opt/nsia/bin">
+        <copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/bin">
             <fileset dir="bin" defaultexcludes="true">
                 <exclude name="**/.svn/" />
             	<include name="nsia.jar" />
@@ -96,14 +96,14 @@
         </copy>
 		
 		<!-- 3.2: populate the lib directory -->
-		<copy todir="${dpkgdir}/nsia-${version}/opt/nsia/lib">
+		<copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/lib">
 			  <fileset dir="lib" defaultexcludes="false">
 			    <exclude name="**/.svn/" />
 		      </fileset>
 		</copy>
 		
         <!-- 3.3: populate the etc directory -->
-        <copy todir="${dpkgdir}/nsia-${version}/opt/nsia/etc">
+        <copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/etc">
               <fileset dir="etc" defaultexcludes="false">
                 <exclude name="**/.svn/" />
               	<exclude name="**/init.d/" />
@@ -111,33 +111,33 @@
         </copy>
 		
         <!-- 3.4: populate the init.d directory -->
-        <copy file="etc/init.d/ubuntu/nsia.sh" tofile="${dpkgdir}/nsia-${version}/etc/init.d/nsia" />
+        <copy file="etc/init.d/ubuntu/nsia.sh" tofile="${value.build.debianpackage.directory}/nsia-${value.build.version}/etc/init.d/nsia" />
 
 		<!-- 4: Set scripts to executable -->
-		<chmod file="${dpkgdir}/nsia-${version}/etc/init.d/nsia" perm="755" />
-		<chmod file="${dpkgdir}/nsia-${version}/opt/nsia/bin/run.sh" perm="755" />
-		<chmod file="${dpkgdir}/nsia-${version}/DEBIAN/postinst" perm="755" />
-		<chmod file="${dpkgdir}/nsia-${version}/DEBIAN/postrm" perm="755" />
-		<chmod file="${dpkgdir}/nsia-${version}/DEBIAN/preinst" perm="755" />
-		<chmod file="${dpkgdir}/nsia-${version}/DEBIAN/prerm" perm="755" />
+		<chmod file="${value.build.debianpackage.directory}/nsia-${value.build.version}/etc/init.d/nsia" perm="755" />
+		<chmod file="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/bin/run.sh" perm="755" />
+		<chmod file="${value.build.debianpackage.directory}/nsia-${value.build.version}/DEBIAN/postinst" perm="755" />
+		<chmod file="${value.build.debianpackage.directory}/nsia-${value.build.version}/DEBIAN/postrm" perm="755" />
+		<chmod file="${value.build.debianpackage.directory}/nsia-${value.build.version}/DEBIAN/preinst" perm="755" />
+		<chmod file="${value.build.debianpackage.directory}/nsia-${value.build.version}/DEBIAN/prerm" perm="755" />
 		
 		<!-- 5: Set owner to root -->
 		<chown owner="root">
-			<fileset dir="${dpkgdir}/" includes="**/*" />
+			<fileset dir="${value.build.debianpackage.directory}/" includes="**/*" />
 		</chown>
 		
 		<chgrp group="root">
-			<fileset dir="${dpkgdir}/" includes="**/*" />
+			<fileset dir="${value.build.debianpackage.directory}/" includes="**/*" />
 		</chgrp>
 		
 		<!-- 6: Call dpkg -->
-		<exec executable="dpkg" dir="${dpkgdir}" osfamily="unix">
+		<exec executable="dpkg" dir="${value.build.debianpackage.directory}" osfamily="unix">
 			<arg value="-b"/>
-			<arg value="nsia-${version}"/>
+			<arg value="nsia-${value.build.version}"/>
 		</exec>
 
 		<!-- 7: Copy the resulting file to bin -->
-		<move file="${dpkgdir}/nsia-${version}.deb" tofile="bin/nsia-${version}.deb" />
+		<move file="${value.build.debianpackage.directory}/nsia-${value.build.version}.deb" tofile="bin/nsia-${value.build.version}.deb" />
 		
 	</target>
 	
