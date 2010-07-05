@@ -10,6 +10,7 @@
         	basedir="java-bin/" 
         	manifest="sbin/Manifest.txt"
         	excludes="*.svn"
+        	includes="net/**"
         />
     </target>
 	
