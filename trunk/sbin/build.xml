@@ -2,7 +2,9 @@
 	<!-- <target name="compile">
     <javac srcdir="." />
   </target> -->
-  
+	<property file="sbin/default.properties"/>
+	<property file="sbin/local.properties"/>
+	
     <target name="jar" description="Create core NSIA JAR file">
         <jar destfile="bin/nsia.jar"
         	basedir="java-bin/" 
@@ -52,7 +54,6 @@
 	</target>
 	
     <target name="downloaddefinitions" description="Download the latest definitions set and export into the NSIA directory (so it can be included in the NSIA.jar)">
-    	<property file="sbin/local.build.properties"></property>
     	<java classname="net.lukemurphey.nsia.support.DefinitionDownload">
     		<arg value="${licensekey}" />
     		<arg value="-f" />
@@ -72,8 +73,6 @@
 	</target>
 	
 	<target name="dpkg" description="Create a Debian package">
-		<property name="version" value="0.9.1" />
-		<property name="dpkgdir" value="java-bin/dpkg" />
 		
 		<!-- 1: Create root directory -->
 		<mkdir dir="${dpkgdir}/nsia-${version}" />
