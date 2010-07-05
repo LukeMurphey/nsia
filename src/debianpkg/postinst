@@ -37,7 +37,7 @@ then
     #Upgrade the database schema...
     echo "Upgrading..."
     cd /opt/nsia/bin
-    java nsia.jar --upgrade
+    java -jar nsia.jar --upgrade
 else
 	# 1.1 -- Get the username
 	echo "Enter a username for the administrator account. Note that the username can contain letters, numbers, dashes and periods:"
