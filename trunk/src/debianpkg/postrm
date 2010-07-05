@@ -23,11 +23,7 @@ case "$1" in
     purge|remove|abort-install|disappear)
     
     # Remove the startup script
-    if [ -f /etc/init.d/nsia ]
-	then
-    	update-rc.d -f nsia remove 2>/dev/null
-    	rm -f /etc/init.d/nsia
-    fi
+    update-rc.d -f nsia remove 2>/dev/null
     
     # Remove the application directory 
     if [ -d /opt/nsia/ ]
@@ -36,7 +32,12 @@ case "$1" in
     fi
     
     ;;
-
+    upgrade)
+    #Ignore
+    ;;
+    failed-upgrade|abort-upgrade)
+	#Ignore
+	;;
     *)
         echo "postrm called with unknown argument \`$1'" >&2
         exit 1
