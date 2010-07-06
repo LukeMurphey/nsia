@@ -78,7 +78,7 @@ public class ManagerServiceBase : ServiceBase
         }
         catch (Exception e)
         {
-            EventLog.WriteEntry(APPLICATION_NAME, "NSIA could not be start: " + e.Message, EventLogEntryType.Error);
+            EventLog.WriteEntry(APPLICATION_NAME, "NSIA could not be started: " + e.Message, EventLogEntryType.Error);
             this.Stop();
         }
     }
