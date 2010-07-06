@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ThreatFactor NSIA"
-!define PRODUCT_VERSION "0.9.1"
+!define PRODUCT_VERSION "0.9.2"
 !define PRODUCT_PUBLISHER "ThreatFactor"
 !define PRODUCT_WEB_SITE "http://ThreatFactor.com"
 
@@ -84,6 +84,9 @@ Section "MainSection" SEC01
   ; Check for a valid JRE first and try to install it
   Call GetJRE
   Pop $JREPATH
+  
+  ; Stop the NSIA service (if it is running)
+  nsSCM::Stop "NSIA"
   
   SetOverwrite try
   CreateDirectory "$INSTDIR\var"
@@ -329,9 +332,14 @@ Function LoginPasswordForm
 
   #${NSD_CreateGroupBox} 0 30u 75% 60u "Password:"
   #Pop $0
-
-  nsDialogs::Show
-
+  
+  IfFileExists $INSTDIR\var\database DatabaseExists NoDatabaseExists
+  
+  NoDatabaseExists:
+    nsDialogs::Show
+  
+  DatabaseExists:
+    ;MessageBox MB_OK "$INSTDIR\var\database already exists!"
 FunctionEnd
 
 Function LoginPasswordFormLeave
@@ -576,12 +584,19 @@ FunctionEnd
 
 Function CompleteInstall
 
-  ; change for your purpose (-jar etc.)
-  ;${GetParameters} $1
-  #StrCpy $0 '"$R0" -classpath "${CLASSPATH}" ${CLASS} $1'
-  StrCpy $0 '"$JREPATH" -jar "$INSTDIR/bin/nsia.jar" --install "$LOGINNAMETEXT" "$LOGINNAMETEXT" "$PASSWORDTEXT"'
+  ; Run the upgrade call if the database already exists (since this indicates the software is being upgraded).
+  ; Otherwise, run the install method to initialize the database and setup the admin account.
+  IfFileExists $INSTDIR\var\database DatabaseExists NoDatabaseExists
   
-  #SetOutPath $EXEDIR
+  DatabaseExists:
+    StrCpy $0 '"$JREPATH" -jar "$INSTDIR/bin/nsia.jar" --upgrade'
+    goto Done
+    
+  NoDatabaseExists:
+    StrCpy $0 '"$JREPATH" -jar "$INSTDIR/bin/nsia.jar" --install "$LOGINNAMETEXT" "$LOGINNAMETEXT" "$PASSWORDTEXT"'
+  
+  Done:
+  
   ExecWait $0
 FunctionEnd
 
