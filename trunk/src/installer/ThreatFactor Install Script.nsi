@@ -160,7 +160,7 @@ Section "MainSection" SEC01
   
   ; Install the service
   ; In regards to the fourth argument: 3 is for manual start, 2 is for automatic start
-  nsSCM::Install "NSIA" "ThreatFactor NSIA" 16 3 "$INSTDIR\bin\ThreatFactor NSIA Service.exe" "" "Tcpip" "" ""
+  nsSCM::Install "NSIA" "ThreatFactor NSIA" 16 3 '"$INSTDIR\bin\ThreatFactor NSIA Service.exe"' "" "Tcpip" "" ""
 
   ; Finalize the installer
   Call CompleteInstall
