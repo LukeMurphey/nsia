@@ -12,6 +12,8 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 
 /**
  * This class maintains a list of errors noted with definitions.
@@ -96,11 +98,9 @@ public class DefinitionErrorList {
 			errorsNoted = null;
 			
 		} catch (NoDatabaseConnectionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Application.getApplication().getEventLog().logExceptionEvent(new EventLogMessage(EventType.DATABASE_FAILURE), e);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Application.getApplication().getEventLog().logExceptionEvent(new EventLogMessage(EventType.SQL_EXCEPTION), e);
 		}
 	}
 	
