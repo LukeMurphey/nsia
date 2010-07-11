@@ -45,7 +45,7 @@ public abstract class UpgradeProcessor implements Comparable<UpgradeProcessor> {
 	 * Perform the upgrade process. Returns a boolean indicating if the upgrade was necessary and applied.
 	 * @return
 	 */
-	public abstract boolean doUpgrade() throws UpgradeFailureException;
+	public abstract boolean doUpgrade( Application application ) throws UpgradeFailureException;
 
 	public int compareTo(UpgradeProcessor other) {
 		return compareTo( other.version_major, other.version_minor, other.version_revision );
