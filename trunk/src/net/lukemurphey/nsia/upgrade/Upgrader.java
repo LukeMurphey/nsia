@@ -66,7 +66,7 @@ public class Upgrader {
 		int upgradesDone = 0;
 		
 		for (UpgradeProcessor upgradeProcessor : list) {
-			if( upgradeProcessor.doUpgrade() ){
+			if( upgradeProcessor.doUpgrade( app ) ){
 				upgradesDone = upgradesDone + 1;
 			}
 		}
@@ -97,7 +97,7 @@ public class Upgrader {
 		int upgradesDone = 0;
 		
 		for (UpgradeProcessor upgradeProcessor : list) {
-			if( upgradeProcessor.doUpgrade( ) ){
+			if( upgradeProcessor.doUpgrade( app ) ){
 				upgradesDone = upgradesDone + 1;
 			}
 		}
