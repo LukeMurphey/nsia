@@ -1,5 +1,15 @@
 package net.lukemurphey.nsia.upgrade;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+
+import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.Application.DatabaseAccessType;
+
 /**
  * This class performs an upgrade between the current schema and the next one.
  * 
@@ -119,4 +129,51 @@ public abstract class UpgradeProcessor implements Comparable<UpgradeProcessor> {
 		return o1.compareTo(o2);
 	}
 	
+	/**
+	 * Determine if the given column exists in the database.
+	 * @param app
+	 * @param table
+	 * @param column
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
+	protected static boolean hasColumn(Application app, String table, String column ) throws NoDatabaseConnectionException, SQLException{
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		
+		try{
+			connection = app.getDatabaseConnection(DatabaseAccessType.ADMIN);
+			
+			statement = connection.prepareStatement("Select * from ?");
+			statement.setString(1, table);
+			statement.setMaxRows(1);
+			result = statement.executeQuery();
+			
+			ResultSetMetaData metaData = result.getMetaData();
+			
+			for (int i = 1; i <= metaData.getColumnCount(); i++) {
+				if( metaData.getColumnName(1).toLowerCase() == column.toLowerCase() ){
+					return true;
+				}
+			}
+		}
+		finally{
+			if( connection != null ){
+				connection.close();
+			}
+			
+			if( statement != null ){
+				statement.close();
+			}
+			
+			if( result != null ){
+				result.close();
+			}
+		}
+		
+		return false;
+	}
 }
