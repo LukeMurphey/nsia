@@ -12,6 +12,7 @@ import net.lukemurphey.nsia.SiteGroupScanResult;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.Definition.Severity;
 import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
 
@@ -55,17 +56,22 @@ public class ScanData  {
 			Vector<SiteGroupScanResult> siteGroupResultsVector = new Vector<SiteGroupScanResult>(); 
 			
 			while( siteGroupResultSet.next() ){
+				
 				SiteGroupScanResult currentResult;
+				
 				try {
 					currentResult = getSiteGroupStatus( siteGroupResultSet.getInt("SiteGroupID") );
 				} catch (InputValidationException e) {
-					currentResult = null;//TODO Log the error, then just skip this entry
+					Application.getApplication().getEventLog().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR), e);
+					currentResult = null;
 				}catch (NotFoundException e) {
-					currentResult = null;//TODO Log the error, then just skip this entry
+					Application.getApplication().getEventLog().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR), e);
+					currentResult = null;
 				}
 				
-				if( currentResult != null )
+				if( currentResult != null ){
 					siteGroupResultsVector.add(currentResult);
+				}
 			}
 			
 			//	 1.2 -- Produce the resulting array
