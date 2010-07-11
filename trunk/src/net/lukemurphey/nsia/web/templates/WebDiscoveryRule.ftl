@@ -8,6 +8,7 @@
     <#if (form_errors??)>
     <@getFormErrors form_errors=form_errors />
     </#if>
+    
     <script src="/media/misc/codepress/codepress.js" type="text/javascript"></script>
     <script type="text/javascript">
         function submitEditorForm(editorform){
@@ -15,6 +16,108 @@
             document.editorform.submit();
             return true;
         }
+        
+        function getDomain (thestring) {
+            //simple function that matches the beginning of a URL
+            //in a string and then returns the domain.
+            var urlpattern = new RegExp("(http|ftp|https)://(.*?)(/.*)?$");
+            var parsedurl = thestring.match(urlpattern);
+        
+            if( parsedurl && parsedurl.length >= 2){
+                return parsedurl[2];
+            }
+            else{
+                return null;
+            }
+        }
+        
+        function stripSubDomain( url ){
+            
+            var parts = url.split(".");
+            
+            if( parts.length >= 2 ){
+                return parts[parts.length-2] + "." + parts[parts.length-1] 
+            }
+            
+            return null;
+        }
+        
+        function getMinimalDomain( urls ){
+            var coredomain = null;
+            var domain = null;
+            
+            var allcoreDomainsMatch = true;
+            var allDomainsMatch = true;
+            
+            for( var c = 0; c < urls.length; c++ ){
+            
+                var url = getDomain(urls[c]);
+                
+                //If the URL is null (did not parse), then do not bother processing it
+                if( url != null ){
+                    
+                    // Set the baseline domain that will be used to perform the search
+                    if( c == 0 ){
+                        domain = url;
+                        coredomain = stripSubDomain(url);
+                    }
+                    else{
+                        
+                        // Make sure the URL is not empty
+                        if( $.trim( url ).length == 0 ){
+                            //Ignore this, it is empty
+                        }
+                        
+                        // Determine if the core domain is not equivalent
+                        else if( stripSubDomain(url) != coredomain ){
+                            allcoreDomainsMatch = false;
+                            allDomainsMatch = false;
+                        }
+                        
+                        // Determine if the sub-domain is not equivalent
+                        else if( domain != url ){
+                            allDomainsMatch = false;
+                        }
+                    }
+                }
+            }
+            
+            if( allDomainsMatch ){
+                return domain;
+            }
+            else if(allcoreDomainsMatch){
+                return coredomain;
+            }
+            else{
+                return "";
+            }
+        }
+        
+        $(document).ready(function() {
+            $("input[name=Domain]").focus( function() {
+                
+                if( $("input[name=Domain]").val().length == 0 ){
+                
+                    urls = cp1.getCode();
+                    urls = urls.toLowerCase();
+                    urls = urls.split("\n");
+                    filter = getMinimalDomain(urls);
+                    
+                    if( filter == null ){
+                        filter = "";
+                    }
+                    else if( filter.length == 0 ){
+                        filter = "*";
+                    }
+                    else{
+                        filter = "*" + filter + "*";
+                    }
+                    
+                    $("input[name=Domain]").val(filter);
+                }
+            });
+        });
+        
     </script>
     <form name="editorform" id="editorform" onSubmit="return submitEditorForm(this.form)" action="<#if rule??><@url name="rule_editor" args=["Edit", rule.ruleId]/><#else><@url name="rule_editor" args=["New"]/></#if>" method="post">
         <input type="hidden" name="StartAddresses2" value="<#if request.getParameter("StartAddresses")??>${request.getParameter("StartAddresses")?html}<#elseif rule??><#list rule.seedUrls as url>${url}<@endline /></#list></#if>">
