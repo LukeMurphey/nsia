@@ -205,6 +205,7 @@ public class ApiScannerController extends ApiHandler{
 		
 		//	0.1 -- Permission and right check
 		UserDescriptor userDescriptor = getUserInfo( sessionIdentifier );
+		
 		try {
 			ScanRule scanRule = ScanRuleLoader.getScanRule(ruleId);
 			long ruleObjectId = scanRule.getObjectId();
@@ -216,7 +217,7 @@ public class ApiScannerController extends ApiHandler{
 		} catch (SQLException e) {
 			appRes.logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 			throw new GeneralizedException();
-		} catch (Exception e) {//TODO Replace this exception with code that will log it (for potential remediation) 
+		} catch (Exception e) {
 			
 			appRes.logExceptionEvent( new EventLogMessage(EventLogMessage.EventType.OPERATION_FAILED,
 					new EventLogField[]{
