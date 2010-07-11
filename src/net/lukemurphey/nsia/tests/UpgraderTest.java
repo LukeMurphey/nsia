@@ -28,7 +28,7 @@ public class UpgraderTest extends TestCase {
 		UpgradeProcessor p1 = new UpgradeProcessor(1,0,1) {
 			
 			@Override
-			public boolean doUpgrade() {
+			public boolean doUpgrade( Application app ) {
 				return true;
 			}
 		};
