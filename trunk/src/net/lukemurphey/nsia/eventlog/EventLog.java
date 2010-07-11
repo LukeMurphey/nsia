@@ -130,7 +130,7 @@ public class EventLog {
 		
 		// 1 -- Configure the Apache logger
 		Logger apacheLogger = Logger.getLogger("org.apache");
-		apacheLogger.setLevel(EventLogSeverity.OFF);//TODO Replace with application specific log types
+		apacheLogger.setLevel(EventLogSeverity.OFF);
 		
 		Logger httpClientLogger = Logger.getLogger("httpclient");
 		httpClientLogger.setLevel(EventLogSeverity.OFF);		
