@@ -4,7 +4,7 @@
 <head>
     <#if extrahead??>
         <#list extrahead as head>
-            ${head}
+${head}
         </#list>
     </#if>
     <link rel="shortcut icon" href="/media/img/16_appicon.ico" type="image/x-icon">
