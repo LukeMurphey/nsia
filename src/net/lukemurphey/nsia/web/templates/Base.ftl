@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
     <#if extrahead??>
         <#list extrahead as head>
-            ${head}
+${head}
         </#list>
     </#if>
     <link rel="shortcut icon" href="/media/img/16_appicon.ico" type="image/x-icon">
