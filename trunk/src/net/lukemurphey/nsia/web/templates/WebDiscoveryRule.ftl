@@ -8,8 +8,8 @@
     <#if (form_errors??)>
     <@getFormErrors form_errors=form_errors />
     </#if>
+    <#assign extrahead=["<script type=\"text/javascript\" language=\"javascript\" src=\"/media/misc/codepress/codepress.js\"></script>"] />
     
-    <script src="/media/misc/codepress/codepress.js" type="text/javascript"></script>
     <script type="text/javascript">
         function submitEditorForm(editorform){
             document.editorform.StartAddresses2.value = cp1.getCode();
