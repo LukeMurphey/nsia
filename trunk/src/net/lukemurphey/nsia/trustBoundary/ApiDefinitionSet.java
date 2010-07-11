@@ -345,7 +345,7 @@ public class ApiDefinitionSet extends ApiHandler {
 			return DefinitionArchive.getLatestAvailableDefinitionSetID();
 		}
 		catch(Exception e){
-			//TODO log error when getting new definitions
+			Application.getApplication().getEventLog().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR), e);
 			throw new GeneralizedException(e);
 		}
 		
