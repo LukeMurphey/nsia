@@ -18,18 +18,30 @@ public class ScanRuleCreatedTimestamps extends UpgradeProcessor {
 	
 	@Override
 	public boolean doUpgrade( Application app ) throws UpgradeFailureException {
-		int updatedRows = 0;
+		int updated = 0;
+		
+		Connection conn = null;
+		PreparedStatement statement = null;
+		PreparedStatement statement2 = null;
 		
 		try{
 			if( app.isUsingInternalDatabase() ){
 				
-				Connection conn = app.getDatabaseConnection(DatabaseAccessType.ADMIN);
-				PreparedStatement statement = conn.prepareStatement("ALTER TABLE ScanRule ADD Created TimeStamp default NULL");
-				PreparedStatement statement2 = conn.prepareStatement("ALTER TABLE ScanRule ADD Modified TimeStamp default NULL");
+				conn = app.getDatabaseConnection(DatabaseAccessType.ADMIN);
+				statement = conn.prepareStatement("ALTER TABLE ScanRule ADD Created TimeStamp default NULL");
+				statement2 = conn.prepareStatement("ALTER TABLE ScanRule ADD Modified TimeStamp default NULL");
 				
 				try{
-					updatedRows = statement.executeUpdate();
-					updatedRows = updatedRows + statement2.executeUpdate();
+					
+					if( hasColumn(app, "ScanRule", "Created") == false ){
+						statement.executeUpdate();
+						updated = updated + 1;
+					}
+					
+					if( hasColumn(app, "ScanRule", "Modified") == false ){
+						statement2.executeUpdate();
+						updated = updated + 1;
+					}
 				}
 				finally{
 					if( conn != null ){
@@ -54,8 +66,8 @@ public class ScanRuleCreatedTimestamps extends UpgradeProcessor {
 			throw new UpgradeFailureException("Exception throw while attempting to add the 'created' and 'updated' columns to the scan rule table", e);
 		}
 		
-		// Determine if any rules were updated.
-		if( updatedRows > 0 ){
+		// Determine if any tables were updated.
+		if( updated > 0 ){
 			return true;
 		}
 		else{
