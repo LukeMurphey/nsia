@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.upgrade.UpgradeProcessor;
 import junit.framework.TestCase;
 
@@ -13,17 +14,18 @@ public class UpgradeProcessorTest extends TestCase {
 		
 		// 1 -- Create the upgraders
 		UpgradeProcessor p1 = new UpgradeProcessor(1,0,0) {
-			
+
 			@Override
-			public boolean doUpgrade() {
-				return true;
+			public boolean doUpgrade(Application app) {
+				return false;
 			}
+			
 		};
 		
 		UpgradeProcessor p2 = new UpgradeProcessor(1,0,2) {
 			
 			@Override
-			public boolean doUpgrade() {
+			public boolean doUpgrade(Application app) {
 				return true;
 			}
 		};
@@ -31,7 +33,7 @@ public class UpgradeProcessorTest extends TestCase {
 		UpgradeProcessor p3 = new UpgradeProcessor(2,0,1) {
 			
 			@Override
-			public boolean doUpgrade() {
+			public boolean doUpgrade(Application app) {
 				return true;
 			}
 		};
@@ -39,7 +41,7 @@ public class UpgradeProcessorTest extends TestCase {
 		UpgradeProcessor p4 = new UpgradeProcessor(2,2,1) {
 			
 			@Override
-			public boolean doUpgrade() {
+			public boolean doUpgrade( Application app ) {
 				return true;
 			}
 		};
@@ -47,7 +49,7 @@ public class UpgradeProcessorTest extends TestCase {
 		UpgradeProcessor p5 = new UpgradeProcessor(3,0,0) {
 			
 			@Override
-			public boolean doUpgrade() {
+			public boolean doUpgrade( Application app ) {
 				return true;
 			}
 		};

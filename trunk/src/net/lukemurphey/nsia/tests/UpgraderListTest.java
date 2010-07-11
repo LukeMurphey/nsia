@@ -3,6 +3,7 @@ package net.lukemurphey.nsia.tests;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.upgrade.UpgradeProcessor;
 import net.lukemurphey.nsia.upgrade.UpgraderList;
 import junit.framework.TestCase;
@@ -19,7 +20,7 @@ public class UpgraderListTest extends TestCase {
 		UpgradeProcessor p1 = new UpgradeProcessor(1,0,0) {
 			
 			@Override
-			public boolean doUpgrade() {
+			public boolean doUpgrade( Application app ) {
 				return true;
 			}
 		};
@@ -27,7 +28,7 @@ public class UpgraderListTest extends TestCase {
 		UpgradeProcessor p2 = new UpgradeProcessor(1,0,2) {
 			
 			@Override
-			public boolean doUpgrade() {
+			public boolean doUpgrade( Application app ) {
 				return true;
 			}
 		};
@@ -35,7 +36,7 @@ public class UpgraderListTest extends TestCase {
 		UpgradeProcessor p3 = new UpgradeProcessor(2,0,1) {
 			
 			@Override
-			public boolean doUpgrade() {
+			public boolean doUpgrade( Application app ) {
 				return true;
 			}
 		};
@@ -43,7 +44,7 @@ public class UpgraderListTest extends TestCase {
 		UpgradeProcessor p4 = new UpgradeProcessor(2,2,1) {
 			
 			@Override
-			public boolean doUpgrade() {
+			public boolean doUpgrade( Application app ) {
 				return true;
 			}
 		};
@@ -51,7 +52,7 @@ public class UpgraderListTest extends TestCase {
 		UpgradeProcessor p5 = new UpgradeProcessor(3,0,0) {
 			
 			@Override
-			public boolean doUpgrade() {
+			public boolean doUpgrade( Application app ) {
 				return true;
 			}
 		};
@@ -59,7 +60,7 @@ public class UpgraderListTest extends TestCase {
 		UpgradeProcessor p6 = new UpgradeProcessor() {
 			
 			@Override
-			public boolean doUpgrade() {
+			public boolean doUpgrade( Application app ) {
 				return true;
 			}
 		};
