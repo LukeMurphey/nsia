@@ -175,6 +175,13 @@ public abstract class Definition {
 		public final static Type ARACHNIDS = new Type(4, "http://www.whitehats.com/info/IDS");
 		public final static Type MCAFEE = new Type(5, "http://vil.nai.com/vil/dispVirus.asp?virus_k=");
 		public final static Type URL = new Type(6, "http://");
+		public final static Type OSVDB = new Type(7, "http://osvdb.org/show/osvdb/", "/discuss");
+		public final static Type USN = new Type(8, "http://www.ubuntu.com/usn/usn-");
+		public final static Type MILWORM = new Type(9, "http://milw0rm.com/exploits");
+		public final static Type SECUNIA = new Type(10, "http://secunia.com/advisories/", "/");
+		public final static Type RHSA = new Type(11, "http://rhn.redhat.com/errata/", ".html");
+		public final static Type MICROSOFT_KB = new Type(12, "http://support.microsoft.com/kb/");
+		public final static Type MICROSOFT_SB = new Type(13, "http://www.microsoft.com/technet/security/bulletin/", ".mspx");
 		
 		/**
 		 * This class represents the possible Snort reference types.
@@ -186,14 +193,25 @@ public abstract class Definition {
 			
 			private int id;
 			private String urlPrefix;
+			private String urlSuffix = null;
 			
 			protected Type( int id, String urlPrefix ){
 				this.id = id;
 				this.urlPrefix = urlPrefix;
 			}
 			
+			protected Type( int id, String urlPrefix, String urlSuffix ){
+				this.id = id;
+				this.urlPrefix = urlPrefix;
+				this.urlSuffix = urlSuffix;
+			}
+			
 			public String getUrlPrefix(){
 				return urlPrefix; 
+			}
+			
+			public String getUrlSuffix(){
+				return urlSuffix; 
 			}
 			
 			public boolean equals(Object type){
@@ -249,13 +267,39 @@ public abstract class Definition {
 			else if( type.equalsIgnoreCase("url") ){
 				return new Reference(Reference.URL, argument);
 			}
+			else if( type.equalsIgnoreCase("osvdb") ){
+				return new Reference(Reference.OSVDB, argument);
+			}
+			else if( type.equalsIgnoreCase("usn") ){
+				return new Reference(Reference.USN, argument);
+			}
+			else if( type.equalsIgnoreCase("milworm") ){
+				return new Reference(Reference.MILWORM, argument);
+			}
+			else if( type.equalsIgnoreCase("secunia") ){
+				return new Reference(Reference.SECUNIA, argument);
+			}
+			else if( type.equalsIgnoreCase("rhsa") ){
+				return new Reference(Reference.RHSA, argument);
+			}
+			else if( type.equalsIgnoreCase("microsoft_kb") ){
+				return new Reference(Reference.MICROSOFT_KB, argument);
+			}
+			else if( type.equalsIgnoreCase("microsoft_bulletin") ){
+				return new Reference(Reference.MICROSOFT_SB, argument);
+			}
 			else{
 				throw new InvalidDefinitionException("Reference name (\"" + type + "\" is invalid");
 			}
 		}
 		
 		public String toString(){
-			return type.getUrlPrefix() + value;
+			if( type.getUrlSuffix() == null ){
+				return type.getUrlPrefix() + value;
+			}
+			else{
+				return type.getUrlPrefix() + value + type.getUrlSuffix();
+			}
 		}
 		
 		public Type getType(){
