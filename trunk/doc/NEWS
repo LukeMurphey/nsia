@@ -1,0 +1,31 @@
+Below is the history of NSIA with notes about the changes available in each version.
+
+
+Version 0.9.2 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+
+ * Fixed issue where clicking "Maximum Session Identifier Lifetime" or "Session Identifier  * Lifetime" on the configuration page opened both
+ * Improved ability for installers to handle upgrades
+ * Fixed issue where installer failed to install Windows service correctly
+ * Improved wording or log message in Windows service
+
+
+
+
+Version 0.9.1 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+
+ * Added ability to make scanner start automatically when the application starts
+
+
+
+
+Version 0.9.0 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+
+ * Fixed issue where emails could not be sent to SMTP servers that used TLS, SSL or StartTLS
+ * Fixed issue where ending a session returned users to the wrong view
+ * Updated version to beta status (from alpha)

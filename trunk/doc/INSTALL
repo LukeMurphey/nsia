@@ -1,0 +1,13 @@
+See LukeMurphey.net for additional NSIA installation documentation:
+
+ * Installation Instructions: http://lukemurphey.net/projects/nsia/wiki/Installing_NSIA
+ * Upgrade Instructions: http://lukemurphey.net/projects/nsia/wiki/Upgrading_NSIA
+ * User guide: http://lukemurphey.net/projects/nsia/wiki/User_Guide
+
+----------------------------------------------
+Before installing, make sure to consider the following:
+
+ * When installing the Debian package, note that the installer will pause and ask you for the administrator account. You will need to view the terminal output if using a GUI frontend to the package manager so that you can enter the credentials.
+ * NSIA has been developed and tested on Sun's Java Runtime, other runtimes may not work
+ * Once installed, NSIA's web interface is available on port 8080 (http://localhost:8080)
+ * If you cannot remember the password or username of the account you created, then review the instructions available at http://lukemurphey.net/projects/nsia/wiki/Restoring_Lost_User_Account
