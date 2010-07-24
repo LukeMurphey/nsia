@@ -6,7 +6,7 @@ Architecture: all
 Essential: no
 Depends: sun-java6-bin, debconf (>= 0.2.17)
 Homepage: http://lukemurphey.net/projects/nsia
-Installed-Size: 19844
+Installed-Size: 19684
 Maintainer: Luke Murphey [luke@threatfactor.com]
 Provides: nsia
 Description: Website intrusion detection system
