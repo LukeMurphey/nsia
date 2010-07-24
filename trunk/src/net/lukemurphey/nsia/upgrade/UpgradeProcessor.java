@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
@@ -147,8 +149,7 @@ public abstract class UpgradeProcessor implements Comparable<UpgradeProcessor> {
 		try{
 			connection = app.getDatabaseConnection(DatabaseAccessType.ADMIN);
 			
-			statement = connection.prepareStatement("Select * from ?");
-			statement.setString(1, table);
+			statement = connection.prepareStatement("Select * from " + StringEscapeUtils.escapeSql( table ) );
 			statement.setMaxRows(1);
 			result = statement.executeQuery();
 			
