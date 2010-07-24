@@ -9,6 +9,7 @@ Version includes the following changes:
  * Added more comprehensive internal exception reporting
  * Added additional definition reference types
  * Added additional documentation to the Debian package and the zip archive
+ * Minor improvements to the Ubuntu daemon script
 
 
 Version 0.9.2 Changes
