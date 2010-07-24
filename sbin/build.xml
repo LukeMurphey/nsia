@@ -116,7 +116,7 @@
 
 		<!-- 3.5: populate the doc directory -->
 		<copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/doc">
-			<fileset dir="etc" defaultexcludes="true">
+			<fileset dir="doc" defaultexcludes="true">
 		    	<include name="LICENSE" />
 				<include name="README" />
 				<include name="AUTHORS" />
