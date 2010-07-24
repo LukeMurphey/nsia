@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 
+import net.lukemurphey.nsia.upgrade.processors.ScanRuleCreatedTimestamps;
+
 /**
  * Includes a list of upgrade processors.
  * @author Luke
@@ -39,6 +41,7 @@ public class UpgraderList {
 		upgraders = new ArrayList<UpgradeProcessor>();
 		
 		// 2 -- Add the upgraders to the list
+		upgraders.add( new ScanRuleCreatedTimestamps() );
 		
 		// 3 -- Sort the list
 		Collections.sort(upgraders);
