@@ -1,14 +1,26 @@
 Template: nsia/username
 Type: string
-Description: Username (must only contain letters, numbers, dashes and periods)
- Enter the login name of the initial user account. The username must only contain letters, numbers, dashes and periods.
+Description: Username (must only contain letters, numbers, dashes and periods):
+ Enter the login name of the initial user account. The username
+ must only contain letters, numbers, dashes and periods.
+
+Template: nsia/password_verify
+Type: password
+Description: Enter Password Again:
+ Re-enter the password of the initial user account. This password
+ must match the previous password.
 
 Template: nsia/password
 Type: password
-Description: Password (must be at least 8 characters long)
- Enter the password of the initial user account. This password must be at least 8 characters long. Make sure to remember the password so you an log into the web-interface.
+Description: Password (must be at least 8 characters long):
+ Enter the password of the initial user account. This password must
+ be at least 8 characters long. Make sure to remember the password
+ so you an log into the web-interface.
+ ${desc}
 
-Template: nsia/password2
-Type: password
-Description: Enter Password Again (must match the previous password)
- Re-enter the password of the initial user account. This password must match the previous password.
+Template: nsia/complete
+Type: note
+Description: NSIA is running on port 8080 (http://127.0.0.1:8080)
+ NSIA was successfully installed and enabled as a daemon. Open a
+ web-browser to http://127.0.0.1:8080 in order to access NSIA. 
+
