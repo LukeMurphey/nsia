@@ -28,14 +28,14 @@ then
     cd /opt/nsia/bin
     java -jar nsia.jar --upgrade
 else
-
+	
 	# 1.1 -- Get the username
 	db_fset nsia/username seen false
-		
+	
 	while :
 	do
 	
-		db_input high nsia/username
+		db_input high nsia/username || true
 		db_go
 		
 		db_get nsia/username
@@ -61,16 +61,18 @@ else
 		else
 			echo "Is invalid"
 		fi
-	
+		
 	done
-
+	
 	# 1.2 -- Get the password
-	db_fset nsia/password seen false
+	db_subst nsia/password "desc" ""
 	
 	while :
 	do
 		# Get the password
-		db_input high nsia/password
+		db_fset nsia/password seen false
+		db_set nsia/password ""
+		db_input high nsia/password || true
 		db_go
 		
 		db_get nsia/password
@@ -81,10 +83,12 @@ else
 		then
 			
 			# Verify the password
-			db_input high nsia/password2
+			db_fset nsia/password_verify seen false
+			db_set nsia/password_verify ""
+			db_input high nsia/password_verify || true
 			db_go
 			
-			db_get nsia/password2
+			db_get nsia/password_verify
 			passwordConfirm="$RET"
 			
 			# Make sure the passwords match
@@ -93,6 +97,9 @@ else
 				break
 			fi
 			
+			db_subst nsia/password "desc" "Note: Your passwords did not match, please try again"
+		else
+			db_subst nsia/password "desc" "Note: Your password was not long enough"
 		fi
 		
 	done
@@ -100,7 +107,7 @@ else
 	# Clear the passwords from the debconf database
 	db_clear
 	db_unregister nsia/password
-	db_unregister nsia/password2
+	db_unregister nsia/password_verify
 	db_purge
 	
 	# 1.3 -- Initialize NSIA
