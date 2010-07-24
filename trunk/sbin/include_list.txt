@@ -5,7 +5,11 @@ bin/ThreatFactor NSIA
 bin/ThreatFactor NSIA GUI
 bin/nsia.jar
 bin/install.sh
-bin/install.bat
+doc/LICENSE
+doc/AUTHORS
+doc/INSTALL
+doc/NEWS
+doc/README
 etc/config.ini
 etc/init.d/ubuntu/*
 etc/mime.types
