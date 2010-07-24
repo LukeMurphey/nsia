@@ -137,7 +137,7 @@
             <#-- 2 -- Output the start addresses -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("StartAddresses"))>ValidationFailed<#else>Background1</#if>">
                 <td style="vertical-align: top;"><div style="margin-top: 5px;" class="TitleText">Addresses to Scan:</div></td>
-                <td><textarea id="cp1" class="codepress urls autocomplete-off" wrap="virtual" rows="11" cols="48" name="StartAddresses"><#if request.getParameter("StartAddresses")??>${request.getParameter("StartAddresses")?html}<#elseif rule??><#list rule.seedUrls as url>${url?trim?html}<@endline /></#list></#if></textarea></td>
+                <td><textarea id="cp1" class="codepress urls autocomplete-off" wrap="virtual" rows="11" cols="48" name="StartAddresses"><#if request.getParameter("StartAddresses")??>${request.getParameter("StartAddresses")?html}<#elseif request.getParameter("StartAddresses2")??>${request.getParameter("StartAddresses2")?html}<#elseif rule??><#list rule.seedUrls as url>${url?trim?html}<@endline /></#list></#if></textarea></td>
             </tr>
             <#-- 3 -- Output the domain limiter -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("Domain"))>ValidationFailed<#else>Background1</#if>">
