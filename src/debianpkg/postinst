@@ -4,6 +4,7 @@
 # see: dh_installdeb(1)
 
 set -e
+. /usr/share/debconf/confmodule
 
 # summary of how this script can be called:
 #        * <postinst> `configure' <most-recently-configured-version>
@@ -17,18 +18,6 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-
-getPassword () {
-	stty -echo
-	echo "Enter the password for $username:"
-	read password
-
-	echo "Enter the password again:"
-	read passwordConfirm
-	stty echo
-}
-
-
 # 1 -- Configure NSIA
 if [ -d /opt/nsia/var/database ]
 then
@@ -39,12 +28,19 @@ then
     cd /opt/nsia/bin
     java -jar nsia.jar --upgrade
 else
+
 	# 1.1 -- Get the username
-	echo "Enter a username for the administrator account. Note that the username can contain letters, numbers, dashes and periods:"
+	db_fset nsia/username seen false
+		
 	while :
 	do
-		read username
 	
+		db_input high nsia/username
+		db_go
+		
+		db_get nsia/username
+		username="$RET"
+		
 		if [ "${#username}" = "0" ]
 		then
 			isInvalid=1
@@ -52,40 +48,61 @@ else
 			isInvalid=$(echo $username | sed 's/[a-zA-Z0-9_.-]*//')
 		fi
 	
-		if [ "${#isInvalid}" != "0" ]
+		# Make sure that username is not invalid
+		if [ "${#isInvalid}" = "0" ]
 		then
-			echo "The username is invalid. The username must only contain letters, numbers, dashes and periods."
-		elif [ "${#username}" = "0" ]
-		then
-			echo "The username is invalid. The username must only contain letters, numbers, dashes and periods."
+			# Make sure the username is not empty
+			if [ "${#username}" != "0" ]
+			then
+				break
+			else
+				echo "Username"
+			fi
 		else
-			break
+			echo "Is invalid"
 		fi
-	
-		echo "Please try again:"
-	
 	
 	done
 
 	# 1.2 -- Get the password
+	db_fset nsia/password seen false
+	
 	while :
 	do
-		getPassword
-		if [ "$password" = "$passwordConfirm" ]
+		# Get the password
+		db_input high nsia/password
+		db_go
+		
+		db_get nsia/password
+		password="$RET"
+		
+		# Make sure the password is long enough
+		if [ "${#password}" -gt 7 ]
 		then
-	
-			if [ "${#password}" -gt 7 ]
+			
+			# Verify the password
+			db_input high nsia/password2
+			db_go
+			
+			db_get nsia/password2
+			passwordConfirm="$RET"
+			
+			# Make sure the passwords match
+			if [ "$password" = "$passwordConfirm" ]
 			then
 				break
-			else
-				echo "The passwords must be at least 8 characters, please try again"
 			fi
-		
-		else
-			echo "The passwords did not match, please try again"
+			
 		fi
+		
 	done
-
+	
+	# Clear the passwords from the debconf database
+	db_clear
+	db_unregister nsia/password
+	db_unregister nsia/password2
+	db_purge
+	
 	# 1.3 -- Initialize NSIA
 	cd /opt/nsia/bin
 	java -jar nsia.jar --install $username $username $password
