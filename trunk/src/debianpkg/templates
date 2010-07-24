@@ -22,5 +22,4 @@ Template: nsia/complete
 Type: note
 Description: NSIA is running on port 8080 (http://127.0.0.1:8080)
  NSIA was successfully installed and enabled as a daemon. Open a
- web-browser to http://127.0.0.1:8080 in order to access NSIA. 
-
+ web-browser to http://127.0.0.1:8080 in order to access NSIA.
