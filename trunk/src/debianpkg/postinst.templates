@@ -1,0 +1,14 @@
+Template: nsia/username
+Type: string
+Description: Username (must only contain letters, numbers, dashes and periods)
+ Enter the login name of the initial user account. The username must only contain letters, numbers, dashes and periods.
+
+Template: nsia/password
+Type: password
+Description: Password (must be at least 8 characters long)
+ Enter the password of the initial user account. This password must be at least 8 characters long. Make sure to remember the password so you an log into the web-interface.
+
+Template: nsia/password2
+Type: password
+Description: Enter Password Again (must match the previous password)
+ Re-enter the password of the initial user account. This password must match the previous password.
