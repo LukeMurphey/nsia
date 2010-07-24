@@ -4,7 +4,7 @@ Section: networking
 Priority: optional
 Architecture: all
 Essential: no
-Depends: sun-java6-bin 
+Depends: sun-java6-bin, debconf (>= 0.2.17)
 Homepage: http://lukemurphey.net/projects/nsia
 Installed-Size: 15462
 Maintainer: Luke Murphey [luke@threatfactor.com]
