@@ -35,31 +35,23 @@ set -e
 
 case "$1" in
   start)
-    echo -n "Starting $DESC: "
+    log_daemon_msg "Starting $DESC" ":"
     start-stop-daemon -d $INSTALL_DIR/bin -b --start --quiet --make-pidfile --pidfile $PIDFILE \
         --exec "$DAEMON" -- $DAEMON_OPTS || true
-    echo "[Done]"
+    ret=$?
+    log_end_msg $ret
     ;;
   stop)
-    echo -n "Stopping $DESC: "
+    log_daemon_msg "Stopping $DESC" ":"
     start-stop-daemon -d $INSTALL_DIR/bin --stop --quiet --pidfile $PIDFILE \
         --exec "$DAEMON" || true
-    echo "[Done]"
+    log_end_msg $?
     ;;
   restart|force-reload)
-    echo -n "Restarting $DESC: "
-    start-stop-daemon -d $INSTALL_DIR/bin --stop --quiet --pidfile \
-        $PIDFILE --exec "$DAEMON" || true
-    sleep 1
-    start-stop-daemon -d $INSTALL_DIR/bin -b --start --quiet --make-pidfile --pidfile \
-        $PIDFILE --exec "$DAEMON" -- $DAEMON_OPTS || true
-    echo "[Done]"
+    $0 stop && $0 start
     ;;
   reload)
-      echo -n "Reloading $DESC configuration: "
-      start-stop-daemon -d $INSTALL_DIR/bin --stop --signal HUP --quiet --pidfile $PIDFILE \
-          --exec "$DAEMON" || true
-      echo "$NAME."
+      $0 stop && $0 start
       ;;
   status)
       status_of_proc -p $PIDFILE "$DAEMON" "$NAME" && exit 0 || exit $?
