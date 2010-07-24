@@ -8,7 +8,7 @@
     <#if (form_errors??)>
     <@getFormErrors form_errors=form_errors />
     </#if>
-    <#assign extrahead=["<script type=\"text/javascript\" language=\"javascript\" src=\"/media/misc/codepress/codepress.js\"></script>"] />
+    <#assign extrahead><script type="text/javascript" language="javascript" src="/media/misc/codepress/codepress.js"></script></#assign>
     
     <script type="text/javascript">
         function submitEditorForm(editorform){
