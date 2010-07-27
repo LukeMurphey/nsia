@@ -22,7 +22,7 @@
 	</target>
 	
     <target name="zip" description="Create the zip file used for installing NSIA">
-        <jar destfile="bin/NSIA_No_Installer.zip"
+        <zip destfile="bin/NSIA_No_Installer.zip"
             basedir="."
         	includesfile="sbin/include_list.txt"
         	whenempty="create"
