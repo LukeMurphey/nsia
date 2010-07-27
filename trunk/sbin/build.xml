@@ -154,4 +154,45 @@
 	</target>
 	
 	<target name="buildall" depends="webarchive,jar,zip"/>
+	
+	<target name="debianpackage">
+		
+		<!-- 1: Get the DebAntTask task -->
+		<taskdef name="deb" classname="org.vafer.jdeb.ant.DebAntTask" />
+		
+		<deb destfile="bin/nsia-${value.build.version}.deb" control="src/debianpkg" verbose="true" >
+			
+			<tarfileset prefix="opt/nsia/lib" dir="doc" defaultexcludes="true">
+		    	<include name="LICENSE" />
+				<include name="README" />
+				<include name="AUTHORS" />
+				<include name="INSTALL" />
+				<include name="NEWS" />
+		    </tarfileset>
+			
+			<tarfileset prefix="opt/nsia/lib" dir="lib" defaultexcludes="false">
+				<exclude name="**/.svn/" />
+			</tarfileset>
+			
+            <tarfileset prefix="opt/nsia/bin" dir="bin" defaultexcludes="true">
+                <exclude name="**/.svn/" />
+            	<include name="nsia.jar" />
+            	<include name="run.sh" />
+            </tarfileset>
+			
+			<tarfileset prefix="etc/init.d" dir="etc/init.d/ubuntu" defaultexcludes="true">
+				<include name="nsia.sh" />
+			</tarfileset>
+
+		</deb>
+		
+		<!-- 
+		<deb destfile="bin/nsia-${value.build.version}.deb" control="src/debianpkg">
+		    <data src="${value.build.debianpackage.directory}">
+		      <exclude name="**/.svn"/>
+		    </data>
+		</deb>
+		-->
+		
+	</target>
 </project>
