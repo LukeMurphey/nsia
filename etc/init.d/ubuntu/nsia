@@ -6,7 +6,7 @@
 # Required-Stop:     $all
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: starts the NSIA scanner
+# Short-Description: starts the NSIA website scanner
 # Description:       starts nsia using start-stop-daemon
 ### END INIT INFO
 
