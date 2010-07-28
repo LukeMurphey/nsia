@@ -7,8 +7,7 @@ Essential: no
 Depends: sun-java6-bin, debconf (>= 0.2.17)
 Homepage: http://lukemurphey.net/projects/nsia
 Installed-Size: 19684
-Maintainer: Luke Murphey [luke@threatfactor.com]
-Provides: nsia
+Maintainer: Luke Murphey <luke@threatfactor.com>
 Description: Website intrusion detection system
  NSIA (Network System Integrity Analysis) is a web application monitoring system
  that scans web applications for potentially unwanted context such as defacements,
