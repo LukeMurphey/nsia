@@ -155,7 +155,7 @@
 	
 	<target name="buildall" depends="webarchive,jar,zip"/>
 	
-	<target name="debianpackage">
+	<target name="debianpackage" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
 		
 		<!-- 1: Get the DebAntTask task -->
 		<taskdef name="deb" classname="org.vafer.jdeb.ant.DebAntTask" />
@@ -178,13 +178,15 @@
 			
 			<!-- 4: Add the binaries -->
             <tarfileset prefix="opt/nsia/bin" dir="bin" defaultexcludes="true">
-                <exclude name="**/.svn/" />
             	<include name="nsia.jar" />
-            	<include name="run.sh" />
             </tarfileset>
 			
+			<tarfileset prefix="opt/nsia/bin" dir="bin" filemode="755" defaultexcludes="true">
+				<include name="run.sh" />
+			</tarfileset>
+			
 			<!-- 5: Add the startup script -->
-			<tarfileset prefix="etc/init.d" dir="etc/init.d/ubuntu" defaultexcludes="true">
+			<tarfileset prefix="etc/init.d" dir="etc/init.d/ubuntu" filemode="755" defaultexcludes="true">
 				<include name="nsia" />
 			</tarfileset>
 
