@@ -162,6 +162,7 @@
 		
 		<deb destfile="bin/nsia-${value.build.version}.deb" control="src/debianpkg" verbose="true" >
 			
+			<!-- 2: Add documentation -->
 			<tarfileset prefix="opt/nsia/doc" dir="doc" defaultexcludes="true">
 		    	<include name="LICENSE" />
 				<include name="README" />
@@ -170,29 +171,24 @@
 				<include name="NEWS" />
 		    </tarfileset>
 			
+			<!-- 3: Add the libraries -->
 			<tarfileset prefix="opt/nsia/lib" dir="lib" defaultexcludes="false">
 				<exclude name="**/.svn/" />
 			</tarfileset>
 			
+			<!-- 4: Add the binaries -->
             <tarfileset prefix="opt/nsia/bin" dir="bin" defaultexcludes="true">
                 <exclude name="**/.svn/" />
             	<include name="nsia.jar" />
             	<include name="run.sh" />
             </tarfileset>
 			
+			<!-- 5: Add the startup script -->
 			<tarfileset prefix="etc/init.d" dir="etc/init.d/ubuntu" defaultexcludes="true">
 				<include name="nsia" />
 			</tarfileset>
 
 		</deb>
-		
-		<!-- 
-		<deb destfile="bin/nsia-${value.build.version}.deb" control="src/debianpkg">
-		    <data src="${value.build.debianpackage.directory}">
-		      <exclude name="**/.svn"/>
-		    </data>
-		</deb>
-		-->
 		
 	</target>
 </project>
