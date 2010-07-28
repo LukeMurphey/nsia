@@ -162,7 +162,7 @@
 		
 		<deb destfile="bin/nsia-${value.build.version}.deb" control="src/debianpkg" verbose="true" >
 			
-			<tarfileset prefix="opt/nsia/lib" dir="doc" defaultexcludes="true">
+			<tarfileset prefix="opt/nsia/doc" dir="doc" defaultexcludes="true">
 		    	<include name="LICENSE" />
 				<include name="README" />
 				<include name="AUTHORS" />
@@ -181,7 +181,7 @@
             </tarfileset>
 			
 			<tarfileset prefix="etc/init.d" dir="etc/init.d/ubuntu" defaultexcludes="true">
-				<include name="nsia.sh" />
+				<include name="nsia" />
 			</tarfileset>
 
 		</deb>
