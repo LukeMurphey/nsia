@@ -194,7 +194,23 @@
 		
 	</target>
 	
-	<target name="windowsinstaller" description="Creates a Windows installer">
+	<target name="check_nsispathdefined">
+	  <condition property="isnsispathdefined">
+	  	<isset property="${value.build.makensis.directory}"/>
+	  </condition>
+	</target>
+	
+	<target name="windowsinstaller" depends="windowsinstaller_nsispathundefined,windowsinstaller_nsispathdefined" description="Creates a Windows installer" />
+	
+	<target name="windowsinstaller_nsispathundefined" unless="isnsispathdefined">
+		<taskdef name="nsis" classname="net.sf.nsisant.Task" />
+		 
+        <nsis script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
+            <define name="VERSION" value="${value.build.version}"/>
+        </nsis>
+	</target>
+	
+	<target name="windowsinstaller_nsispathdefined" if="isnsispathdefined">
 		
 		<taskdef name="nsis" classname="net.sf.nsisant.Task" />
 		 
