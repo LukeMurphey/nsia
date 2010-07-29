@@ -200,7 +200,6 @@
 		 
         <nsis path="${value.build.makensis.directory}" script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
             <define name="VERSION" value="${value.build.version}"/>
-            <scriptcmd cmd="AutoCloseWindow true"/>
         </nsis>
 	</target>
 </project>
