@@ -153,7 +153,7 @@
 		
 	</target>
 	
-	<target name="buildall" depends="webarchive,jar,zip"/>
+	<target name="buildall" depends="webarchive,jar,zip,debianpackage,windowsinstaller"/>
 	
 	<target name="debianpackage" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
 		
@@ -192,5 +192,15 @@
 
 		</deb>
 		
+	</target>
+	
+	<target name="windowsinstaller" description="Creates a Windows installer">
+		
+		<taskdef name="nsis" classname="net.sf.nsisant.Task" />
+		 
+        <nsis path="${value.build.makensis.directory}" script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
+            <define name="VERSION" value="${value.build.version}"/>
+            <scriptcmd cmd="AutoCloseWindow true"/>
+        </nsis>
 	</target>
 </project>
