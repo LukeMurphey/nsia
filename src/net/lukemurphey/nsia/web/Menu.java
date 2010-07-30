@@ -230,7 +230,7 @@ public class Menu {
 	}
 	
 	public static Link[] getScanResultMenu( RequestContext context, int scanResultID ) throws URLInvalidException{
-		return getScanResultMenu(context, scanResultID);
+		return getScanResultMenu(context, scanResultID, null, null);
 	}
 	
 	public static Link[] getScanResultMenu( RequestContext context, int scanResultID, SiteGroupDescriptor siteGroup, ScanRule rule ) throws URLInvalidException{
