@@ -316,9 +316,7 @@ public abstract class ScanResult {
 		
 		//	 0.2 -- Ensure the scan result ID is valid
 		
-		// 1 -- Load the basic scan result attributes
-		PreparedStatement statement = null;
-		
+		// 1 -- Load the basic scan result attributes		
 		try{
 			
 			if( result == null || !result.next() ){
@@ -339,9 +337,6 @@ public abstract class ScanResult {
 			
 			if (result != null )
 				result.close();
-			
-			if (statement != null )
-				statement.close();
 		}
 	}
 	
