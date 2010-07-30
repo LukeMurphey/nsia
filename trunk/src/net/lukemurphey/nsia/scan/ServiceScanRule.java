@@ -547,9 +547,11 @@ public class ServiceScanRule extends ScanRule implements WorkerThread {
         	for(int c = 0; c < numberOfPorts; c++){
         		
 	        	// Make sure to exit if the scan was canceled
-	        	if(continueExecuting == false){
-	        		break;
-	        	}
+        		synchronized(this){
+		        	if(continueExecuting == false){
+		        		break;
+		        	}
+        		}
 	        	
 	        	// The maximum number of scan threads has been reached, wait on one to complete and then check the others
 	        	if( inProgressScans.size() >= asyncLimit ){
