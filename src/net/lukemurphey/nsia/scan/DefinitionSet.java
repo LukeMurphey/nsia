@@ -237,8 +237,10 @@ public class DefinitionSet {
 					&& versionID.formatID == this.formatID
 					&& versionID.revisionID == this.revisionID
 					&& (
+							//Make sure the extendedInfo are both null
 							(versionID.extendedInfo == null && this.extendedInfo == null )
-							|| (versionID.extendedInfo.equalsIgnoreCase(this.extendedInfo)) ) ){
+							//or they are identical 
+							|| (versionID.extendedInfo != null && versionID.extendedInfo.equalsIgnoreCase(this.extendedInfo)) ) ){
 				return true;
 			}
 			else{
@@ -775,7 +777,7 @@ public class DefinitionSet {
 		}
 	}
 	
-	public class DefinitionCategory{
+	public static class DefinitionCategory{
 		private String category;
 		private String subCategory;
 		
@@ -793,7 +795,7 @@ public class DefinitionSet {
 		}
 	}
 	
-	private class DefinitionCategoryComparator implements java.util.Comparator<DefinitionCategory> {
+	private static class DefinitionCategoryComparator implements java.util.Comparator<DefinitionCategory> {
 
 		public int compare(DefinitionCategory first, DefinitionCategory second ) {
 			
