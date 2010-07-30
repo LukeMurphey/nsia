@@ -328,7 +328,6 @@ public class SpecimenSnapshot {
 	private void update() throws SQLException, NoDatabaseConnectionException{
 		
 		Connection connection = null;
-		ResultSet resultSet = null;
 		PreparedStatement statement = null;
 		
 		try{
@@ -351,10 +350,6 @@ public class SpecimenSnapshot {
 		finally{
 			if( connection != null ){
 				connection.close();
-			}
-			
-			if( resultSet != null ){
-				resultSet.close();
 			}
 			
 			if( statement != null ){
