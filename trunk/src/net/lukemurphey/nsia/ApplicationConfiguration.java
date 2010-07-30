@@ -555,7 +555,7 @@ public class ApplicationConfiguration {
 		
 		//	 0.1 -- Make sure the address is not null
 		if( address == null ){
-			throw new InputValidationException("The address is invalid, cannot be null", "Syslog Server Address", address);
+			throw new InputValidationException("The address is invalid, cannot be null", "Syslog Server Address", "");
 		}
 		
 		//	 0.2 -- Make sure the address is not empty
@@ -578,7 +578,7 @@ public class ApplicationConfiguration {
 		
 		//	 0.1 -- Make sure the parameter is not null
 		if (protocol == null){
-			throw new InputValidationException("The protocol is invalid, cannot be null", "Syslog Server Protocol", protocol);
+			throw new InputValidationException("The protocol is invalid, cannot be null", "Syslog Server Protocol", "");
 		}
 		
 		//	 0.2 -- Make sure the parameter is a valid protocol
@@ -611,7 +611,7 @@ public class ApplicationConfiguration {
 	 * Returns true if the application has a valid, un-expired license.
 	 * @return
 	 */
-	public boolean isLicenseValid(){
+	public synchronized boolean isLicenseValid(){
 		return LicenseManagement.validate(license);
 	}
 	
