@@ -87,4 +87,17 @@ public class ScanResultCode {
 		
 		return (id == resultCode.id);
 	}
+	
+	public int hashCode(){
+		return id;
+	}
+	
+	public boolean equals( Object obj ){
+		if( obj instanceof ScanResultCode ){
+			return equals( (ScanResultCode)obj);
+		}
+		else{
+			return false;
+		}
+	}
 }
