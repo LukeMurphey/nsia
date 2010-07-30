@@ -660,7 +660,7 @@ public class ScannerController extends Thread{
 	 * @throws SQLException
 	 */
 	private PreparedStatement getRuleScanStatement( Connection connection, boolean filterToObsoleted, long siteGroupID ) throws SQLException{
-		PreparedStatement ruleStatement = connection.prepareStatement("Select * from ScanRule where State = 1 and ScanDataObsolete <> 0 and (created = null or created < ?) and (modified = null or modified < ?) and SiteGroupID = ?");
+		PreparedStatement ruleStatement = null;
 		
 		if( filterToObsoleted ){
 			ruleStatement = connection.prepareStatement("Select * from ScanRule where State = 1 and ScanDataObsolete <> 0 and (created = null or created < ?) and (modified = null or modified < ?) and SiteGroupID = ?");
