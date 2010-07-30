@@ -89,7 +89,7 @@ public class DashboardDefinitionsUpdate extends View {
 	 * @author Luke
 	 *
 	 */
-	private class VersionChecker extends Thread {
+	private static class VersionChecker extends Thread {
 		public void run(){
 			checkingVersion = true;
 			try{

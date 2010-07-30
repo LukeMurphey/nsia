@@ -11,7 +11,7 @@ public class ContentCache {
 	 * @author Luke
 	 *
 	 */
-	public class ContentCacheEntry{
+	public static class ContentCacheEntry{
 		private String name;
 		private long entry_created;
 		private long entry_expires;

@@ -42,7 +42,7 @@ public class AccessControlEditView extends View {
 		super("AccessControl", VIEW_NAME, Pattern.compile("[0-9]+"), Pattern.compile("New|Edit", Pattern.CASE_INSENSITIVE), Pattern.compile("(User|Group)?", Pattern.CASE_INSENSITIVE), Pattern.compile("[0-9]*"));
 	}
 	
-	private class ACLDescriptor{
+	private static class ACLDescriptor{
         public AccessControlDescriptor.Action read = AccessControlDescriptor.Action.UNSPECIFIED;
         public AccessControlDescriptor.Action write = AccessControlDescriptor.Action.UNSPECIFIED;
         public AccessControlDescriptor.Action delete = AccessControlDescriptor.Action.UNSPECIFIED;

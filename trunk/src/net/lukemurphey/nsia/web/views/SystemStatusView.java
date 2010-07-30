@@ -42,7 +42,7 @@ public class SystemStatusView extends View {
 		INFO, CHECK, WARNING, ERROR;
 	}
 	
-	public class SystemStat{
+	public static class SystemStat{
 		private String title;
 		private String message;
 		private StatType stat_type;

@@ -39,7 +39,7 @@ public class TaskListView extends View {
 		return view.createURL();
 	}
 	
-	public class TaskDescriptor{
+	public static class TaskDescriptor{
 		
 		WorkerThread thread;
 		UserDescriptor user;

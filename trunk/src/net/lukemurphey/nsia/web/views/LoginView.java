@@ -48,7 +48,7 @@ public class LoginView extends View {
 		return view.createURL();
 	}
 	
-	public class Message{
+	public static class Message{
 		
 		private String message;
 		private MessageSeverity sev;
@@ -156,7 +156,7 @@ public class LoginView extends View {
 			}
 			else{
 				//Authentication attempt failed
-				data.put("auth_failed", new Boolean(true));
+				data.put("auth_failed", Boolean.TRUE);
 				data.put("message", new Message("Authentication failed; credentials are incorrect", MessageSeverity.ALERT));
 			}
 		}

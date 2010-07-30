@@ -95,7 +95,7 @@ public class SystemConfigurationView extends View {
 		TEXT, MULTILINETEXT, BOOL, SELECT, INTEGER, PASSWORD;
 	}
 	
-	public class SelectParamValue{
+	public static class SelectParamValue{
 		String name;
 		String value;
 		
@@ -113,7 +113,7 @@ public class SystemConfigurationView extends View {
 		}
 	}
 	
-	public class Parameter{
+	public static class Parameter{
 		
 		private ParameterType type;
 		private String name;
@@ -211,7 +211,7 @@ public class SystemConfigurationView extends View {
 		
 	}
 	
-	private class FieldValidationFailedException extends Exception{
+	private static class FieldValidationFailedException extends Exception{
 
 		private static final long serialVersionUID = 4279640126480506939L;
 		
