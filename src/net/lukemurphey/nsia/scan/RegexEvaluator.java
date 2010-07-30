@@ -4,8 +4,6 @@ import java.util.regex.*;
 
 public class RegexEvaluator extends Evaluator {
 
-	
-	String originalPcre;
 	Pattern pattern;
 	
 	public RegexEvaluator( String pcre ) throws InvalidEvaluatorException{
@@ -16,8 +14,6 @@ public class RegexEvaluator extends Evaluator {
 		
 		// 0 -- Precondition check
 		// The PCRE class peforms error checking, therefore the precondition checks will not be duplicated here since they would be redundant
-		
-		originalPcre = pcre;
 		try{
 			pattern = Pcre.parse(pcre, canonEquality);
 		}
