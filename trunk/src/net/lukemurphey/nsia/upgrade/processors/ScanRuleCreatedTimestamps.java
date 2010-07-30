@@ -44,9 +44,7 @@ public class ScanRuleCreatedTimestamps extends UpgradeProcessor {
 					}
 				}
 				finally{
-					if( conn != null ){
-						conn.close();
-					}
+					conn.close();
 					
 					if( statement != null ){
 						statement.close();
