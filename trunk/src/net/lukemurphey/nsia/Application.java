@@ -1026,7 +1026,8 @@ public final class Application {
 			
 			if( !hideOutput && shutdownCommandSource == ShutdownRequestSource.API ){
 				System.out.print("System is shutting down (received shutdown command from API interface)...");
-			}else if( !hideOutput && shutdownCommandSource == ShutdownRequestSource.UNSPECIFIED ){
+			}
+			else if( !hideOutput && (shutdownCommandSource == ShutdownRequestSource.UNSPECIFIED || shutdownCommandSource == ShutdownRequestSource.CLI) ){
 				System.out.print("System is shutting down...");
 			}
 			
@@ -1075,7 +1076,7 @@ public final class Application {
 				}
 			}
 			
-			if( !hideOutput){
+			if( !hideOutput ){
 				System.out.println("Done");
 			}
 			
