@@ -64,7 +64,7 @@ public class DefinitionArchive {
 	 * @throws SQLException 
 	 * @throws DefinitionSetLoadException 
 	 */
-	public static DefinitionArchive getArchive(boolean ignoreErrors) throws DefinitionSetLoadException, SQLException, NoDatabaseConnectionException, InputValidationException{
+	public synchronized static DefinitionArchive getArchive(boolean ignoreErrors) throws DefinitionSetLoadException, SQLException, NoDatabaseConnectionException, InputValidationException{
 		
 		if(archive == null){
 			archive = new DefinitionArchive( Application.getApplication(), ignoreErrors );
@@ -411,14 +411,13 @@ public class DefinitionArchive {
 				{
 					connection = application.getDatabaseConnection(DatabaseAccessType.SCANNER);
 					localId = saveToDatabase( connection, newDefinition );
+					
+					// Update the list of definition errors
+					DefinitionErrorList errors = DefinitionErrorList.load(application);
+					errors.clearOutdatedErrors(this.definitionSet);
 				}
 				
 				newDefinition.localId = localId;
-				
-				// Update the list of definition errors
-				DefinitionErrorList errors = DefinitionErrorList.load(application);
-				errors.clearOutdatedErrors(this.definitionSet);
-				
 				return localId;
 			}
 			finally{
@@ -442,7 +441,7 @@ public class DefinitionArchive {
 		XmlRpcClient client = new XmlRpcClient( DEFINITION_SUPPORT_API_URL );
 		
 		Vector<Integer> params = new Vector<Integer>();
-		params.add(new Integer(DEFINITION_VERSION) );
+		params.add( Integer.valueOf(DEFINITION_VERSION) );
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat(DefinitionSet.DEFINITION_SET_DATE_FORMAT);
 		
@@ -494,7 +493,7 @@ public class DefinitionArchive {
 			XmlRpcClient client = new XmlRpcClient( DEFINITION_SUPPORT_API_URL );
 			
 			Vector<Object> params = new Vector<Object>();
-			params.add(new Integer(DEFINITION_VERSION) );
+			params.add( Integer.valueOf(DEFINITION_VERSION) );
 			params.add( key );
 			
 			Object result = client.execute( "Definitions.latestDefinitions", params );
@@ -580,7 +579,7 @@ public class DefinitionArchive {
 		XmlRpcClient client = new XmlRpcClient( DEFINITION_SUPPORT_API_URL );
 		
 		Vector<Integer> params = new Vector<Integer>();
-		params.add(new Integer(DEFINITION_VERSION) );
+		params.add( Integer.valueOf(DEFINITION_VERSION) );
 		
 		Object result = client.execute( "Definitions.latestID", params );
 
