@@ -40,7 +40,7 @@ public class DashboardStatusPanel extends View {
 		GREEN, YELLOW, RED;
 	}
 	
-	public class StatusDescriptor{
+	public static class StatusDescriptor{
 		
 		private StatusIndicator status;
 		private String status_desc;

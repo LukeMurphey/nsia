@@ -67,7 +67,7 @@ public class UserEditView extends View {
 	 * @author Luke
 	 *
 	 */
-	private class UserEditForm extends Form{
+	private static class UserEditForm extends Form{
 		
 		@Override
 		public FieldErrors validate( HttpServletRequest request ){
@@ -172,7 +172,10 @@ public class UserEditView extends View {
 										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
 										new EventLogField( FieldName.TARGET_USER_ID, userID ),
 										new EventLogField( FieldName.TARGET_USER_NAME, name ) );
+								
 								context.addMessage("User created successfully", MessageSeverity.SUCCESS);
+								response.sendRedirect( UserView.getURL(user) );
+								return true;
 							}
 							else{
 								Application.getApplication().logEvent(EventLogMessage.EventType.OPERATION_FAILED,
@@ -180,11 +183,11 @@ public class UserEditView extends View {
 									new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 									new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
 									new EventLogField( FieldName.TARGET_USER_ID, name ) );
+								
 								context.addMessage("User was not created successfully", MessageSeverity.WARNING);
+								response.sendRedirect( UserView.getURL(userID) );
+								return false;
 							}
-	
-							response.sendRedirect( UserView.getURL(user) );
-							return true;
 						}
 						
 						// 3.3 -- Edit the existing account

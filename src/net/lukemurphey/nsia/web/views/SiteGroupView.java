@@ -81,7 +81,7 @@ public class SiteGroupView extends View {
 		return view.createURL(siteGroupID);
 	}
 	
-	public class RuleStatusDescriptor{
+	public static class RuleStatusDescriptor{
 		private RuleState status;
 		private int deviations;
 		private String ruleType;
@@ -132,7 +132,7 @@ public class SiteGroupView extends View {
 		
 	}
 	
-	public class RuleResult{
+	public static class RuleResult{
 		Vector<RuleStatusDescriptor> ruleStatuses;
 		ScanRule[] scanRules;
 		ScanResult[] scanResults;

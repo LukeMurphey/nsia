@@ -60,7 +60,7 @@ public class UserPasswordUpdateView extends View {
 	 * @author Luke
 	 *
 	 */
-	private class UserPasswordUpdateForm extends Form{
+	private static class UserPasswordUpdateForm extends Form{
 		
 		public UserPasswordUpdateForm(){
 			addField( new Field("YourPassword") );
@@ -197,6 +197,12 @@ public class UserPasswordUpdateView extends View {
 			}
 			
 			data.put("user", user);
+		}
+		
+		// 2 -- Make sure we have a user to change the password of
+		if( user == null ){
+			Dialog.getDialog(response, context, data, "No user provided to update", "User Not Found", DialogType.WARNING);
+			return true;
 		}
 		
 		// 3 -- Check permissions

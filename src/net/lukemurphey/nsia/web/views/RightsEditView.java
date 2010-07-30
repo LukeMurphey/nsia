@@ -58,7 +58,7 @@ public class RightsEditView extends View {
 		return view.createURL("Group", group.getGroupId());
 	}
 	
-	public class Right{
+	public static class Right{
 		private String name;
 		private String description;
 		private boolean permitted;
@@ -226,7 +226,7 @@ public class RightsEditView extends View {
 	}
 	
 	
-	public class RightsCategory{
+	public static class RightsCategory{
 		private Vector<Right> rights = new Vector<Right>();
 		private String name;
 		private int index;

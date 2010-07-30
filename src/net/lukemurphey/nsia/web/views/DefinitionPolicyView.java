@@ -91,7 +91,7 @@ public class DefinitionPolicyView extends View {
 		return new CategoryDescriptor( getName(null, definitionCategory.getCategory(), definitionCategory.getSubCategory()) , descriptor);
 	}
 	
-	public class CategoryDescriptor{
+	public static class CategoryDescriptor{
 		private String name;
 		private boolean isDefault;
 		private boolean enabled;
@@ -370,12 +370,7 @@ public class DefinitionPolicyView extends View {
 				String subCategory = definition[1];
 				
 				try {
-					if( siteGroupDesc != null ){
-						clearCategoryDescriptors(context.getSessionInfo(), category, subCategory, siteGroupDesc);
-					}
-					else{
-						clearCategoryDescriptors(context.getSessionInfo(), category, subCategory);
-					}
+					clearCategoryDescriptors(context.getSessionInfo(), category, subCategory, siteGroupDesc);
 				} catch (InsufficientPermissionException e) {
 					context.addMessage("You don't have permissions to edit the scan policy", MessageSeverity.WARNING);
 				} catch (NotFoundException e) {

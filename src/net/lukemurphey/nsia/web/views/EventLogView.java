@@ -45,7 +45,7 @@ public class EventLogView extends View {
 	 * @author Luke
 	 *
 	 */
-	private class LogEntries{
+	private static class LogEntries{
 		EventLogEntry[] logEntries;
 		int firstEntry;
 		int lastEntry;
