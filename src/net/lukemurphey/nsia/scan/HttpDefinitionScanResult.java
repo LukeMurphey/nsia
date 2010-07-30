@@ -283,9 +283,9 @@ public class HttpDefinitionScanResult extends ScanResult {
 		
 		Hashtable<Definition.Severity, Integer> results = new Hashtable<Definition.Severity, Integer>();
 		
-		results.put(Definition.Severity.LOW, new Integer(low));
-		results.put(Definition.Severity.MEDIUM, new Integer(medium));
-		results.put(Definition.Severity.HIGH, new Integer(high));
+		results.put(Definition.Severity.LOW, Integer.valueOf(low));
+		results.put(Definition.Severity.MEDIUM, Integer.valueOf(medium));
+		results.put(Definition.Severity.HIGH, Integer.valueOf(high));
 		
 		return results;
 	}
