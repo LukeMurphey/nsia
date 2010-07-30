@@ -138,7 +138,7 @@ public class Upgrader {
 	 * @author Luke
 	 *
 	 */
-	private class SchemaVersion{
+	private static class SchemaVersion{
 		
 		private int major = 0;
 		private int minor = 0;
