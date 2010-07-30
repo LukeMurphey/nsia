@@ -22,7 +22,7 @@ public class EventLogMessageTest extends TestCase {
 		EventLogField[] fields = {new EventLogField(FieldName.SOURCE_USER_ID, "1"), new EventLogField(FieldName.SOURCE_USER_NAME, "Luke.Murphey.Admin"), new EventLogField(FieldName.RIGHT, "System.Shutdown")};
 		EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.ACCESS_CONTROL_DENY, date, fields );
 		
-		if( !message.toString().equals("[2008/01/02 20:16:32 CST, Warning] Access Control: Denied action { SourceUserID = 1, SourceUserName = Luke.Murphey.Admin, Right = System.Shutdown }") ){
+		if( !message.toString().equals("[2008/01/02 20:16:32 CST, Warning] Access Control: Denied action { source_user_id = 1, source_user_name = Luke.Murphey.Admin, right = System.Shutdown }") ){
 			fail("The message string did not match the specified format");
 			//System.out.println( message.toString() );
 		}
@@ -38,7 +38,7 @@ public class EventLogMessageTest extends TestCase {
 		EventLogField[] fields = {new EventLogField(FieldName.MESSAGE, "<QUOTE>\"</QUOTE>"), new EventLogField(FieldName.RULE_SPECIMEN, "http://1.web?trees,foliage"), new EventLogField(FieldName.SOURCE_USER_NAME, "Luke.Murphey.Admin"), new EventLogField(FieldName.RIGHT, "System.Shutdown")};
 		EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.ACCESS_CONTROL_DENY, date, fields );
 		
-		if( !message.toString().equals("[2008/01/02 20:16:32 CST, Warning] Access Control: Denied action { Message = \"<QUOTE>\\\"</QUOTE>\", Specimen = \"http://1.web?trees,foliage\", SourceUserName = Luke.Murphey.Admin, Right = System.Shutdown }") ){
+		if( !message.toString().equals("[2008/01/02 20:16:32 CST, Warning] Access Control: Denied action { message = \"<QUOTE>\\\"</QUOTE>\", specimen = \"http://1.web?trees,foliage\", source_user_name = Luke.Murphey.Admin, right = System.Shutdown }") ){
 			fail("The message string did not match the specified format");
 		}
 	}
