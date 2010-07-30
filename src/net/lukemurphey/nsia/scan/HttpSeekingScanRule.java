@@ -608,7 +608,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	 * @author Luke
 	 *
 	 */
-	private class ScanRecord{
+	private static class ScanRecord{
 		private URL url;
 		private HttpDefinitionScanResult parentScanResult;
 		private int currentLevel;
