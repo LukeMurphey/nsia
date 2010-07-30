@@ -248,6 +248,15 @@ public class DefinitionSet {
 			}
 		}
 		
+		public boolean equals( Object obj ){
+			if( obj instanceof DefinitionVersionID ){
+				return equals( (DefinitionVersionID)obj);
+			}
+			else{
+				return false;
+			}
+		}
+		
 		public String toString(){
 			if( extendedInfo != null && extendedInfo.length() > 0){
 				return formatID + "." + revisionID + " " + extendedInfo;
