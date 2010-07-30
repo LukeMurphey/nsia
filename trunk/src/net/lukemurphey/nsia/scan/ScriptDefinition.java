@@ -705,7 +705,7 @@ public class ScriptDefinition extends Definition {
 	 * @author Luke
 	 *
 	 */
-	private class TerminatorThread extends Thread{
+	private static class TerminatorThread extends Thread{
 		
 		//The object that contains the invocable functions
 		private Invocable invocable;
@@ -781,7 +781,7 @@ public class ScriptDefinition extends Definition {
 	 * @author Luke
 	 *
 	 */
-	private class InvokerThread extends Thread{
+	private static class InvokerThread extends Thread{
 		
 		//The object that contains the invocable functions
 		private Invocable invocable;
@@ -869,7 +869,7 @@ public class ScriptDefinition extends Definition {
 	 * @author Luke
 	 *
 	 */
-	private class Environment{
+	private static class Environment{
 		private SavedScriptData data;
 		
 		public Environment(SavedScriptData data){
