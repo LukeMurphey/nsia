@@ -127,7 +127,7 @@ public class DefinitionsUpdateView extends View {
 		}
 		
 		//	 5.2 -- Post a dialog indicating the task is complete
-		else if( isAjax && (worker == null || worker.getStatus() == State.STOPPED) ){
+		else if( isAjax && worker != null && worker.getStatus() == State.STOPPED ){
 			response.getWriter().print( Dialog.getProgressDialog(worker.getStatusDescription(), worker.getTaskDescription(), 100, new Link("OK", createURL())) );
 			return true;
 		}

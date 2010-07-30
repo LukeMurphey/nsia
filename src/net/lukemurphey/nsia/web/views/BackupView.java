@@ -78,7 +78,7 @@ public class BackupView extends View {
 		}
 		
 		//   4.3 -- Post a dialog indicating the task is complete
-		else if( isAjax && (backupWorker == null || backupWorker.getWorkerThread().getStatus() == State.STOPPED) ){
+		else if( isAjax && backupWorker != null && backupWorker.getWorkerThread().getStatus() == State.STOPPED ){
 			response.getWriter().print( Dialog.getProgressDialog(backupWorker.getWorkerThread().getStatusDescription(), backupWorker.getWorkerThread().getTaskDescription(), 100, new Link("OK", createURL())) );
 			return true;
 		}
