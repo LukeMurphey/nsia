@@ -992,13 +992,8 @@ public class ServiceScanRule extends ScanRule implements WorkerThread {
 		}
 		
 		// 1 -- Set the item
-		if( portsExpectedOpen == null ){
-			this.portsExpectedOpen = new NetworkPortRange[0];
-		}
-		else{
-			this.portsExpectedOpen = new NetworkPortRange[portsExpectedOpen.length];
-			System.arraycopy(portsExpectedOpen, 0, this.portsExpectedOpen, 0, this.portsExpectedOpen.length);
-		}
+		this.portsExpectedOpen = new NetworkPortRange[portsExpectedOpen.length];
+		System.arraycopy(portsExpectedOpen, 0, this.portsExpectedOpen, 0, this.portsExpectedOpen.length);
 		
 	}
 
