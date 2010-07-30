@@ -36,10 +36,8 @@ public class ShutdownCommand extends ConsoleCommand {
 			
 		}*/
 		
-		System.out.print("System is shutting down...");
 		application.logEvent( EventLogMessage.EventType.APPLICATION_SHUTTING_DOWN, new EventLogField(FieldName.UPTIME, GenericUtils.getTimeDescription(application.getUptime()/1000) ) );
-		application.shutdown(Application.ShutdownRequestSource.CLI);
-		System.out.println("Done");
+		application.shutdown(Application.ShutdownRequestSource.CLI, false);
 		return CommandResult.TERMINATE_CONSOLE;
 	}
 
