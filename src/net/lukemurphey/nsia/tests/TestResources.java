@@ -13,7 +13,7 @@ public class TestResources {
 
 	private static TestResources testRes = null;
 	
-	public static TestResources getTestResources() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoDatabaseConnectionException{
+	public static synchronized TestResources getTestResources() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoDatabaseConnectionException{
 		if( testRes != null){
 			return testRes;
 		}
