@@ -69,7 +69,7 @@ public class AddUserCommand extends ConsoleCommand {
 			try{
 				inputStreamChannel = Channels.newInputStream((new FileInputStream(FileDescriptor.in)).getChannel());
 				inputStreamReader = new InputStreamReader(inputStreamChannel);
-				in = new BufferedReader( inputStreamReader );
+				in = new BufferedReader( inputStreamReader ); //Don't close this reader. Closing it will cause an IOException later.
 				
 				System.out.print("Enter the user's password: ");
 				password = in.readLine();
