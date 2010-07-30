@@ -26,7 +26,7 @@ public class DefinitionErrorList {
 	//protected Application application;
 	private static Boolean errorsNoted = null;
 	
-	public static boolean errorsNoted(Application application) throws NoDatabaseConnectionException, SQLException{
+	public static synchronized boolean errorsNoted(Application application) throws NoDatabaseConnectionException, SQLException{
 		if( errorsNoted == null ){
 			DefinitionErrorList errors = DefinitionErrorList.load(application);
 			
