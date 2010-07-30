@@ -110,14 +110,14 @@ public class DefragmentIndexesView extends View {
 		//	 5.1 -- Determine if just the progress dialog should be shown (e.g. AJAX request) 
 		boolean isAjax = (request.getParameter("AJAX") != null);
 		
-		//	 5.2 -- Post a dialog indicating that the backup is complete if the task is done
+		//	 5.2 -- Post a dialog indicating that the re-indexing is complete if the task is done
 		if( isAjax && worker == null ){
 			response.getWriter().print( Dialog.getProgressDialog("Reindexing complete", "Reindex Database", 100, new Link("OK", createURL())) );
 			return true;
 		}
 		
 		//   5.3 -- Post a dialog indicating the task is complete
-		else if( isAjax && (worker == null || worker.getWorkerThread().getStatus() == State.STOPPED) ){
+		else if( isAjax && worker != null && worker.getWorkerThread().getStatus() == State.STOPPED ){
 			response.getWriter().print( Dialog.getProgressDialog(worker.getWorkerThread().getStatusDescription(), worker.getWorkerThread().getTaskDescription(), 100, new Link("OK", createURL())) );
 			return true;
 		}
