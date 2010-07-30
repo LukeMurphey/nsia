@@ -32,7 +32,7 @@ public class EmailAddress implements Serializable{
 			throw new UnknownHostException("Host name is null");
 		
 		this.mailUser = mailUser;
-		this.mailHost = new HostAddress(mailHost.toString());
+		this.mailHost = new HostAddress(mailHost.getHostName());
 	}
 	
 	/**
