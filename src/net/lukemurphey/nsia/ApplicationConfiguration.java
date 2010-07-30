@@ -770,7 +770,7 @@ public class ApplicationConfiguration {
 	 * @throws NoDatabaseConnectionException 
 	 * @throws SQLException 
 	 */
-	public void setLicenseKey(String licenseKey) throws InputValidationException, SQLException, NoDatabaseConnectionException{
+	public synchronized void setLicenseKey(String licenseKey) throws InputValidationException, SQLException, NoDatabaseConnectionException{
 		
 		try {
 			license = LicenseManagement.getKeyInfo(licenseKey);
