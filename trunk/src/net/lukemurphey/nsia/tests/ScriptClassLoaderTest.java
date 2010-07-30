@@ -27,7 +27,7 @@ import junit.framework.TestCase;
 public class ScriptClassLoaderTest extends TestCase {
 
 	
-	protected class RunThread extends Thread{
+	protected static class RunThread extends Thread{
 		
 		protected String script;
 		protected ScriptDefinition scriptSig;
