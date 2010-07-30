@@ -212,7 +212,7 @@ public class SyslogNGAppender extends AppenderSkeleton {
 	 * Get the protocol to use to send the log messages to the server.
 	 * @return
 	 */
-	public Protocol getProtocol(){
+	public synchronized Protocol getProtocol(){
 		return socket.socketType();
 	}
 	
@@ -274,7 +274,7 @@ public class SyslogNGAppender extends AppenderSkeleton {
 	/**
 	 * Activate the options defined.
 	 */
-	public void activateOptions() {
+	public synchronized void activateOptions() {
 		try {
 			if(protocol == Protocol.TCP){
 				socket = SocketWrapper.createTCPSocket(server, port);
