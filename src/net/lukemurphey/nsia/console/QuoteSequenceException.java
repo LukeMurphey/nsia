@@ -17,12 +17,12 @@ public class QuoteSequenceException extends Exception{
 	}
 	
 	public String getSpaces(int numberOfSpaces){
-		String spaces = "";
+		StringBuffer spaces = new StringBuffer();
 		
 		for(int c = 0; c < numberOfSpaces; c++){
-			spaces += " ";
+			spaces.append(" ");
 		}
 		
-		return spaces;
+		return spaces.toString();
 	}
 }
