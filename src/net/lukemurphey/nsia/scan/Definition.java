@@ -217,7 +217,7 @@ public abstract class Definition {
 			public boolean equals(Object type){
 				
 				// 0 -- Precondition check
-				if( type.equals(null) ){
+				if( type == null ){
 					throw new IllegalArgumentException("Type cannot be null");
 				}
 				
