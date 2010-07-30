@@ -156,7 +156,6 @@ public abstract class UpgradeProcessor implements Comparable<UpgradeProcessor> {
 			ResultSetMetaData metaData = result.getMetaData();
 			
 			for (int i = 1; i <= metaData.getColumnCount(); i++) {
-				System.out.println(metaData.getColumnName(i).toLowerCase() + "::" + column.toLowerCase());
 				if( metaData.getColumnName(i).equalsIgnoreCase(column.toLowerCase()) ){
 					return true;
 				}
