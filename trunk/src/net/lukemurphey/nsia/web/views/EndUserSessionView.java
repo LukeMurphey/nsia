@@ -105,9 +105,7 @@ public class EndUserSessionView extends View {
 				return true;
 			}
 			
-			// 5 -- Terminate the session			
-			sessionInfo = sessionManagement.getSessionInfo(sessionTrackingNumber);
-			 
+			// 5 -- Terminate the session
 			if( sessionManagement.terminateSession(sessionTrackingNumber) ){
 				
 				//Log that the session was terminated
@@ -119,7 +117,6 @@ public class EndUserSessionView extends View {
 			}
 			else{
 				Application.getApplication().logEvent(EventLogMessage.EventType.SESSION_INVALID_TERMINATION_ATTEMPT,
-						new EventLogField( FieldName.SESSION_TRACKING_NUMBER, sessionTrackingNumber ),
 						new EventLogField( FieldName.SESSION_TRACKING_NUMBER, sessionTrackingNumber ));
 			}
 			
