@@ -192,7 +192,7 @@ public class SyslogNGAppender extends AppenderSkeleton {
 	 * Set the port to send the log messages to.
 	 * @param port
 	 */
-	public void setPort(int port) {
+	public synchronized void setPort(int port) {
 		this.port = port;
 	}
 
@@ -200,7 +200,7 @@ public class SyslogNGAppender extends AppenderSkeleton {
 	 * Set the protocol to use to send the log messages to the server.
 	 * @param protocol
 	 */
-	private void setProtocol(Protocol protocol){
+	private synchronized void setProtocol(Protocol protocol){
 		if( protocol == null ){
 			throw new IllegalArgumentException("The protocol cannot be null");
 		}
@@ -228,7 +228,7 @@ public class SyslogNGAppender extends AppenderSkeleton {
 	 * Set the server to send the log messages to.
 	 * @param server
 	 */
-	public void setServer(String server){
+	public synchronized void setServer(String server){
 		this.server = server;
 	}
 	
