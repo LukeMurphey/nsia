@@ -198,12 +198,14 @@ public class UserView extends View {
 		// Get the list of included groups
 		String included_groups = null;
 		
-		for (UserGroupInfo userGroupInfo : userGroups) {
-			if( included_groups == null ){
-				included_groups = "" + userGroupInfo.getID();
-			}
-			else{
-				included_groups = included_groups + "," +  userGroupInfo.getID();
+		if( userGroups != null ){
+			for (UserGroupInfo userGroupInfo : userGroups) {
+				if( included_groups == null ){
+					included_groups = "" + userGroupInfo.getID();
+				}
+				else{
+					included_groups = included_groups + "," +  userGroupInfo.getID();
+				}
 			}
 		}
 		

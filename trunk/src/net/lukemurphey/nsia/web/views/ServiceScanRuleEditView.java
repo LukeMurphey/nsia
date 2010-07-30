@@ -92,6 +92,14 @@ public class ServiceScanRuleEditView extends View {
 			
 			NetworkPortRange[] portsExpectedOpen;
 			
+			// Make sure the ports to parse is not null
+			if( portsExpectedOpenStr == null ){
+				errors = new FieldErrors();
+				errors.put(new FieldError("PortsExpectedOpen", "", "The list of ports expected open must not be empty"));
+				data.put("form_errors", errors);
+				return false;
+			}
+			
 			try{
 				portsExpectedOpen = NetworkPortRange.parseRange(portsExpectedOpenStr);
 			}
