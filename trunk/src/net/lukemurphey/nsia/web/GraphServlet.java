@@ -939,44 +939,46 @@ public class GraphServlet extends HttpServlet {
 		PiePlot plot = (PiePlot) chart.getPlot();
 		plot.setNoDataMessage("No data available");
 		
-		for(int c = 0; c < mimeTypes.size(); c++){
-			int rem = c % 10;
-			
-			if( rem == 0 ){
-				plot.setSectionPaint(c, new Color(173, 205, 221));
-			}
-			else if( rem == 1 ){
-				plot.setSectionPaint(c, new Color(137, 184, 210));
-			}
-			else if( rem == 2 ){
-				plot.setSectionPaint(c, new Color(82, 151, 184));
-			}
-			else if( rem == 3 ){
-				plot.setSectionPaint(c, new Color(32, 120, 157));
-			}
-			else if( rem == 4 ){
-				plot.setSectionPaint(c, new Color(181, 202, 189));
-			}
-			else if( rem == 5 ){
-				plot.setSectionPaint(c, new Color(149, 181, 160));
-			}
-			else if( rem == 6 ){
-				plot.setSectionPaint(c, new Color(99, 148, 110));
-			}
-			else if( rem == 7 ){
-				plot.setSectionPaint(c, new Color(50, 117, 58));
-			}
-			else if( rem == 8 ){
-				plot.setSectionPaint(c, new Color(198, 212, 176));
-			}
-			else if( rem == 9 ){
-				plot.setSectionPaint(c, new Color(173, 196, 143));
-			}
-			else if( rem == 10 ){
-				plot.setSectionPaint(c, new Color(134, 169, 83));
-			}
-			else {
-				plot.setSectionPaint(c, new Color(96, 145, 46));
+		if( mimeTypes != null ){
+			for(int c = 0; c < mimeTypes.size(); c++){
+				int rem = c % 10;
+				
+				if( rem == 0 ){
+					plot.setSectionPaint(c, new Color(173, 205, 221));
+				}
+				else if( rem == 1 ){
+					plot.setSectionPaint(c, new Color(137, 184, 210));
+				}
+				else if( rem == 2 ){
+					plot.setSectionPaint(c, new Color(82, 151, 184));
+				}
+				else if( rem == 3 ){
+					plot.setSectionPaint(c, new Color(32, 120, 157));
+				}
+				else if( rem == 4 ){
+					plot.setSectionPaint(c, new Color(181, 202, 189));
+				}
+				else if( rem == 5 ){
+					plot.setSectionPaint(c, new Color(149, 181, 160));
+				}
+				else if( rem == 6 ){
+					plot.setSectionPaint(c, new Color(99, 148, 110));
+				}
+				else if( rem == 7 ){
+					plot.setSectionPaint(c, new Color(50, 117, 58));
+				}
+				else if( rem == 8 ){
+					plot.setSectionPaint(c, new Color(198, 212, 176));
+				}
+				else if( rem == 9 ){
+					plot.setSectionPaint(c, new Color(173, 196, 143));
+				}
+				else if( rem == 10 ){
+					plot.setSectionPaint(c, new Color(134, 169, 83));
+				}
+				else {
+					plot.setSectionPaint(c, new Color(96, 145, 46));
+				}
 			}
 		}
 		
