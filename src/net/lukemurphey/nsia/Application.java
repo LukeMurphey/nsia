@@ -1082,22 +1082,23 @@ public final class Application {
 				System.out.println("Done");
 			}
 			
-			// 6 -- Shutdown console listeners
-			/*
-			 * Java does not have a good method to stop listening to input from the console. The standard implementations
-			 * do not throw an IOException when interrupt is called. Therefore, this method will force the entire
-			 * application to exit after the all interruptible threads are closed.
-			 */
-			if( ConsoleListener.getConsoleListener() != null ){
-				System.exit(0); //Force the entire application to exit
-				/*
-				 * Note: when the JVM finally allows the console listening thread to be interrupted then the following function should be used and the System.exit(0) call removed:
-				 * ConsoleListener.stopListener();
-				 */
-			}
-			
 			appRes = null;
 		}
+			
+		// 6 -- Shutdown console listeners
+		/*
+		 * Java does not have a good method to stop listening to input from the console. The standard implementations
+		 * do not throw an IOException when interrupt is called. Therefore, this method will force the entire
+		 * application to exit after the all interruptible threads are closed.
+		 */
+		if( ConsoleListener.getConsoleListener() != null ){
+			System.exit(0); //Force the entire application to exit
+			/*
+			 * Note: when the JVM finally allows the console listening thread to be interrupted then the following function should be used and the System.exit(0) call removed:
+			 * ConsoleListener.stopListener();
+			 */
+		}
+			
 	}
 	
 	/**
