@@ -10,6 +10,7 @@ doc/AUTHORS
 doc/INSTALL
 doc/NEWS
 doc/README
+doc/Quick Start Guide.pdf
 etc/config.ini
 etc/init.d/ubuntu/*
 etc/mime.types
