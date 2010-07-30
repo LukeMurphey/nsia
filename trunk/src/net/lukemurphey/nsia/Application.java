@@ -95,7 +95,8 @@ public final class Application {
 	 * This is used to ensure that any shutdown hooks don't attempt to start
 	 * another shutdown sequence after one has already began.
 	 */
-	private Boolean shutdownInProgress = Boolean.FALSE; 
+	private Boolean shutdownInProgress = Boolean.FALSE;
+	private Object shutdownMutex = new Object();
 	
 	private String databaseLocation;
 	private String databaseDriver;
@@ -791,7 +792,7 @@ public final class Application {
 				metricsMonitor.shutdown();
 			}
 			
-			while( metricsMonitor.isAlive() ){
+			while( metricsMonitor != null && metricsMonitor.isAlive() ){
 				try{
 					metricsMonitorMutex.wait(100);
 				}
@@ -868,6 +869,7 @@ public final class Application {
 		// Launch console listener for accepting command line commands
 		if( runMode == RunMode.CLI ){
 			ConsoleListener.startConsoleListener();
+			appRes.runMode = runMode;
 		}
 		
 		return appRes;
@@ -1007,7 +1009,7 @@ public final class Application {
 	 */
 	public void shutdown( ShutdownRequestSource shutdownCommandSource, boolean hideOutput ){ // NOPMD by luke on 5/26/07 10:47 AM
 		
-		synchronized( shutdownInProgress ){
+		synchronized( shutdownMutex ){
 			
 			// 0 -- Precondition check
 			if( shutdownInProgress.booleanValue() ){
@@ -1787,7 +1789,7 @@ public final class Application {
 	 * @return
 	 */
 	protected boolean isShuttingDown(){
-		synchronized(shutdownInProgress){
+		synchronized(shutdownMutex){
 			return shutdownInProgress.booleanValue();
 		}
 	}
