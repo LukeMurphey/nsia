@@ -115,13 +115,11 @@ public class UserManagement {
 						userDesc.emailAddress = EmailAddress.getByAddress( email );
 					} catch (UnknownHostException e) {
 						
-						if( appRes != null )
-							appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Email address in database for user is invalid: Domain portion of mail address for user '" + userDesc.userName + "'/" + userId + " is invalid (" + email + ")"));
+						appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Email address in database for user is invalid: Domain portion of mail address for user '" + userDesc.userName + "'/" + userId + " is invalid (" + email + ")"));
 						
 					} catch (InvalidLocalPartException e) {
 						
-						if( appRes != null )
-							appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Email address in database for user is invalid: Local-part of mail address for user '" + userDesc.userName + "'/" + userId + " is invalid (" + email + ")"));
+						appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Email address in database for user is invalid: Local-part of mail address for user '" + userDesc.userName + "'/" + userId + " is invalid (" + email + ")"));
 					}
 				}
 				
@@ -189,13 +187,11 @@ public class UserManagement {
 						userDesc.emailAddress = EmailAddress.getByAddress( email );
 					} catch (UnknownHostException e) {
 						
-						if( appRes != null )
-							appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Email address in database for user is invalid: Domain portion of mail address for user '" + userDesc.userName + "'/" + userDesc.userId + " is invalid (" + email + ")"));
+						appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Email address in database for user is invalid: Domain portion of mail address for user '" + userDesc.userName + "'/" + userDesc.userId + " is invalid (" + email + ")"));
 						
 					} catch (InvalidLocalPartException e) {
 						
-						if( appRes != null )
-							appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Email address in database for user is invalid: Local-part of mail address for user '" + userDesc.userName + "'/" + userDesc.userId + " is invalid (" + email + ")"));
+						appRes.logEvent( EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Email address in database for user is invalid: Local-part of mail address for user '" + userDesc.userName + "'/" + userDesc.userId + " is invalid (" + email + ")"));
 					}
 				}
 				
