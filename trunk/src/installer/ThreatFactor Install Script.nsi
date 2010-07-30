@@ -121,7 +121,6 @@ Section "MainSection" SEC01
   File "${ROOT_PATH}\lib\derbyLocale_zh_CN.jar"
   File "${ROOT_PATH}\lib\derbyLocale_zh_TW.jar"
   File "${ROOT_PATH}\lib\derbynet.jar"
-  File "${ROOT_PATH}\lib\derbyrun.jar"
   File "${ROOT_PATH}\lib\derbytools.jar"
   File "${ROOT_PATH}\lib\filterbuilder.jar"
   File "${ROOT_PATH}\lib\freemarker.jar"
