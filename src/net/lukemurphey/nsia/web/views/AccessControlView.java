@@ -145,32 +145,12 @@ public class AccessControlView extends View {
 	        
 	        //   1.2 -- Get the user or group
 	        String subject = request.getParameter("Subject");
-	        int groupId = VALUE_UNDEFINED;
-	        int userId = VALUE_UNDEFINED;
-	        ObjectPermissionDescriptor objectPermissionDescriptor = null;
 	        boolean isEditing = false;
 	        
 	        //   1.3 -- Get the existing ACL entry (if so requested)
-	        boolean isUser = false;
 	        
 	        if( subject != null){
 	            isEditing = true;
-	            try{
-	                if( subject.startsWith("group") ){
-	                	isUser = false;
-	                    groupId = Integer.parseInt(subject.substring(5));
-	                    objectPermissionDescriptor = accessControl.getGroupPermissions( groupId, objectId );
-	                    
-	                }
-	                else if( subject.startsWith("user") ){
-	                	isUser = true;
-	                    userId = Integer.parseInt(subject.substring(4));
-	                    objectPermissionDescriptor = accessControl.getUserPermissions( userId, objectId, false );
-	                }
-	            }
-	            catch(NumberFormatException e){
-	                //throw new InvalidHtmlParameterException("Invalid Parameter", "The user or group identifier is invalid", "Console" );
-	            }
 	        }
 	        
 	        //  1.4 -- Post an error if the arguments are invalid
