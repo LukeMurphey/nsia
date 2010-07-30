@@ -42,17 +42,13 @@ public class WebClient {
 	int downloadTimeoutSeconds = 10; 
 	
 	//The maximum amount of data to download
-	long downloadBytesMax = 1024 * 256; //256 bytes 
+	int downloadBytesMax = 1024 * 256; //256 bytes 
 	
 	//Mutex for waiting to time-out the download if necessary 
 	Object httpMethodMutex = new Object();
 	
-	//Shutdown thread
-	Thread shutdownThread = null;
-	
 	//Result of the operation
 	boolean timeOutReached = false;
-	boolean downloadLimitReached = false;
 	
 	/**
 	 * Construct a web-client for the given operation and URL.
@@ -131,7 +127,7 @@ public class WebClient {
 	 * Set the maximum amount of data that will be downloaded.
 	 * @param bytes
 	 */
-	public void setSizeLimit( long bytes ){
+	public void setSizeLimit( int bytes ){
 		if( bytes <= 0 ){
 			throw new IllegalArgumentException("Maximum number of bytes to download must be greater than 0");
 		}
@@ -150,7 +146,7 @@ public class WebClient {
 	 * @author Luke
 	 *
 	 */
-	public class HttpResult{
+	public static class HttpResult{
 		HttpResponseData httpResponse;
 		boolean timeOutReached = false;
 		
@@ -259,7 +255,7 @@ public class WebClient {
 			
 			TimeoutThread timeoutThread = new TimeoutThread();
 			timeoutThread.start();
-			HttpResponseData httpResponse = new HttpResponseData(method);
+			HttpResponseData httpResponse = new HttpResponseData(method, downloadBytesMax);
 			httpMethodMutex.notify();
 			method.releaseConnection();
 			return new HttpResult(httpResponse, timeOutReached);
