@@ -82,9 +82,9 @@ public abstract class Authentication {
 		
 		try{
 			conn = appRes.getDatabaseConnection( Application.DatabaseAccessType.USER_QUERY );
-			statementAttempts = conn.prepareStatement("Select * from AttemptedLogins where LoginName = ?");
+			statementAttempts = conn.prepareStatement("Select * from AttemptedLogins where Lower(LoginName) = ?");
 			
-			statementAttempts.setString(1, userName);
+			statementAttempts.setString(1, userName.toLowerCase());
 			result = statementAttempts.executeQuery();
 			
 			// 2 -- Update the count of attempted authentications 
