@@ -1,10 +1,13 @@
 package net.lukemurphey.nsia.tests;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.apache.xmlrpc.XmlRpcException;
 
 import junit.framework.TestCase;
+import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
@@ -15,6 +18,7 @@ import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Properties;
 
 
 public class ContentSignatureArchiveTest extends TestCase {
@@ -55,16 +59,38 @@ public class ContentSignatureArchiveTest extends TestCase {
 		}
 	}
 	
-	public void testLoadSignaturesFromServer() throws DefinitionUpdateFailedException, DefinitionSetLoadException, NoDatabaseConnectionException, SQLException, InputValidationException, TestApplicationException {
-		TestApplication.getApplication();
-		DefinitionArchive archive = DefinitionArchive.getArchive(true);
+	public void testLoadSignaturesFromServer() throws DefinitionUpdateFailedException, DefinitionSetLoadException, NoDatabaseConnectionException, SQLException, InputValidationException, TestApplicationException, IOException {
 		
-		DefinitionVersionID rev  = archive.updateDefinitions();
+		File propsFile = new File("dev/local.properties");
+		String licenseKey = null;
 		
-		if( rev == null ){
-			fail("Current definition set could not be obtained");
+		if( propsFile.exists() ){
+			
+			// Load the properties file
+			Properties props = new Properties();
+			FileInputStream fis = new FileInputStream(propsFile);
+	        props.load(fis);    
+	        fis.close();
+	        
+	        // Get the license key (if it exists)
+	        licenseKey = props.getProperty("value.test.licensekey", null);
+	        
 		}
-		
+        
+		if( licenseKey != null ){
+			Application app = TestApplication.getApplication();
+			
+			//Set the license key so that the definitions can be loaded
+			app.getApplicationConfiguration().setLicenseKey(licenseKey);
+			
+			DefinitionArchive archive = DefinitionArchive.getArchive(true);
+			
+			DefinitionVersionID rev  = archive.updateDefinitions();
+			
+			if( rev == null ){
+				fail("Current definition set could not be obtained");
+			}
+		}
 	}
 	
 }
