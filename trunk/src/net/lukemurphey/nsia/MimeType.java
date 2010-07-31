@@ -1,6 +1,7 @@
 package net.lukemurphey.nsia;
 
 import java.io.*;
+
 import eu.medsea.util.*;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -12,15 +13,40 @@ public class MimeType {
 	private static MimetypesFileTypeMap typeMap = null;
 	
 	private static MimetypesFileTypeMap getMimeTypeMap(){
-		try{
+		
+		if( typeMap == null ){
+			
+			// 1 -- Determine if the mime-types file exists and load it if it does
+			try{
+				File file = new File( "../etc/mime.types" );
+				
+				if( file.exists() ){
+					typeMap = new MimetypesFileTypeMap("../etc/mime.types" );
+				}
+			}
+			catch(IOException e){
+				Application.getApplication().logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
+			}
+			
+			// 2 -- Otherwise, load the embedded mime.type file
+			InputStream in = null;
+			
 			if( typeMap == null ){
-				typeMap = new MimetypesFileTypeMap("../etc/mime.types" );
+				try{
+					in = MimeType.class.getResourceAsStream("mime.types");
+					typeMap = new MimetypesFileTypeMap( in );
+				}
+				finally{
+					if( in != null ){
+						try {
+							in.close();
+						} catch(IOException e){
+							Application.getApplication().logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
+						}
+					}
+				}
 			}
 		}
-		catch(IOException e){
-			Application.getApplication().logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
-		}
-		
 		return typeMap;
 	}
 	
