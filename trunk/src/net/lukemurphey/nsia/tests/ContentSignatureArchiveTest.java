@@ -55,7 +55,7 @@ public class ContentSignatureArchiveTest extends TestCase {
 		}
 	}
 	
-	public void testLoadSignaturesFromServer() throws DefinitionUpdateFailedException, DefinitionSetLoadException, SQLException, NoDatabaseConnectionException, InputValidationException, IOException {
+	public void testLoadSignaturesFromServer() throws DefinitionUpdateFailedException, DefinitionSetLoadException, NoDatabaseConnectionException, SQLException, InputValidationException, TestApplicationException {
 		TestApplication.getApplication();
 		DefinitionArchive archive = DefinitionArchive.getArchive(true);
 		

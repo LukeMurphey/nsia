@@ -1,10 +1,8 @@
 package net.lukemurphey.nsia.tests;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 import net.lukemurphey.nsia.Application;
-import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.ScannerController;
 import net.lukemurphey.nsia.scan.ScanResult;
 import net.lukemurphey.nsia.scan.ScanResultCode;
@@ -17,7 +15,7 @@ public class ScannerControllerTest extends TestCase {
 	ScannerController scannerController;
 	Application app = null;
 	
-	public void setUp() throws NoDatabaseConnectionException, IOException{
+	public void setUp() throws TestApplicationException{
 		app = TestApplication.getApplication();
 		scannerController = new ScannerController(app);
 	}

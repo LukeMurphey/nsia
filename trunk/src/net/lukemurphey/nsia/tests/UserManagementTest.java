@@ -1,6 +1,5 @@
 package net.lukemurphey.nsia.tests;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 import net.lukemurphey.nsia.Application;
@@ -15,7 +14,7 @@ public class UserManagementTest extends TestCase {
 	UserManagement userManagement;
 	Application app = null;
 	
-	public void setUp() throws NoDatabaseConnectionException, IOException{
+	public void setUp() throws TestApplicationException{
 		app = TestApplication.getApplication();
 		userManagement = new UserManagement(app);
 	}

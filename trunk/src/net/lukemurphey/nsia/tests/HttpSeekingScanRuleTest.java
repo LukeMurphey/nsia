@@ -1,7 +1,5 @@
 package net.lukemurphey.nsia.tests;
 
-import java.io.IOException;
-
 import junit.framework.TestCase;
 import net.lukemurphey.nsia.*;
 import net.lukemurphey.nsia.scan.HttpDefinitionScanResult;
@@ -12,7 +10,7 @@ public class HttpSeekingScanRuleTest extends TestCase {
 
 	Application app = null;
 	
-	public void setUp() throws NoDatabaseConnectionException, IOException{
+	public void setUp() throws TestApplicationException{
 		app = TestApplication.getApplication();
 	}
 	

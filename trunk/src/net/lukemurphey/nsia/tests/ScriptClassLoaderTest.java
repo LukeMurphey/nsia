@@ -45,7 +45,7 @@ public class ScriptClassLoaderTest extends TestCase {
 			this.connection = connection;
 			
 			try {
-				Class<?> loadedClass = this.getContextClassLoader().loadClass("net.lukemurphey.nsia.scanRules.ScriptSignature");
+				Class<?> loadedClass = this.getContextClassLoader().loadClass(net.lukemurphey.nsia.scan.ScriptDefinition.class.toString());
 				
 				Method method = loadedClass.getMethod("parse", new Class<?>[]{String.class});
 				
@@ -89,16 +89,16 @@ public class ScriptClassLoaderTest extends TestCase {
 	}
 	
 	public void testBasicScriptLoader() throws ScriptException, NoDatabaseConnectionException, SQLException, NoSuchMethodException, HttpException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException, InvalidDefinitionException, InterruptedException{
-		String sig = TestResources.readFileAsString( TestResources.TEST_RESOURCE_DIRECTORY + "NonLocalScripting.js" );
+		String sig = TestResources.readFileAsString( TestResources.TEST_RESOURCE_DIRECTORY + "URLExists.js" );
 		
 		HostConfiguration hostConfig = new HostConfiguration();
-		hostConfig.setHost("analytics.blogspot.com", 80, "http");
+		hostConfig.setHost("google.com", 80, "http");
 		HttpMethod httpMethod = new GetMethod( "/" );
 		httpMethod.setFollowRedirects(true);
 		HttpClient httpClient = new HttpClient();
 		httpClient.executeMethod( hostConfig, httpMethod );
 		
-		HttpResponseData httpResponse = new HttpResponseData( httpMethod, "analytics.blogspot.com" );
+		HttpResponseData httpResponse = new HttpResponseData( httpMethod, "http://google.com" );
 		
 		RunThread thread = new RunThread(sig, httpResponse, 1, new Variables(), TestResources.getTestResources().getConnection() );
 		thread.setContextClassLoader(new ScriptClassLoader());

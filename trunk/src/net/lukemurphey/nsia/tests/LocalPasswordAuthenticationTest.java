@@ -3,7 +3,6 @@ package net.lukemurphey.nsia.tests;
 import junit.framework.TestCase;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.io.IOException;
 import java.net.*;
 
 import net.lukemurphey.nsia.Application;
@@ -19,7 +18,7 @@ public class LocalPasswordAuthenticationTest extends TestCase {
 	LocalPasswordAuthentication localPwd;
 	Application app = null;
 	
-	public void setUp() throws NoDatabaseConnectionException, IOException{
+	public void setUp() throws TestApplicationException{
 		app = TestApplication.getApplication();
 		localPwd = new LocalPasswordAuthentication( app );
 	}

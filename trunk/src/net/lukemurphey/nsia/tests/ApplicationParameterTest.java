@@ -2,7 +2,6 @@ package net.lukemurphey.nsia.tests;
 
 import junit.framework.TestCase;
 
-import java.io.IOException;
 import java.sql.*;
 
 import net.lukemurphey.nsia.Application;
@@ -15,7 +14,7 @@ public class ApplicationParameterTest extends TestCase {
 	ApplicationParameters params = null;
 	Application app = null;
 	
-	public void setUp() throws NoDatabaseConnectionException, IOException{
+	public void setUp() throws TestApplicationException{
 		app = TestApplication.getApplication();
 		params = new ApplicationParameters(app);
 	}
