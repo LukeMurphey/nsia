@@ -1,7 +1,6 @@
 package net.lukemurphey.nsia.tests;
 
 import java.io.IOException;
-import java.net.BindException;
 import java.sql.SQLException;
 
 import net.lukemurphey.nsia.Application;
@@ -9,7 +8,6 @@ import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupScanResult;
-import net.lukemurphey.nsia.TestsConfig;
 import net.lukemurphey.nsia.scan.ScanData;
 import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
 
