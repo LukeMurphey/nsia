@@ -1,63 +1,56 @@
 package net.lukemurphey.nsia.tests;
 
-import java.net.BindException;
+import java.io.IOException;
 import java.sql.SQLException;
 
+import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
-import net.lukemurphey.nsia.TestsConfig;
 import net.lukemurphey.nsia.UserManagement;
 
 import junit.framework.TestCase;
 
 public class UserManagementTest extends TestCase {
 	UserManagement userManagement;
+	Application app = null;
 	
-	public static void main(String[] args) {
+	public void setUp() throws NoDatabaseConnectionException, IOException{
+		app = TestApplication.getApplication();
+		userManagement = new UserManagement(app);
+	}
+	
+	public void tearDown(){
+		TestApplication.stopApplication();
 	}
 
-	public UserManagementTest(String name) throws BindException, SQLException, InputValidationException, Exception {
-		super(name);
-		
-		userManagement = new UserManagement(TestsConfig.getApplicationResource());
-	}
-
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.UserManagement.getUserDescriptor(long)'
-	 */
 	public void testGetUserDescriptorLong() throws SQLException, NoDatabaseConnectionException, NotFoundException {
 		UserManagement.UserDescriptor userDesc = userManagement.getUserDescriptor(1);
 		if( userDesc == null )
 			fail("The user was not found");
 	}
 
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.UserManagement.getUserDescriptor(String)'
-	 */
 	public void testGetUserDescriptorString() throws SQLException, InputValidationException, NoDatabaseConnectionException, NotFoundException {
-		UserManagement.UserDescriptor userDesc = userManagement.getUserDescriptor("Luke");
+		UserManagement.UserDescriptor userDesc = userManagement.getUserDescriptor("Test");
+		
 		if( userDesc == null )
 			fail("The user was not found using case sensitive call");
+	}
+	
+	public void testGetUserDescriptorStringWrongCase() throws SQLException, InputValidationException, NoDatabaseConnectionException, NotFoundException {
+		UserManagement.UserDescriptor userDesc = userManagement.getUserDescriptor("test");
 		
-		userDesc = userManagement.getUserDescriptor("luke");
 		if( userDesc == null )
 			fail("The user was not found using case insensitive call");
 	}
 
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.UserManagement.getUserId(String)'
-	 */
 	public void testGetUserId() throws SQLException, InputValidationException, NoDatabaseConnectionException {
-		long userId = userManagement.getUserID("luke");
+		long userId = userManagement.getUserID("Test");
 		
 		if( userId == -1 )
 			fail("The user was not found");
 	}
 
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.UserManagement.disableAccount(long)'
-	 */
 	public void testDisableAccount() throws SQLException, NoDatabaseConnectionException, InputValidationException, NotFoundException {
 		if( !userManagement.disableAccount(1) )
 			fail("The account could not be disabled");
@@ -74,23 +67,14 @@ public class UserManagementTest extends TestCase {
 			fail("Account was not re-enabled");
 	}
 
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.UserManagement.addAccount(String, String, String, String, long, EmailAddress, boolean)'
-	 */
 	public void testAddAccount() {
 
 	}
 
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.UserManagement.changePassword(long, String)'
-	 */
 	public void testChangePassword() {
 
 	}
 
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.UserManagement.updateUserInfo(long, String, EmailAddress, boolean)'
-	 */
 	public void testUpdateUserInfo() {
 
 	}
