@@ -76,22 +76,17 @@ public class ScriptClassLoader extends ClassLoader {
 	
 	public Class<?> loadClass(String className) throws ClassNotFoundException {
 		
-		//System.out.println( "Looking for :" + className );
-		
 		String resolvedClass = SHORTCUTS.get(className);
 		
 		if( resolvedClass != null ){
-			//System.out.println( "Accepted (shortcut):" + className );
 			return super.loadClass(resolvedClass);
 		}
 		else{
 			if( WHITELIST.contains(className) ){
-				//System.out.println( "Accepted (whitelist):" + className );
 				return super.loadClass(className);
 			}
 			else{
-				//System.out.println( "Rejected:" + className );
-				throw new ClassNotFoundException();
+				throw new ClassNotFoundException("Class " + className + " not found");
 			}
 		}
 	}
