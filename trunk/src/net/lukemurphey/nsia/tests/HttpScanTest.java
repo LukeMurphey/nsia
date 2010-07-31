@@ -1,6 +1,8 @@
 package net.lukemurphey.nsia.tests;
 
 import junit.framework.TestCase;
+
+import java.io.IOException;
 import java.net.*;
 import java.sql.SQLException;
 
@@ -16,24 +18,26 @@ import net.lukemurphey.nsia.scan.ScanRule.ScanRuleLoadFailureException;
 
 public class HttpScanTest extends TestCase {
 
-	Application appRes;
+	Application app = null;
 	
-	public static void main(String[] args) {
+	public void setUp() throws NoDatabaseConnectionException, IOException{
+		app = TestApplication.getApplication();
 	}
-
-	public HttpScanTest() throws BindException, SQLException, InputValidationException, Exception{
-		appRes = TestsConfig.getApplicationResource();
-		
+	
+	public void tearDown(){
+		TestApplication.stopApplication();
 	}
 	
 	public void testLoadRuleFromDatabase() throws MalformedURLException, SQLException, ScanException, NoDatabaseConnectionException, ScanRuleLoadFailureException{
-		HttpStaticScanRule httpScan = new HttpStaticScanRule(appRes);
+		HttpStaticScanRule httpScan = new HttpStaticScanRule(app);
 		
-		if( !httpScan.loadFromDatabase(1) )
-			fail("Database load failed");
+		if( !httpScan.loadFromDatabase(1) ){
+			fail("Rule load failed");
+		}
 		
 		ScanResult result = httpScan.doScan();
 		HttpStaticScanResult httpResult = (HttpStaticScanResult)result;
+		
 		if( result.getDeviations() != 0){
 			System.out.println( "Deviations: " + result.getDeviations());
 			System.out.println( "Response code: " + httpResult.getActualResponseCode());
@@ -43,10 +47,11 @@ public class HttpScanTest extends TestCase {
 	}
 	
 	public void testSaveRuleToDatabase() throws MalformedURLException, SQLException, ScanException, NoDatabaseConnectionException, ScanRuleLoadFailureException{
-		HttpStaticScanRule httpScan = new HttpStaticScanRule(appRes);
+		HttpStaticScanRule httpScan = new HttpStaticScanRule(app);
 		
-		if( !httpScan.loadFromDatabase(1) )
-			fail("Database load failed");
+		if( !httpScan.loadFromDatabase(1) ){
+			fail("Rule load failed");
+		}
 		
 		ScanResult result = httpScan.doScan();
 		HttpStaticScanResult httpResult = (HttpStaticScanResult)result;
@@ -57,7 +62,7 @@ public class HttpScanTest extends TestCase {
 			fail("Unexpected deviations were observed");
 		}
 		
-		result.saveToDatabase(appRes.getDatabaseConnection(Application.DatabaseAccessType.SCANNER), 1);
+		result.saveToDatabase(app.getDatabaseConnection(Application.DatabaseAccessType.SCANNER), 1);
 	}
 	
 	/*
