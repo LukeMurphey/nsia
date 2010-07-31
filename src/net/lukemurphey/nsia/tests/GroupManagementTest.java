@@ -1,6 +1,5 @@
 package net.lukemurphey.nsia.tests;
 
-import java.io.IOException;
 import java.net.BindException;
 import java.sql.SQLException;
 
@@ -18,7 +17,7 @@ public class GroupManagementTest extends TestCase {
 	GroupManagement groupManagement;
 	Application app = null;
 	
-	public void setUp() throws NoDatabaseConnectionException, IOException{
+	public void setUp() throws TestApplicationException{
 		app = TestApplication.getApplication();
 		groupManagement = new GroupManagement(app);
 	}

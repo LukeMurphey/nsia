@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.martiansoftware.jsap.JSAPException;
+
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.GenericUtils;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
@@ -16,11 +18,19 @@ public class TestApplication {
 	private static Application app = null;
 	public static String DEFAULT_TEST_DATABASE_PATH = "tmp/test_database";
 	
-	public synchronized static Application getApplication() throws IOException, NoDatabaseConnectionException{
-		
-		if( app == null ){
-			createDatabaseCopy();
-			app = new Application( DEFAULT_TEST_DATABASE_PATH );
+	public synchronized static Application getApplication() throws TestApplicationException{
+		try{
+			if( app == null ){
+				createDatabaseCopy();
+				app = new Application( DEFAULT_TEST_DATABASE_PATH );
+			}
+		}
+		catch(IOException e ){
+			throw new TestApplicationException(e);
+		} catch (NoDatabaseConnectionException e) {
+			throw new TestApplicationException(e);
+		} catch (JSAPException e) {
+			throw new TestApplicationException(e);
 		}
 		
 		return app;

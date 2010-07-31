@@ -1,6 +1,5 @@
 package net.lukemurphey.nsia.tests;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 import net.lukemurphey.nsia.Application;
@@ -18,7 +17,7 @@ public class ScanDataTest extends TestCase {
 	Application app = null;
 	ScanData scanData; 
 	
-	public void setUp() throws NoDatabaseConnectionException, IOException{
+	public void setUp() throws TestApplicationException{
 		app = TestApplication.getApplication();
 		scanData = new ScanData( app );
 	}
