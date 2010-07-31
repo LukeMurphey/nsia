@@ -7,7 +7,7 @@
 	
     <target name="jar" description="Create core NSIA JAR file">
         <jar destfile="bin/nsia.jar"
-        	basedir="java-bin/" 
+        	basedir="tmp/java/" 
         	manifest="dev/Manifest.txt"
         	excludes="*.svn"
         	includes="net/**"
