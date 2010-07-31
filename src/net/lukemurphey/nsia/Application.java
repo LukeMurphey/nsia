@@ -37,7 +37,7 @@ public final class Application {
 	private static Application appRes;
 	
 	private EventLog eventlog = null;
-	private ApplicationConfiguration appConfig = null; // NOPMD by luke on 5/26/07 10:50 AM
+	private ApplicationConfiguration appConfig = null;
 	
 	public static final String APPLICATION_NAME = "NSIA";
 	public static final String APPLICATION_VENDOR = "ThreatFactor";
@@ -187,6 +187,9 @@ public final class Application {
 	}
 	
 	public Application( String embeddedDatabasePath ) throws NoDatabaseConnectionException{
+		
+		//this(null, embeddedDatabasePath, false );
+		
 		//This constructor instantiates a application object that is intended only for test cases.
 		firewall = null;
 		scannerController = null;
@@ -201,6 +204,8 @@ public final class Application {
 			}
 			
 			appRes = this;
+			
+			appConfig = new ApplicationConfiguration( this );
 		}
 	}
 	
@@ -217,6 +222,18 @@ public final class Application {
 	 *
 	 */
 	public Application( String[] args, String embeddedDatabasePath ) throws JSAPException, NoDatabaseConnectionException{
+		this(args, embeddedDatabasePath, true );
+	}
+	
+	/**
+	 * Default constructor
+	 * @throws JSAPException 
+	 * @throws ClassNotFoundException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 *
+	 */
+	public Application( String[] args, String embeddedDatabasePath, boolean startAsServer ) throws JSAPException, NoDatabaseConnectionException{
 		
 		// 0 -- Perform basic startup routines
 		
@@ -294,7 +311,13 @@ public final class Application {
 			logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 		}
 		
-		scannerController = new ScannerController( this );
+		if( startAsServer ){
+			scannerController = new ScannerController( this );
+		}
+		else{
+			scannerController = null;
+		}
+		
 		firewall = new Firewall( this );
 		//firewall.loadFirewallRulesFromDatabase();
 		
@@ -306,32 +329,36 @@ public final class Application {
 		}
 		catch (NoDatabaseConnectionException e1) {
 			System.out.println( e1.getMessage() );
-			//logExceptionEvent( StringTable.MSGID_INTERNAL_ERROR, e1 ); //This will
-			//System.getProperties().setProperty("httpclient.useragent", "SiteSentry " + getVersion() );
 		}
 		catch (InputValidationException e1) {
 			System.out.println( e1.getMessage() );
-			//logExceptionEvent( StringTable.MSGID_INTERNAL_ERROR, e1 ); //This will
-			//System.getProperties().setProperty("httpclient.useragent", "SiteSentry " + getVersion() );
 		}
 		catch (SQLException e1) {
 			System.out.println( e1.getMessage() );
-			//logExceptionEvent( StringTable.MSGID_INTERNAL_ERROR, e1 ); //This will
-			//System.getProperties().setProperty("httpclient.useragent", "SiteSentry " + getVersion() );
 		}
 		
 		// 6 -- Instantiate the manager
-		manager = new NetworkManager();
+		if( startAsServer ){
+			manager = new NetworkManager();
+		}
+		else{
+			manager = null;
+		}
+		
 		startTime = System.currentTimeMillis();
 		
 		// 7 -- Start the metrics monitor
-		startMetricsMonitor();
+		if( startAsServer ){
+			startMetricsMonitor();
+		}
 		
 		ShutdownHook shutdownHook = new ShutdownHook();
 		Runtime.getRuntime().addShutdownHook(shutdownHook);
 		
 		// 8 -- Start the scheduled background tasks
-		startTasks();
+		if( startAsServer ){
+			startTasks();
+		}
 	}
 	
 	/*private int getWorkerThreadID(){
@@ -1025,7 +1052,7 @@ public final class Application {
 	 * @param shutdownCommandSource
 	 */
 	public void shutdown( ShutdownRequestSource shutdownCommandSource ){
-		shutdown( shutdownCommandSource, true );
+		shutdown( shutdownCommandSource, false );
 	}
 	
 	/**
