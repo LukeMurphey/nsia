@@ -3,6 +3,7 @@ package net.lukemurphey.nsia.tests;
 import junit.framework.TestCase;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.io.IOException;
 import java.net.*;
 
 import net.lukemurphey.nsia.Application;
@@ -13,74 +14,73 @@ import net.lukemurphey.nsia.LocalPasswordAuthentication;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NumericalOverflowException;
 import net.lukemurphey.nsia.PasswordAuthenticationValidator;
-import net.lukemurphey.nsia.TestsConfig;
 
 public class LocalPasswordAuthenticationTest extends TestCase {
-	Application appRes;
 	LocalPasswordAuthentication localPwd;
+	Application app = null;
 	
-	public LocalPasswordAuthenticationTest() throws BindException, SQLException, InputValidationException, Exception{
-		appRes = TestsConfig.getApplicationResource();
-		localPwd = new LocalPasswordAuthentication(appRes);
+	public void setUp() throws NoDatabaseConnectionException, IOException{
+		app = TestApplication.getApplication();
+		localPwd = new LocalPasswordAuthentication( app );
+	}
+	
+	public void tearDown(){
+		TestApplication.stopApplication();
+	}
+
+	public void testAuthenticateStringPasswordAuthenticationValidatorValid() throws UnknownHostException, NoSuchAlgorithmException, SQLException, InputValidationException, NoDatabaseConnectionException, NumericalOverflowException{
+		PasswordAuthenticationValidator validator = new PasswordAuthenticationValidator("asdfasdf"); //This is actual password of the user
+		ClientData clientData = new ClientData( InetAddress.getLocalHost(), "Eclipse Test JUnit Case" );
 		
-		try {
-			appRes.connectToDatabase( TestsConfig.DB_PATH, TestsConfig.DB_PASSWORD, TestsConfig.DB_DRIVER );
-			//EventLog eventlog = new EventLog( new File(TestsConfig.LOG_FILE) );
-			//appRes.setEventLog( eventlog );
-			
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		//} catch (FileNotFoundException e) {
-		//	e.printStackTrace();
+		Authentication.AuthenticationResult authResult = localPwd.authenticate("Test", validator, clientData);
+		
+		if( authResult.getAuthenticationStatus() != Authentication.AuthenticationResult.AUTH_SUCCESS ){
+			fail("The authentication failed for a valid user");
 		}
 		
 	}
 	
-	public static void main(String[] args) {
-	}
+	public void testAuthenticateStringPasswordAuthenticationValidatorInvalid() throws NoSuchAlgorithmException, SQLException, InputValidationException, NoDatabaseConnectionException, NumericalOverflowException, UnknownHostException {
 
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.LocalPasswordAuthentication.authenticate(String, PasswordAuthenticationValidator)'
-	 */
-	public void testAuthenticateStringPasswordAuthenticationValidator() throws NoSuchAlgorithmException, SQLException, InputValidationException, NoDatabaseConnectionException, NumericalOverflowException, UnknownHostException {
-		PasswordAuthenticationValidator validator = new PasswordAuthenticationValidator("password");
-		
+		PasswordAuthenticationValidator validator = new PasswordAuthenticationValidator("invalidPassword");
 		ClientData clientData = new ClientData( InetAddress.getLocalHost(), "Eclipse Test JUnit Case" );
 		
-		Authentication.AuthenticationResult authResult = localPwd.authenticate("Luke", validator, clientData);
-		if( authResult.getAuthenticationStatus() != Authentication.AuthenticationResult.AUTH_SUCCESS )
-			fail("The authentication failed for a valid user");
+		Authentication.AuthenticationResult authResult = localPwd.authenticate("Test", validator, clientData);
 		
-		validator = new PasswordAuthenticationValidator("invalidPassword");
-		authResult = localPwd.authenticate("Luke", validator, clientData);
-		if( authResult.getAuthenticationStatus() == Authentication.AuthenticationResult.AUTH_SUCCESS )
+		if( authResult.getAuthenticationStatus() == Authentication.AuthenticationResult.AUTH_SUCCESS ){
 			fail("The authentication succeeded for a invalid user");
-		
-		
+		}
 	}
 
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.Authentication.incrementAuthenticationFailedCount(String, long)'
-	 */
-	public void testIncrementAuthenticationFailedCount() throws SQLException, NumericalOverflowException, InputValidationException, NoDatabaseConnectionException {
-		//long prevCount = localPwd.getAuthenticationFailedCount("L33tHax0r",800000000L);
+	
+	public void testValidAccountLockout() throws SQLException, NumericalOverflowException, InputValidationException, NoDatabaseConnectionException, NoSuchAlgorithmException, UnknownHostException {
 		
-		//localPwd.incrementAuthenticationFailedCount("L33tHax0r", 800000000L);
-		//assertEquals( prevCount+1, localPwd.getAuthenticationFailedCount("L33tHax0r",800000000L) );
+		PasswordAuthenticationValidator validator = new PasswordAuthenticationValidator("invalidPassword");
+		ClientData clientData = new ClientData( InetAddress.getLocalHost(), "Eclipse Test JUnit Case" );
 		
-		//localPwd.incrementAuthenticationFailedCount("L33tHax0r", 800000000L);
-		//assertEquals( prevCount+2, localPwd.getAuthenticationFailedCount("L33tHax0r",800000000L) );
+		//Lock the account due to repeated authentication attempts
+		for( int c = 0; c < 5; c++){
+			localPwd.authenticate("Test", validator, clientData);
+		}
+		
+		if( !localPwd.isAccountBruteForceLocked("Test") ){
+			fail("Account was not locked out");
+		}
 	}
-
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.Authentication.getAuthenticationFailedCount(String, long)'
-	 */
-	public void testGetAuthenticationFailedCount() throws SQLException  {
-		//assertEquals( 6, localPwd.getAuthenticationFailedCount("SomeName",800000000L) );
+	
+	public void testInvalidAccountLockout() throws SQLException, NumericalOverflowException, InputValidationException, NoDatabaseConnectionException, NoSuchAlgorithmException, UnknownHostException {
+		
+		PasswordAuthenticationValidator validator = new PasswordAuthenticationValidator("invalidPassword");
+		ClientData clientData = new ClientData( InetAddress.getLocalHost(), "Eclipse Test JUnit Case" );
+		
+		//Lock the account due to repeated authentication attempts
+		for( int c = 0; c < 5; c++){
+			localPwd.authenticate("NotARealUser", validator, clientData);
+		}
+		
+		if( !localPwd.isAccountBruteForceLocked("NotARealUser") ){
+			fail("Account was not locked out");
+		}
 	}
 
 }
