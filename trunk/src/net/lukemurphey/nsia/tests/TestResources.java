@@ -33,7 +33,7 @@ public class TestResources {
 	
 	private org.apache.commons.dbcp.BasicDataSource connectionBroker;
 	
-	public static final String TEST_RESOURCE_DIRECTORY = "C:\\Users\\Luke Murphey\\workspace\\NSIA\\Development\\Test Case Resources\\";
+	public static final String TEST_RESOURCE_DIRECTORY = "dev/test/";
 	
 	public static String readFileAsString(String filePath) throws java.io.IOException{
         StringBuffer fileData = new StringBuffer(1000);
@@ -67,9 +67,9 @@ public class TestResources {
 		String databaseLocation;
 		
 		if( createIfNonExistant )
-			databaseLocation = "jdbc:derby:Database;create=true";
+			databaseLocation = "jdbc:derby:tmp/test_database;create=true";
 		else
-			databaseLocation = "jdbc:derby:Database";
+			databaseLocation = "jdbc:derby:tmp/test_database";
 		
 		
 		
