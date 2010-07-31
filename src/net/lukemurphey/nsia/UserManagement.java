@@ -236,8 +236,9 @@ public class UserManagement {
 		// 1 -- Retrieve the user ID
 		int userId = getUserID( userName );
 		
-		if( userId < 0 )
+		if( userId < 0 ){
 			return null;
+		}
 		
 		// 2 -- Get the user descriptor
 		return getUserDescriptor( userId );
@@ -258,17 +259,21 @@ public class UserManagement {
 		// 0 -- Precondition check
 		
 		//	 0.1 -- Username must not be null or blank
-		if( userName == null || userName.length() == 0 )
+		if( userName == null || userName.length() == 0 ){
 			return -1;
+		}
 		
 		//	 0.2 -- Username must contain valid characters
 		Matcher matcher = nameRegex.matcher(userName);
-		if( !matcher.matches() )
+		
+		if( !matcher.matches() ){
 			throw new InputValidationException( "The username contains invalid characters", "Username", userName);
+		}
 		
 		//	 0.3 -- Username must not be overly long (this makes SQL injection more difficult)
-		if( userName.length() > USERNAME_LENGTH )
+		if( userName.length() > USERNAME_LENGTH ){
 			throw new InputValidationException("The username contains too many characters (" + userName.length() + ")", "Username", userName);
+		}
 		
 		// 1 -- Check the database
 		PreparedStatement statement = null;
@@ -277,8 +282,8 @@ public class UserManagement {
 		
 		try{
 			connection = appRes.getDatabaseConnection(Application.DatabaseAccessType.USER_QUERY);
-			statement = connection.prepareStatement("Select * from Users where LoginName = ?");
-			statement.setString(1, userName);
+			statement = connection.prepareStatement("Select * from Users where Lower(LoginName) = ?");
+			statement.setString(1, userName.toLowerCase());
 			result = statement.executeQuery();
 			
 			if( result.next() )
@@ -286,14 +291,17 @@ public class UserManagement {
 			else
 				return -1;
 		} finally {
-			if (result != null )
+			if (result != null ){
 				result.close();
+			}
 			
-			if (statement != null )
+			if (statement != null ){
 				statement.close();
+			}
 			
-			if (connection != null )
+			if (connection != null ){
 				connection.close();
+			}
 		}
 	}
 	
@@ -314,8 +322,9 @@ public class UserManagement {
 		// 0 -- precondition check
 		
 		//	 0.1 -- Make sure the argument is valid
-		if( userId < 1 )
+		if( userId < 1 ){
 			throw new IllegalArgumentException("The user ID must be greater than 0");
+		}
 		
 		//	 0.2 -- Determine if a database connection is available
 		//if( appRes.getDatabaseConnection(Application.DB_USER_QUERY_SUBSYSTEM) != null );
@@ -338,11 +347,13 @@ public class UserManagement {
 			
 			return true;
 		} finally {
-			if (preparedStatement != null )
+			if (preparedStatement != null ){
 				preparedStatement.close();
+			}
 			
-			if (conn != null )
+			if (conn != null ){
 				conn.close();
+			}
 		}
 	}
 	
@@ -361,8 +372,9 @@ public class UserManagement {
 		// 0 -- precondition check
 		
 		//	 0.1 -- Make sure the argument is valid
-		if( userId < 1 )
+		if( userId < 1 ){
 			throw new IllegalArgumentException("The user ID must be greater than 0");
+		}
 		
 		// 1 -- Set the account status to disabled
 		Connection conn = appRes.getDatabaseConnection( Application.DatabaseAccessType.USER_UPDATE );
@@ -377,11 +389,13 @@ public class UserManagement {
 			
 			return true;
 		} finally {
-			if (preparedStatement != null )
+			if (preparedStatement != null ){
 				preparedStatement.close();
+			}
 			
-			if (conn != null )
+			if (conn != null ){
 				conn.close();
+			}
 		}
 	}
 	
@@ -403,8 +417,9 @@ public class UserManagement {
 		// 0 -- precondition check
 		
 		//	 0.1 -- Make sure the argument is valid
-		if( userId < 1 )
+		if( userId < 1 ){
 			throw new IllegalArgumentException("The user ID must be greater than 0");
+		}
 		
 		
 		// 1 -- Set the account status to disabled
@@ -415,8 +430,9 @@ public class UserManagement {
 			preparedStatement = conn.prepareStatement("Delete from Users where UserID = ?");
 			preparedStatement.setLong(1, userId );
 			
-			if( preparedStatement.executeUpdate() != 1 )
+			if( preparedStatement.executeUpdate() != 1 ){
 				return false;
+			}
 			
 			// 2 -- Disable the active sessions for the given user (set to administratively disabled)
 			SessionManagement sessionManagement = new SessionManagement( appRes );
@@ -424,11 +440,13 @@ public class UserManagement {
 			
 			return true;
 		} finally {
-			if (preparedStatement != null )
+			if (preparedStatement != null ){
 				preparedStatement.close();
+			}
 			
-			if (conn != null )
+			if (conn != null ){
 				conn.close();
+			}
 		}
 	}
 	
@@ -507,43 +525,54 @@ public class UserManagement {
 		// 0 -- Precondition check
 		
 		//	 0.1 -- Make sure the user name is valid
-		if( userName == null || userName.length() == 0 )
+		if( userName == null || userName.length() == 0 ){
 			throw new IllegalArgumentException("Username is invalid (null)");
+		}
 		
-		if( userName.length() == 0 )
+		if( userName.length() == 0 ){
 			throw new IllegalArgumentException("Username is invalid (empty string)");
+		}
 		
 		Matcher matcher = nameRegex.matcher( userName );
-		if( !matcher.matches() )
+		
+		if( !matcher.matches() ){
 			throw new InputValidationException("Username contains invalid characters", "Username", userName );
+		}
 		
 		//	 0.2 -- Make sure the real name is valid
-		if( realName == null || realName.length() == 0 )
+		if( realName == null || realName.length() == 0 ){
 			throw new IllegalArgumentException("Real name is invalid (null)");
+		}
 		
-		if( realName.length() == 0 )
+		if( realName.length() == 0 ){
 			throw new IllegalArgumentException("Real name is invalid (empty string)");
+		}
 		
 		Matcher realNameMatcher = realNameRegex.matcher( realName );
 		
-		if( !realNameMatcher.matches() )
+		if( !realNameMatcher.matches() ){
 			throw new InputValidationException("Real name contains invalid characters", "Realname", realName );
+		}
 		
 		//	 0.3 -- Make sure the hash algorithm is valid
-		if( hashAlgorithm == null )
+		if( hashAlgorithm == null ){
 			throw new IllegalArgumentException("Hash algorithm is invalid (null)");
+		}
 		
-		if( hashAlgorithm.length() == 0 )
+		if( hashAlgorithm.length() == 0 ){
 			throw new IllegalArgumentException("Hash algorithm is invalid (empty)");
+		}
 		
 		//	 0.4 -- Make sure hash iteration count is valid
-		if( hashIterationCount < 1 )
+		if( hashIterationCount < 1 ){
 			throw new InputValidationException("Hash iteration count is illegal","Hash Iteration Count", String.valueOf(hashIterationCount) );
+		}
 		
 		
 		// 1 -- Make sure the user does not already exist
-		if( getUserID( userName ) != -1 )
+		if( getUserID( userName ) != -1 ){
 			return -1;
+		}
 		
 		
 		// 2 -- Get the parameters for the account details
@@ -577,32 +606,40 @@ public class UserManagement {
 			preparedStatement.setLong(8, hashIterationCount );
 			preparedStatement.setString(9, salt );
 			
-			if( emailAddress == null )
+			if( emailAddress == null ){
 				preparedStatement.setString(10, "" );
-			else
+			}
+			else{
 				preparedStatement.setString(10, emailAddress.toString() );
+			}
 			
 			preparedStatement.setBoolean(11, unrestricted );
 			
-			if( preparedStatement.executeUpdate() < 1 )
+			if( preparedStatement.executeUpdate() < 1 ){
 				return -1;
+			}
 			
 			// 4 -- Return the user ID
 			keys = preparedStatement.getGeneratedKeys();
-			if( keys.next() )
+			if( keys.next() ){
 				return keys.getInt(1);
-			else
+			}
+			else{
 				return -1;
+			}
 			
 		} finally {
-			if (preparedStatement != null )
+			if (preparedStatement != null ){
 				preparedStatement.close();
+			}
 			
-			if (keys != null )
+			if (keys != null ){
 				keys.close();
+			}
 			
-			if (conn != null )
+			if (conn != null ){
 				conn.close();
+			}
 		}
 	}
 	
@@ -623,10 +660,12 @@ public class UserManagement {
 	public String changePasswordToRandom( int userId, int newPasswordLength ) throws NoDatabaseConnectionException, SQLException, InputValidationException, NoSuchAlgorithmException{
 		String newPassword = LocalPasswordAuthentication.generateRandomPassword( newPasswordLength );
 		
-		if( changePassword( userId, newPassword ) )
+		if( changePassword( userId, newPassword ) ){
 			return newPassword;
-		else
+		}
+		else{
 			return null;
+		}
 	}
 	
 	/**
@@ -664,20 +703,24 @@ public class UserManagement {
 		// 0 -- Precondition check
 		
 		//	 0.1 -- Make sure the new password is valid
-		if( newPassword == null )
+		if( newPassword == null ){
 			throw new IllegalArgumentException("Password is invalid (null)");
+		}
 		
-		if( newPassword.length() == 0 )
+		if( newPassword.length() == 0 ){
 			throw new IllegalArgumentException("Password is invalid (empty)");
+		}
 		
 		//	 0.3 -- Make sure the user id is valid
-		if( userId < 1 )
+		if( userId < 1 ){
 			throw new IllegalArgumentException("User ID is invalid (must be greater than 0)");
+		}
 		
 		//	 0.4 -- Make sure database is available
 		Connection conn = appRes.getDatabaseConnection( Application.DatabaseAccessType.USER_UPDATE );
-		if( conn == null )
+		if( conn == null ){
 			throw new NoDatabaseConnectionException();
+		}
 		
 		
 		// 1 -- Change the password
@@ -706,11 +749,13 @@ public class UserManagement {
 			else
 				return false;
 		} finally {
-			if (prepStmt != null )
+			if (prepStmt != null ){
 				prepStmt.close();
+			}
 			
-			if (conn != null )
+			if (conn != null ){
 				conn.close();
+			}
 		}
 	}
 	
@@ -729,45 +774,56 @@ public class UserManagement {
 		// 0 -- Precondition check
 		
 		//	 0.1 -- User ID must be valid
-		if( userId < 1 )
+		if( userId < 1 ){
 			throw new IllegalArgumentException("User ID is invalid (must be greater than 0)");
+		}
 		
 		//	 0.2 -- Make sure the real name is valid
-		if( realName == null || realName.length() == 0 )
+		if( realName == null || realName.length() == 0 ){
 			throw new IllegalArgumentException("Real name is invalid (null)");
+		}
 		
-		if( realName.length() == 0 )
+		if( realName.length() == 0 ){
 			throw new IllegalArgumentException("Real name is invalid (empty string)");
+		}
 		
 		Matcher realNameMatcher = realNameRegex.matcher( realName );
 		
-		if( !realNameMatcher.matches() )
+		if( !realNameMatcher.matches() ){
 			throw new InputValidationException("Real name contains invalid characters", "Realname", realName );
+		}
 		
 		// 0.3 -- Make sure the user name is valid
-			if( userName == null || userName.length() == 0 )
+			if( userName == null || userName.length() == 0 ){
 				throw new IllegalArgumentException("User name is invalid (null)");
+			}
 			
-			if( realName.length() == 0 )
+			if( realName.length() == 0 ){
 				throw new IllegalArgumentException("User name is invalid (empty string)");
+			}
 			
 			Matcher userNameMatcher = nameRegex.matcher( userName );
 			
-			if( !userNameMatcher.matches() )
+			if( !userNameMatcher.matches() ){
 				throw new InputValidationException("User name contains invalid characters", "Username", userName );
+			}
 		
 		//	 0.4 -- Make sure database is available
 		Connection conn = appRes.getDatabaseConnection( Application.DatabaseAccessType.USER_UPDATE );
-		if( conn == null )
+		
+		if( conn == null ){
 			throw new NoDatabaseConnectionException();
+		}
 		
 		
 		// 1 -- Update the users' information
 		String emailAddressStr;
-		if( emailAddress == null )
+		if( emailAddress == null ){
 			emailAddressStr = "";
-		else
+		}
+		else{
 			emailAddressStr = emailAddress.toString();
+		}
 		
 		PreparedStatement statement = null;
 		
@@ -778,16 +834,20 @@ public class UserManagement {
 			statement.setString(3, emailAddressStr);
 			statement.setLong(4, userId);
 			
-			if( statement.executeUpdate() < 1 )
+			if( statement.executeUpdate() < 1 ){
 				return false;
-			else
+			}
+			else{
 				return true;
+			}
 		} finally {			
-			if (statement != null )
+			if (statement != null ){
 				statement.close();
+			}
 			
-			if (conn != null )
+			if (conn != null ){
 				conn.close();
+			}
 		}
 	}
 	
@@ -807,45 +867,56 @@ public class UserManagement {
 		// 0 -- Precondition check
 		
 		//	 0.1 -- User ID must be valid
-		if( userId < 1 )
+		if( userId < 1 ){
 			throw new IllegalArgumentException("User ID is invalid (must be greater than 0)");
+		}
 		
 		//	 0.2 -- Make sure the real name is valid
-		if( realName == null || realName.length() == 0 )
+		if( realName == null || realName.length() == 0 ){
 			throw new IllegalArgumentException("Real name is invalid (null)");
+		}
 		
-		if( realName.length() == 0 )
+		if( realName.length() == 0 ){
 			throw new IllegalArgumentException("Real name is invalid (empty string)");
+		}
 		
 		Matcher realNameMatcher = realNameRegex.matcher( realName );
 		
-		if( !realNameMatcher.matches() )
+		if( !realNameMatcher.matches() ){
 			throw new InputValidationException("Real name contains invalid characters", "Realname", realName );
+		}
 		
 		// 0.3 -- Make sure the user name is valid
-			if( userName == null || userName.length() == 0 )
+			if( userName == null || userName.length() == 0 ){
 				throw new IllegalArgumentException("User name is invalid (null)");
+			}
 			
-			if( realName.length() == 0 )
+			if( realName.length() == 0 ){
 				throw new IllegalArgumentException("User name is invalid (empty string)");
+			}
 			
 			Matcher userNameMatcher = nameRegex.matcher( userName );
 			
-			if( !userNameMatcher.matches() )
+			if( !userNameMatcher.matches() ){
 				throw new InputValidationException("User name contains invalid characters", "Username", userName );
+			}
 		
 		//	 0.4 -- Make sure database is available
 		Connection conn = appRes.getDatabaseConnection( Application.DatabaseAccessType.USER_UPDATE );
-		if( conn == null )
+		
+		if( conn == null ){
 			throw new NoDatabaseConnectionException();
+		}
 		
 		
 		// 1 -- Update the users' information
 		String emailAddressStr;
-		if( emailAddress == null )
+		if( emailAddress == null ){
 			emailAddressStr = "";
-		else
+		}
+		else{
 			emailAddressStr = emailAddress.toString();
+		}
 		
 		PreparedStatement statement = null;
 		
@@ -856,21 +927,27 @@ public class UserManagement {
 			statement.setString(3, emailAddressStr);
 			statement.setLong(5, userId);
 			
-			if( accountEnabled == false )
+			if( accountEnabled == false ){
 				statement.setLong(4, UserManagement.AccountStatus.DISABLED.ordinal() );
-			else
+			}
+			else{
 				statement.setLong(4, UserManagement.AccountStatus.VALID_USER.ordinal() );
+			}
 			
-			if( statement.executeUpdate() < 1 )
+			if( statement.executeUpdate() < 1 ){
 				return false;
-			else
+			}
+			else{
 				return true;
+			}
 		} finally {			
-			if (statement != null )
+			if (statement != null ){
 				statement.close();
+			}
 			
-			if (conn != null )
+			if (conn != null ){
 				conn.close();
+			}
 		}
 	}
 	
@@ -891,45 +968,56 @@ public class UserManagement {
 		// 0 -- Precondition check
 		
 		//	 0.1 -- User ID must be valid
-		if( userId < 1 )
+		if( userId < 1 ){
 			throw new IllegalArgumentException("User ID is invalid (must be greater than 0)");
+		}
 		
 		//	 0.2 -- Make sure the real name is valid
-		if( realName == null || realName.length() == 0 )
+		if( realName == null || realName.length() == 0 ){
 			throw new IllegalArgumentException("Real name is invalid (null)");
+		}
 		
-		if( realName.length() == 0 )
+		if( realName.length() == 0 ){
 			throw new IllegalArgumentException("Real name is invalid (empty string)");
+		}
 		
 		Matcher realNameMatcher = realNameRegex.matcher( realName );
 		
-		if( !realNameMatcher.matches() )
+		if( !realNameMatcher.matches() ){
 			throw new InputValidationException("Real name contains invalid characters", "Realname", realName );
+		}
 		
 		// 0.3 -- Make sure the user name is valid
-			if( userName == null || userName.length() == 0 )
-				throw new IllegalArgumentException("User name is invalid (null)");
+		if( userName == null || userName.length() == 0 ){
+			throw new IllegalArgumentException("User name is invalid (null)");
+		}
 			
-			if( realName.length() == 0 )
-				throw new IllegalArgumentException("User name is invalid (empty string)");
+		if( realName.length() == 0 ){
+			throw new IllegalArgumentException("User name is invalid (empty string)");
+		}
 			
-			Matcher userNameMatcher = nameRegex.matcher( userName );
+		Matcher userNameMatcher = nameRegex.matcher( userName );
 			
-			if( !userNameMatcher.matches() )
-				throw new InputValidationException("User name contains invalid characters", "Username", userName );
+		if( !userNameMatcher.matches() ){
+			throw new InputValidationException("User name contains invalid characters", "Username", userName );
+		}
 		
 		//	 0.4 -- Make sure database is available
 		Connection conn = appRes.getDatabaseConnection( Application.DatabaseAccessType.USER_UPDATE );
-		if( conn == null )
+		
+		if( conn == null ){
 			throw new NoDatabaseConnectionException();
+		}
 		
 		
 		// 1 -- Update the users' information
 		String emailAddressStr;
-		if( emailAddress == null )
+		if( emailAddress == null ){
 			emailAddressStr = "";
-		else
+		}
+		else{
 			emailAddressStr = emailAddress.toString();
+		}
 		
 		PreparedStatement statement = null;
 		
@@ -941,21 +1029,27 @@ public class UserManagement {
 			statement.setBoolean(4, unrestricted);
 			statement.setLong(6, userId);
 			
-			if( accountEnabled == false )
+			if( accountEnabled == false ){
 				statement.setLong(5, UserManagement.AccountStatus.DISABLED.ordinal() );
-			else
+			}
+			else{
 				statement.setLong(5, UserManagement.AccountStatus.VALID_USER.ordinal() );
+			}
 			
-			if( statement.executeUpdate() < 1 )
+			if( statement.executeUpdate() < 1 ){
 				return false;
-			else
+			}
+			else{
 				return true;
+			}
 		} finally {			
-			if (statement != null )
+			if (statement != null ){
 				statement.close();
+			}
 			
-			if (conn != null )
+			if (conn != null ){
 				conn.close();
+			}
 		}
 	}
 	
@@ -975,45 +1069,56 @@ public class UserManagement {
 		// 0 -- Precondition check
 		
 		//	 0.1 -- User ID must be valid
-		if( userId < 1 )
+		if( userId < 1 ){
 			throw new IllegalArgumentException("User ID is invalid (must be greater than 0)");
+		}
 		
 		//	 0.2 -- Make sure the real name is valid
-		if( realName == null || realName.length() == 0 )
+		if( realName == null || realName.length() == 0 ){
 			throw new IllegalArgumentException("Real name is invalid (null)");
+		}
 		
-		if( realName.length() == 0 )
+		if( realName.length() == 0 ){
 			throw new IllegalArgumentException("Real name is invalid (empty string)");
+		}
 		
 		Matcher realNameMatcher = realNameRegex.matcher( realName );
 		
-		if( !realNameMatcher.matches() )
+		if( !realNameMatcher.matches() ){
 			throw new InputValidationException("Real name contains invalid characters", "Realname", realName );
+		}
 		
 		// 0.3 -- Make sure the user name is valid
-			if( userName == null || userName.length() == 0 )
-				throw new IllegalArgumentException("User name is invalid (null)");
+		if( userName == null || userName.length() == 0 ){
+			throw new IllegalArgumentException("User name is invalid (null)");
+		}
 			
-			if( realName.length() == 0 )
-				throw new IllegalArgumentException("User name is invalid (empty string)");
+		if( realName.length() == 0 ){
+			throw new IllegalArgumentException("User name is invalid (empty string)");
+		}
 			
-			Matcher userNameMatcher = nameRegex.matcher( userName );
+		Matcher userNameMatcher = nameRegex.matcher( userName );
 			
-			if( !userNameMatcher.matches() )
-				throw new InputValidationException("User name contains invalid characters", "Username", userName );
+		if( !userNameMatcher.matches() ){
+			throw new InputValidationException("User name contains invalid characters", "Username", userName );
+		}
 		
 		//	 0.4 -- Make sure database is available
 		Connection conn = appRes.getDatabaseConnection( Application.DatabaseAccessType.USER_UPDATE );
-		if( conn == null )
+		
+		if( conn == null ){
 			throw new NoDatabaseConnectionException();
+		}
 		
 		
 		// 1 -- Update the users' information
 		String emailAddressStr;
-		if( emailAddress == null )
+		if( emailAddress == null ){
 			emailAddressStr = "";
-		else
+		}
+		else{
 			emailAddressStr = emailAddress.toString();
+		}
 		
 		PreparedStatement statement = null;
 		
@@ -1025,16 +1130,20 @@ public class UserManagement {
 			statement.setBoolean(4, unrestricted);
 			statement.setLong(5, userId);
 			
-			if( statement.executeUpdate() < 1 )
+			if( statement.executeUpdate() < 1 ){
 				return false;
-			else
+			}
+			else{
 				return true;
+			}
 		} finally {			
-			if (statement != null )
+			if (statement != null ){
 				statement.close();
+			}
 			
-			if (conn != null )
+			if (conn != null ){
 				conn.close();
+			}
 		}
 	}
 	
