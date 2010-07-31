@@ -16,13 +16,13 @@ import org.xml.sax.*;
 public class ContentSignatureSetTest extends TestCase {
 	
 	public void testLoadXML() throws IOException, SAXException, ParserConfigurationException, DefinitionSetLoadException{
-		String xml = TestResources.readFileAsString(TestResources.TEST_RESOURCE_DIRECTORY + "SignaturesList.xml");
+		String xml = TestResources.readFileAsString(TestResources.TEST_RESOURCE_DIRECTORY + "NSIA.Definitions");
 
 		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(xml)));
 		
 		DefinitionSet sigs = DefinitionSet.loadFromXml(document);
 		
-		if( sigs.getDefinitions().length != 2){
+		if( sigs.getDefinitions().length != 1893){
 			fail("The signature set did not load the expected number of signatures (returned " + sigs.getDefinitions().length + ")");
 		}
 	}
