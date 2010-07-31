@@ -6,7 +6,9 @@ import eu.medsea.util.*;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 
 public class MimeType {
 
@@ -17,15 +19,21 @@ public class MimeType {
 		if( typeMap == null ){
 			
 			// 1 -- Determine if the mime-types file exists and load it if it does
-			try{
-				File file = new File( "../etc/mime.types" );
+			String fileName = "../etc/mime.types";
+			
+			try{	
+				File file = new File( fileName );
 				
 				if( file.exists() ){
-					typeMap = new MimetypesFileTypeMap("../etc/mime.types" );
+					typeMap = new MimetypesFileTypeMap( fileName );
 				}
 			}
 			catch(IOException e){
-				Application.getApplication().logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
+				EventLogMessage message = new EventLogMessage( EventLogMessage.EventType.INTERNAL_ERROR );
+				message.addField( new EventLogField(FieldName.MESSAGE, "Unable to load mime-types file") );
+				message.addField( new EventLogField(FieldName.FILE, fileName) );
+				
+				Application.getApplication().logExceptionEvent( message, e);
 			}
 			
 			// 2 -- Otherwise, load the embedded mime.type file
@@ -41,7 +49,11 @@ public class MimeType {
 						try {
 							in.close();
 						} catch(IOException e){
-							Application.getApplication().logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e);
+							
+							EventLogMessage message = new EventLogMessage( EventLogMessage.EventType.INTERNAL_ERROR );
+							message.addField( new EventLogField(FieldName.MESSAGE, "Unable to load embedded mime.types file") );
+							
+							Application.getApplication().logExceptionEvent( message, e);
 						}
 					}
 				}
