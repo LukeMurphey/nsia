@@ -76,6 +76,13 @@ public class LocalPasswordAuthentication extends Authentication{
 		long startTime = System.currentTimeMillis();
 		
 		if( userDescriptor == null ){
+			
+			/* Increase the login attempt count to facilitate account blocking.
+			   Note that this is being done even though the username is invalid
+			   so that the system can indicate that the account is now blocked
+			   without revealing which are real accounts. */
+			incrementAuthenticationFailedCount( userName, appRes.getApplicationConfiguration().getAuthenticationAttemptAggregationCount() );
+			
 			timedDelay( startTime, SECONDS_AUTHENTICATION_DELAY);
 			return new AuthenticationResult( AuthenticationResult.AUTH_INVALID_USER, null);
 		}
