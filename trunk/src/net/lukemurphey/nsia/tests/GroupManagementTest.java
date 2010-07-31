@@ -1,26 +1,34 @@
 package net.lukemurphey.nsia.tests;
 
+import java.io.IOException;
 import java.net.BindException;
 import java.sql.SQLException;
 
+import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.GroupManagement;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
-import net.lukemurphey.nsia.TestsConfig;
+import net.lukemurphey.nsia.GroupManagement.GroupDescriptor;
 
 import junit.framework.TestCase;
 
 public class GroupManagementTest extends TestCase {
-	GroupManagement groupManagement;
 	
-	public static void main(String[] args) {
+	GroupManagement groupManagement;
+	Application app = null;
+	
+	public void setUp() throws NoDatabaseConnectionException, IOException{
+		app = TestApplication.getApplication();
+		groupManagement = new GroupManagement(app);
 	}
-
+	
+	public void tearDown(){
+		TestApplication.stopApplication();
+	}
+	
 	public GroupManagementTest(String name) throws BindException, SQLException, InputValidationException, Exception {
 		super(name);
-		
-		groupManagement = new GroupManagement(TestsConfig.getApplicationResource());
 	}
 
 	/*
@@ -34,8 +42,17 @@ public class GroupManagementTest extends TestCase {
 	/*
 	 * Test method for 'net.lukemurphey.siteSentry.GroupManagement.addGroup(String, String)'
 	 */
-	public void testAddGroup() {
-
+	public void testAddGroup() throws SQLException, NoDatabaseConnectionException, InputValidationException, NotFoundException {
+		int groupID = groupManagement.addGroup("SomeTestGroup", "For testing...");
+		
+		GroupDescriptor groupDescriptor = groupManagement.getGroupDescriptor(groupID);
+		
+		if( groupDescriptor == null ){
+			fail("Group was not successfully created");
+		}
+		else if(groupDescriptor.getGroupName().equals("SomeTestGroup") == false ){
+			fail("Group was not loaded correctly");
+		}
 	}
 
 	/*
@@ -80,7 +97,7 @@ public class GroupManagementTest extends TestCase {
 
 	/*
 	 * Test method for 'net.lukemurphey.siteSentry.GroupManagement.disableGroup(long)'
-	 */
+)	 */
 	public void testDisableGroup() throws SQLException, NoDatabaseConnectionException, InputValidationException, NotFoundException {
 		if( !groupManagement.disableGroup(1) )
 			fail("The account could not be disabled");
