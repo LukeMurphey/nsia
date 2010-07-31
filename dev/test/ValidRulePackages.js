@@ -5,15 +5,8 @@
  * Message: This is a test
  * Severity: Low
  */
-
-
-importPackage(Packages.org.htmlparser);
-importPackage(Packages.org.htmlparser.filters);
-importPackage(Packages.org.htmlparser.util);
-
-importPackage(Packages.signature);
-//importPackage(Packages.htmlparser);
-//importPackage(Packages.net.lukeMurphey.nsia.scanRules);
+importPackage(Packages.HTTP);
+importPackage(Packages.ThreatScript)
 
 
 function analyze( httpResponse, operation, variables, environment, defaultRule ){
