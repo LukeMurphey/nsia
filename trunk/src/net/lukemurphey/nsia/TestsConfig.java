@@ -1,5 +1,6 @@
 package net.lukemurphey.nsia;
 
+import java.io.File;
 import java.net.BindException;
 import java.sql.SQLException;
 
@@ -14,6 +15,28 @@ public class TestsConfig {
 	public static final String DB_PASSWORD = "pmk5566";
 	
 	public static final String LOG_FILE = "testLog.log";
+	public static final String DEFAULT_DATABASE_PATH = "../tmp/test_database";
+	
+	private static Application testApp = null;
+	
+	public synchronized static Application getApplication() throws NoDatabaseConnectionException{
+		
+		if( testApp != null ){
+			testApp = new Application(DEFAULT_DATABASE_PATH);
+		}
+		
+		return testApp;
+	}
+	
+	public synchronized static void stopApplication(){
+		if( testApp != null ){
+			testApp.shutdown();
+			testApp = null;
+			
+			//Purge the database
+			GenericUtils.deleteDirectory( new File(DEFAULT_DATABASE_PATH) );
+		}
+	}
 	
 	public static Application getApplicationResource() throws BindException, SQLException, InputValidationException, Exception{
 		// 1 -- Setup the database
