@@ -1,8 +1,10 @@
 package net.lukemurphey.nsia.tests;
 
+import java.io.IOException;
 import java.net.BindException;
 import java.sql.SQLException;
 
+import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
@@ -15,21 +17,24 @@ import junit.framework.TestCase;
 
 public class ScanDataTest extends TestCase {
 
+	Application app = null;
 	ScanData scanData; 
-	public static void main(String[] args) {
+	
+	public void setUp() throws NoDatabaseConnectionException, IOException{
+		app = TestApplication.getApplication();
+		scanData = new ScanData( app );
 	}
-
-	public ScanDataTest(String name) throws BindException, SQLException, InputValidationException, Exception {
-		super(name);
-		scanData = new ScanData( TestsConfig.getApplicationResource() );
+	
+	public void tearDown(){
+		TestApplication.stopApplication();
 	}
 	
 	public void testGetSiteGroupStatus() throws SQLException, InputValidationException, NoDatabaseConnectionException, NotFoundException, ScanResultLoadFailureException{
 		SiteGroupScanResult result = scanData.getSiteGroupStatus( 1 );
 		
-		if( result == null )
+		if( result == null ){
 			fail("Result was null, Site Group status could not be retrieved");
-			
+		}
 	}
 
 }
