@@ -287,8 +287,16 @@ public class CommonEventFormatMessage {
 		}
 		
 		// Append the extensions
+		boolean isFirst = true;
 		for (ExtensionField extensionField : extensionFields) {
-			message.append(" ");
+			
+			if( !isFirst ){
+				message.append(" ");
+			}
+			else{
+				isFirst = false;
+			}
+			
 			message.append(extensionField.toString());
 		}
 		
