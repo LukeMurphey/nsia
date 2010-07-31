@@ -1,6 +1,8 @@
 package net.lukemurphey.nsia.tests;
 
 
+import java.io.File;
+
 import junit.framework.TestCase;
 import net.lukemurphey.nsia.*;
 import net.lukemurphey.nsia.scan.HttpDefinitionScanResult;
@@ -48,9 +50,10 @@ public class HttpSeekingScanRuleTest extends TestCase {
 			}
 		}
 	}*/
-	
+	/*
 	public void testLoadScanResults() throws Exception{
-		Application application = new Application(true);//TestsConfig.getApplicationResource();
+		
+		Application application = new Application("tmp/test_database");//TestsConfig.getApplicationResource();
 		
 		if( application == null ){
 			throw new Exception("Application cannot be null");
@@ -64,7 +67,7 @@ public class HttpSeekingScanRuleTest extends TestCase {
 			System.out.println( sigResults[c].getScanResultID() );
 		}
 		
-	}
+	}*/
 	/*
 	public void testScan() throws BindException, SQLException, InputValidationException, Exception{
 		Application application = TestsConfig.getApplicationResource();
