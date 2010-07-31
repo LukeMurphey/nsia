@@ -76,20 +76,21 @@ public class ScriptDefinitionTest extends TestCase {
 		//System.out.println( "" + msTotal/1000.0 + " total seconds for actual script signatures to evaluate"  );
 	}
 	
-	public void testUsePackageShortCuts() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, SQLException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException, DefinitionEvaluationException{
+	public void testUsePackageShortCuts() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, SQLException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException, DefinitionEvaluationException, TestApplicationException{
 		
 		HostConfiguration hostConfig = new HostConfiguration();
-		hostConfig.setHost("analytics.blogspot.com", 80, "http");
+		hostConfig.setHost("google.com", 80, "http");
 		HttpMethod httpMethod = new GetMethod( "/" );
 		httpMethod.setFollowRedirects(true);
 		HttpClient httpClient = new HttpClient();
 		httpClient.executeMethod( hostConfig, httpMethod );
 		
-		HttpResponseData httpResponse = new HttpResponseData( httpMethod, "http://analytics.blogspot.com" );
+		HttpResponseData httpResponse = new HttpResponseData( httpMethod, "http://google.com" );
 		
 		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "ValidRulePackages.js" );
 		
-		sig.evaluate(httpResponse, new Variables(), 1, TestResources.getTestResources().getConnection());
+		Application app = TestApplication.getApplication();
+		sig.evaluate(httpResponse, new Variables(), 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
 		
 		if( !sig.getMessage().matches("This is a test")
 				|| !sig.toString().matches("1.2.3") ){
