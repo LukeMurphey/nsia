@@ -186,27 +186,12 @@ public final class Application {
 		manager = null;
 	}
 	
-	public Application( String embeddedDatabasePath ) throws NoDatabaseConnectionException{
-		
-		//this(null, embeddedDatabasePath, false );
-		
-		//This constructor instantiates a application object that is intended only for test cases.
-		firewall = null;
-		scannerController = null;
-		manager = null;
-		
-		if( embeddedDatabasePath != null ){
-			try{
-				connectToInternalDatabase(true, embeddedDatabasePath);
-			}
-			catch(Exception e){
-				throw new NoDatabaseConnectionException(e);
-			}
-			
-			appRes = this;
-			
-			appConfig = new ApplicationConfiguration( this );
-		}
+	public Application( String embeddedDatabasePath, boolean startServices ) throws JSAPException, NoDatabaseConnectionException{
+		this(null, embeddedDatabasePath, startServices );
+	}
+	
+	public Application( String embeddedDatabasePath ) throws JSAPException, NoDatabaseConnectionException{
+		this(null, embeddedDatabasePath, true );
 	}
 	
 	public Application( String[] args ) throws JSAPException, NoDatabaseConnectionException{
