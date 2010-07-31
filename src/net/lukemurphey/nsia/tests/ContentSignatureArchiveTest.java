@@ -19,10 +19,22 @@ import java.util.Date;
 
 public class ContentSignatureArchiveTest extends TestCase {
 
+	public void tearDown(){
+		TestApplication.stopApplication();
+	}
+	
 	public void testGetLatestID() throws XmlRpcException, IOException{
 		DefinitionVersionID latestID = DefinitionArchive.getLatestAvailableDefinitionSetID();
 		
-		System.out.println( "Latest available ID is " + latestID.toString() );
+		if( latestID == null ){
+			fail("Latest definition ID could not be obtained");
+		}
+		else if(latestID.formatID() <= 0){
+			fail("Latest definition format ID in invalid (" + latestID.formatID() + ")");
+		}
+		else if(latestID.revisionID() < 0){
+			fail("Latest definition revision ID in invalid (" + latestID.revisionID() + ")");
+		}
 	}
 	
 	public void testRevisionIDParse() throws XmlRpcException, IOException{
@@ -38,16 +50,21 @@ public class ContentSignatureArchiveTest extends TestCase {
 		
 		Date date = DefinitionArchive.getLatestAvailableDefinitionSetDate();
 		
-		System.out.println( "Latest available definitions are dated " + date.toString() );
+		if( date == null ){
+			fail("Latest date could not be obtained");
+		}
 	}
 	
-	public void testLoadSignaturesFromServer() throws DefinitionUpdateFailedException, DefinitionSetLoadException, SQLException, NoDatabaseConnectionException, InputValidationException {
-		
+	public void testLoadSignaturesFromServer() throws DefinitionUpdateFailedException, DefinitionSetLoadException, SQLException, NoDatabaseConnectionException, InputValidationException, IOException {
+		TestApplication.getApplication();
 		DefinitionArchive archive = DefinitionArchive.getArchive(true);
 		
 		DefinitionVersionID rev  = archive.updateDefinitions();
 		
-		System.out.println( "Definitions loaded from server with version identifier of " + rev.toString() );
+		if( rev == null ){
+			fail("Current definition set could not be obtained");
+		}
+		
 	}
 	
 }
