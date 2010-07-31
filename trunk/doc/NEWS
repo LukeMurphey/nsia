@@ -1,5 +1,22 @@
 Below is the history of NSIA with notes about the changes available in each version.
 
+Version 0.9.4 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+
+  * Numerous latent bug fixes and performance fixes
+  * System now loads mime.types from the Java archive if it does not exist on disk
+  * Login system no longer considers user names case sensitive
+  * Fixed issue in CEF messages that included extra whitespace
+  * Fixed issue where shutdown message was not posted correctly in CLI when application was exiting
+  * The WebClient class (used by the ThreatScripts) now obeys the file size limit
+  * Fixed issue in upgrader that caused an error message even though the system was successfully upgraded
+  * Added a quick start guide
+  * Fixed issue in installer that failed to remove the derbyrun.jar library
+  * Few minor fixes to the Debian package (incorrectly formatted email address, redundant provides statement, etc.)
+  * Fixed issue where form values were not reposted when a user attempts to submit a edits to a web-discovery rule that fails to pass validation.
+  
+
 Version 0.9.3 Changes
 ------------------------------------------------------------------
 Version includes the following changes:

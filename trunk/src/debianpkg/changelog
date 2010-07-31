@@ -3,3 +3,39 @@ nsia (0.9.1-1) unstable; urgency=low
   * Added ability to set the default state of the scanner (so it will automatically start when the scanner starts)
 
  -- Luke Murphey <luke@threatfactor.com>  Fri, 26 Jun 2010 01:25:00 +0500
+
+nsia (0.9.2-1) unstable; urgency=low
+
+  * Fixed issue where clicking "Maximum Session Identifier Lifetime" or "Session Identifier  * Lifetime" on the configuration page opened both
+  * Improved ability for installers to handle upgrades
+  * Fixed issue where installer failed to install Windows service correctly
+  * Improved wording or log message in Windows service
+
+ -- Luke Murphey <luke@threatfactor.com> 
+
+nsia (0.9.3-1) unstable; urgency=low
+
+  * Rule editor now pre-populates the domain restriction for web-discovery rules
+  * Debian package now uses debconf to prompt the user for the login name and password
+  * Added more comprehensive internal exception reporting
+  * Added additional definition reference types
+  * Added additional documentation to the Debian package and the zip archive
+  * Minor improvements to the Ubuntu daemon script
+
+ -- Luke Murphey <luke@threatfactor.com> 
+ 
+nsia (0.9.4-1) unstable; urgency=low
+ 
+  * Numerous latent bug fixes and performance fixes
+  * System now loads mime.types from the Java archive if it does not exist on disk
+  * Login system no longer considers user names case sensitive
+  * Fixed issue in CEF messages that included extra whitespace
+  * Fixed issue where shutdown message was not posted correctly in CLI when application was exiting
+  * The WebClient class (used by the ThreatScripts) now obeys the file size limit
+  * Fixed issue in upgrader that caused an error message even though the system was successfully upgraded
+  * Added a quick start guide
+  * Fixed issue in installer that failed to remove the derbyrun.jar library
+  * Few minor fixes to the Debian package (incorrectly formatted email address, redundant provides statement, etc.)
+  * Fixed issue where form values were not reposted when a user attempts to submit a edits to a web-discovery rule that fails to pass validation.
+  
+ -- Luke Murphey <luke@threatfactor.com>  Fri, 26 Jul 2010 01:25:00 +0500
