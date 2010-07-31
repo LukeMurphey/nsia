@@ -18,11 +18,14 @@ public class TestApplication {
 	private static Application app = null;
 	public static String DEFAULT_TEST_DATABASE_PATH = "tmp/test_database";
 	
-	public synchronized static Application getApplication() throws TestApplicationException{
+	public static Application getApplication() throws TestApplicationException{
+		return getApplication( false );
+	}
+	public synchronized static Application getApplication( boolean startServices ) throws TestApplicationException{
 		try{
 			if( app == null ){
 				createDatabaseCopy();
-				app = new Application( DEFAULT_TEST_DATABASE_PATH );
+				app = new Application( DEFAULT_TEST_DATABASE_PATH, startServices );
 			}
 		}
 		catch(IOException e ){
