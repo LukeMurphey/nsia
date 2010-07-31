@@ -2,13 +2,13 @@
 	<!-- <target name="compile">
     <javac srcdir="." />
   </target> -->
-	<property file="sbin/default.properties"/>
-	<property file="sbin/local.properties"/>
+	<property file="dev/default.properties"/>
+	<property file="dev/local.properties"/>
 	
     <target name="jar" description="Create core NSIA JAR file">
         <jar destfile="bin/nsia.jar"
         	basedir="java-bin/" 
-        	manifest="sbin/Manifest.txt"
+        	manifest="dev/Manifest.txt"
         	excludes="*.svn"
         	includes="net/**"
         />
@@ -24,7 +24,7 @@
     <target name="zip" description="Create the zip file used for installing NSIA">
         <zip destfile="bin/NSIA_No_Installer.zip"
             basedir="."
-        	includesfile="sbin/include_list.txt"
+        	includesfile="dev/include_list.txt"
         	whenempty="create"
         />
     </target>
