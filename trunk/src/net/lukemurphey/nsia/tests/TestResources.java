@@ -71,8 +71,6 @@ public class TestResources {
 		else
 			databaseLocation = "jdbc:derby:tmp/test_database";
 		
-		
-		
 		connectionBroker = new BasicDataSource();
 		connectionBroker.setMaxActive(50);
 		connectionBroker.setDriverClassName(databaseDriver);
