@@ -8,14 +8,6 @@ import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor.DefinitionPolicyActi
 
 public class DefinitionPolicyDescriptorTest extends TestCase {
 	
-	/*
-	public void testSave() throws BindException, SQLException, NoDatabaseConnectionException, InputValidationException, Exception{
-		RuleFilter filter = new RuleFilter(1, -1, null, null, null, null);
-		
-		filter.saveToDatabase(TestsConfig.getApplicationResource().getDatabaseConnection(DatabaseAccessType.SCANNER));
-	}
-	*/
-	
 	public void testFilterMultipleOverride(){
 		Vector<DefinitionPolicyDescriptor> descriptors = new Vector<DefinitionPolicyDescriptor>();
 		
