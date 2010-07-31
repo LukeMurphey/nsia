@@ -46,7 +46,7 @@ public final class Application {
 	public static final int VERSION_MINOR = 9;
 	public static final int VERSION_REVISION = 3;
 	public static final String VERSION_STATUS = null;
-	public static final String DATABASE_LOCATION = "../var/database";
+	public static final String DEFAULT_DATABASE_PATH = "../var/database";
 	
 	private final Object metricsMonitorMutex = new Object();
 	
@@ -62,6 +62,9 @@ public final class Application {
 	private ApplicationStateMonitor metricsMonitor;
 	
 	private static String buildNumber = null;
+	
+	//The path to the embedded database
+	private String embeddedDatabasePath = null;
 	
 	//The following is a list of database connections configured for specific functions
 	public enum DatabaseAccessType{
@@ -183,15 +186,15 @@ public final class Application {
 		manager = null;
 	}
 	
-	public Application( boolean connecToDatabase ) throws NoDatabaseConnectionException{
+	public Application( String embeddedDatabasePath ) throws NoDatabaseConnectionException{
 		//This constructor instantiates a application object that is intended only for test cases.
 		firewall = null;
 		scannerController = null;
 		manager = null;
 		
-		if( connecToDatabase ){
+		if( embeddedDatabasePath != null ){
 			try{
-				connectToInternalDatabase(false);
+				connectToInternalDatabase(true, embeddedDatabasePath);
 			}
 			catch(Exception e){
 				throw new NoDatabaseConnectionException(e);
@@ -199,6 +202,10 @@ public final class Application {
 			
 			appRes = this;
 		}
+	}
+	
+	public Application( String[] args ) throws JSAPException, NoDatabaseConnectionException{
+		this( args, null );
 	}
 	
 	/**
@@ -209,7 +216,7 @@ public final class Application {
 	 * @throws InstantiationException 
 	 *
 	 */
-	public Application( String[] args ) throws JSAPException, NoDatabaseConnectionException{
+	public Application( String[] args, String embeddedDatabasePath ) throws JSAPException, NoDatabaseConnectionException{
 		
 		// 0 -- Perform basic startup routines
 		
@@ -219,41 +226,46 @@ public final class Application {
 		// 1 -- Parse the command-line arguments
 		
 		// First, find out if the application was initiated using the startup routine
-		if( args.length == 4 && args[0].equalsIgnoreCase("--install")){
+		if( args != null && args.length == 4 && args[0].equalsIgnoreCase("--install")){
 			System.out.println("Completing installation");
 			completeInstall(args[1], args[3], args[2]);
 			//The function above should not return, therefore, don't let it continue just in case.
 			System.exit(-1);
 		}
 		
-		JSAP jsap;
-		jsap = getCommandLineProcessor();
-		JSAPResult commandLineData = jsap.parse( args );
-		
-		//Show help if the command-line data parsing failed
-		if( !commandLineData.success() ){
-			System.err.println(); // NOPMD by luke on 5/26/07 10:42 AM
-            System.err.println("Usage: " + APPLICATION_NAME); // NOPMD by luke on 5/26/07 10:42 AM
-            System.err.println( jsap.getHelp() ); // NOPMD by luke on 5/26/07 10:43 AM
-            System.exit(1);
-		}
-		
-		// 2 -- Load the configuration file
+		//The properties file that contains the database connection information
 		Properties properties = null;
+		JSAPResult commandLineData = null;
 		
-		try{
-			properties = loadConfigFile(commandLineData.getString("configFile"));
-		}
-		catch (IOException e) {
-			System.err.println("Configuration file could not be loaded: " + e.getMessage()); // NOPMD by luke on 5/26/07 10:43 AM
-			System.exit(-1);
+		if( args != null ){
+			JSAP jsap;
+			jsap = getCommandLineProcessor();
+			commandLineData = jsap.parse( args );
+			
+			//Show help if the command-line data parsing failed
+			if( !commandLineData.success() ){
+				System.err.println(); // NOPMD by luke on 5/26/07 10:42 AM
+	            System.err.println("Usage: " + APPLICATION_NAME); // NOPMD by luke on 5/26/07 10:42 AM
+	            System.err.println( jsap.getHelp() ); // NOPMD by luke on 5/26/07 10:43 AM
+	            System.exit(1);
+			}
+		
+		
+			// 2 -- Load the configuration file
+			try{
+				properties = loadConfigFile(commandLineData.getString("configFile"));
+			}
+			catch (IOException e) {
+				System.err.println("Configuration file could not be loaded: " + e.getMessage()); // NOPMD by luke on 5/26/07 10:43 AM
+				System.exit(-1);
+			}
 		}
 		
 		// 3 -- Create the event log facility
 		eventlog = new EventLog();
 		
 		// 4 -- Connect to the database
-		connectToDatabase(properties);
+		connectToDatabase( properties, embeddedDatabasePath );
 		
 		appRes = this;
 		
@@ -271,7 +283,7 @@ public final class Application {
 		}
 		
 		// If the upgrade option was provided, then the application should terminate after performing the upgrade option
-		if( commandLineData.getBoolean("upgrade", false) ){
+		if( commandLineData != null && commandLineData.getBoolean("upgrade", false) ){
 			shutdown(true);
 			System.exit(0);
 		}
@@ -346,7 +358,7 @@ public final class Application {
 	}*/
 	
 	private void completeInstall( String username, String password, String realName ){
-		connectToDatabase( null );
+		connectToDatabase( );
 		UserManagement userManagement = new UserManagement(this);
 		
 		try{
@@ -362,10 +374,14 @@ public final class Application {
 		}
 	}
 	
-	private void connectToDatabase( Properties properties ){
+	private void connectToDatabase( ){
+		connectToDatabase( null, null );
+	}
+	
+	private void connectToDatabase( Properties properties, String embeddedDatabasePath ){
 		try {
 			
-			//4.1a -- Use the configured database (if the config file exists)
+			// 1a -- Use the configured database (if the config file exists)
 			if( properties != null && properties.getProperty("Database.Location") != null ){
 				/* 
 				 * If the user specified a database connection in the configuration file, then
@@ -380,17 +396,22 @@ public final class Application {
 				}
 			}
 			
-			//4.1b -- Use the internal database if an external database connection was not specified
+			// 1b -- Use the internal database if an external database connection was not specified
 			else{
 
 				try{
-					connectToInternalDatabase(false);
+					if( embeddedDatabasePath != null ){
+						connectToInternalDatabase(false, embeddedDatabasePath);
+					}
+					else{
+						connectToInternalDatabase(false);
+					}
 				}
 				// Try to identify the cause for the database exception and act accordingly
 				catch( SQLNestedException e){
 					SQLException nextException =  (SQLException)e.getCause();
 					
-					// 4.1.1b -- Determine if the exception is due to another JVM using the database
+					// 1.1b -- Determine if the exception is due to another JVM using the database
 					if( nextException != null &&
 							nextException.getNextException() != null &&
 							nextException.getNextException().getMessage().startsWith("Another instance of Derby may have already booted the database") ){
@@ -398,8 +419,8 @@ public final class Application {
 						System.exit(-1);
 					}
 					
-					// 4.1.2b -- If the error is due to the fact that the database does not exist, then try to create it
-					if( e.getMessage().equalsIgnoreCase("Cannot create PoolableConnectionFactory (Database '" + DATABASE_LOCATION + "' not found.)")){
+					// 1.2b -- If the error is due to the fact that the database does not exist, then try to create it
+					if( e.getMessage().equalsIgnoreCase("Cannot create PoolableConnectionFactory (Database '" + embeddedDatabasePath + "' not found.)")){
 						System.out.print("Creating and initializing the internal database...");
 						try{
 							connectToInternalDatabase(true);
@@ -417,7 +438,7 @@ public final class Application {
 					}
 					
 					
-					// 4.1.3c -- Print out the inner exception and fail 
+					// 1.3b -- Print out the inner exception and fail 
 					else if( nextException != null ){
 						System.err.println("Database connection failed: " + nextException.getMessage() );
 						System.exit(-1);
@@ -812,10 +833,22 @@ public final class Application {
 	 * @throws SQLException 
 	 * @throws NoDatabaseConnectionException 
 	 */
-	public static Application startApplication(String[] args, RunMode runMode ) throws JSAPException, NoDatabaseConnectionException, SQLException, InputValidationException, BindException, Exception{ // NOPMD by luke on 5/26/07 10:46 AM
+	public static Application startApplication( String[] args, RunMode runMode ) throws JSAPException, NoDatabaseConnectionException, SQLException, InputValidationException, BindException, Exception{
+		return startApplication( args, runMode, DEFAULT_DATABASE_PATH);
+	}
+	
+	/**
+	 * Start the application by parsing the command-line arguments and performing the required startup actions.
+	 * @param args
+	 * @return
+	 * @throws JSAPException 
+	 * @throws InputValidationException 
+	 * @throws SQLException 
+	 * @throws NoDatabaseConnectionException 
+	 */
+	public static Application startApplication( String[] args, RunMode runMode, String embeddedDatabasePath ) throws JSAPException, NoDatabaseConnectionException, SQLException, InputValidationException, BindException, Exception{
 		
-		appRes = new Application(args);
-		
+		appRes = new Application(args, embeddedDatabasePath);
 		appRes.startListener();
 		appRes.scannerController.start();
 		
@@ -1066,7 +1099,7 @@ public final class Application {
 			// 5 -- Disconnect database
 			try{
 				if( isUsingInternalDatabase() ){
-					Connection connection = DriverManager.getConnection("jdbc:derby:"+ DATABASE_LOCATION +";shutdown=true");
+					Connection connection = DriverManager.getConnection("jdbc:derby:"+ embeddedDatabasePath +";shutdown=true");
 					connection.close();
 				}
 			}
@@ -1153,7 +1186,7 @@ public final class Application {
 	/**
 	 * This function establishes a connection to the internal database. The database connection will be made in such a
 	 * way to establish accounts for each of the different functions of the application. This is done to enforce separation of duties 
-	 * and principle of least privelege.
+	 * and principle of least privilege.
 	 * @precondition The internal database must exist 
 	 * @postcondition The internal database will be connected 
 	 * @throws ClassNotFoundException 
@@ -1163,6 +1196,23 @@ public final class Application {
 	 * @throws NoDatabaseConnectionException 
 	 */
 	public DatabaseInitializationState connectToInternalDatabase( boolean createIfNonExistant ) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoDatabaseConnectionException{
+		return connectToInternalDatabase( createIfNonExistant, DEFAULT_DATABASE_PATH );
+	}
+	
+	/**
+	 * This function establishes a connection to the internal database. The database connection will be made in such a
+	 * way to establish accounts for each of the different functions of the application. This is done to enforce separation of duties 
+	 * and principle of least privilege.
+	 * @precondition The internal database must exist 
+	 * @postcondition The internal database will be connected 
+	 * @throws ClassNotFoundException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws SQLException 
+	 * @throws NoDatabaseConnectionException 
+	 */
+	public DatabaseInitializationState connectToInternalDatabase( boolean createIfNonExistant, String embeddedDatabasePath ) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoDatabaseConnectionException{
+		
 		// 0 -- Precondition check
 		//	No preconditions will be explicitly checked.
 		//	Instead, the necessary conditions will be checked during the connection operations
@@ -1170,10 +1220,12 @@ public final class Application {
 		// 1 -- Setup the database
 		databaseDriver = "org.apache.derby.jdbc.EmbeddedDriver";
 		
+		this.embeddedDatabasePath = embeddedDatabasePath;
+		
 		if( createIfNonExistant )
-			databaseLocation = "jdbc:derby:" + DATABASE_LOCATION + ";create=true";
+			databaseLocation = "jdbc:derby:" + this.embeddedDatabasePath + ";create=true";
 		else
-			databaseLocation = "jdbc:derby:" + DATABASE_LOCATION;
+			databaseLocation = "jdbc:derby:" + this.embeddedDatabasePath;
 		
 		connectionBroker = new BasicDataSource();
 		connectionBroker.setMaxActive(50);
@@ -1191,7 +1243,7 @@ public final class Application {
 	/**
 	 * This function establishes a connection to the database per the given arguments. The database connection will be made in such a
 	 * way to establish accounts for each of the different functions of the application. This is done to enforce separation of duties 
-	 * and principle of least privelege.
+	 * and principle of least privilege.
 	 * @precondition The databaseLocation must not be empty or null, the password must not be null, the database driver must be available (if specified)
 	 * @postcondition The database driver will be loaded (if available) and the database connection will be established for all contexts/subsystems 
 	 * @param databaseLocation The location of the database server
