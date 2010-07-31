@@ -1,56 +1,50 @@
 package net.lukemurphey.nsia.tests;
 
 import junit.framework.TestCase;
+
+import java.io.IOException;
 import java.sql.*;
 
+import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.ApplicationParameters;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 
 public class ApplicationParameterTest extends TestCase {
-	public ApplicationParameters params = null;
 	
-	public static void main(String[] args) {
-		ApplicationParameterTest test = new ApplicationParameterTest();
-		
-		try {
-			test.testSetParameter();
-			test.testGetParameter();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/*
-	 * Get a connection to the database
-	 */
-	public ApplicationParameterTest(){
-		
-		// 1 -- Create the parameter class
-		params = new ApplicationParameters();
+	ApplicationParameters params = null;
+	Application app = null;
+	
+	public void setUp() throws NoDatabaseConnectionException, IOException{
+		app = TestApplication.getApplication();
+		params = new ApplicationParameters(app);
 	}
 	
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.ApplicationParameter.getParameter(String, String)'
-	 */
+	public void tearDown(){
+		TestApplication.stopApplication();
+	}
+	
 	public void testGetParameter() throws Exception {
+		params.setParameter("Administration.SyslogServer", "192.168.10.5");
 		String value = params.getParameter("Administration.SyslogServer", null);
-		System.out.println("Administration.SyslogServer = " + value);
+		
 		assertNotNull(value);
 	}
 
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.ApplicationParameter.setParameter(String, String)'
-	 */
 	public void testSetParameter() throws Exception {
 		params.setParameter("Administration.SyslogServer", "192.168.10.5");
-		params.setParameter("Administration.SyslogEnabled", "true");
+		
+		String value = params.getParameter("Administration.SyslogServer", null);
+		
+		if( !value.equals( "192.168.10.5") ){
+			fail("Parameter value was not returned successfully");
+		}
 	}
 
-	/*
-	 * Test method for 'net.lukemurphey.siteSentry.ApplicationParameter.doesParameterExist(String)'
-	 */
 	public void testDoesParameterExist() throws InputValidationException, NoDatabaseConnectionException, SQLException {
+		
+		params.setParameter("Administration.SyslogServer", "192.168.10.5");
+		
 		assertEquals(params.doesParameterExist("Administration.SyslogServer"), true);
 		assertEquals(params.doesParameterExist("D03sN073x1s7"), false);
 		assertEquals(params.doesParameterExist(null), false);
