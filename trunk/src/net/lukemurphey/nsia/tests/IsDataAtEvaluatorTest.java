@@ -52,7 +52,6 @@ public class IsDataAtEvaluatorTest extends TestCase {
 	public void testEvaluateFailAbsoluteWithLastMatchAtEdge() {
 		
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
-		eval.setOffset(2);
 		
 		DataSpecimen data = new DataSpecimen("01234");
 		
@@ -66,9 +65,9 @@ public class IsDataAtEvaluatorTest extends TestCase {
 	public void testEvaluateRelativeAtEdge() {
 		
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
-		eval.setOffset(4);
+		eval.setOffset(3);
 		
-		DataSpecimen data = new DataSpecimen("01234");
+		DataSpecimen data = new DataSpecimen("012345");
 		
 		int result = eval.evaluate(data, 1);
 		
@@ -80,13 +79,12 @@ public class IsDataAtEvaluatorTest extends TestCase {
 	public void testEvaluateAbsoluteWithLastMatchAtEdge() {
 		
 		IsDataAtEvaluator eval = new IsDataAtEvaluator();
-		eval.setOffset(4);
 		
 		DataSpecimen data = new DataSpecimen("01234");
 		
-		int result = eval.evaluate(data, 6);
+		int result = eval.evaluate(data, 3);
 		
-		if( result != 6 ){
+		if( result != 3 ){
 			fail("Returned value is incorrect (returned " + result + " )");
 		}
 	}
@@ -129,7 +127,7 @@ public class IsDataAtEvaluatorTest extends TestCase {
 		}
 
 		IsDataAtEvaluator eval2 = new IsDataAtEvaluator();
-		eval.setOffset(12);
+		eval2.setOffset(12);
 		
 		if( eval2.getOffset() != 12){
 			fail("Offset value returned is incorrect (returned " + eval2.getOffset() + ")");
