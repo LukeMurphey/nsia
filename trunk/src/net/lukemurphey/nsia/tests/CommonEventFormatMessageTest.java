@@ -34,8 +34,8 @@ public class CommonEventFormatMessageTest extends TestCase {
 		message.addExtensionField(new ExtensionField(CommonExtensionDictionaryField.DESTINATION_ADDRESS, "192.168.10.8") );
 		
 		String result = message.getCEFMessage();
-		
-		if( result.equals("CEF:0|ThreatFactor|Website \\| Auditor|1.0|267|Scan Result: Rule Failed|10|dst=192.168.10.8") == false){
+		                   
+		if( result.equals("CEF:0|ThreatFactor|Website \\| Auditor|1.0|267|Scan Result: Rule Failed|10| dst=192.168.10.8") == false){
 			fail("The CEF message returned was not the expected value:" + result);
 		}
 	}
@@ -47,7 +47,7 @@ public class CommonEventFormatMessageTest extends TestCase {
 		
 		String result = message.getCEFMessage();
 		
-		if( result.equals("CEF:0|ThreatFactor|Website Auditor|1.0|267|Scan Result: Rule Failed|10|fname=1+1\\=2") == false){
+		if( result.equals("CEF:0|ThreatFactor|Website Auditor|1.0|267|Scan Result: Rule Failed|10| fname=1+1\\=2") == false){
 			fail("The CEF message returned was not the expected value:" + result);
 		}
 	}
@@ -59,7 +59,7 @@ public class CommonEventFormatMessageTest extends TestCase {
 		
 		String result = message.getCEFMessage();
 		
-		if( result.equals("CEF:0|ThreatFactor|Website Auditor|1.0|267|Scan Result: Rule Failed|10|dst=192.168.10.8") == false){
+		if( result.equals("CEF:0|ThreatFactor|Website Auditor|1.0|267|Scan Result: Rule Failed|10| dst=192.168.10.8") == false){
 			fail("The CEF message returned was not the expected value:" + result);
 		}
 	}
