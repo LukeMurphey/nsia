@@ -74,7 +74,7 @@ Page custom LoginPasswordForm LoginPasswordFormLeave
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "../../tmp/packages/ThreatFactor NSIA Setup.exe"
+OutFile "../../tmp/packages/ThreatFactor NSIA Setup (${VERSION}).exe"
 InstallDir "$PROGRAMFILES\ThreatFactor NSIA"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
