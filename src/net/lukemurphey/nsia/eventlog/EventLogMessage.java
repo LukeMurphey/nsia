@@ -159,7 +159,8 @@ public class EventLogMessage {
 		LOG_CACHE_EMPTYING(EventLogSeverity.NOTICE, "Event Log: Cache being forwarded"),
 		DEFINITION_MATCH(EventLogSeverity.WARNING, "Scanner: Definition matched"),
 		RESPONSE_ACTION_FAILED(EventLogSeverity.WARNING, "Response Module: Action failed"),
-		STARTUP_ERROR(EventLogSeverity.WARNING, "System: Startup error");
+		STARTUP_ERROR(EventLogSeverity.WARNING, "System: Startup error"),
+		DEFINITION_UPDATE_REQUEST_FAILED(EventLogSeverity.WARNING, "System: Definition update request failed");
 
 		private EventType(EventLogSeverity severity, String name){
 			this.severity = severity;
