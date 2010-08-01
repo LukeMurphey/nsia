@@ -26,9 +26,7 @@ import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
-import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
-import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionType;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
@@ -471,11 +469,13 @@ public class DefinitionArchive {
 			else{
 				return versionID.revisionID() != this.definitionSet.getVersionID().revisionID();
 			}
-			//return versionID.revisionID() > this.definitionSet.getVersionID().revisionID();
 			
 		}
-		catch(Exception e){
-			Application.getApplication().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField( FieldName.MESSAGE, "Error observed when checking for new definitions")), e);
+		catch (XmlRpcException e) {
+			Application.getApplication().getEventLog().logEvent( new EventLogMessage(EventType.DEFINITION_UPDATE_REQUEST_FAILED));
+		}
+		catch (IOException e) {
+			Application.getApplication().getEventLog().logEvent( new EventLogMessage(EventType.DEFINITION_UPDATE_REQUEST_FAILED));
 		}
 		
 		return false;
