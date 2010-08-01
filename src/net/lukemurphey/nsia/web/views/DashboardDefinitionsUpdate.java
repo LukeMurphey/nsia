@@ -110,9 +110,9 @@ public class DashboardDefinitionsUpdate extends View {
 			} catch (InputValidationException e) {
 				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 			} catch (XmlRpcException e) {
-				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
+				Application.getApplication().getEventLog().logEvent( new EventLogMessage(EventType.DEFINITION_UPDATE_REQUEST_FAILED));
 			} catch (IOException e) {
-				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
+				Application.getApplication().getEventLog().logEvent( new EventLogMessage(EventType.DEFINITION_UPDATE_REQUEST_FAILED));
 			}
 			finally{
 				checkingVersion = false;
