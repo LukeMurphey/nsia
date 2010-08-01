@@ -23,7 +23,7 @@
 	
     <target name="zip" description="Create the zip file used for installing NSIA">
     	<mkdir dir="tmp/packages"/>
-        <zip destfile="tmp/packages/NSIA (${value.build.version}).zip"
+        <zip destfile="tmp/packages/ThreatFactor NSIA(${value.build.version}).zip"
             basedir="."
         	includesfile="dev/include_list.txt"
         	whenempty="create"
