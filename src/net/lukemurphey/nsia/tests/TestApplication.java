@@ -51,7 +51,7 @@ public class TestApplication {
 		
 		deleteDatabase();
 		
-		copyDirectory( new File("dev/test/test_database"), new File(DEFAULT_TEST_DATABASE_PATH) );
+		copyDirectory( new File("dev/test/test_database"), new File(DEFAULT_TEST_DATABASE_PATH), true );
 	}
 	
 	private static void deleteDatabase(){
@@ -59,8 +59,13 @@ public class TestApplication {
 		GenericUtils.deleteDirectory( test_db );
 	}
 	
-    private static void copyDirectory(File sourceLocation , File targetLocation) throws IOException {
+    private static void copyDirectory(File sourceLocation , File targetLocation, boolean ignoreDotFiles) throws IOException {
         
+    	//Ignore the directories that start with "." since these are hidden
+    	if( ignoreDotFiles && sourceLocation.getName().startsWith(".")){
+    		return;
+    	}
+    	
         if (sourceLocation.isDirectory()) {
             if (!targetLocation.exists()) {
                 targetLocation.mkdir();
@@ -69,7 +74,7 @@ public class TestApplication {
             String[] children = sourceLocation.list();
             for (int i=0; i<children.length; i++) {
                 copyDirectory(new File(sourceLocation, children[i]),
-                        new File(targetLocation, children[i]));
+                        new File(targetLocation, children[i]), ignoreDotFiles);
             }
         } else {
             
