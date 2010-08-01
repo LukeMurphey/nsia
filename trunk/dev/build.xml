@@ -22,7 +22,7 @@
 	</target>
 	
     <target name="zip" description="Create the zip file used for installing NSIA">
-        <zip destfile="bin/NSIA_No_Installer.zip"
+        <zip destfile="tmp/packages/NSIA_No_Installer.zip"
             basedir="."
         	includesfile="dev/include_list.txt"
         	whenempty="create"
@@ -31,16 +31,16 @@
 	
 	<target name="clean" description="Clean up archives creating by this build script" >
 	    <delete>
-	    	<fileset file="bin/NSIA_No_Installer.zip"/>
-	    	<fileset file="bin/nsia.jar"/>
-	    	<fileset file="lib/webConsole.war"/>
+	    	<fileset file="tmp/packages" />
+	    	<fileset file="bin/nsia.jar" />
+	    	<fileset file="lib/webConsole.war" />
 	    </delete>
 	</target>
   
 	<target name="svnbinclean" description="Clean up the .svn directories found in the java-bin directory (prevents SVN from thinking the java-bin directory should under revision control)">
 		<echo level="info">Remove svn-files...</echo>
 		<delete includeemptydirs="true" >
-		    <fileset dir="java-bin" defaultexcludes="false" >
+		    <fileset dir="tmp/java" defaultexcludes="false" >
 		        <include name="**/.svn/" />
 		    </fileset>
 		</delete>
@@ -60,10 +60,10 @@
     		<arg value="-f" />
     		<arg value="../src/net/lukemurphey/nsia/scan/default_definitions.xml" />
             <classpath>
-              <pathelement location="lib\JSAP-2.0b.jar" />
-              <pathelement location="lib\xmlrpc-2.0.jar" />
-              <pathelement location="lib\commons-codec-1.3.jar" />
-              <pathelement location="java-bin" />
+              <pathelement location="lib/JSAP-2.0b.jar" />
+              <pathelement location="lib/xmlrpc-2.0.jar" />
+              <pathelement location="lib/commons-codec-1.3.jar" />
+              <pathelement location="tmp/java" />
               <!-- <pathelement path="${java.class.path}"/> -->
             </classpath>
     	</java>
@@ -149,7 +149,7 @@
 		</exec>
 
 		<!-- 7: Copy the resulting file to bin -->
-		<move file="${value.build.debianpackage.directory}/nsia-${value.build.version}.deb" tofile="bin/nsia-${value.build.version}.deb" />
+		<move file="${value.build.debianpackage.directory}/nsia-${value.build.version}.deb" tofile="tmp/packages/nsia-${value.build.version}.deb" />
 		
 	</target>
 	
@@ -160,7 +160,7 @@
 		<!-- 1: Get the DebAntTask task -->
 		<taskdef name="deb" classname="org.vafer.jdeb.ant.DebAntTask" />
 		
-		<deb destfile="bin/nsia-${value.build.version}.deb" control="src/debianpkg" verbose="true" >
+		<deb destfile="tmp/packages/nsia-${value.build.version}.deb" control="src/debianpkg" verbose="true" >
 			
 			<!-- 2: Add documentation -->
 			<tarfileset prefix="opt/nsia/doc" dir="doc" defaultexcludes="true">
@@ -204,16 +204,15 @@
 	
 	<target name="windowsinstaller_nsispathundefined" depends="check_nsispathdefined" unless="isnsispathdefined">
 		<taskdef name="nsis" classname="net.sf.nsisant.Task" />
-		
+		<mkdir dir="tmp/packages"/>
         <nsis script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
             <define name="VERSION" value="${value.build.version}"/>
         </nsis>
 	</target>
 	
 	<target name="windowsinstaller_nsispathdefined" depends="check_nsispathdefined" if="isnsispathdefined">
-		
 		<taskdef name="nsis" classname="net.sf.nsisant.Task" />
-		
+		<mkdir dir="tmp/packages"/>
         <nsis path="${value.build.makensis.directory}" script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
             <define name="VERSION" value="${value.build.version}"/>
         </nsis>
