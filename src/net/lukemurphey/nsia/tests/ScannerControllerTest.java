@@ -16,7 +16,7 @@ public class ScannerControllerTest extends TestCase {
 	Application app = null;
 	
 	public void setUp() throws TestApplicationException{
-		app = TestApplication.getApplication();
+		app = TestApplication.getApplication(true);
 		scannerController = new ScannerController(app);
 	}
 	
