@@ -152,7 +152,7 @@ public class UserEditView extends View {
 						// 3.2 -- Create a new account if one to edit was not provided
 						if( user == null ){
 							
-							//	 0.2 -- Only allow unrestricted accounts to create other unrestricted accounts
+							// 3.2.1 -- Only allow unrestricted accounts to create other unrestricted accounts
 							if( !context.getUser().isUnrestricted() && unrestricted == true ){
 								Application.getApplication().logEvent( EventLogMessage.EventType.ACCESS_CONTROL_DENY,
 										new EventLogField( FieldName.MESSAGE, "Attempt to create unrestricted account from restricted account"),
@@ -162,31 +162,41 @@ public class UserEditView extends View {
 								throw new DisallowedOperationException("Restricted users cannot create unrestricted accounts");
 							}
 							
-							int userID = userManager.addAccount(name, fullname, password, emailAddress, unrestricted);
-							
-							if( userID > 0){
-								user = userManager.getUserDescriptor(userID);
+							// 3.2.2 -- Make sure user does not already exist
+							if( userManager.getUserID( name ) != -1 ){
+								context.addMessage("User name already exists", MessageSeverity.WARNING);
 								
-								Application.getApplication().logEvent(EventLogMessage.EventType.USER_ADDED,
+								return false;
+							}
+							
+							// 3.2.3 -- Add the user account
+							else{
+								int userID = userManager.addAccount(name, fullname, password, emailAddress, unrestricted);
+								
+								if( userID > 0){
+									user = userManager.getUserDescriptor(userID);
+									
+									Application.getApplication().logEvent(EventLogMessage.EventType.USER_ADDED,
+											new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+											new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+											new EventLogField( FieldName.TARGET_USER_ID, userID ),
+											new EventLogField( FieldName.TARGET_USER_NAME, name ) );
+									
+									context.addMessage("User created successfully", MessageSeverity.SUCCESS);
+									response.sendRedirect( UserView.getURL(user) );
+									return true;
+								}
+								else{
+									Application.getApplication().logEvent(EventLogMessage.EventType.OPERATION_FAILED,
+										new EventLogField( FieldName.OPERATION, "Add user account" ),
 										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
-										new EventLogField( FieldName.TARGET_USER_ID, userID ),
-										new EventLogField( FieldName.TARGET_USER_NAME, name ) );
-								
-								context.addMessage("User created successfully", MessageSeverity.SUCCESS);
-								response.sendRedirect( UserView.getURL(user) );
-								return true;
-							}
-							else{
-								Application.getApplication().logEvent(EventLogMessage.EventType.OPERATION_FAILED,
-									new EventLogField( FieldName.OPERATION, "Add user account" ),
-									new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
-									new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
-									new EventLogField( FieldName.TARGET_USER_ID, name ) );
-								
-								context.addMessage("User was not created successfully", MessageSeverity.WARNING);
-								response.sendRedirect( UserView.getURL(userID) );
-								return false;
+										new EventLogField( FieldName.TARGET_USER_ID, name ) );
+									
+									context.addMessage("User was not created successfully", MessageSeverity.WARNING);
+									
+									return false;
+								}
 							}
 						}
 						
