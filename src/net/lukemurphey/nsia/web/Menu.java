@@ -21,7 +21,6 @@ import net.lukemurphey.nsia.web.views.DefinitionsExportView;
 import net.lukemurphey.nsia.web.views.DefinitionsImportView;
 import net.lukemurphey.nsia.web.views.DefinitionsUpdateView;
 import net.lukemurphey.nsia.web.views.DefinitionsView;
-import net.lukemurphey.nsia.web.views.DefragmentIndexesView;
 import net.lukemurphey.nsia.web.views.EventLogView;
 import net.lukemurphey.nsia.web.views.ExceptionListView;
 import net.lukemurphey.nsia.web.views.GroupDeleteView;
@@ -64,7 +63,6 @@ public class Menu {
 		menu.add( new Link("Event Logs", EventLogView.getURL()) );
 		menu.add( new Link("Shutdown System", ShutdownView.getURL()) );
 		menu.add( new Link("Create Backup", BackupView.getURL()) );
-		menu.add( new Link("Defragment Indexes", DefragmentIndexesView.getURL()) );
 		
 		menu.add( new Link("Scanning Engine") );
 		if( Application.getApplication().getScannerController().scanningEnabled() ){
