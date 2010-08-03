@@ -110,13 +110,14 @@ public abstract class Authentication {
 				
 				//	1.2 -- Set the incremented value if the attempt should still be aggregated
 				else{
-					increaseAttempts = conn.prepareStatement("Update AttemptedLogins set Attempts = ? where LoginName = ?");
+					int attemptNameID = result.getInt("AttemptedNameID");
+					increaseAttempts = conn.prepareStatement("Update AttemptedLogins set Attempts = ? where AttemptedNameID = ?");
 					
 					if( !NumericalOverflowAnalysis.assertSafeIncrement( count ) )
 						throw new NumericalOverflowException("Attempt to increment failed login count overflowed for username: " + userName, "Failed Login Attempt Count");
 					
 					increaseAttempts.setLong(1, count+1);
-					increaseAttempts.setString(2, userName );
+					increaseAttempts.setInt(2, attemptNameID );
 					
 					increaseAttempts.executeUpdate();
 				}
@@ -181,9 +182,9 @@ public abstract class Authentication {
 		
 		try{
 			conn = appRes.getDatabaseConnection( Application.DatabaseAccessType.USER_QUERY );
-			statementAttempts = conn.prepareStatement("Delete from AttemptedLogins where LoginName = ?");
+			statementAttempts = conn.prepareStatement("Delete from AttemptedLogins where Lower(LoginName) = ?");
 			
-			statementAttempts.setString(1, userName);
+			statementAttempts.setString(1, userName.toLowerCase());
 			statementAttempts.execute();
 		} finally {
 			if (statementAttempts != null )
@@ -237,9 +238,9 @@ public abstract class Authentication {
 		Connection conn = null;
 		try{
 			conn = appRes.getDatabaseConnection(Application.DatabaseAccessType.USER_QUERY);
-			statementAttempts = conn.prepareStatement("Select * from AttemptedLogins where LoginName = ?");
+			statementAttempts = conn.prepareStatement("Select * from AttemptedLogins where Lower(LoginName) = ?");
 			
-			statementAttempts.setString(1, userName);
+			statementAttempts.setString(1, userName.toLowerCase());
 			result = statementAttempts.executeQuery();
 			
 			if( result.next() ){
