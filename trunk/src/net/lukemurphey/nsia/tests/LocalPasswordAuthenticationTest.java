@@ -67,6 +67,24 @@ public class LocalPasswordAuthenticationTest extends TestCase {
 		}
 	}
 	
+	public void testValidAccountLockoutCaseCheck() throws SQLException, NumericalOverflowException, InputValidationException, NoDatabaseConnectionException, NoSuchAlgorithmException, UnknownHostException {
+		
+		PasswordAuthenticationValidator validator = new PasswordAuthenticationValidator("invalidPassword");
+		ClientData clientData = new ClientData( InetAddress.getLocalHost(), "Eclipse Test JUnit Case" );
+		
+		//Lock the account due to repeated authentication attempts
+		localPwd.authenticate("lockedOut", validator, clientData);
+		localPwd.authenticate("LockedOut", validator, clientData);
+		localPwd.authenticate("LOCkedout", validator, clientData);
+		localPwd.authenticate("locKEDOut", validator, clientData);
+		localPwd.authenticate("LOCKEDOUT", validator, clientData);
+		
+		if( !localPwd.isAccountBruteForceLocked("lockedout") ){
+			fail("Account was not locked out (using same login name with different cases)");
+		}
+	}
+	
+	
 	public void testInvalidAccountLockout() throws SQLException, NumericalOverflowException, InputValidationException, NoDatabaseConnectionException, NoSuchAlgorithmException, UnknownHostException {
 		
 		PasswordAuthenticationValidator validator = new PasswordAuthenticationValidator("invalidPassword");
