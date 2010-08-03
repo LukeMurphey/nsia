@@ -17,6 +17,7 @@ import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.NumericalOverflowException;
 import net.lukemurphey.nsia.PasswordAuthenticationValidator;
 import net.lukemurphey.nsia.UserManagement;
+import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 
 import junit.framework.TestCase;
 
@@ -77,7 +78,7 @@ public class UserManagementTest extends TestCase {
 	}
 
 	public void testAddAccount() throws NoSuchAlgorithmException, UnknownHostException, SQLException, InputValidationException, NoDatabaseConnectionException, InvalidLocalPartException, NotFoundException {
-		int userID = this.userManagement.addAccount("testAddAccount", "testAddAccount", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
+		int userID = userManagement.addAccount("testAddAccount", "testAddAccount", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
 		
 		if( userManagement.getUserDescriptor(userID) == null ){
 			fail("User account was not successfully created");
@@ -85,13 +86,13 @@ public class UserManagementTest extends TestCase {
 	}
 
 	public void testAddAccountIdentical() throws NoSuchAlgorithmException, UnknownHostException, SQLException, InputValidationException, NoDatabaseConnectionException, InvalidLocalPartException, NotFoundException {
-		int userID = this.userManagement.addAccount("someUser", "someUser", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
+		int userID = userManagement.addAccount("someUser", "someUser", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
 		
 		if( userManagement.getUserDescriptor(userID) == null ){
 			fail("User account was not successfully created");
 		}
 		
-		int secondUserID = this.userManagement.addAccount("someUser", "someUser", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
+		int secondUserID = userManagement.addAccount("someUser", "someUser", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
 		
 		if( secondUserID >= 0 ){
 			fail("Account with same user name was allowed to be created");
@@ -99,13 +100,13 @@ public class UserManagementTest extends TestCase {
 	}
 	
 	public void testAddAccountIdenticalDiffCase() throws NoSuchAlgorithmException, UnknownHostException, SQLException, InputValidationException, NoDatabaseConnectionException, InvalidLocalPartException, NotFoundException {
-		int userID = this.userManagement.addAccount("someUser", "someUser", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
+		int userID = userManagement.addAccount("someUser", "someUser", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
 		
 		if( userManagement.getUserDescriptor(userID) == null ){
 			fail("User account was not successfully created");
 		}
 		
-		int secondUserID = this.userManagement.addAccount("SomEUser", "someUser", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
+		int secondUserID = userManagement.addAccount("SomEUser", "someUser", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
 		
 		if( secondUserID >= 0 ){
 			fail("Account with same user name was allowed to be created with different case in filename");
@@ -113,7 +114,7 @@ public class UserManagementTest extends TestCase {
 	}
 	
 	public void testChangePassword() throws NoSuchAlgorithmException, UnknownHostException, SQLException, InputValidationException, NoDatabaseConnectionException, InvalidLocalPartException, NotFoundException, NumericalOverflowException {
-		int userID = this.userManagement.addAccount("someUser", "someUser", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
+		int userID = userManagement.addAccount("someUser", "someUser", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
 		
 		if( userManagement.getUserDescriptor(userID) == null ){
 			fail("User account was not successfully created");
@@ -132,8 +133,23 @@ public class UserManagementTest extends TestCase {
 		}
 	}
 
-	public void testUpdateUserInfo() {
-
+	public void testUpdateUserInfo() throws NoSuchAlgorithmException, UnknownHostException, SQLException, InputValidationException, NoDatabaseConnectionException, InvalidLocalPartException, NotFoundException {
+		int userID = userManagement.addAccount("someUser", "someUser", "^&89dsd879uaidst67", EmailAddress.getByAddress( "test@whatever.com" ), false);
+		
+		if( userManagement.getUserDescriptor(userID) == null ){
+			fail("User account was not successfully created");
+		}
+		
+		String newFullName = "someUser Changed";
+		if( userManagement.updateAccount(userID, "someUser", newFullName, EmailAddress.getByAddress( "test@whatever.com" ) ) == false ){
+			fail("User account was not successfully changed (updateAccount returned false)");
+		}
+		
+		UserDescriptor user = userManagement.getUserDescriptor(userID);
+		
+		if( user.getFullname().equals(newFullName) == false ){
+			fail("User account was not successfully changed (fullname is not the correct value)");
+		}
 	}
 
 }
