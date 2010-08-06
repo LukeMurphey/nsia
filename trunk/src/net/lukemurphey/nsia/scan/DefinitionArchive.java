@@ -1,6 +1,9 @@
 package net.lukemurphey.nsia.scan;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -514,6 +517,49 @@ public class DefinitionArchive {
 		} catch (IOException e) {
 			throw new DefinitionUpdateFailedException( "Error when attempting to retrieve definition updates from server", e );
 		}
+	}
+	
+	/**
+	 * Load definitions from the local resource stream if available.
+	 * @return
+	 * @throws DefinitionUpdateFailedException
+	 */
+	public DefinitionVersionID loadDefaultDefinitions() throws DefinitionUpdateFailedException{
+		
+		try{
+			// 1 -- Read in the definitions as XML
+			InputStream in = null;
+			InputStreamReader isr = null;
+		    BufferedReader br = null;
+			
+			in = DefinitionArchive.class.getResourceAsStream("default_definitions.xml");
+			isr = new InputStreamReader(in);
+		    br = new BufferedReader(isr);
+		    
+		    String line;
+		    StringBuffer definitionsXmlBuffer = new StringBuffer();
+		    
+		    while ((line = br.readLine()) != null) {
+		    	definitionsXmlBuffer.append(line);
+		    }
+		    
+			// 2 -- Load the definitions
+	        DefinitionSet definitionSet = DefinitionSet.loadFromString(definitionsXmlBuffer.toString());
+	        
+	        DefinitionArchive.archive.updateDefinitions(definitionSet, true);//Note: the argument of true means that all existing definitions marked as "Official" will be removed first (since they will be replaced)
+	        return definitionSet.getVersionID();
+		
+		} catch (ParserConfigurationException e) {
+			throw new DefinitionUpdateFailedException( "Definitions loaded from local resource are corrupted", e );
+		} catch (SAXException e) {
+			throw new DefinitionUpdateFailedException( "Error when attempting to parse definitions", e );
+		} catch (IOException e) {
+			throw new DefinitionUpdateFailedException( "Error when attempting to load definitions", e );
+		} catch (DefinitionSetLoadException e) {
+			throw new DefinitionUpdateFailedException( "Error when attempting to load local definitions", e );
+		} catch (DefinitionArchiveException e) {
+			throw new DefinitionUpdateFailedException( "Error when attempting to load local definitions", e );
+		} 
 	}
 	
 	/**
