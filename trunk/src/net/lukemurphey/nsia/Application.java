@@ -20,6 +20,7 @@ import net.lukemurphey.nsia.eventlog.MessageFormatter;
 import net.lukemurphey.nsia.eventlog.MessageFormatterFactory;
 import net.lukemurphey.nsia.eventlog.SyslogNGAppender;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.upgrade.UpgradeFailureException;
 import net.lukemurphey.nsia.upgrade.Upgrader;
 
@@ -373,12 +374,23 @@ public final class Application {
 		connectToDatabase( );
 		UserManagement userManagement = new UserManagement(this);
 		
+		int errors = 0;
+		
 		try{
+			// Add the user account
 			if( userManagement.addAccount(username, realName, password, "SHA-512", 10000, null, true) < 0){
-				System.exit(-1);
+				errors = errors + 1;
+			}
+			
+			// Try to load the default definitions
+			DefinitionArchive archive = DefinitionArchive.getArchive();
+			archive.loadDefaultDefinitions();
+			
+			if( errors == 0 ){
+				System.exit(0);
 			}
 			else{
-				System.exit(0);
+				System.exit(-1);
 			}
 		}
 		catch(Exception e){
