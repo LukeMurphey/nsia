@@ -11,7 +11,6 @@ import junit.framework.TestCase;
 
 public class ScannerControllerTest extends TestCase {
 	
-	
 	ScannerController scannerController;
 	Application app = null;
 	
