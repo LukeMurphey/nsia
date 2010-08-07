@@ -310,7 +310,7 @@ public class EventLogMessage {
 			}
 		}
 		
-		return null;//Field was nout found
+		return null;//Field was not found
 	}
 	
 	/**
