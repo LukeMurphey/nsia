@@ -59,7 +59,7 @@ public class RuleStatusEventLogHook extends EventLogHook {
 			if( message.getEventType() == EventType.RULE_REJECTED || message.getEventType() == EventType.RULE_FAILED ){
 				EventLogField field = message.getField(EventLogField.FieldName.RULE_ID);
 				
-				if( field != null && field.getDescription().equals( ruleIDString ) ){
+				if( field != null && field.getValue().equals( ruleIDString ) ){
 					//Perform action
 					action.execute(message);
 				}

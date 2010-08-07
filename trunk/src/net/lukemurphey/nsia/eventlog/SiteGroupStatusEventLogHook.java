@@ -59,7 +59,7 @@ public class SiteGroupStatusEventLogHook extends EventLogHook {
 			if( message.getEventType() == EventType.RULE_REJECTED || message.getEventType() == EventType.RULE_FAILED ){
 				EventLogField field = message.getField(EventLogField.FieldName.SITE_GROUP_ID);
 				
-				if( field != null && field.getDescription().equals( siteGroupID ) ){
+				if( field != null && field.getValue().equals( siteGroupID ) ){
 					//Perform action
 					action.execute(message);
 				}
