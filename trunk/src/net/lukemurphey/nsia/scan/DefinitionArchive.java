@@ -533,6 +533,12 @@ public class DefinitionArchive {
 		    BufferedReader br = null;
 			
 			in = DefinitionArchive.class.getResourceAsStream("default_definitions.xml");
+			
+			// Make sure the definitions exist
+			if( in == null ){
+				return null;
+			}
+			
 			isr = new InputStreamReader(in);
 		    br = new BufferedReader(isr);
 		    
@@ -541,6 +547,7 @@ public class DefinitionArchive {
 		    
 		    while ((line = br.readLine()) != null) {
 		    	definitionsXmlBuffer.append(line);
+		    	definitionsXmlBuffer.append("\n");
 		    }
 		    
 			// 2 -- Load the definitions
