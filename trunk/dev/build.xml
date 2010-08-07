@@ -5,7 +5,7 @@
 	<property file="dev/default.properties"/>
 	<property file="dev/local.properties"/>
 	
-    <target name="jar" description="Create core NSIA JAR file">
+    <target name="jar" depends="check_default_definitions_exists" description="Create core NSIA JAR file">
         <jar destfile="bin/nsia.jar"
         	basedir="tmp/java/" 
         	manifest="dev/Manifest.txt"
@@ -18,6 +18,14 @@
         <available file="bin/nsia.jar" property="nsia_jar_present"/>
     </target>
     
+    <target name="__check_default_definitions_exists">
+        <available file="tmp/java/net/lukemurphey/nsia/scan/default_definitions.xml" property="default_definitions_present"/>
+    </target>
+    
+    <target name="check_default_definitions_exists" depends="__check_default_definitions_exists" unless="default_definitions_present">
+        <fail>Default definitions file does not exist</fail>
+    </target>
+	
     <target name="__check_web_archive_exists">
         <available file="lib/webConsole.war" property="webconsole_war_present"/>
     </target>
