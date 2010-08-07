@@ -110,6 +110,10 @@ public class DefinitionArchive {
 		return definitionSet.getCustomDefinitionsCount();
 	}
 	
+	public int getOfficialDefinitionsCount(){
+		return definitionSet.getOfficialDefinitionsCount();
+	}
+	
 	/**
 	 * Get the list of definitions.
 	 * @return
@@ -520,11 +524,26 @@ public class DefinitionArchive {
 	}
 	
 	/**
-	 * Load definitions from the local resource stream if available.
+	 * Load definitions from the local resource stream if available. Returns null if definitions were not loaded.
+	 * @return
+	 * @throws DefinitionUpdateFailedException 
+	 * @throws DefinitionUpdateFailedException
+	 */
+	public DefinitionVersionID loadDefaultDefinitions( ) throws DefinitionUpdateFailedException{
+		return loadDefaultDefinitions( false );
+	}
+	
+	/**
+	 * Load definitions from the local resource stream if available. Returns null if definitions were not loaded.
 	 * @return
 	 * @throws DefinitionUpdateFailedException
 	 */
-	public DefinitionVersionID loadDefaultDefinitions() throws DefinitionUpdateFailedException{
+	public DefinitionVersionID loadDefaultDefinitions( boolean loadEvenIfDefsExists ) throws DefinitionUpdateFailedException{
+		
+		// Don't load the definitions if official definitions exist already
+		if( loadEvenIfDefsExists == false && getOfficialDefinitionsCount() > 0 ){
+			return null;
+		}
 		
 		try{
 			// 1 -- Read in the definitions as XML
