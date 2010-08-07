@@ -59,7 +59,7 @@
     	<java classname="net.lukemurphey.nsia.support.DefinitionDownload">
     		<arg value="${value.build.licensekey}" />
     		<arg value="-f" />
-    		<arg value="../src/net/lukemurphey/nsia/scan/default_definitions.xml" />
+    		<arg value="../tmp/java/net/lukemurphey/nsia/scan/default_definitions.xml" />
             <classpath>
               <pathelement location="lib/JSAP-2.0b.jar" />
               <pathelement location="lib/xmlrpc-2.0.jar" />
