@@ -74,33 +74,33 @@ public class EventLogField{
 	}
 	
 	private FieldName name;
-	private String description;
+	private String value;
 	
-	public EventLogField( FieldName name, String description ){
+	public EventLogField( FieldName name, String value ){
 		this.name = name;
-		this.description = description;
+		this.value = value;
 	}
 	
 	public EventLogField( FieldName name, long value ){
 		this.name = name;
-		this.description = Long.toString(value);
+		this.value = Long.toString(value);
 	}
 	
 	public EventLogField( FieldName name, int value ){
 		this.name = name;
-		this.description = Integer.toString(value);
+		this.value = Integer.toString(value);
 	}
 	
 	public FieldName getName(){
 		return name;
 	}
 	
-	public String getDescription(){
-		return description;
+	public String getValue(){
+		return value;
 	}
 	
 	public String toString(){
-		return name.getSimpleNameFormat() + " = " + escapeField(description);
+		return name.getSimpleNameFormat() + " = " + escapeField(value);
 	}
 	
 	private static String escapeField( String value ){

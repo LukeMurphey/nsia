@@ -172,19 +172,19 @@ public class CommonEventFormatMessage {
 			
 			// 1 -- Load the necessary attributes
 			if( fields[c].getName() == EventLogField.FieldName.TARGET_USER_NAME ){
-				addExtensionField( new ExtensionField(CommonExtensionDictionaryField.DESTINATION_USER_NAME, fields[c].getDescription()) );
+				addExtensionField( new ExtensionField(CommonExtensionDictionaryField.DESTINATION_USER_NAME, fields[c].getValue()) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.TARGET_USER_ID ){
-				addExtensionField( new ExtensionField(CommonExtensionDictionaryField.DESTINATION_USER_ID, fields[c].getDescription()) );
+				addExtensionField( new ExtensionField(CommonExtensionDictionaryField.DESTINATION_USER_ID, fields[c].getValue()) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.SOURCE_USER_ID ){
-				addExtensionField( new ExtensionField(CommonExtensionDictionaryField.SOURCE_USER_ID, fields[c].getDescription()) );
+				addExtensionField( new ExtensionField(CommonExtensionDictionaryField.SOURCE_USER_ID, fields[c].getValue()) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.SOURCE_USER_NAME ){
-				addExtensionField( new ExtensionField(CommonExtensionDictionaryField.SOURCE_USER, fields[c].getDescription()) );
+				addExtensionField( new ExtensionField(CommonExtensionDictionaryField.SOURCE_USER, fields[c].getValue()) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.MESSAGE ){
-				addExtensionField( new ExtensionField(CommonExtensionDictionaryField.MESSAGE, fields[c].getDescription()) );
+				addExtensionField( new ExtensionField(CommonExtensionDictionaryField.MESSAGE, fields[c].getValue()) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.SEVERITY ){
 				//this.deviceSeverity = escapeField(fields[c].getDescription(), true); //Need to try to convert to int, or ignore
@@ -193,7 +193,7 @@ public class CommonEventFormatMessage {
 			// 2 -- Load the other attributes
 			else{
 				//TODO Need to make sure that name does not overlap with existing entry
-				addExtensionField( new ExtensionField(fields[c].getName().getSimpleNameFormat(), fields[c].getDescription())  );
+				addExtensionField( new ExtensionField(fields[c].getName().getSimpleNameFormat(), fields[c].getValue())  );
 			}
 		}
 	}

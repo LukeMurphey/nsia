@@ -79,7 +79,7 @@ public abstract class Action implements Serializable  {
 			Vector<MessageVariable> vars = new Vector<MessageVariable>();
 			
 			for(EventLogField field : logMessage.getFields()){
-				vars.add( new MessageVariable( "$" + field.getName().getSimpleNameFormat(), field.getDescription() )  );
+				vars.add( new MessageVariable( "$" + field.getName().getSimpleNameFormat(), field.getValue() )  );
 			}
 			
 			vars.add( new MessageVariable( "$EventType", logMessage.getEventType().getName()) );
@@ -101,7 +101,7 @@ public abstract class Action implements Serializable  {
 			Vector<MessageVariable> vars = new Vector<MessageVariable>();
 			
 			for(EventLogField field : logMessage.getFields()){
-				vars.add( new MessageVariable( "${" + field.getName().getSimpleNameFormat() + "}", field.getDescription() )  );
+				vars.add( new MessageVariable( "${" + field.getName().getSimpleNameFormat() + "}", field.getValue() )  );
 			}
 			
 			vars.add( new MessageVariable( "${EventType}", logMessage.getEventType().getName()) );

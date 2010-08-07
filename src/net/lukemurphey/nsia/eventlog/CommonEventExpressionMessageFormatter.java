@@ -24,34 +24,34 @@ public class CommonEventExpressionMessageFormatter extends MessageFormatter {
 		// 2 -- Add each additional field, try to match up the field name with one of the default fields if possible
 		for(int c = 0; c < fields.length; c++){
 			if( fields[c].getName() == EventLogField.FieldName.SOURCE_USER_ID ){
-				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.SRC_USER_ID, fields[c].getDescription() ) );
+				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.SRC_USER_ID, fields[c].getValue() ) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.SOURCE_USER_NAME ){
-				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.SRC_USER, fields[c].getDescription() ) );
+				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.SRC_USER, fields[c].getValue() ) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.TARGET_USER_NAME ){
-				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.USER, fields[c].getDescription() ) );
+				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.USER, fields[c].getValue() ) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.TARGET_USER_ID ){
-				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.USER_ID, fields[c].getDescription() ) );
+				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.USER_ID, fields[c].getValue() ) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.GROUP_ID ){
-				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.USER_GROUP_ID, fields[c].getDescription() ) );
+				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.USER_GROUP_ID, fields[c].getValue() ) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.GROUP_NAME ){
-				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.USER_GROUP, fields[c].getDescription() ) );
+				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.USER_GROUP, fields[c].getValue() ) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.SOURCE_ADDRESS ){
-				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.SRC_HOST, fields[c].getDescription() ) );
+				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.SRC_HOST, fields[c].getValue() ) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.URL ){
-				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.URL, fields[c].getDescription() ) );
+				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.URL, fields[c].getValue() ) );
 			}
 			else if( fields[c].getName() == EventLogField.FieldName.FILE ){
-				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.FILE_NAME, fields[c].getDescription() ) );
+				cee.addExtensionField( new ExtensionField( CommonEventExpressionField.FILE_NAME, fields[c].getValue() ) );
 			}
 			else{
-				cee.addExtensionField( new ExtensionField( fields[c].getName().getSimpleNameFormat(), fields[c].getDescription() ) );
+				cee.addExtensionField( new ExtensionField( fields[c].getName().getSimpleNameFormat(), fields[c].getValue() ) );
 			}
 		}
 		
