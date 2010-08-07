@@ -20,7 +20,6 @@ import net.lukemurphey.nsia.eventlog.MessageFormatter;
 import net.lukemurphey.nsia.eventlog.MessageFormatterFactory;
 import net.lukemurphey.nsia.eventlog.SyslogNGAppender;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
-import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.upgrade.UpgradeFailureException;
 import net.lukemurphey.nsia.upgrade.Upgrader;
 
@@ -211,6 +210,10 @@ public final class Application {
 		this(args, embeddedDatabasePath, true );
 	}
 	
+	public Application( boolean startAsServer ) throws JSAPException, NoDatabaseConnectionException{
+		this(null, null, true );
+	}
+	
 	/**
 	 * Default constructor
 	 * @throws JSAPException 
@@ -227,14 +230,6 @@ public final class Application {
 		System.getProperties().setProperty("httpclient.useragent", "NSIA");
 		
 		// 1 -- Parse the command-line arguments
-		
-		// First, find out if the application was initiated using the startup routine
-		if( args != null && args.length == 4 && args[0].equalsIgnoreCase("--install")){
-			System.out.println("Completing installation");
-			completeInstall(args[1], args[3], args[2]);
-			//The function above should not return, therefore, don't let it continue just in case.
-			System.exit(-1);
-		}
 		
 		//The properties file that contains the database connection information
 		Properties properties = null;
@@ -369,38 +364,6 @@ public final class Application {
 		
 		return randValue;
 	}*/
-	
-	private void completeInstall( String username, String password, String realName ){
-		connectToDatabase( );
-		UserManagement userManagement = new UserManagement(this);
-		
-		int errors = 0;
-		
-		try{
-			// Add the user account
-			if( userManagement.addAccount(username, realName, password, "SHA-512", 10000, null, true) < 0){
-				errors = errors + 1;
-			}
-			
-			// Try to load the default definitions
-			DefinitionArchive archive = DefinitionArchive.getArchive();
-			archive.loadDefaultDefinitions();
-			
-			if( errors == 0 ){
-				System.exit(0);
-			}
-			else{
-				System.exit(-1);
-			}
-		}
-		catch(Exception e){
-			System.exit(-1);
-		}
-	}
-	
-	private void connectToDatabase( ){
-		connectToDatabase( null, null );
-	}
 	
 	private void connectToDatabase( Properties properties, String embeddedDatabasePath ){
 		try {
@@ -861,6 +824,14 @@ public final class Application {
 		return startApplication( args, runMode, DEFAULT_DATABASE_PATH);
 	}
 	
+	public static Application startApplication( String[] args, RunMode runMode, boolean startServices ) throws JSAPException, NoDatabaseConnectionException, SQLException, InputValidationException, BindException, Exception{
+		return startApplication( args, runMode, DEFAULT_DATABASE_PATH, startServices);
+	}
+	
+	public static Application startApplication( String[] args, RunMode runMode, String embeddedDatabasePath ) throws BindException, JSAPException, NoDatabaseConnectionException, SQLException, InputValidationException, Exception{
+		return startApplication(args, runMode, embeddedDatabasePath, true);
+	}
+	
 	/**
 	 * Start the application by parsing the command-line arguments and performing the required startup actions.
 	 * @param args
@@ -870,11 +841,14 @@ public final class Application {
 	 * @throws SQLException 
 	 * @throws NoDatabaseConnectionException 
 	 */
-	public static Application startApplication( String[] args, RunMode runMode, String embeddedDatabasePath ) throws JSAPException, NoDatabaseConnectionException, SQLException, InputValidationException, BindException, Exception{
+	public static Application startApplication( String[] args, RunMode runMode, String embeddedDatabasePath, boolean startServices ) throws JSAPException, NoDatabaseConnectionException, SQLException, InputValidationException, BindException, Exception{
 		
-		appRes = new Application(args, embeddedDatabasePath);
-		appRes.startListener();
-		appRes.scannerController.start();
+		appRes = new Application(args, embeddedDatabasePath, startServices);
+		
+		if( startServices ){
+			appRes.startListener();
+			appRes.scannerController.start();
+		}
 		
 		// Configure external logging
 		try {
@@ -924,7 +898,7 @@ public final class Application {
 		appRes.logEvent( new EventLogMessage(EventLogMessage.EventType.APPLICATION_STARTED, new EventLogField(FieldName.VERSION, Application.getVersion())));
 		
 		// Launch console listener for accepting command line commands
-		if( runMode == RunMode.CLI ){
+		if( startServices && runMode == RunMode.CLI ){
 			ConsoleListener.startConsoleListener();
 			appRes.runMode = runMode;
 		}
