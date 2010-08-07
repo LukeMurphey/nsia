@@ -541,6 +541,10 @@ public class DefinitionSet {
 		getCustomDefinitionsCount();
 	}
 	
+	public int getOfficialDefinitionsCount(){
+		return definitions.size() - getCustomDefinitionsCount();
+	}
+	
 	public int getCustomDefinitionsCount(){
 		
 		synchronized ( this ) {
