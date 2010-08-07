@@ -3,6 +3,7 @@ package net.lukemurphey.nsia;
 import java.net.BindException;
 
 import net.lukemurphey.nsia.Application.RunMode;
+import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.tools.AppLaunch;
 
 import org.mortbay.util.MultiException;
@@ -24,7 +25,29 @@ public class Main {
 			}
 		}
 		
-		//2 -- Start the application
+		// 2 -- Determine if this call is to complete the installation of NSIA
+		if( args != null && args.length == 4 && args[0].equalsIgnoreCase("--install")){
+			try{
+				Application app = Application.startApplication(null, RunMode.CLI, false);
+				System.out.println("Completing installation");
+				
+				if( completeInstall(args[1], args[3], args[2], app) ){
+					app.shutdown(false);
+					System.exit(0);
+				}
+				else{
+					app.shutdown(false);
+					System.exit(-1);
+				}
+			}
+			catch (Exception e) {
+				System.err.println("Fatal Exception, application terminating (Stack Trace Follows)");
+				e.printStackTrace();
+				System.exit(-1);
+			}
+		}
+		
+		// 3 -- Start the application
 		if( runMode == RunMode.GUI ){
 			AppLaunch.main(args);
 		}
@@ -46,6 +69,34 @@ public class Main {
 				e.printStackTrace();
 				System.exit(-1);
 			}
+		}
+	}
+	
+	private static boolean completeInstall( String username, String password, String realName, Application app ){
+		
+		UserManagement userManagement = new UserManagement(app);
+		
+		int errors = 0;
+		
+		try{
+			// Add the user account
+			if( userManagement.addAccount(username, realName, password, "SHA-512", 10000, null, true) < 0){
+				errors = errors + 1;
+			}
+			
+			// Try to load the default definitions
+			DefinitionArchive archive = DefinitionArchive.getArchive();
+			archive.loadDefaultDefinitions();
+			
+			if( errors == 0 ){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		catch(Exception e){
+			return false;
 		}
 	}
 	
