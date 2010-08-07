@@ -14,6 +14,22 @@
         />
     </target>
 	
+    <target name="__check_nsia_archive_exists">
+        <available file="bin/nsia.jar" property="nsia_jar_present"/>
+    </target>
+    
+    <target name="__check_web_archive_exists">
+        <available file="lib/webConsole.war" property="webconsole_war_present"/>
+    </target>
+	
+	<target name="check_nsia_archive_exists" depends="__check_nsia_archive_exists" unless="nsia_jar_present">
+		<fail>NSIA Java archive does not exist</fail>
+	</target>
+	
+    <target name="check_web_archive_exists" depends="__check_web_archive_exists" unless="webconsole_war_present">
+    	<fail>Warning: Web console archive does not exist</fail>
+    </target>
+	
     <target name="webarchive" description="Create the web-archive used by the NSIA web-application" >
 	    <jar destfile="lib/webConsole.war"
 	        basedir="src/webarchive"
@@ -21,7 +37,7 @@
 	    />
 	</target>
 	
-    <target name="zip" description="Create the zip file used for installing NSIA">
+    <target name="zip" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create the zip file used for installing NSIA">
     	<mkdir dir="tmp/packages"/>
         <zip destfile="tmp/packages/ThreatFactor NSIA(${value.build.version}).zip"
             basedir="."
@@ -74,7 +90,7 @@
 		<delete dir="${value.build.debianpackage.directory}" />
 	</target>
 	
-	<target name="dpkg" description="Create a Debian package">
+	<target name="dpkg" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package">
 		<mkdir dir="tmp/packages"/>
 		
 		<!-- 1: Create root directory -->
@@ -157,7 +173,7 @@
 	
 	<target name="buildall" depends="webarchive,jar,zip,debianpackage,windowsinstaller"/>
 	
-	<target name="debianpackage" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
+	<target name="debianpackage" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
 		<mkdir dir="tmp/packages"/>
 		
 		<!-- 1: Get the DebAntTask task -->
@@ -205,7 +221,7 @@
 	
 	<target name="windowsinstaller" depends="windowsinstaller_nsispathundefined,windowsinstaller_nsispathdefined" description="Creates a Windows installer" />
 	
-	<target name="windowsinstaller_nsispathundefined" depends="check_nsispathdefined" unless="isnsispathdefined">
+	<target name="windowsinstaller_nsispathundefined" depends="check_nsispathdefined,check_web_archive_exists,check_nsia_archive_exists" unless="isnsispathdefined">
 		<taskdef name="nsis" classname="net.sf.nsisant.Task" />
 		<mkdir dir="tmp/packages"/>
         <nsis script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
@@ -213,7 +229,7 @@
         </nsis>
 	</target>
 	
-	<target name="windowsinstaller_nsispathdefined" depends="check_nsispathdefined" if="isnsispathdefined">
+	<target name="windowsinstaller_nsispathdefined" depends="check_nsispathdefined,check_web_archive_exists,check_nsia_archive_exists" if="isnsispathdefined">
 		<taskdef name="nsis" classname="net.sf.nsisant.Task" />
 		<mkdir dir="tmp/packages"/>
         <nsis path="${value.build.makensis.directory}" script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
