@@ -84,11 +84,16 @@ public abstract class Action implements Serializable  {
 			
 			vars.add( new MessageVariable( "$EventType", logMessage.getEventType().getName()) );
 			vars.add( new MessageVariable( "$EventTypeID", Integer.toString( logMessage.getEventType().ordinal()) ) );
+			vars.add( new MessageVariable( "$event_type", logMessage.getEventType().getName()) );
+			vars.add( new MessageVariable( "$event_type_id", Integer.toString( logMessage.getEventType().ordinal()) ) );
+			
 			vars.add( new MessageVariable( "$SeverityID", Integer.toString( logMessage.getSeverity().getSyslogEquivalent()) ) );
 			vars.add( new MessageVariable( "$Severity", logMessage.getSeverity().toString() ) );
-			vars.add( new MessageVariable( "$Date", logMessage.getDate().toString() ) );
-			vars.add( new MessageVariable( "$Message", logMessage.getMessageName() ) );
+			vars.add( new MessageVariable( "$severity_id", Integer.toString( logMessage.getSeverity().getSyslogEquivalent()) ) );
 			
+			vars.add( new MessageVariable( "$Date", logMessage.getDate().toString() ) );
+			
+			vars.add( new MessageVariable( "$Message", logMessage.getMessageName() ) );
 			return vars;
 		}
 		
@@ -101,8 +106,13 @@ public abstract class Action implements Serializable  {
 			
 			vars.add( new MessageVariable( "${EventType}", logMessage.getEventType().getName()) );
 			vars.add( new MessageVariable( "${EventTypeID}", Integer.toString( logMessage.getEventType().ordinal()) ) );
+			vars.add( new MessageVariable( "${event_type}", logMessage.getEventType().getName()) );
+			vars.add( new MessageVariable( "${event_type_id}", Integer.toString( logMessage.getEventType().ordinal()) ) );
+			
 			vars.add( new MessageVariable( "${SeverityID}", Integer.toString( logMessage.getSeverity().getSyslogEquivalent()) ) );
 			vars.add( new MessageVariable( "${Severity}", logMessage.getSeverity().toString() ) );
+			vars.add( new MessageVariable( "${severity_id}", Integer.toString( logMessage.getSeverity().getSyslogEquivalent()) ) );
+
 			vars.add( new MessageVariable( "${Date}", logMessage.getDate().toString() ) );
 			vars.add( new MessageVariable( "${Message}", logMessage.getMessageName() ) );
 			
