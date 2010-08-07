@@ -22,6 +22,7 @@ echo.
 echo.
 echo Step 2 of 5: Make sure that NSIA has not been configured yet
 echo ---------------------------------------------------
+goto NSIA_NOT_CONFIGURED
 IF EXIST ../var/database GOTO NSIA_CONFIGURED
 goto NSIA_NOT_CONFIGURED
 
@@ -51,8 +52,7 @@ echo.
 echo.
 echo Step 4 of 5: Initialize NSIA
 echo ---------------------------------------------------
-REM java -jar nsia.jar --install $username $username $password
-java -jar nsia.jar --install %username% %username% %password%
+REM java -jar nsia.jar --install %username% %username% %password%
 
 echo NSIA was successfully installed!
 echo Now, all you have to do is run it
@@ -71,9 +71,9 @@ echo.
 echo Otherwise, you can run it with the following command: "java -jar nsia.jar"
 
 REM    6.2 -- Give the user the option to install NSIA as a service
-CHOICE /C YN /M "Would you like to install NSIA as a service; [y]es or [n]o?"
-IF ERRORLEVEL 2 goto DONT_INSTALL_AS_SERVICE
-IF ERRORLEVEL 1 goto INSTALL_AS_SERVICE
+SET /p InstallService=Would you like to install NSIA as a service; [y]es or [n]o?
+IF /I "%InstallService%" == "y" GOTO INSTALL_AS_SERVICE
+goto DONT_INSTALL_AS_SERVICE
 
 :INSTALL_AS_SERVICE
 echo.
@@ -102,11 +102,10 @@ echo.
 REM Continue on
 
 REM    6.3 -- Give the option to run it now
-CHOICE /C YN /M "Would you like to run NSIA now; [y]es or [n]o?"
-IF ERRORLEVEL 2 goto DONT_START_NOW
-IF ERRORLEVEL 1 goto START_NOW_GuI
-REM CHOICE /C:yn /N /T:N,10 [y]es or [n]o?
-REM set result=%ERRORLEVEL%
+SET /p RunNow=Would you like to run NSIA now; [y]es or [n]o?
+IF /I "%RunNow%" == "y" GOTO START_NOW_GUI
+goto DONT_START_NOW
+
 :START_NOW
 echo Starting NSIA...
 goto START_NOW_CLI
