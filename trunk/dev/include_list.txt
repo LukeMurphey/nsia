@@ -5,6 +5,7 @@ bin/ThreatFactor NSIA
 bin/ThreatFactor NSIA GUI
 bin/nsia.jar
 bin/install.sh
+bin/install.bat
 doc/LICENSE
 doc/AUTHORS
 doc/INSTALL
