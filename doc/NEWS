@@ -1,5 +1,15 @@
 Below is the history of NSIA with notes about the changes available in each version.
 
+Version 0.9.5 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+  * Default definitions are now loaded when the installation of NSIA is completed
+  * Windows install batch file (in the zip file) now fully supports Windows XP
+  * Removed button to manually force index defragmentation
+  * Logins are now consistently handled in a case insensitive way
+  * Fixed caused when attempting to add a user when the username already exists
+  * Exception generated due to inability to communicate with ThreatFactor.com regarding definitions are no longer considered errors
+
 Version 0.9.4 Changes
 ------------------------------------------------------------------
 Version includes the following changes:

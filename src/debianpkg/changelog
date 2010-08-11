@@ -39,3 +39,14 @@ nsia (0.9.4-1) unstable; urgency=low
   * Fixed issue where form values were not reposted when a user attempts to submit a edits to a web-discovery rule that fails to pass validation.
   
  -- Luke Murphey <luke@threatfactor.com>  Fri, 26 Jul 2010 01:25:00 +0500
+ 
+nsia (0.9.5-1) unstable; urgency=low
+
+  * Default definitions are now loaded when the installation of NSIA is completed
+  * Windows install batch file (in the zip file) now fully supports Windows XP
+  * Removed button to manually force index defragmentation
+  * Logins are now consistently handled in a case insensitive way
+  * Fixed caused when attempting to add a user when the username already exists
+  * Exception generated due to inability to communicate with ThreatFactor.com regarding definitions are no longer considered errors
+ 
+ -- Luke Murphey <luke@threatfactor.com>  Tue, 10 Aug 2010 19:47:00 +0500
