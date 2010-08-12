@@ -1,7 +1,11 @@
 <project default="buildall">
 	
-	<property file="dev/default.properties" />
+	<!--
+	Load the properties files, Local is loaded first since properties are immutable (cannot be changed
+	by later property files) and we want the local properties to override the default properties
+	-->
 	<property file="dev/local.properties" />
+	<property file="dev/default.properties" />
 	
     <target name="jar" depends="check_default_definitions_exists" description="Create core NSIA JAR file">
 		
