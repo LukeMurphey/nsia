@@ -1,11 +1,23 @@
 <project default="buildall">
-	<!-- <target name="compile">
-    <javac srcdir="." />
-  </target> -->
-	<property file="dev/default.properties"/>
-	<property file="dev/local.properties"/>
+	
+	<property file="dev/default.properties" />
+	<property file="dev/local.properties" />
 	
     <target name="jar" depends="check_default_definitions_exists" description="Create core NSIA JAR file">
+		
+        <!-- 1: Get the build number -->
+        <taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask" />
+        <svn>
+		   <info target=".." />
+        </svn>
+        
+        <!-- 2: Update the build information properties file -->
+        <propertyfile file="tmp/java/net/lukemurphey/nsia/build.properties" comment="Build Information File">
+                <entry key="build.number" value="${svn.info.lastRev}" />
+                <entry key="build.date" type="date" value="now" pattern="dd.MM.yyyy HH:mm"/>
+        </propertyfile>
+    	
+		<!-- 3: Create the Java archive -->
         <jar destfile="bin/nsia.jar"
         	basedir="tmp/java/" 
         	manifest="dev/Manifest.txt"
