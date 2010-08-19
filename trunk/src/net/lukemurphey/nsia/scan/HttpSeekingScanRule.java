@@ -193,7 +193,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	 * fields.
 	 */
 	private static final int DEPTH_LIMIT = 100;
-	private static final int SCAN_LIMIT = 30000;
+	private static final int SCAN_LIMIT = 50000;
 	
 	//Indicates the number of resources the rule has scanned. This is updated while the rule is being evaluated and can thus be used to determine progress. 
 	private int resourcesScanned = 0;
