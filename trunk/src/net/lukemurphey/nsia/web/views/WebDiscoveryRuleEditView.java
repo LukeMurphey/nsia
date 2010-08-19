@@ -85,7 +85,7 @@ public class WebDiscoveryRuleEditView extends View {
 		form.addField( new Field("ScanFrequencyValue", new IntegerValidator(1,1000000)) );
 		form.addField( new Field("Domain") );
 		form.addField( new Field("RecursionDepth", new IntegerValidator(1, 1000)) );
-		form.addField( new Field("ScanLimit", new IntegerValidator(1, 1000)) );
+		form.addField( new Field("ScanLimit", new IntegerValidator(1, 20000)) );
 		
 		return form;
 	}
