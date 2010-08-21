@@ -38,11 +38,11 @@ public class UpgraderTest extends TestCase {
 		
 		Upgrader upgrader = new Upgrader(app);
 		
-		if( upgrader.isUpgradeNecessary( 1, 0, 0) == false ){
+		if( upgrader.isUpgradeNecessary( 100, 0, 0) == false ){
 			fail("Upgrader indicated that no upgrade was necessary");
 		}
 		
-		int result = upgrader.peformUpgrades(list.getList(), 1, 0, 0 );
+		int result = upgrader.peformUpgrades(list.getList(), 100, 0, 0 );
 		
 		if( result != 1 ){
 			fail("Upgrader returned an incorrect count of upgraders executed (" + result + ")");
