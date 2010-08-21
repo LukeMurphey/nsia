@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import net.lukemurphey.nsia.Application;
-import net.lukemurphey.nsia.Firewall;
 import net.lukemurphey.nsia.GeneralizedException;
-import net.lukemurphey.nsia.HostAddress;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -85,12 +83,15 @@ public class XmlrpcServlet extends HttpServlet {
         response.setContentType("text/xml");
         
    	 	// 1.2 -- Determine if the source is allowed
+        // Removed for now since the firewall class has been disabled (may be re-integrated into a later version)
+        /*
 		Firewall firewall = Application.getApplication().getFirewall();
 		Firewall.Action addressAllowed = firewall.isAllowed( new HostAddress( request.getRemoteAddr() ) );
 		if( addressAllowed != Firewall.Action.ACCEPT && addressAllowed != Firewall.Action.ACCEPTED_BY_DEFAULT )
 			response.sendError( HttpServletResponse.SC_FORBIDDEN );
 		else
 			response.sendRedirect("Console");
+			*/
     }
 	
 	/**
