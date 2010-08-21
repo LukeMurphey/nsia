@@ -103,7 +103,6 @@ public final class Application {
 	
 	private String databaseLocation;
 	private String databaseDriver;
-	private final Firewall firewall;
 	private final ScannerController scannerController;
 	private final NetworkManager manager;
 	private SessionManagement sessionManagement; // NOPMD by luke on 5/26/07 10:41 AM
@@ -181,7 +180,6 @@ public final class Application {
 	
 	public Application(){
 		//This constructor instantiates a blank application and is intended only for test cases.
-		firewall = null;
 		scannerController = null;
 		manager = null;
 	}
@@ -308,9 +306,6 @@ public final class Application {
 		else{
 			scannerController = null;
 		}
-		
-		firewall = new Firewall( this );
-		//firewall.loadFirewallRulesFromDatabase();
 		
 		// 9 -- Set the agent string
 		try {
@@ -604,14 +599,6 @@ public final class Application {
 		}
 		
 		return p;
-	}
-	
-	/**
-	 * Get the firewall object.
-	 * @return
-	 */
-	public Firewall getFirewall(){
-		return firewall;
 	}
 	
 	/**
