@@ -42,9 +42,9 @@ public final class Application {
 	public static final String APPLICATION_NAME = "NSIA";
 	public static final String APPLICATION_VENDOR = "ThreatFactor";
 	
-	public static final int VERSION_MAJOR = 0;
-	public static final int VERSION_MINOR = 9;
-	public static final int VERSION_REVISION = 5;
+	public static final int VERSION_MAJOR = 1;
+	public static final int VERSION_MINOR = 0;
+	public static final int VERSION_REVISION = 0;
 	public static final String VERSION_STATUS = null;
 	public static final String DEFAULT_DATABASE_PATH = "../var/database";
 	
@@ -215,6 +215,14 @@ public final class Application {
 	}
 	
 	/**
+	 * Set the user agent string used by the web client.
+	 */
+	private void setUserAgent(){
+		System.getProperties().setProperty("httpclient.useragent", "ThreatFactor NSIA " + Application.getVersion());
+	}
+	
+	
+	/**
 	 * Default constructor
 	 * @throws JSAPException 
 	 * @throws ClassNotFoundException 
@@ -227,7 +235,7 @@ public final class Application {
 		// 0 -- Perform basic startup routines
 		
 		//	 0.1 -- Set the user agent identification
-		System.getProperties().setProperty("httpclient.useragent", "NSIA");
+		setUserAgent();
 		
 		// 1 -- Parse the command-line arguments
 		
@@ -286,12 +294,14 @@ public final class Application {
 			System.exit(0);
 		}
 		
+		// 7 -- Load the event log hooks
 		try {
 			eventlog.loadHooks();
 		} catch (SQLException e) {
 			logExceptionEvent( EventLogMessage.EventType.SQL_EXCEPTION, e );
 		}
 		
+		// 8 -- Initiate the scanner controller
 		if( startAsServer ){
 			scannerController = new ScannerController( this );
 		}
@@ -302,11 +312,12 @@ public final class Application {
 		firewall = new Firewall( this );
 		//firewall.loadFirewallRulesFromDatabase();
 		
-		String siteSentryClientId = null;
+		// 9 -- Set the agent string
 		try {
-			siteSentryClientId = appConfig.getHttpClientId();
+			String agentString = null;
+			agentString = appConfig.getHttpClientId();
 			
-			System.getProperties().setProperty("httpclient.useragent", siteSentryClientId );
+			System.getProperties().setProperty("httpclient.useragent", agentString );
 		}
 		catch (NoDatabaseConnectionException e1) {
 			System.out.println( e1.getMessage() );
@@ -318,7 +329,7 @@ public final class Application {
 			System.out.println( e1.getMessage() );
 		}
 		
-		// 6 -- Instantiate the manager
+		// 10 -- Instantiate the manager
 		if( startAsServer ){
 			manager = new NetworkManager();
 		}
@@ -328,42 +339,20 @@ public final class Application {
 		
 		startTime = System.currentTimeMillis();
 		
-		// 7 -- Start the metrics monitor
+		// 11 -- Start the metrics monitor
 		if( startAsServer ){
 			startMetricsMonitor();
 		}
 		
+		// 12 -- Register the shutdown hook
 		ShutdownHook shutdownHook = new ShutdownHook();
 		Runtime.getRuntime().addShutdownHook(shutdownHook);
 		
-		// 8 -- Start the scheduled background tasks
+		// 13 -- Start the scheduled background tasks
 		if( startAsServer ){
 			startTasks();
 		}
 	}
-	
-	/*private int getWorkerThreadID(){
-		Random generator = new Random();
-		
-		ListIterator<WorkerThreadDescriptor> iterator = workerThreadQueue.listIterator();
-		
-		boolean randValueFound = true;
-		int randValue = 1;
-		
-		while( randValueFound == true){
-			randValueFound = false;
-			
-			randValue = generator.nextInt();
-			
-			while( iterator.hasNext() ){
-				if( iterator.next().workerId == randValue ){
-					randValueFound = true;
-				}
-			}
-		}
-		
-		return randValue;
-	}*/
 	
 	private void connectToDatabase( Properties properties, String embeddedDatabasePath ){
 		try {
