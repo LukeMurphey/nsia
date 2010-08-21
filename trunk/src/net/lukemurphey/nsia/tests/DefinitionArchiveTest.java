@@ -27,7 +27,7 @@ public class DefinitionArchiveTest extends TestCase {
 		
 		DefinitionArchive archive = DefinitionArchive.getArchive();
 		
-		DefinitionVersionID defs = archive.loadDefaultDefinitions();
+		DefinitionVersionID defs = archive.loadDefaultDefinitions( true );
 		
 		if( defs == null ){
 			fail("Definitions could not be installed");
