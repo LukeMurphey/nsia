@@ -21,6 +21,9 @@ import net.lukemurphey.nsia.web.templates.TemplateLoader;
 
 public class DashboardLicensePanel extends View {
 
+	// The following determines whether or not a warning will be shown if the user does not have a valid license.
+	public static final boolean IGNORE_NO_LICENSE = true;
+	
 	public DashboardLicensePanel() {
 		super("DashboardPanel/License", "dashboard_panel_license");
 	}
@@ -64,7 +67,12 @@ public class DashboardLicensePanel extends View {
 		// 2 -- Determine if the license was validated yet
 		boolean license_unvalidated = (license == null || license.getStatus() == null || license.getStatus() == LicenseStatus.UNVALIDATED);
 		
-		// 3 -- Post the panel only if a license issue was noted
+		// 3 -- Don't bother warning the user if they do not have a valid license if the settings is to ignore these
+		if( IGNORE_NO_LICENSE && license != null && license.getStatus() == LicenseStatus.UNLICENSED ){
+			return null;
+		}
+		
+		// 4 -- Post the panel only if a license issue was noted
 		if( app.getApplicationConfiguration().licenseKeyCheckCompleted() && (license == null || license.isValid() == false )){
 			
 			data.put("license_check_completed", !license_unvalidated); 
