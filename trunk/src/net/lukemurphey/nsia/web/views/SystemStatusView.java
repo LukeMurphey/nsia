@@ -46,11 +46,19 @@ public class SystemStatusView extends View {
 		private String title;
 		private String message;
 		private StatType stat_type;
+		private Link link = null;
 		
 		public SystemStat( String title, String message, StatType stat_type ){
 			this.title = title;
 			this.message = message;
 			this.stat_type = stat_type;
+		}
+		
+		public SystemStat( String title, String message, StatType stat_type, Link link ){
+			this.title = title;
+			this.message = message;
+			this.stat_type = stat_type;
+			this.link = link;
 		}
 		
 		public boolean isError(){
@@ -67,6 +75,10 @@ public class SystemStatusView extends View {
 		
 		public boolean isCheck(){
 			return stat_type == StatType.CHECK;
+		}
+		
+		public Link getHref(){
+			return link;
 		}
 		
 		public String getTitle(){
@@ -186,15 +198,16 @@ public class SystemStatusView extends View {
 		// If the license was returned, then post the information
 		if( licenseDescriptor != null ){
 			boolean validLicense = licenseDescriptor.isValid();
+			Link licenseLink = new Link("(manage license)", LicenseView.getURL());
 			
 			if( validLicense == false && licenseDescriptor.getKey() != null){
-				license_stats.add( new SystemStat("Key", licenseDescriptor.getKey() + " (" + licenseDescriptor.getStatus().getDescription() + ")", StatType.WARNING) );
+				license_stats.add( new SystemStat("Key", licenseDescriptor.getKey() + " (" + licenseDescriptor.getStatus().getDescription() + ")", StatType.WARNING, licenseLink) );
 			}
 			else if( validLicense == false && licenseDescriptor.getKey() == null){
-				license_stats.add( new SystemStat("Key", licenseDescriptor.getStatus().getDescription(), StatType.WARNING) );
+				license_stats.add( new SystemStat("Key", licenseDescriptor.getStatus().getDescription(), StatType.WARNING, licenseLink) );
 			}
 			else if( validLicense == true ){
-				license_stats.add( new SystemStat("Key", licenseDescriptor.getKey() + " (" + licenseDescriptor.getStatus().getDescription() + ")", StatType.CHECK) );
+				license_stats.add( new SystemStat("Key", licenseDescriptor.getKey() + " (" + licenseDescriptor.getStatus().getDescription() + ")", StatType.CHECK, licenseLink) );
 			}
 			
 			if( licenseDescriptor.getExpirationDate() != null){
