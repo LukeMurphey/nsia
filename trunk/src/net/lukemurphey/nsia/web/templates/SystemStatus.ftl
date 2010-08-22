@@ -1,7 +1,7 @@
 <#assign content>
 
 <#macro getWarningNote message>
-    <table>
+    <table style="float:left">
         <tr>
             <td><img src="/media/img/16_Warning" alt="Warning"></td>
             <td class="WarnText">
@@ -12,7 +12,7 @@
 </#macro>
 
 <#macro getCheckNote message>
-    <table>
+    <table style="float:left">
         <tr>
             <td><img src="/media/img/16_Check" alt="OK"></td>
             <td>
@@ -23,7 +23,7 @@
 </#macro>
 
 <#macro getErrorNote message>
-    <table>
+    <table style="float:left">
         <tr>
             <td><img src="/media/img/16_Alert" alt="Alert"></td>
             <td class="WarnText">
@@ -34,7 +34,7 @@
 </#macro>
 
 <#macro getInfoNote message>
-    <table>
+    <table style="float:left;">
         <tr>
             <td><img src="/media/img/16_Information" alt="Info"></td>
             <td>
@@ -42,6 +42,14 @@
             </td>
         </tr>
     </table>
+</#macro>
+
+<#macro getattrs attrs>
+    <#if attrs??>
+        <#list attrs as attr>
+            ${attr.name}="${attr.value}"
+        </#list> 
+    </#if>
 </#macro>
 
 <#macro getRow stat>
@@ -60,6 +68,10 @@
                 <@getInfoNote message=stat.message />
             <#elseif stat.error>
                 <@getErrorNote message=stat.message />
+            </#if>
+            
+            <#if stat.href??>
+                <table><tr><td><a <@getattrs stat.href.attributes /> href="${stat.href.link}">${stat.href.title}</a></td></tr></table>
             </#if>
         </td>
     </tr>
