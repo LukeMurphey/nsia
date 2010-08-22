@@ -637,7 +637,7 @@ public class ApplicationConfiguration {
 	}
 	
 	/**
-	 * Gets the license associated with the application. Null is returned if no license exists.
+	 * Gets the license associated with the application. Null is returned if the license could not yet be checked.
 	 * @return
 	 * @throws InputValidationException 
 	 * @throws SQLException 
