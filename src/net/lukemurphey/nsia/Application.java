@@ -42,9 +42,9 @@ public final class Application {
 	public static final String APPLICATION_NAME = "NSIA";
 	public static final String APPLICATION_VENDOR = "ThreatFactor";
 	
-	public static final int VERSION_MAJOR = 1;
-	public static final int VERSION_MINOR = 0;
-	public static final int VERSION_REVISION = 0;
+	public static final int VERSION_MAJOR = 0;
+	public static final int VERSION_MINOR = 9;
+	public static final int VERSION_REVISION = 6;
 	public static final String VERSION_STATUS = null;
 	public static final String DEFAULT_DATABASE_PATH = "../var/database";
 	
@@ -750,7 +750,7 @@ public final class Application {
 		
 		// 1 -- Start the definition updater
 		DefinitionUpdateWorker worker = new DefinitionUpdateWorker();
-		timer.scheduleAtFixedRate( new TimerTaskWorker(worker, "Definition Updater"), 1000*60*30, 1000*60*60*8); //Repeat every 30 minutes and delay for 8 hours
+		timer.scheduleAtFixedRate( new TimerTaskWorker(worker, "Definition Updater"), 1000*60*30, 1000*60*60); //Repeat every hour and delay for 30 minutes
 		
 		// 2 -- Start the index defragmenter (if the internal database was used)
 		if( usingInternalDatabase ){
