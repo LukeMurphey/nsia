@@ -9,6 +9,11 @@ import java.util.regex.Pattern;
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
 
+/**
+ * Provides mechanisms for determining if a newer version of NSIA is available.
+ * @author Luke
+ *
+ */
 public class VersionManagement {
 
 	private static final String NSIA_SUPPORT_API_URL = "https://threatfactor.com/xmlrpc/";
@@ -37,6 +42,11 @@ public class VersionManagement {
         return cachedVersionInfo;
 	}
 	
+	/**
+	 * Represents the version of NSIA and allows version identifiers to be compared.
+	 * @author Luke
+	 *
+	 */
 	public static class VersionDescriptor{
 		private static Pattern VERSION_REGEX = Pattern.compile("([0-9]*)?([.]([0-9]*))?([.]([0-9]*))?[ ]*(\\((.*)\\))?"); //([0-9]*)?([.]([0-9]*))?([.]([0-9]*))?[ ]*(\((.*)\))? 
 		
@@ -103,6 +113,12 @@ public class VersionManagement {
 			return versionID;
 		}
 		
+		/**
+		 * Determines if a later version exists than the current version of NSIA based on the two version descriptors provided.
+		 * @param current
+		 * @param latestAvailable
+		 * @return
+		 */
 		public static boolean isLaterVersion( VersionDescriptor current, VersionDescriptor latestAvailable ){
 			
 			if( latestAvailable.getBranch() != null && latestAvailable.getBranch().equalsIgnoreCase(current.getBranch()) == false ){
@@ -113,11 +129,11 @@ public class VersionManagement {
 				return true;
 			}
 			
-			else if( latestAvailable.getMinor() > current.getMinor() ){
+			else if( latestAvailable.getMajor() == current.getMajor() && latestAvailable.getMinor() > current.getMinor() ){
 				return true;
 			}
 			
-			else if( latestAvailable.getRevision() > current.getRevision() ){
+			else if( latestAvailable.getMajor() == current.getMajor() && latestAvailable.getMinor() == current.getMinor() && latestAvailable.getRevision() > current.getRevision() ){
 				return true;
 			}
 			
@@ -126,6 +142,13 @@ public class VersionManagement {
 		}
 	}
 	
+	/**
+	 * Indicates if a newer version of NSIA is available.
+	 * @param dontBlock
+	 * @return
+	 * @throws XmlRpcException
+	 * @throws IOException
+	 */
 	public static boolean isNewerVersionAvailableID( boolean dontBlock ) throws XmlRpcException, IOException{
 		
 		String version = getNewestVersionAvailableID(dontBlock);
@@ -145,6 +168,13 @@ public class VersionManagement {
 		}
 	}
 	
+	/**
+	 * Get the newest available version ID for NSIA.
+	 * @param dontBlock
+	 * @return
+	 * @throws XmlRpcException
+	 * @throws IOException
+	 */
 	public static synchronized String getNewestVersionAvailableID( boolean dontBlock ) throws XmlRpcException, IOException{
 		
 		// 1.1 -- Determine if the cached version information is recent (check every 4 hours or 14400000 seconds)
@@ -167,6 +197,11 @@ public class VersionManagement {
 		}
 	}
 	
+	/**
+	 * This class will download the version information and ensure it is populated such that VersionManagement.getVersionID() will return a cached version of it.
+	 * @author Luke
+	 *
+	 */
 	private static class VersionChecker extends Thread{
 		
 		public UncaughtExceptionHandler exHandler = null;
