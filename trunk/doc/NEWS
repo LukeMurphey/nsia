@@ -6,7 +6,7 @@ Version includes the following changes:
   * Increased the maximum number of resources that can be scanned with a auto-discovery rule
   * Dashboard license panel no longer shows a warning when the application is not licensed
   * Fixed issue that caused NSIA to incorrectly indicate a newer version was available
-  * Added link to manage license on system status page next to license description
+  * Added a link to manage the license on system status page (next to license description)
   * Definition update now logs that the definitions were updated
   
 Version 0.9.5 Changes

@@ -56,7 +56,7 @@ nsia (0.9.6-1) unstable; urgency=low
   * Increased the maximum number of resources that can be scanned with a auto-discovery rule
   * Dashboard license panel no longer shows a warning when the application is not licensed
   * Fixed issue that caused NSIA to incorrectly indicate a newer version was available
-  * Added link to manage license on system status page next to license description
-s
-  
+  * Added link to manage license on system status page next to license descriptions
+  * Definition update now logs that the definitions were updated
+    
  -- Luke Murphey <luke@threatfactor.com>  Tue, 21 Aug 2010 22:33:00 +0500
