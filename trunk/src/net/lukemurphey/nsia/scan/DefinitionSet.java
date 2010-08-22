@@ -542,23 +542,22 @@ public class DefinitionSet {
 	}
 	
 	public int getOfficialDefinitionsCount(){
+		System.out.println(definitions.size() + "," + getCustomDefinitionsCount());
 		return definitions.size() - getCustomDefinitionsCount();
 	}
 	
 	public int getCustomDefinitionsCount(){
 		
 		synchronized ( this ) {
-			if( countOfCustomDefinitions > -1 ){
-				countOfCustomDefinitions = 0;
-				
-				Iterator<Definition> it = definitions.iterator();
-				
-				while( it.hasNext() ){
-					Definition definition = it.next();
-					
-					if( definition.isOfficial() == false ){
-						countOfCustomDefinitions++;
-					}
+			countOfCustomDefinitions = 0;
+
+			Iterator<Definition> it = definitions.iterator();
+
+			while( it.hasNext() ){
+				Definition definition = it.next();
+
+				if( definition.isOfficial() == false ){
+					countOfCustomDefinitions++;
 				}
 			}
 			
