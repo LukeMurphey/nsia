@@ -54,5 +54,7 @@ nsia (0.9.5-1) unstable; urgency=low
 nsia (1.0.0-1) stable; urgency=low
 
   * Increased the maximum number of resources that can be scanned with a auto-discovery rule
- 
+  * Dashboard license panel no longer shows a warning when the application is not licensed
+  * Fixed issue that caused NSIA to incorrectly indicate a newer version was available
+  
  -- Luke Murphey <luke@threatfactor.com>  Tue, 21 Aug 2010 16:46:00 +0500
