@@ -542,7 +542,6 @@ public class DefinitionSet {
 	}
 	
 	public int getOfficialDefinitionsCount(){
-		System.out.println(definitions.size() + "," + getCustomDefinitionsCount());
 		return definitions.size() - getCustomDefinitionsCount();
 	}
 	
