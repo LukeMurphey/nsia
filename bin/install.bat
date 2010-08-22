@@ -52,7 +52,7 @@ echo.
 echo.
 echo Step 4 of 5: Initialize NSIA
 echo ---------------------------------------------------
-REM java -jar nsia.jar --install %username% %username% %password%
+java -jar nsia.jar --install %username% %username% %password%
 
 echo NSIA was successfully installed!
 echo Now, all you have to do is run it
