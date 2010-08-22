@@ -175,6 +175,7 @@ public class SystemStatusView extends View {
 		
 		LicenseDescriptor licenseDescriptor = null;
 		String key;
+		Link licenseLink = new Link("[manage]", LicenseView.getURL());
 		
 		// If validation of the license fails, then post a warning.
 		try {
@@ -189,7 +190,7 @@ public class SystemStatusView extends View {
 		}
 
 		if( key == null && licenseDescriptor == null ){
-			license_stats.add( new SystemStat("Key",  "Validation Failed", StatType.WARNING) );
+			license_stats.add( new SystemStat("Key",  "Validation Failed", StatType.WARNING, licenseLink) );
 		}
 		else if(licenseDescriptor == null) {
 			license_stats.add( new SystemStat("Key",   key + " (" + "Validation Failed" + ")", StatType.WARNING) );
@@ -198,13 +199,13 @@ public class SystemStatusView extends View {
 		// If the license was returned, then post the information
 		if( licenseDescriptor != null ){
 			boolean validLicense = licenseDescriptor.isValid();
-			Link licenseLink = new Link("(manage license)", LicenseView.getURL());
+			
 			
 			if( validLicense == false && licenseDescriptor.getKey() != null){
-				license_stats.add( new SystemStat("Key", licenseDescriptor.getKey() + " (" + licenseDescriptor.getStatus().getDescription() + ")", StatType.WARNING, licenseLink) );
+				license_stats.add( new SystemStat("Key", licenseDescriptor.getKey() + " (" + licenseDescriptor.getStatus().getDescription() + ")", StatType.WARNING) );
 			}
 			else if( validLicense == false && licenseDescriptor.getKey() == null){
-				license_stats.add( new SystemStat("Key", licenseDescriptor.getStatus().getDescription(), StatType.WARNING, licenseLink) );
+				license_stats.add( new SystemStat("Key", licenseDescriptor.getStatus().getDescription(), StatType.WARNING, new Link("[apply license]", LicenseView.getURL())) );
 			}
 			else if( validLicense == true ){
 				license_stats.add( new SystemStat("Key", licenseDescriptor.getKey() + " (" + licenseDescriptor.getStatus().getDescription() + ")", StatType.CHECK, licenseLink) );
