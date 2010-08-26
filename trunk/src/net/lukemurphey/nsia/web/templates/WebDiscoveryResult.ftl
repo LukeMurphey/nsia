@@ -126,10 +126,10 @@
         </tr>
             <#list findings as finding>
             <#assign severity=finding.maxSeverity />
-            <#if ( finding.resultCode == SCAN_COMPLETED && scanResult.deviations == 0 )>
+            <#if ( finding.resultCode == SCAN_COMPLETED && finding.deviations == 0 )>
          <tr class="Background1">
             <td width="22" style="vertical-align: top;" class="StatGreenSmall"><img src="/media/img/22_Check" alt="OK"></td>
-            <#elseif ( finding.resultCode == SCAN_COMPLETED && scanResult.deviations > 0 )>
+            <#elseif ( finding.resultCode == SCAN_COMPLETED && finding.deviations > 0 )>
                 <#if ( severity == HIGH )>
          <tr class="Background1">
             <td width="22" style="vertical-align: top;" class="StatRedSmall"><img src="/media/img/22_Alert" alt="Alert"></td>
@@ -164,10 +164,10 @@
                     <div style="display: none;" id="finding${finding_index?c}"><p>&nbsp;&nbsp;&nbsp;No Definitions Matched</div>
                   </#if>
               </td>
-                <#if ( finding.resultCode == SCAN_COMPLETED && scanResult.deviations == 0)>
+                <#if ( finding.resultCode == SCAN_COMPLETED && finding.deviations == 0)>
                 <td width="180" style="vertical-align: top;">No Issues Found&nbsp;&nbsp;&nbsp;</td>
                 <td class="StatGreenSmall">&nbsp;</td>
-                <#elseif ( finding.resultCode == SCAN_COMPLETED && scanResult.deviations > 0 )>
+                <#elseif ( finding.resultCode == SCAN_COMPLETED && finding.deviations > 0 )>
                     <#if ( severity == HIGH )>
                 <td width="180" style="vertical-align: top;">Definitions Matched&nbsp;&nbsp;&nbsp;</td>
                 <td class="StatRedSmall">&nbsp;</td>
