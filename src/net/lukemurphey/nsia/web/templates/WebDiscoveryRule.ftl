@@ -154,6 +154,11 @@
                 <td class="TitleText">Maximum Number of Resource to Scan</td>
                 <td><input class="textInput" size="40" type="text" name="ScanLimit" value="<#if request.getParameter("ScanLimit")??>${request.getParameter("ScanLimit")?html}<#elseif rule??>${rule.scanCountLimit?c}</#if>"></td>
             </tr>
+            <#-- 6 -- Output whether to scan external URLs -->
+            <tr class="<#if (form_errors?? && form_errors.fieldHasError("ScanExternalURLs"))>ValidationFailed<#else>Background1</#if>">
+                <td class="TitleText">Scan External Linked Content</td>
+                <td><input name="ScanExternalURLs" type="checkbox" <#if rule??><#if rule.scansExternalLinks>checked</#if><#elseif request.getParameter("DontScanExternalURLs")??><#else>checked</#if>></td>
+            </tr>
             <tr class="lastRow">
                 <td class="alignRight" colspan="2">
                 <#if !rule?? >

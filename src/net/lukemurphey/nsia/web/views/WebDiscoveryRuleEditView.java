@@ -160,6 +160,15 @@ public class WebDiscoveryRuleEditView extends View {
 			rule.setRecursionDepth( Integer.valueOf(request.getParameter( "RecursionDepth") ) );
 			rule.setScanCountLimit( Integer.valueOf(request.getParameter( "ScanLimit") ) );
 			
+			//Determine if we should scan the first level of external URLs
+			if( request.getParameter("ScanExternalURLs") != null ){
+				rule.scanExternalLinks(true);
+			}
+			else{
+				rule.scanExternalLinks(false);
+			}
+			
+			// Create the rule
 			try {
 				if( isNewRule ){
 					int siteGroupID = Integer.valueOf( request.getParameter("SiteGroupID") );
