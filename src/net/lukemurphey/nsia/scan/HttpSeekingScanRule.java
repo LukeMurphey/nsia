@@ -276,7 +276,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		scanExternalLinks = includeFirstLevelOfExternalLinks;
 	}
 	
-	public boolean scansExternalLinks( ){
+	public boolean getScansExternalLinks( ){
 		return scanExternalLinks;
 	}
 	
