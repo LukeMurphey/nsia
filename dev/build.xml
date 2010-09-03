@@ -1,4 +1,4 @@
-<project default="buildall">
+<project default="buildall" name="nsia">
 	
 	<!--
 	Load the properties files, Local is loaded first since properties are immutable (cannot be changed
