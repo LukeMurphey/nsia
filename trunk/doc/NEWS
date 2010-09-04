@@ -1,5 +1,13 @@
 Below is the history of NSIA with notes about the changes available in each version.
 
+Version 0.9.7 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+  * Added ability to specify that external resources should or should not be included in the scans
+  * Fixed issue where report indicated that definitions were matched when none were on the web-discovery report
+  * Added wait animation when baselining
+  * Improved link for managing the license
+
 Version 0.9.6 Changes
 ------------------------------------------------------------------
 Version includes the following changes:

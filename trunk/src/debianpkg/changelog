@@ -60,3 +60,12 @@ nsia (0.9.6-1) unstable; urgency=low
   * Definition update now logs that the definitions were updated
     
  -- Luke Murphey <luke@threatfactor.com>  Tue, 21 Aug 2010 22:33:00 +0500
+ 
+ nsia (0.9.7-1) unstable; urgency=low
+
+  * Added ability to specify that external resources should or should not be included in the scans
+  * Fixed issue where report indicated that definitions were matched when none were on the web-discovery report
+  * Added wait animation when baselining
+  * Improved link for managing the license
+    
+ -- Luke Murphey <luke@threatfactor.com>  Tue, 4 Sep 2010 22:14:00 +0500
