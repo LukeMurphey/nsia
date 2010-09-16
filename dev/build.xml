@@ -13,11 +13,14 @@
         <taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask" />
         <svn>
 		   <info target=".." />
+ 		   <wcVersion prefix="svn." path=".." />
         </svn>
-        
+    	
+    	<echo>Building Java archive for build ${svn.revision.max} (current repository is ${svn.info.rev})</echo>
+    	
         <!-- 2: Update the build information properties file -->
         <propertyfile file="tmp/java/net/lukemurphey/nsia/build.properties" comment="Build Information File">
-                <entry key="build.number" value="${svn.info.lastRev}" />
+                <entry key="build.number" value="${svn.revision.max}" />
                 <entry key="build.date" type="date" value="now" pattern="dd.MM.yyyy HH:mm"/>
         </propertyfile>
     	
