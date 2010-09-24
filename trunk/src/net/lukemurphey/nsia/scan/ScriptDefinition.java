@@ -925,6 +925,51 @@ public class ScriptDefinition extends Definition {
 		public void set(String name, Externalizable value){
 			data.set(name, value);
 		}
+		
+		@SuppressWarnings("unused")
+		public void set(String name, int value, boolean isSpecimenSpecific){
+			data.set(name, Integer.valueOf( value ), isSpecimenSpecific);
+		}
+		
+		@SuppressWarnings("unused")
+		public void set(String name, short value, boolean isSpecimenSpecific){
+			data.set(name, Short.valueOf( value ), isSpecimenSpecific);
+		}
+		
+		@SuppressWarnings("unused")
+		public void set(String name, long value, boolean isSpecimenSpecific){
+			data.set(name, Long.valueOf( value ), isSpecimenSpecific );
+		}
+		
+		@SuppressWarnings("unused")
+		public void set(String name, float value, boolean isSpecimenSpecific){
+			data.set(name, Float.valueOf( value), isSpecimenSpecific );
+		}
+		
+		@SuppressWarnings("unused")
+		public void set(String name, boolean value, boolean isSpecimenSpecific){
+			data.set(name, Boolean.valueOf(value), isSpecimenSpecific);
+		}
+		
+		@SuppressWarnings("unused")
+		public void set(String name, double value, boolean isSpecimenSpecific){
+			data.set(name, Double.valueOf(value), isSpecimenSpecific);
+		}
+		
+		@SuppressWarnings("unused")
+		public void set(String name, char value, boolean isSpecimenSpecific){
+			data.set(name, Character.valueOf( value ), isSpecimenSpecific);
+		}
+		
+		@SuppressWarnings("unused")
+		public void set(String name, Serializable value, boolean isSpecimenSpecific){
+			data.set(name, value, isSpecimenSpecific);
+		}
+		
+		@SuppressWarnings("unused")
+		public void set(String name, Externalizable value, boolean isSpecimenSpecific){
+			data.set(name, value, isSpecimenSpecific);
+		}
 	}
 	
 	/**
@@ -977,12 +1022,11 @@ public class ScriptDefinition extends Definition {
 					statement.setLong(2, ruleId);
 				}
 				else{
-					statement = connection.prepareStatement("Select * from ScriptEnvironment where DefinitionName = ? and RuleID = ? and UniqueResourceName = ?");
+					statement = connection.prepareStatement("Select * from ScriptEnvironment where DefinitionName = ? and RuleID = ? and (UniqueResourceName = ? or UniqueResourceName is null)");
 					statement.setString(1, definitionName);
 					statement.setLong(2, ruleId);
 					statement.setString(3, uniqueResourceName);
 				}
-				//statement.setLong(3, resultID);  //and ScanResultID = ?
 				
 				results = statement.executeQuery();
 				
@@ -1098,9 +1142,19 @@ public class ScriptDefinition extends Definition {
 		 * @param value
 		 */
 		public void set( String name, Serializable value ){
+			set( name, value, true );
+		}
+		
+		/**
+		 * Set the value of the name specified.
+		 * @param name
+		 * @param value
+		 * @param isSpecimenSpecific
+		 */
+		public void set( String name, Serializable value, boolean isSpecimenSpecific ){
 			synchronized ( pairs ){
 				removeInternal(name);
-				pairs.add( new NameValuePair(name, value) );
+				pairs.add( new NameValuePair(name, value, isSpecimenSpecific) );
 				itemsChanged = true;
 			}
 		}
@@ -1111,11 +1165,23 @@ public class ScriptDefinition extends Definition {
 		 * @param value
 		 */
 		public void set( String name, Externalizable value ){
+			set( name, value, true );
+		}
+		
+		/**
+		 * Set the value of the name specified.
+		 * @param name
+		 * @param value
+		 * @param isSpecimenSpecific
+		 */
+		public void set( String name, Externalizable value, boolean isSpecimenSpecific ){
 			synchronized ( pairs ){
 				itemsChanged = true;
-				pairs.add( new NameValuePair(name, value) );
+				pairs.add( new NameValuePair(name, value, isSpecimenSpecific) );
 			}
 		}
+		
+		
 		
 		/**
 		 * Save the saved script data to the database.
@@ -1195,7 +1261,7 @@ public class ScriptDefinition extends Definition {
 			
 			try{
 				
-				if( uniqueResourceName != null ){
+				if( uniqueResourceName != null && pair.isSpecimenSpecific == true ){
 					insertStatement = connection.prepareStatement("Insert into ScriptEnvironment (DefinitionName, RuleID, Name, Value, UniqueResourceName) values(?, ?, ?, ?, ?)");
 					insertStatement.setString(1, definitionName);
 					insertStatement.setLong(2, ruleId);
@@ -1251,8 +1317,10 @@ public class ScriptDefinition extends Definition {
 		private int pairId = -1;
 		private String name;
 		private Object value;
+		private boolean isSpecimenSpecific = true; 
 		
-		public NameValuePair( String name, Object value){
+		public NameValuePair( String name, Object value, boolean isSpecimenSpecific){
+			
 			// 0 -- Precondition Check
 			if( name == null){
 				throw new IllegalArgumentException("The name must not be null");
@@ -1265,9 +1333,19 @@ public class ScriptDefinition extends Definition {
 			// 1 -- Set the parameters
 			this.name = name;
 			this.value = value;
+			this.isSpecimenSpecific = isSpecimenSpecific;
 		}
 		
-		public NameValuePair( int pairId, String name, Object value){
+		public NameValuePair( String name, Object value ){
+			this( name, value, true );
+		}
+		
+		public NameValuePair( int pairId, String name, Object value ){
+			this(pairId, name, value, true);
+		}
+		
+		public NameValuePair( int pairId, String name, Object value, boolean isSpecimenSpecific ){
+			
 			// 0 -- Precondition Check
 			if( pairId < 0){
 				throw new IllegalArgumentException("The pair ID must be greater than zero");
@@ -1285,6 +1363,7 @@ public class ScriptDefinition extends Definition {
 			this.name = name;
 			this.value = value;
 			this.pairId = pairId;
+			this.isSpecimenSpecific = isSpecimenSpecific;
 		}
 		
 		public boolean nameMatches(String name){
@@ -1302,6 +1381,10 @@ public class ScriptDefinition extends Definition {
 		
 		public Object getValue(){
 			return value;
+		}
+		
+		public boolean isSpecimenSpecific(){
+			return isSpecimenSpecific;
 		}
 		
 		/*public int getValueInt(){
