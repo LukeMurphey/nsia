@@ -13,7 +13,7 @@
         <taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask" />
         <svn>
 		   <info target=".." />
- 		   <wcVersion prefix="svn." path=".." />
+           <wcVersion prefix="svn." path="${value.build.workingcopy.directory}" />
         </svn>
     	
     	<echo>Building Java archive for build ${svn.revision.max} (current repository is ${svn.info.rev})</echo>
