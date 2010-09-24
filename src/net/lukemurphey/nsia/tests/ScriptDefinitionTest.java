@@ -20,6 +20,7 @@ import net.lukemurphey.nsia.scan.DefinitionEvaluationException;
 import net.lukemurphey.nsia.scan.HttpResponseData;
 import net.lukemurphey.nsia.scan.InvalidDefinitionException;
 import net.lukemurphey.nsia.scan.ScriptDefinition;
+import net.lukemurphey.nsia.scan.scriptenvironment.Result;
 import net.lukemurphey.nsia.scan.scriptenvironment.Variables;
 
 public class ScriptDefinitionTest extends TestCase {
@@ -54,7 +55,7 @@ public class ScriptDefinitionTest extends TestCase {
 		getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "ValidRuleLineComments.js" );
 	}
 	
-	public void testSetEnvironmentData() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
+	public void testScriptDefinition() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
 		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "URLExists.js" );
 		
 		HostConfiguration hostConfig = new HostConfiguration();
@@ -118,6 +119,84 @@ public class ScriptDefinitionTest extends TestCase {
 		
 		if( sig.isInvasive() == false ){
 			fail("The rule invasive flag was not set properly");
+		}
+	}
+	
+	public void testSetEnvironmentDataNotShared() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
+		
+		// 1 -- Perform a scan against a URL, this should cause the script to save the script data with the isSpecimenSpecific flag as false
+		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "SaveDataNotShared.js" );
+		Application app = TestApplication.getApplication();
+		
+		{
+			HostConfiguration hostConfig = new HostConfiguration();
+			hostConfig.setHost("google.com", 80, "http");
+			HttpMethod httpMethod = new GetMethod( "/" );
+			httpMethod.setFollowRedirects(true);
+			HttpClient httpClient = new HttpClient();
+			httpClient.executeMethod( hostConfig, httpMethod );
+			
+			HttpResponseData httpResponse = new HttpResponseData( httpMethod, "http://google.com" );
+				
+			Result res = sig.evaluate(httpResponse, new Variables(), 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+			
+			if( !res.getDescription().matches("No value set") ){
+				fail("The definition should not have set the variable");
+			}
+		}
+		
+		// 2 -- Perform the scan again against a different URL and make sure the script cannot set the value set by the previous scan
+		HostConfiguration hostConfig2 = new HostConfiguration();
+		hostConfig2.setHost("threatfactor.com", 80, "http");
+		HttpMethod httpMethod2 = new GetMethod( "/" );
+		httpMethod2.setFollowRedirects(true);
+		HttpClient httpClient2 = new HttpClient();
+		httpClient2.executeMethod( hostConfig2, httpMethod2 );
+		
+		HttpResponseData httpResponse2 = new HttpResponseData( httpMethod2, "http://threatfactor.com" );
+		Result res2 = sig.evaluate(httpResponse2, new Variables(), 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+		
+		if( !res2.getDescription().matches("No value set") ){
+			fail("The definition should not have set the variable: " + res2.getDescription());
+		}
+	}
+	
+	public void testSetEnvironmentDataIsSpecimen() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
+		
+		// 1 -- Perform a scan against a URL, this should cause the script to save the script data with the isSpecimenSpecific flag as false
+		Application app = TestApplication.getApplication();
+		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "SaveDataNoSpecimen.js" );
+		
+		{
+			HostConfiguration hostConfig = new HostConfiguration();
+			hostConfig.setHost("google.com", 80, "http");
+			HttpMethod httpMethod = new GetMethod( "/" );
+			httpMethod.setFollowRedirects(true);
+			HttpClient httpClient = new HttpClient();
+			httpClient.executeMethod( hostConfig, httpMethod );
+			
+			HttpResponseData httpResponse = new HttpResponseData( httpMethod, "http://google.com" );
+			
+			Result res = sig.evaluate(httpResponse, new Variables(), 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+			
+			if( !res.getDescription().matches("No value set") ){
+				fail("The definition should not have set the variable");
+			}
+		}
+		
+		// 2 -- Perform the scan again against a different URL and see if the script can read the value set by the previous scan
+		HostConfiguration hostConfig2 = new HostConfiguration();
+		hostConfig2.setHost("threatfactor.com", 80, "http");
+		HttpMethod httpMethod2 = new GetMethod( "/" );
+		httpMethod2.setFollowRedirects(true);
+		HttpClient httpClient2 = new HttpClient();
+		httpClient2.executeMethod( hostConfig2, httpMethod2 );
+		
+		HttpResponseData httpResponse2 = new HttpResponseData( httpMethod2, "http://threatfactor.com" );
+		Result res2 = sig.evaluate(httpResponse2, new Variables(), 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+		
+		if( !res2.getDescription().startsWith("Value set: 12345678") ){
+			fail("The definition did not set the variable correctly: " + res2.getDescription());
 		}
 	}
 	
