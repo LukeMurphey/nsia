@@ -77,10 +77,10 @@ public class ScriptDefinition extends Definition {
 	private static final Pattern OPTION_REGEX = Pattern.compile("(Version|Name|ID|Message|Reference|Severity|Invasive)[ ]*\\:[ ]*([-\\w.\"/\\\\ (),?%=]+)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 	
 	//Mutex used to prevent multi-thread access to the invocable function 
-	private Object mutex = null;
+	private Object mutex = new Object();
 	
 	//Mutex used to prevent multi-thread access to the terminate function
-	private Object terminatorMutex = null;
+	private Object terminatorMutex = new Object();
 	
 	public static ScriptDefinition parse(String script) throws InvalidDefinitionException{
 		return new ScriptDefinition( script );
