@@ -432,6 +432,9 @@ public class ScriptDefinition extends Definition {
 			// 2 -- Execute the script
 			
 			//	 2.1 -- Call the baseline method
+			ScriptEngine scriptEngine = getScriptEngine();
+			populateBindings(scriptEngine);
+			
 			Invocable invocable = (Invocable)getScriptEngine();
 			
 			try {
