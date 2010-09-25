@@ -3,6 +3,8 @@ package net.lukemurphey.nsia.scan;
 import javax.script.*;
 
 import sun.org.mozilla.javascript.internal.Context;
+import sun.org.mozilla.javascript.internal.NativeArray;
+import sun.org.mozilla.javascript.internal.NativeJavaObject;
 
 import java.util.Iterator;
 import java.util.Vector;
@@ -155,7 +157,6 @@ public class ScriptDefinition extends Definition {
 		// 2 -- Set the context such that the script class loader will be used.
 		Context context = Context.enter();
 		context.setApplicationClassLoader(new ScriptClassLoader());
-		//context.setClassShutter(new ScriptClassShutter());
 		
 		// 3 -- Get the relevant engine
 		if( scriptingEngine == null ){
@@ -916,6 +917,46 @@ public class ScriptDefinition extends Definition {
 			data.set(name, Character.valueOf( value ));
 		}
 		
+		/**
+		 * The scripting engine may try to set an array which corresponds to a NativeArray class.
+		 * This class must be converted to an Object array in order to be serialized correctly.
+		 * Additionally, each object within the array may need to be unwrapped to the original
+		 * object in order for serialization to be possible. This method will perform the necessary
+		 * conversions so that the result can be serialized correctly.
+		 * @param name
+		 * @param arr
+		 * @param isSpecimenSpecific
+		 */
+		public void set(String name, NativeArray arr, boolean isSpecimenSpecific){
+
+			Object [] array = new Object[(int) arr.getLength()];
+			for (Object o : arr.getIds()) {
+			    int index = (Integer) o;
+			    Object object = arr.get(index, null);
+			    
+			    // Unwrap the original object if wrapped in a Native Java Object
+			    if( object instanceof NativeJavaObject){
+			    	NativeJavaObject n = (NativeJavaObject)object;
+			    	array[index] = n.unwrap();
+			    }
+			    else{
+			    	array[index] = object;
+			    }
+			}
+			
+			data.set(name, array, isSpecimenSpecific);
+		}
+		
+		/***
+		 * This method accepts Javascript native arrays and converts them to a serializable array.
+		 * @param name
+		 * @param arr
+		 */
+		@SuppressWarnings("unused")
+		public void set(String name, NativeArray arr){
+			set(name, arr, true);
+		}
+		
 		@SuppressWarnings("unused")
 		public void set(String name, Serializable value){
 			data.set(name, value);
@@ -969,6 +1010,11 @@ public class ScriptDefinition extends Definition {
 		@SuppressWarnings("unused")
 		public void set(String name, Externalizable value, boolean isSpecimenSpecific){
 			data.set(name, value, isSpecimenSpecific);
+		}
+		
+		@SuppressWarnings("unused")
+		public void remove(String name){
+			data.remove(name);
 		}
 	}
 	
@@ -1221,7 +1267,7 @@ public class ScriptDefinition extends Definition {
 					statement.setLong(2, ruleId);
 				}
 				else{
-					statement = connection.prepareStatement("Delete from ScriptEnvironment where DefinitionName = ? and RuleID = ? and UniqueResourceName = ?");
+					statement = connection.prepareStatement("Delete from ScriptEnvironment where DefinitionName = ? and RuleID = ? and (UniqueResourceName = ? or UniqueResourceName is null)");
 					statement.setString(1, definitionName);
 					statement.setLong(2, ruleId);
 					statement.setString(3, uniqueResourceName);
@@ -1333,6 +1379,7 @@ public class ScriptDefinition extends Definition {
 			// 1 -- Set the parameters
 			this.name = name;
 			this.value = value;
+			
 			this.isSpecimenSpecific = isSpecimenSpecific;
 		}
 		
