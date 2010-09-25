@@ -3,8 +3,6 @@ package net.lukemurphey.nsia.scan;
 import javax.script.*;
 
 import sun.org.mozilla.javascript.internal.Context;
-import sun.org.mozilla.javascript.internal.NativeArray;
-import sun.org.mozilla.javascript.internal.NativeJavaObject;
 
 import java.util.Iterator;
 import java.util.Vector;
@@ -77,6 +75,12 @@ public class ScriptDefinition extends Definition {
 	
 	//The following regular expression find the meta options in the comments
 	private static final Pattern OPTION_REGEX = Pattern.compile("(Version|Name|ID|Message|Reference|Severity|Invasive)[ ]*\\:[ ]*([-\\w.\"/\\\\ (),?%=]+)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+	
+	//Mutex used to prevent multi-thread access to the invocable function 
+	private Object mutex = null;
+	
+	//Mutex used to prevent multi-thread access to the terminate function
+	private Object terminatorMutex = null;
 	
 	public static ScriptDefinition parse(String script) throws InvalidDefinitionException{
 		return new ScriptDefinition( script );
@@ -521,13 +525,13 @@ public class ScriptDefinition extends Definition {
 	@SuppressWarnings("deprecation")
 	private TerminateResult terminate( Invocable invocable, int maxRuntime, long ruleID ){
 		
-		TerminatorThread terminatorThread = new TerminatorThread( invocable );
+		TerminatorThread terminatorThread = new TerminatorThread( invocable, terminatorMutex );
 		terminatorThread.setName("ScriptDefinition " + this.getFullName() + " (terminate call)" );
 		
-		synchronized (terminatorThread.mutex) {
+		synchronized (terminatorMutex) {
 			try {
 				terminatorThread.start();
-				terminatorThread.mutex.wait(maxRuntime);
+				terminatorMutex.wait(maxRuntime);
 			} catch (InterruptedException e1) {
 				//Thread was forcibly awoken, ignore this and let the thread complete
 			}
@@ -585,13 +589,13 @@ public class ScriptDefinition extends Definition {
 		}
 		else {
 			// Create and start the thread that will be responsible for performing the scan
-			InvokerThread thread = new InvokerThread(invocable, httpResponse, variables, env );
+			InvokerThread thread = new InvokerThread(invocable, httpResponse, variables, env, mutex );
 			thread.setName("ScriptDefinition " + this.getFullName() );
 			
-			synchronized (thread.mutex) {
+			synchronized (mutex) {
 				try {
 					thread.start();
-					thread.mutex.wait(maxRuntime);
+					mutex.wait(maxRuntime);
 				} catch (InterruptedException e1) {
 					//Thread was forcibly awoken, ignore this and let the thread complete
 				} catch(Throwable t){
@@ -699,323 +703,6 @@ public class ScriptDefinition extends Definition {
 		}
 		
 	    return result;
-	}
-	
-	/**
-	 * This class ised to call the terminate function on the script definitions if necessary
-	 * @author Luke
-	 *
-	 */
-	private static class TerminatorThread extends Thread{
-		
-		//The object that contains the invocable functions
-		private Invocable invocable;
-		
-		//Contains any exceptions generated when executing the function
-		private Throwable e = null;
-		
-		//Indicates if the script declares a terminate function
-		private boolean terminateExists = true;
-		
-		//Indicates if the thread is still running (completed it's terminate call)
-		private boolean isRunning = false;
-		
-		//The mutual exclusion used to enforce thread safety and call notify on
-		private Object mutex = new Object();
-		
-		public TerminatorThread(Invocable invocable){
-			this.invocable = invocable;
-		}
-		
-		@Override
-		public void run(){
-
-			try{
-				isRunning = true;
-				invocable.invokeFunction("terminate");
-				terminateExists = true;
-			} catch (NoSuchMethodException e) {
-				terminateExists = false;
-			} catch(ScriptException e){
-				this.e = e;
-			} catch (Exception e) {
-				this.e = e;
-			} catch (Throwable e) {
-				this.e = e;
-			}
-			finally{
-				isRunning = false;
-
-				synchronized (mutex) {
-					mutex.notifyAll();
-				}
-			}
-		}
-		
-		/**
-		 * Indicates if the thread is still running.
-		 * @return
-		 */
-		public boolean isRunning(){
-			return isRunning;
-		}
-		
-		/**
-		 * Get any exceptions thrown by the invocable function.
-		 * @return
-		 */
-		public Throwable getThrowable(){
-			return e;
-		}
-		
-		/**
-		 * Indicates if the invocable declares a terminate function.
-		 * @return
-		 */
-		public boolean declaresTerminate(){
-			return terminateExists;
-		}
-	}
-	
-	/**
-	 * This thread calls the ThreatScript using a new thread (so it can be terminated).
-	 * @author Luke
-	 *
-	 */
-	private static class InvokerThread extends Thread{
-		
-		//The object that contains the invocable functions
-		private Invocable invocable;
-		
-		//The result object from the call
-		private Result result = null;
-		
-		//The HTTP response data that was passed to the thread
-		private HttpResponseData httpResponse;
-		
-		//The variables that were passed to the thread
-		private Variables variables;
-		
-		//The environment that was passed to the thread
-		private Environment env;
-		
-		//Contains any exceptions generated when executing the function
-		private Throwable e = null;
-		
-		//Indicates if the thread is running
-		private boolean isRunning = false;
-		
-		//Mutex used to prevent multi-thread access to the invocable function 
-		private Object mutex = new Object();
-		
-		public InvokerThread(Invocable invocable, HttpResponseData httpResponse, Variables variables, Environment env){
-			this.invocable = invocable;
-			this.httpResponse = httpResponse;
-			this.variables = variables;
-			this.env = env;
-		}
-		
-		@Override
-		public void run(){
-			
-			isRunning = true;
-			
-			try{
-				result = (Result)invocable.invokeFunction("analyze", httpResponse, variables, env );
-			} catch(ScriptException e){
-				this.e = e;
-			} catch (NoSuchMethodException e) {
-				this.e = e;
-			} catch (Exception e) {
-				this.e = e;
-			} catch (Throwable e) {
-				this.e = e;
-			}
-			
-			isRunning = false;
-			
-			synchronized(mutex){
-				mutex.notifyAll();
-			}
-			
-		}
-		
-		/**
-		 * Indicates if the thread is still running.
-		 * @return
-		 */
-		public boolean isRunning(){
-			return isRunning;
-		}
-		
-		/**
-		 * Gets the result from the invocable function.
-		 * @return
-		 */
-		public Result getResult(){
-			return result;
-		}
-		
-		/**
-		 * Get any exceptions thrown by the invocable function.
-		 * @return
-		 */
-		public Throwable getThrowable(){
-			return e;
-		}
-	}
-	
-	/**
-	 * The environment class stores values that script definitions need to store.
-	 * @author Luke
-	 *
-	 */
-	private static class Environment{
-		private SavedScriptData data;
-		
-		public Environment(SavedScriptData data){
-			this.data = data;
-		}
-		
-		@SuppressWarnings("unused")
-		public NameValuePair get(String name){
-			return data.get(name);
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, int value){
-			data.set(name, Integer.valueOf( value ));
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, short value){
-			data.set(name, Short.valueOf( value ));
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, long value){
-			data.set(name, Long.valueOf( value ) );
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, float value){
-			data.set(name, Float.valueOf( value) );
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, boolean value){
-			data.set(name, Boolean.valueOf(value));
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, double value){
-			data.set(name, Double.valueOf(value));
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, char value){
-			data.set(name, Character.valueOf( value ));
-		}
-		
-		/**
-		 * The scripting engine may try to set an array which corresponds to a NativeArray class.
-		 * This class must be converted to an Object array in order to be serialized correctly.
-		 * Additionally, each object within the array may need to be unwrapped to the original
-		 * object in order for serialization to be possible. This method will perform the necessary
-		 * conversions so that the result can be serialized correctly.
-		 * @param name
-		 * @param arr
-		 * @param isSpecimenSpecific
-		 */
-		public void set(String name, NativeArray arr, boolean isSpecimenSpecific){
-
-			Object [] array = new Object[(int) arr.getLength()];
-			for (Object o : arr.getIds()) {
-			    int index = (Integer) o;
-			    Object object = arr.get(index, null);
-			    
-			    // Unwrap the original object if wrapped in a Native Java Object
-			    if( object instanceof NativeJavaObject){
-			    	NativeJavaObject n = (NativeJavaObject)object;
-			    	array[index] = n.unwrap();
-			    }
-			    else{
-			    	array[index] = object;
-			    }
-			}
-			
-			data.set(name, array, isSpecimenSpecific);
-		}
-		
-		/***
-		 * This method accepts Javascript native arrays and converts them to a serializable array.
-		 * @param name
-		 * @param arr
-		 */
-		@SuppressWarnings("unused")
-		public void set(String name, NativeArray arr){
-			set(name, arr, true);
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, Serializable value){
-			data.set(name, value);
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, Externalizable value){
-			data.set(name, value);
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, int value, boolean isSpecimenSpecific){
-			data.set(name, Integer.valueOf( value ), isSpecimenSpecific);
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, short value, boolean isSpecimenSpecific){
-			data.set(name, Short.valueOf( value ), isSpecimenSpecific);
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, long value, boolean isSpecimenSpecific){
-			data.set(name, Long.valueOf( value ), isSpecimenSpecific );
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, float value, boolean isSpecimenSpecific){
-			data.set(name, Float.valueOf( value), isSpecimenSpecific );
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, boolean value, boolean isSpecimenSpecific){
-			data.set(name, Boolean.valueOf(value), isSpecimenSpecific);
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, double value, boolean isSpecimenSpecific){
-			data.set(name, Double.valueOf(value), isSpecimenSpecific);
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, char value, boolean isSpecimenSpecific){
-			data.set(name, Character.valueOf( value ), isSpecimenSpecific);
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, Serializable value, boolean isSpecimenSpecific){
-			data.set(name, value, isSpecimenSpecific);
-		}
-		
-		@SuppressWarnings("unused")
-		public void set(String name, Externalizable value, boolean isSpecimenSpecific){
-			data.set(name, value, isSpecimenSpecific);
-		}
-		
-		@SuppressWarnings("unused")
-		public void remove(String name){
-			data.remove(name);
-		}
 	}
 	
 	/**
