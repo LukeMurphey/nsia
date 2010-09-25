@@ -433,53 +433,60 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			Iterator<ScanRunner> it = runningThreads.iterator();
 			while ( it.hasNext() ){
 				ScanRunner runner = it.next();
-				
+
 				if( runner.done() ){
-					
+
 					// 2.3.1 -- Move completed items to the finished queue 
 					it.remove();
 					HttpSignatureScanResultWithParser result = runner.getResult();
-					
+
 					if( terminate == false && result != null ){
 						findings.add(result.getScanResult());
 						resourcesScanned++;
-						
+
 						// 2.3.2 -- Extract the URLs to scan and add them to the list
 						if( runner.getLevel() < recursionLevels && result.getParser() != null ){
-							Vector<URL> extractedUrls = extractUrls(result.getScanResult().getUrl(), result.getParser());
 							
-							for( URL newURL : extractedUrls ){
-								
-								// Check to see if we have hit the limit. If so, then stop. 
-								if( findings.size() >= this.scanCountLimit ){
-									break;
-								}
-								
-								String str = newURL.toString();
-								boolean found = false;
-								
-								// See if the entry is in the list or URLs already processed
-								for( String oldURL : urls ){
-									if( oldURL.equalsIgnoreCase(str) ){
-										found = true;
+							// Make sure the content-type is HTML
+							if( result.getScanResult() != null &&
+									(result.getScanResult().getContentType() == null || 
+									 result.getScanResult().getContentType().contains("html")
+									 || result.getScanResult().getContentType().contains("xml") ) ){ 
+								Vector<URL> extractedUrls = extractUrls(result.getScanResult().getUrl(), result.getParser());
+
+								for( URL newURL : extractedUrls ){
+
+									// Check to see if we have hit the limit. If so, then stop. 
+									if( findings.size() >= this.scanCountLimit ){
+										break;
 									}
-								}
-								
-								// The URL appears to be unique, add it to the list
-								if( found == false ){
-									
-									urls.add(str);
-									
-									/*
-									 * If the resource returned a 404 response code, then only scan the other resources directly included in the page with the 404. This prevent loops
-									 * caused by 404 pages that include references to same the same 404 page. To prevent recursion, set a recursion level to the max so that the scanner
-									 * won't recurse further.
-									 */ 
-									if( result.getHttpResponseCode() == 404 && stopRecursingOn404 ){
-										pending.add(new ScanRecord(newURL, result.getScanResult(), ( recursionLevels ) ));
+
+									String str = newURL.toString();
+									boolean found = false;
+
+									// See if the entry is in the list or URLs already processed
+									for( String oldURL : urls ){
+										if( oldURL.equalsIgnoreCase(str) ){
+											found = true;
+										}
 									}
-									else{
-										pending.add(new ScanRecord(newURL, result.getScanResult(), ( runner.getLevel() + 1 ) ));
+
+									// The URL appears to be unique, add it to the list
+									if( found == false ){
+
+										urls.add(str);
+
+										/*
+										 * If the resource returned a 404 response code, then only scan the other resources directly included in the page with the 404. This prevent loops
+										 * caused by 404 pages that include references to same the same 404 page. To prevent recursion, set a recursion level to the max so that the scanner
+										 * won't recurse further.
+										 */ 
+										if( result.getHttpResponseCode() == 404 && stopRecursingOn404 ){
+											pending.add(new ScanRecord(newURL, result.getScanResult(), ( recursionLevels ) ));
+										}
+										else{
+											pending.add(new ScanRecord(newURL, result.getScanResult(), ( runner.getLevel() + 1 ) ));
+										}
 									}
 								}
 							}
