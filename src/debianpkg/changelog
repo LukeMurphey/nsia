@@ -69,3 +69,9 @@ nsia (0.9.6-1) unstable; urgency=low
   * Improved link for managing the license
     
  -- Luke Murphey <luke@threatfactor.com>  Tue, 4 Sep 2010 22:14:00 +0500
+ 
+ nsia (0.9.8-1) unstable; urgency=low
+
+  * Script definitions can now save environment data that can be read by the same definition for other URLs (but only for the same rule)
+
+ -- Luke Murphey <luke@threatfactor.com>  Tue, 24 Sep 2010 19:20:00 +0500
