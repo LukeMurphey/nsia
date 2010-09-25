@@ -470,6 +470,7 @@ public class ScriptDefinition extends Definition {
 		
 		scriptEngine.put("StringUtils", new StringUtils());
 		scriptEngine.put("Debug", new Debug(this));
+		scriptEngine.put("scriptStarted", new java.util.Date());
 	}
 	
 	/**
