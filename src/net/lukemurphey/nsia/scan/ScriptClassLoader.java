@@ -10,6 +10,7 @@ import net.lukemurphey.nsia.scan.scriptenvironment.Result;
 import net.lukemurphey.nsia.scan.scriptenvironment.TraceMethod;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -59,6 +60,8 @@ public class ScriptClassLoader extends ClassLoader {
 				temp.put("HTTP.OptionsRequest", OptionsMethod.class.getName());
 				
 				temp.put("ThreatScript.DataAnalysis", ScriptSignatureUtils.class.getName() );
+				temp.put("ThreatScript.Vector", net.lukemurphey.nsia.scan.scriptenvironment.Vector.class.getName() );
+				temp.put("ThreatScript.Date", Date.class.getName() );
 				
 				SHORTCUTS = temp;
 			}
