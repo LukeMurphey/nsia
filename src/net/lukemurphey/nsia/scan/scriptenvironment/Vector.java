@@ -181,6 +181,15 @@ public class Vector implements Serializable, Iterable<Object>{
 	}
 
 	/**
+	 * Remove the item that is at the given index.
+	 * @param index
+	 * @return
+	 */
+	public Object remove(int index){
+		return items.remove(index);
+	}
+	
+	/**
 	 * Get the object at the given index.
 	 * @param index
 	 * @return
