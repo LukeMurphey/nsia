@@ -229,6 +229,7 @@ public class GenericUtils {
 	 * @param subject
 	 * @param body
 	 * @throws MessagingException
+	 * @throws MailServerConnectionFailedException 
 	 */
 	public static void sendMail( EmailAddress toAddress, String subject, String body ) throws MessagingException {
 		Application app = Application.getApplication();
@@ -290,7 +291,7 @@ public class GenericUtils {
 	 * @param password
 	 * @param port
 	 * @param encryption
-	 * @throws MessagingException
+	 * @throws MessagingException 
 	 */
 	public static void sendMail(EmailAddress toAddress, String subject, String body, EmailAddress fromAddress, String smtpServer, String username, String password, int port, SMTPEncryption encryption ) throws MessagingException { 
 	    
@@ -349,6 +350,11 @@ public class GenericUtils {
 	    	transport.connect(smtpServer, username, password);
 	    }
 
+	    if( transport.isConnected() == false ){
+	    	//Unable to connect to the SMTP server (not connected)
+	    	throw new MessagingException("Connection to the mail server failed");
+	    }
+	    
 	    transport.sendMessage(msg, msg.getAllRecipients());
 	    transport.close();
 	}
