@@ -200,4 +200,62 @@ public class ScriptDefinitionTest extends TestCase {
 		}
 	}
 	
+	public void testVector() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
+		
+		// 1 -- Perform a scan against a URL, this should cause the script to save the script data with the isSpecimenSpecific flag as false
+		Application app = TestApplication.getApplication();
+		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "Vector.js" );
+		
+		HostConfiguration hostConfig = new HostConfiguration();
+		hostConfig.setHost("google.com", 80, "http");
+		HttpMethod httpMethod = new GetMethod( "/" );
+		httpMethod.setFollowRedirects(true);
+		HttpClient httpClient = new HttpClient();
+		httpClient.executeMethod( hostConfig, httpMethod );
+		
+		HttpResponseData httpResponse = new HttpResponseData( httpMethod, "http://google.com" );
+		
+		// 2 -- Make sure the Vector saved the values
+		Result result = sig.evaluate(httpResponse, new Variables(), 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+		
+		if( !result.getDescription().equals("1") ){
+			fail("The definition did not set the variable correctly: " + result.getDescription());
+		}
+		
+		result = sig.evaluate(httpResponse, new Variables(), 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+		
+		if( !result.getDescription().equals("2") ){
+			fail("The definition did not set the vector entry correctly: " + result.getDescription());
+		}
+	}
+	
+	public void testVectorNativeArrayConversion() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
+		
+		// 1 -- Perform a scan against a URL, make sure the URL loads the native array items
+		Application app = TestApplication.getApplication();
+		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "VectorNativeArrayConversion.js" );
+		
+		HostConfiguration hostConfig = new HostConfiguration();
+		hostConfig.setHost("google.com", 80, "http");
+		HttpMethod httpMethod = new GetMethod( "/" );
+		httpMethod.setFollowRedirects(true);
+		HttpClient httpClient = new HttpClient();
+		httpClient.executeMethod( hostConfig, httpMethod );
+		
+		HttpResponseData httpResponse = new HttpResponseData( httpMethod, "http://google.com" );
+		
+		// 2 -- Make sure the Vector saved the values
+		Result result = sig.evaluate(httpResponse, new Variables(), 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+		
+		if( !result.getDescription().equals("2") ){
+			fail("The definition did not populate the vector correctly: " + result.getDescription());
+		}
+		
+		result = sig.evaluate(httpResponse, new Variables(), 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+		
+		if( !result.getDescription().equals("2") ){
+			fail("The definition did not populate the vector correctly: " + result.getDescription());
+		}
+	}
+	
 }
