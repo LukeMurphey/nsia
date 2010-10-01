@@ -675,6 +675,31 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	}
 	
 	/**
+	 * Determine if the domain matches the domain limiter. This method will consider whether the wildcard
+	 * should be considered a domain name, path or complete URL with arguments.
+	 * @param url
+	 * @return
+	 */
+	private boolean domainMatches( URL url ){
+		
+		// 1 -- See if the domain matcher has arguments
+		if( restrictToDomain.wildcard().contains("?") ){
+			return restrictToDomain.getPattern().matcher( url.toString() ).matches();
+		}
+		
+		// 2 -- See if it is just a domain 
+		else if( Pattern.matches("[0-9a-zA-Z*-.]+", restrictToDomain.wildcard()) ){
+			return restrictToDomain.getPattern().matcher( url.getHost() ).matches();
+		}
+		
+		// 3 -- Otherwise, assume the entire URL ought to be matched
+		else{
+			String[] urlNoArgs = url.toString().split("[?]");
+			return restrictToDomain.getPattern().matcher( urlNoArgs[0] ).matches();
+		}
+	}
+	
+	/**
 	 * Gets a list of URLs built from paths included in the given attribute (like "href", "src", etc.).
 	 * @param nodesList The list of nodes to search
 	 * @param attribute The name of the attribute to find URLs in (like "href" or "src")
@@ -707,13 +732,13 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 					
 					URL newURL = new URL(parentUrl, URLDecoder.decode(currentItem.trim(), "UTF-8") );
 					
-					if(  newURL.getHost() != null && hostnameIsValid(newURL.getHost()) ){ //This check was added because the scanner kept trying to scan "http://:". Unable to determine the exact root cause but it seems to be related to  
+					if( newURL.getHost() != null && hostnameIsValid(newURL.getHost()) ){ //This check was added because the scanner kept trying to scan "http://:". Unable to determine the exact root cause but it seems to be related to  
 						//Add the entry to the list of URLs
 						if (	// Don't add the URL unless it is either...
 								// 1) within the specified domain
-								restrictToDomain.getPattern().matcher( newURL.getHost() ).matches()
+								domainMatches( newURL )
 								// 2) the link is the first level of external links the system was setup to scan external links 
-								|| (scanExternalLinks && restrictToDomain.getPattern().matcher( parentUrl.getHost() ).matches())
+								|| (scanExternalLinks && domainMatches( parentUrl ) )
 								// 3) always include flag is true
 								|| alwaysInclude == true
 								)
