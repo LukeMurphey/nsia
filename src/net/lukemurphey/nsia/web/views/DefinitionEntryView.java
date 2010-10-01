@@ -116,14 +116,7 @@ public class DefinitionEntryView extends View {
 			throw new ViewFailedException(e);
 		}
 		
-		// 3 -- Log the result
-		Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITIONS_UPDATED, new EventLogField[]{
-				new EventLogField( EventLogField.FieldName.DEFINITION_ID, definition.getID() ),
-				new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
-				new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),
-				new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getSessionInfo().getUserId() )} );
-		
-		// 4 -- Return the definition
+		// 3 -- Return the definition
 		return definition;
 	}
 	
