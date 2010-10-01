@@ -1802,6 +1802,10 @@ public final class Application {
 			
 			in = Application.class.getResourceAsStream("build.properties");
 			
+			if( in == null ){ //Properties file could not be found
+				return null;
+			}
+			
 			buildProperties.load(in);
 		    
 		} catch (IOException e1) {
