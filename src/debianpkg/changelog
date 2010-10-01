@@ -95,4 +95,4 @@ nsia (0.9.6-1) unstable; urgency=low
   * ThreatScript baseline calls are now populated with the same bindings that the analyze functions calls include
   * ThreatScript bindings now includes the date that the script was initiated
 
- -- Luke Murphey <luke@threatfactor.com>  Tue, 1 Oct 2010 19:20:00 +0500
+ -- Luke Murphey <luke@threatfactor.com>  Tue, 1 Oct 2010 15:57:00 +0500
