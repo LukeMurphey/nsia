@@ -94,10 +94,10 @@ public class DefinitionEntryView extends View {
 				
 			}
 			else{
-				int definitionID = archive.addDefinition(definition);
+				archive.addDefinition(definition);
 				
 				Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITIONS_ADDED, new EventLogField[]{
-						new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
+						new EventLogField( EventLogField.FieldName.DEFINITION_ID, definition.getID() ),
 						new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
