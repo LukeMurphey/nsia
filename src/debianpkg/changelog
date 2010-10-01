@@ -75,3 +75,24 @@ nsia (0.9.6-1) unstable; urgency=low
   * Script definitions can now save environment data that can be read by the same definition for other URLs (but only for the same rule)
 
  -- Luke Murphey <luke@threatfactor.com>  Tue, 24 Sep 2010 19:20:00 +0500
+ 
+ nsia (0.9.9-1) unstable; urgency=low
+
+  * Added a Vector class that can be used by ThreatScripts to persist data
+  * Added shortcut methods the ThreatScript Environment class that allows scripts to obtain the unwrapped value in a single call
+  * Event-log view no longer automatically refreshes if the results are filtered
+  * Added an about dialog
+  * Fixed issue where redundant log events were created when editing definitions
+  * Fixed issue where log events noting that a definition was created included the local ID, not the definition ID 
+  * Creating two site-groups with the same name no longer generates an error
+  * Errors that occur when baselining a script no longer cause an error and are added to the script error list
+  * Incident response actions no longer cause the scan to terminate
+  * Email incident response action no longer generates an error if it is unable to connect to the SMTP server
+  * URL matching in web discovery rule no longer always checks the entire URL, thus preventing the system from following URLs who don't match the domain
+  * Added event log message for noting that a rule could not be baselined
+  * Minor spelling correction on the SelectRuleType form ("exiting" to "existing")
+  * Link extraction is now only performed on HTML or XML files (prevents issues from text that looks like URLs in Javascript files)
+  * ThreatScript baseline calls are now populated with the same bindings that the analyze functions calls include
+  * ThreatScript bindings now includes the date that the script was initiated
+
+ -- Luke Murphey <luke@threatfactor.com>  Tue, 1 Oct 2010 19:20:00 +0500
