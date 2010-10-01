@@ -101,6 +101,13 @@ public class SiteGroupEditView extends View {
 				else{
 					try{
 						if( siteGroup == null ){
+							
+							// Stop if a site-group already exists with the given name
+							if(siteGroupManager.getGroupID(name) > 0 ){
+								context.addMessage("A Sitegroup already exists with the given name", MessageSeverity.WARNING);
+								return false;
+							}
+							
 							int siteGroupID = siteGroupManager.addGroup(name, description);
 							
 							if( siteGroupID > -1 ){
@@ -112,6 +119,8 @@ public class SiteGroupEditView extends View {
 										new EventLogField( FieldName.SITE_GROUP_ID, siteGroupID ) );
 								
 								context.addMessage("Sitegroup created successfully", MessageSeverity.SUCCESS);
+								
+								response.sendRedirect( SiteGroupView.getURL( siteGroupID ));
 							}
 							else{
 								
@@ -122,10 +131,10 @@ public class SiteGroupEditView extends View {
 										new EventLogField( FieldName.SITE_GROUP_NAME, name ) );
 								
 								context.addMessage("Sitegroup was not created successfully", MessageSeverity.WARNING);
+								
+								return false;
 							}
 							
-							
-							response.sendRedirect( SiteGroupView.getURL( siteGroupID ));
 							return true;
 						}
 						else{
