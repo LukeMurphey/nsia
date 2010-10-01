@@ -160,7 +160,8 @@ public class EventLogMessage {
 		DEFINITION_MATCH(EventLogSeverity.WARNING, "Scanner: Definition matched"),
 		RESPONSE_ACTION_FAILED(EventLogSeverity.WARNING, "Response Module: Action failed"),
 		STARTUP_ERROR(EventLogSeverity.WARNING, "System: Startup error"),
-		DEFINITION_UPDATE_REQUEST_FAILED(EventLogSeverity.WARNING, "System: Definition update request failed");
+		DEFINITION_UPDATE_REQUEST_FAILED(EventLogSeverity.WARNING, "System: Definition update request failed"),
+		RULE_BASELINE_FAILED(EventLogSeverity.WARNING, "Scanner: Rule baseline request failed");
 
 		private EventType(EventLogSeverity severity, String name){
 			this.severity = severity;
