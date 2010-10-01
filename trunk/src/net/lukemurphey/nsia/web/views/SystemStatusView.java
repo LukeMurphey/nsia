@@ -295,7 +295,14 @@ public class SystemStatusView extends View {
 		configuration_stats.add( new SystemStat("Operating System Name", application.getOperatingSystemName(), StatType.INFO) );
 		configuration_stats.add( new SystemStat("Operating System Version", application.getOperatingSystemVersion(), StatType.INFO) );
 		configuration_stats.add( new SystemStat("Architecture", application.getPlatformArch(), StatType.INFO) );
-		configuration_stats.add( new SystemStat("Manager Version", Application.getVersion(), StatType.INFO) );
+		
+		String ver = Application.getVersion();
+		
+		if( Application.getBuildNumber() != null && Application.getBuildNumber().isEmpty() == false ){
+			ver = ver + " (build " + Application.getBuildNumber() + ")";
+		}
+		
+		configuration_stats.add( new SystemStat("Version", ver, StatType.INFO) );
 		configuration_stats.add( new SystemStat("Processor Count", String.valueOf( application.getProcessorCount()), StatType.INFO) );
 		configuration_stats.add( new SystemStat("Server Port", String.valueOf( application.getNetworkManager().getServerPort() ), StatType.INFO) );
 	
