@@ -1236,6 +1236,10 @@ public class Shortcuts {
 		Map<String, Object> data = new HashMap<String, Object>();
 		
 		data.put("version", Application.getVersion());
+		
+		if( Application.getBuildNumber() != null && Application.getBuildNumber().isEmpty() == false ){
+			data.put("build_number", Application.getBuildNumber());
+		}
 		data.put("request", new RequestTemplateHelper(request) );
 		
 		if( context != null && context.getSessionInfo() != null ){
