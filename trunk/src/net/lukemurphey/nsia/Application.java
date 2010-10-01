@@ -1775,40 +1775,58 @@ public final class Application {
 	 * @return
 	 */
 	public static String getBuildNumber(){
-		
-		if( buildNumber != null )
+		if( buildNumber != null ){
 			return buildNumber;
-		
-		FileReader input = null;
-		BufferedReader bufRead = null;
-		
-		try{
-			input = new FileReader("buildNumber");
-			bufRead = new BufferedReader(input);
-			
-			buildNumber = bufRead.readLine();
-			
-			bufRead.close();
-			bufRead = null;
 		}
-		catch(IOException e){
-			buildNumber = "";
-			
-			try{
-				if( input != null ){
-					input.close();
-				}
-				
-				if( bufRead != null ){
-					bufRead.close();
-				}
-			}
-			catch(IOException e2){
-				//Ignore this exception, reading the buildnumber is not that important (won't cause a crash)
-			}
+		
+		Properties buildProperties = getBuildProperties();
+		
+		if( buildProperties != null ){
+			buildNumber = buildProperties.getProperty("build.number", "");
 		}
 		
 		return buildNumber;
+	}
+	
+	/**
+	 * Returns the build properties from the properties file (if it exists). Null is returned if the file does not exist.
+	 * @return
+	 */
+	public static Properties getBuildProperties(){
+		Properties buildProperties = new Properties();
+		InputStream in = null;
+		InputStreamReader isr = null;
+	    BufferedReader br = null;
+		
+		try {
+			
+			in = Application.class.getResourceAsStream("build.properties");
+			
+			buildProperties.load(in);
+		    
+		} catch (IOException e1) {
+			return null;
+		} finally{
+			
+			try{
+				if( isr != null ){
+					isr.close();
+				}
+				
+				if( in != null ){
+					in.close();
+				}
+				
+				if( br != null ){
+					br.close();
+				}
+			}
+			catch( IOException e2 ){
+				return null;
+			}
+		}
+		
+		return buildProperties;
 	}
 	
 	/**
