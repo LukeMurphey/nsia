@@ -308,6 +308,7 @@ public class SiteGroupView extends View {
 	private void baselineRules( RequestContext context, long[] rules) throws SQLException, NoDatabaseConnectionException, DefinitionSetLoadException, InputValidationException, ScriptException, IOException, NotFoundException, ScanRuleLoadFailureException, InsufficientPermissionException, GeneralizedException, NoSessionException{
 
 		int rulesBaselined = 0;
+		int rulesNotBaselined = 0;
 		//ScanData scanData = new ScanData(Application.getApplication());
 		
 		for (long ruleID : rules) {
@@ -322,15 +323,18 @@ public class SiteGroupView extends View {
 				HttpSeekingScanRule httpRule = (HttpSeekingScanRule) rule;
 				try {
 					httpRule.baseline();
+					rulesBaselined++;
 				} catch (RuleBaselineException e) {
-					Application.getApplication().logEvent(EventLogMessage.EventType.RULE_BASELINE_FAILED,
+					EventLogMessage message = new EventLogMessage(EventLogMessage.EventType.RULE_BASELINE_FAILED,
 							new EventLogField( FieldName.SITE_GROUP_ID, siteGroup.getGroupId() ),
 							new EventLogField( FieldName.RULE_ID, ruleID ),
 							new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
-							new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() )
-							);
+							new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ));
+					
+					Application.getApplication().logExceptionEvent(message, e);
+					rulesNotBaselined++;
 				}
-				rulesBaselined++;
+				
 			}
 			else if( rule instanceof ServiceScanRule ){
 				ServiceScanRule serviceRule = (ServiceScanRule) rule;
@@ -342,7 +346,13 @@ public class SiteGroupView extends View {
 			//context.addMessage("Rule " + ruleID + " was unsuccessfully baselined (" + e.getMessage() + ")", MessageSeverity.ALERT);			
 		}
 		
-		context.addMessage(rulesBaselined + " rules have been re-baselined", MessageSeverity.SUCCESS);
+		if( rulesBaselined > 0 ){
+			context.addMessage(rulesBaselined + " rules have been re-baselined", MessageSeverity.SUCCESS);
+		}
+		
+		if( rulesNotBaselined > 0 ){
+			context.addMessage(rulesNotBaselined + " rules could not re-baselined", MessageSeverity.ALERT);
+		}
 	}
 	
 	/**
