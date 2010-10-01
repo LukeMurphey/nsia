@@ -25,8 +25,8 @@ public class Environment{
 	 * @param name The name of the parameter to find
 	 * @return
 	 */
-	public NameValuePair get( String name ){
-		return getWrapped( name ); 
+	public NameValuePair get(String name){
+		return getWrapped( name );
 	}
 	
 	/**
@@ -35,7 +35,7 @@ public class Environment{
 	 * @param getUnwrapped Unwrap the object to the original value
 	 * @return
 	 */
-	public Object get( String name, boolean getUnwrapped){
+	public Object get(String name, boolean getUnwrapped){
 		if( getUnwrapped ){
 			return getUnwrapped( name );
 		}
@@ -58,7 +58,7 @@ public class Environment{
 	 * @param name The name of the parameter to find
 	 * @return
 	 */
-	private Object getUnwrapped( String name ){
+	private Object getUnwrapped(String name){
 		NameValuePair nv = data.get(name);
 		
 		if( nv != null ){
