@@ -11,4 +11,8 @@ public class RuleBaselineException extends Exception {
 	public RuleBaselineException(String message){
 		super(message);
 	}
+	
+	public RuleBaselineException(Throwable t){
+		super(t);
+	}
 }
