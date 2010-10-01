@@ -77,8 +77,9 @@ public class SiteGroupManagement {
 		*/
 		
 		// 1 -- Make sure the group does not already exist
-		if( getGroupID( siteGroupName ) != -1 )
+		if( getGroupID( siteGroupName ) != -1 ){
 			return -1;
+		}
 		
 		// 2 -- Add the group
 		
@@ -94,22 +95,30 @@ public class SiteGroupManagement {
 			preparedStatement = conn.prepareStatement("Insert into SiteGroups (Name, Description, Status, ObjectID) values (?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			preparedStatement.setString(1, siteGroupName );
-			if( siteGroupDescription == null )
+			
+			if( siteGroupDescription == null ){
 				preparedStatement.setString(2, "" );
-			else
+			}
+			else{
 				preparedStatement.setString(2, siteGroupDescription );
+			}
+			
 			preparedStatement.setInt(3, siteGroupStateIndicator.ordinal() );
 			preparedStatement.setLong(4, objectId );
 			
-			if( preparedStatement.executeUpdate() < 1 )
+			if( preparedStatement.executeUpdate() < 1 ){
 				return -1;
+			}
 			
 			// 3 -- Return the group ID
 			keys = preparedStatement.getGeneratedKeys();
-			if( keys.next() )
+			
+			if( keys.next() ){
 				return keys.getInt(1);
-			else
+			}
+			else{
 				return -1;
+			}
 			
 		} finally {
 			if (preparedStatement != null )
@@ -144,15 +153,19 @@ public class SiteGroupManagement {
 		PreparedStatement statement = null;
 		ResultSet result = null;
 		Connection connection = application.getDatabaseConnection(Application.DatabaseAccessType.ADMIN);
+		
 		try{
 			statement = connection.prepareStatement("Select * from SiteGroups where Name = ?");
 			statement.setString(1, siteGroupName);
 			result = statement.executeQuery();
 			
-			if( result.next() )
+			if( result.next() ){
 				return result.getInt("SiteGroupID");
-			else
+			}
+			else{
 				return -1;
+			}
+			
 		} finally {
 			if (result != null )
 				result.close();
