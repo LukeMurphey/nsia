@@ -67,7 +67,37 @@ ${head}
 
     <tr>
         <td class="Footer" valign="middle" align="right" height="32">
-            <span class="Footer">Version <#if version??>${version?html}</#if>&nbsp;&nbsp;&nbsp;</span></td></tr>
+        	<div style="display: none" id="aboutdialog" title="About NSIA">
+				<p class="title">ThreatFactor NSIA</p>
+				
+				Copyright © 2010 ThreatFactor.com, All rights reserved.<br />
+				<#if version??>Version ${version?html}<#if build_number??> (build ${build_number?html})</#if></#if>
+				
+				<ul>
+					<li><a href="http://threatfactor.com/Products/NSIA" target="_blank">Product Overview</a></li>
+					<li><a href="http://lukemurphey.net/projects/nsia/issues/new" target="_blank">File a Bug</a></li>
+					<li><a href="http://lukemurphey.net/projects/nsia/wiki" target="_blank">Wiki</a></li>
+					<li><a href="http://sourceforge.net/projects/nsia/" target="_blank">Source Code</a></li>
+					<li><a href="http://www.gnu.org/licenses/agpl-3.0.html" target="_blank">License (Affero GPL v3)</a></li>
+				</ul>
+    	
+			</div>
+            <span class="Footer"><a href="javascript:openAboutDialog()">About NSIA</a>&nbsp;&nbsp;&nbsp;</span></td></tr>
+            <script>
+				//$(function() {
+				function openAboutDialog(){
+					$( "#aboutdialog" ).dialog({
+						modal: true,
+						width: 350,
+						buttons: {
+							Ok: function() {
+								$( this ).dialog( "close" );
+							}
+						}
+					});
+				}
+				//});
+			</script>
     </table>
     &nbsp;
 </body>
