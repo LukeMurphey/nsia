@@ -165,9 +165,11 @@ public class EventLogView extends View {
 		// 3 -- Get the filter
 		int startEntry = -1;
 		boolean getEventsAfterID = false;
+		boolean isFiltered = false;
 		
 		//	 3.1 -- Determine if the user clicked the "Next" button
 		if( request.getParameter("Action") != null && request.getParameter("Action").equalsIgnoreCase("Previous")){
+			isFiltered = true;
 			getEventsAfterID = false;
 			
 			try{
@@ -181,6 +183,7 @@ public class EventLogView extends View {
 		
 		//	 3.2 -- Determine if the user clicked the "Next" button
 		else if( request.getParameter("Action") != null && request.getParameter("Action").equalsIgnoreCase("Next")){
+			isFiltered = true;
 			getEventsAfterID = true;
 			
 			try{
@@ -194,6 +197,8 @@ public class EventLogView extends View {
 		//	 3.3 -- Get the severity filter
 		int severity = -1;
 		if( request.getParameter("Severity") != null ){
+			isFiltered = true;
+			
 			try{
 				severity = Integer.valueOf( request.getParameter("Severity") );
 			}
@@ -206,6 +211,7 @@ public class EventLogView extends View {
 		//	 3.4 -- Get the content filter
 		String contentFilter = null;
 		if( request.getParameter("Content") != null ){
+			isFiltered = true;
 			contentFilter = request.getParameter("Content");
 		}
 		
@@ -222,7 +228,10 @@ public class EventLogView extends View {
 		data.put("informational", EventLogSeverity.INFORMATIONAL);
 		data.put("debug", EventLogSeverity.DEBUG);
 
-		Shortcuts.addDashboardHeaders(request, response, data, createURL());
+		// If the view is not being filtered, then replace the dashboard headers with one that refreshes
+		if( !isFiltered ){
+			Shortcuts.addDashboardHeaders(request, response, data, createURL());
+		}
 		
 		LogEntries entries = getLogEntries( severity, contentFilter, startEntry, getEventsAfterID);
 		
