@@ -440,6 +440,25 @@ tr.BorderRow{
 	background-color: #96a3b4;
 }
 
+.Footer a{
+	color: #EEEEEE;
+	text-decoration: underline;
+}
+
+#aboutdialog p.title{
+	font-size: 120%;
+        font-weight: bold;
+}
+
+#aboutdialog A:visited{
+	color: #1374C4;
+        text-decoration: underline;
+}
+
+#aboutdialog A:link{
+	color: #1374C4;
+        text-decoration: underline;
+}
 
 .SmallSplitterDark{
 	border-left: 2px solid #c1cad5;
