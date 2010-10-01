@@ -711,9 +711,9 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 						//Add the entry to the list of URLs
 						if (	// Don't add the URL unless it is either...
 								// 1) within the specified domain
-								restrictToDomain.getPattern().matcher( newURL.toString() ).matches()
+								restrictToDomain.getPattern().matcher( newURL.getHost() ).matches()
 								// 2) the link is the first level of external links the system was setup to scan external links 
-								|| (scanExternalLinks && restrictToDomain.getPattern().matcher( parentUrl.toString() ).matches())
+								|| (scanExternalLinks && restrictToDomain.getPattern().matcher( parentUrl.getHost() ).matches())
 								// 3) always include flag is true
 								|| alwaysInclude == true
 								)
