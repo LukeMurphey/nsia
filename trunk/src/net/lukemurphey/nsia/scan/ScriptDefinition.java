@@ -344,8 +344,9 @@ public class ScriptDefinition extends Definition {
 	 * @throws ScriptException
 	 * @throws IOException 
 	 * @throws InvalidDefinitionException 
+	 * @throws DefinitionEvaluationException 
 	 */
-	public boolean baseline( ScanResult scanResult ) throws SQLException, NoDatabaseConnectionException, ScriptException, IOException, InvalidDefinitionException{
+	public boolean baseline( ScanResult scanResult ) throws SQLException, InvalidDefinitionException, DefinitionEvaluationException{
 		
 		// 0 -- Precondition check
 		if( scanResult == null ){
@@ -416,8 +417,9 @@ public class ScriptDefinition extends Definition {
 	 * @throws ScriptException
 	 * @throws IOException
 	 * @throws InvalidDefinitionException 
+	 * @throws SQLException 
 	 */
-	private boolean baseline( long scanRuleID, long scanResultID, String uniqueResourceName ) throws SQLException, NoDatabaseConnectionException, ScriptException, IOException, InvalidDefinitionException{
+	private boolean baseline( long scanRuleID, long scanResultID, String uniqueResourceName ) throws DefinitionEvaluationException, InvalidDefinitionException, SQLException{
 		Connection connection = null;
 		boolean baselineComplete = false;
 		
@@ -448,12 +450,25 @@ public class ScriptDefinition extends Definition {
 				//No baseline function is defined, just return false noting that the baseline method is unavailable
 				return false;
 			}
+			catch (ScriptException e) {
+				DefinitionErrorList.logError(this.getFullName(), this.revision, "Runtime exception", "Rule ID " + scanRuleID , this.id, this.localId);
+				throw new DefinitionEvaluationException("The definition threw an exception while baselining (ID " + scanRuleID + ", definition \"" + this.getFullName() + "\")", e);
+			} 
 	
 			//	 2.2 -- Save the state variables
 			if( data != null ){
 				data.save(connection, uniqueResourceName);
 			}
 			
+		}
+		catch( SQLException e ){
+			throw new DefinitionEvaluationException("SQL Exception thrown while baselining rule", e); 
+		}
+		catch( IOException e ){
+			throw new DefinitionEvaluationException("IO Exception thrown while baselining rule", e); 
+		}
+		catch( NoDatabaseConnectionException e ){
+			throw new DefinitionEvaluationException("No database connection available while baselining rule", e); 
 		}
 		finally{
 			if( connection != null ){
