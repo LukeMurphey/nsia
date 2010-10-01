@@ -1343,7 +1343,17 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		addSeedUrls(urls);
 	}
 	
-	public synchronized boolean baseline() throws SQLException, NoDatabaseConnectionException, DefinitionSetLoadException, InputValidationException, ScriptException, IOException{
+	/**
+	 * Baseline the rule against the last scan result.
+	 * @return True if the rule successfully baselined.
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 * @throws DefinitionSetLoadException
+	 * @throws InputValidationException
+	 * @throws ScriptException
+	 * @throws IOException
+	 */
+	public synchronized boolean baseline() throws RuleBaselineException, SQLException{
 		Connection conn = null;
 		
 		try{
@@ -1379,7 +1389,6 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 				// Create an entry for each definition match
 				for( DefinitionMatch match : finding.getDefinitionMatches() ){
 					
-					try {
 						boolean createExceptions = true;
 						
 						//Find out of the definition is a script and baseline it if is is
@@ -1404,10 +1413,6 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 								desc.saveToDatabase(conn);
 							}
 						}
-					
-					} catch (InvalidDefinitionException e) {
-						return false;//TODO Log the fact that definition name appeared to be invalid and the baselining could not be completed
-					}
 				}
 				
 			}
@@ -1418,6 +1423,17 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		}
 		catch(ScanResultLoadFailureException e){
 			return false;
+		}
+		catch (NoDatabaseConnectionException e) {
+			throw new RuleBaselineException("SQL Exception throw while baselining the rule", e);
+		} catch (InvalidDefinitionException e) {
+			throw new RuleBaselineException("Script could not be baselined (script is invalid)", e);
+		} catch (DefinitionEvaluationException e) {
+			throw new RuleBaselineException(e);
+		} catch (DefinitionSetLoadException e) {
+			throw new RuleBaselineException(e);
+		} catch (InputValidationException e) {
+			throw new RuleBaselineException(e);
 		}
 		finally{
 			if( conn != null ){

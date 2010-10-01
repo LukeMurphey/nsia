@@ -21,7 +21,6 @@ import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.scan.Definition;
 import net.lukemurphey.nsia.scan.DefinitionMatch;
-import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
 import net.lukemurphey.nsia.scan.HttpDefinitionScanResult;
 import net.lukemurphey.nsia.scan.HttpHeaderRule;
 import net.lukemurphey.nsia.scan.HttpHeaderScanResult;
@@ -38,13 +37,9 @@ import net.lukemurphey.nsia.scan.ServiceScanRule;
 import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
 import net.lukemurphey.nsia.scan.ScanRule.ScanRuleLoadFailureException;
 
-
 import java.util.regex.*;
 
-import java.io.IOException;
 import java.net.URL;
-
-import javax.script.ScriptException;
 
 
 /**
@@ -1177,15 +1172,7 @@ public class ApiScanData extends ApiHandler{
 			throw new RuleBaselineException("A database connection could not be established", e);
 		} catch (ScanRuleLoadFailureException e) {
 			throw new RuleBaselineException("Scan result could not be loaded while baselining rule", e);
-		} catch (DefinitionSetLoadException e) {
-			throw new RuleBaselineException("Definition set could not be loaded while baselining rule", e);
-		} catch (InputValidationException e) {
-			throw new RuleBaselineException("Input validation failed occurred while baselining rule", e);
-		} catch (ScriptException e) {
-			throw new RuleBaselineException("ScriptException occurred while baselining rule", e);
-		} catch (IOException e) {
-			throw new RuleBaselineException("IOException occurred while baselining rule", e);
-		}
+		} 
 	}
 	
 	/**

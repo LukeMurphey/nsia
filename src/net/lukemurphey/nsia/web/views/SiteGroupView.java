@@ -32,6 +32,7 @@ import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
 import net.lukemurphey.nsia.scan.HttpSeekingScanRule;
+import net.lukemurphey.nsia.scan.RuleBaselineException;
 import net.lukemurphey.nsia.scan.ScanData;
 import net.lukemurphey.nsia.scan.ScanResult;
 import net.lukemurphey.nsia.scan.ScanResultCode;
@@ -319,7 +320,16 @@ public class SiteGroupView extends View {
 			
 			if( rule instanceof HttpSeekingScanRule ){
 				HttpSeekingScanRule httpRule = (HttpSeekingScanRule) rule;
-				httpRule.baseline();
+				try {
+					httpRule.baseline();
+				} catch (RuleBaselineException e) {
+					Application.getApplication().logEvent(EventLogMessage.EventType.RULE_BASELINE_FAILED,
+							new EventLogField( FieldName.SITE_GROUP_ID, siteGroup.getGroupId() ),
+							new EventLogField( FieldName.RULE_ID, ruleID ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() )
+							);
+				}
 				rulesBaselined++;
 			}
 			else if( rule instanceof ServiceScanRule ){
