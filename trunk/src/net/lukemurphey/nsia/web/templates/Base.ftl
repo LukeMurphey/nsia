@@ -82,7 +82,7 @@ ${head}
 				</ul>
     	
 			</div>
-            <span class="Footer"><a href="javascript:openAboutDialog()">About NSIA</a>&nbsp;&nbsp;&nbsp;</span></td></tr>
+            <span class="Footer"><a href="javascript:openAboutDialog();pauseTemporarily();">About NSIA</a>&nbsp;&nbsp;&nbsp;</span></td></tr>
             <script>
 				function openAboutDialog(){
 					$( "#aboutdialog" ).dialog({
@@ -90,6 +90,7 @@ ${head}
 						width: 350,
 						buttons: {
 							Ok: function() {
+								unpauseTemporarily();
 								$( this ).dialog( "close" );
 							}
 						}
