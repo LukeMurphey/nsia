@@ -90,8 +90,8 @@ ${head}
 						width: 350,
 						buttons: {
 							Ok: function() {
-								unpauseTemporarily();
 								$( this ).dialog( "close" );
+								unpauseTemporarily();
 							}
 						}
 					});
