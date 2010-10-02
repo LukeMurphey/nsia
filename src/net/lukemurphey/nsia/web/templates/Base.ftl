@@ -70,7 +70,7 @@ ${head}
         	<div style="display: none" id="aboutdialog" title="About NSIA">
 				<p class="title">ThreatFactor NSIA</p>
 				
-				Copyright © 2010 ThreatFactor.com, All rights reserved.<br />
+				Copyright &copy; 2010 ThreatFactor.com, All rights reserved.<br />
 				<#if version??>Version ${version?html}<#if build_number??> (build ${build_number?html})</#if></#if>
 				
 				<ul>
