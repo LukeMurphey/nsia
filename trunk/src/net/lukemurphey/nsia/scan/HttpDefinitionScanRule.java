@@ -260,7 +260,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 				}
 				else{
 					for(DefinitionMatch match : results){
-						logDefinitionMatch(match.getDefinitionName(), match.getDefinitionID(), this.getSpecimenDescription(), this.scanRuleId, match.getSeverity());
+						logDefinitionMatch(match.getDefinitionName(), match.getDefinitionID(), this.getSpecimenDescription(), this.scanRuleId, match.getSeverity(), match.getMessage());
 					}
 				}
 				
@@ -350,7 +350,11 @@ public class HttpDefinitionScanRule extends ScanRule{
 		} 
 	}
 
-	private void logDefinitionMatch( String signatureName, int signatureID, String url, long ruleID, Severity severity){
+	private void logDefinitionMatch( String signatureName, int signatureID, String url, long ruleID, Severity severity ){
+		logDefinitionMatch(signatureName, signatureID, url, ruleID, severity, null);
+	}
+	
+	private void logDefinitionMatch( String signatureName, int signatureID, String url, long ruleID, Severity severity, String definitionOutput ){
 		
 		if( appRes != null ){
 			EventLogMessage message = new EventLogMessage(EventType.DEFINITION_MATCH);
@@ -363,6 +367,10 @@ public class HttpDefinitionScanRule extends ScanRule{
 			
 			message.addField( new EventLogField(FieldName.SEVERITY, severity.toString() ));
 			message.addField( new EventLogField(FieldName.URL, url ));
+			
+			if( definitionOutput != null ){
+				message.addField( new EventLogField(FieldName.DEFINITION_OUTPUT, definitionOutput ));
+			}
 			
 			if( ruleID > -1 ){
 				message.addField(new EventLogField(FieldName.RULE_ID, ruleID));
