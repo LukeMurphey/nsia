@@ -111,6 +111,23 @@ function startit() {
 	startCountDownTimeout();
 }
 
+var wasPaused = false;
+
+function pauseTemporarily(){
+	if( isCountDownRunning() ) {
+		wasPaused = false;
+		pauseCountdown();
+	}
+	else{
+		wasPaused = true;
+	}
+}
+
+function unpauseTemporarily(){
+	if( wasPaused == false ){
+		unpauseCountdown();
+	}
+}
 
 function pauseCountdown(){
 	var playImg = getElem("refresh_play");
@@ -123,11 +140,22 @@ function pauseCountdown(){
 	playImg.style.display = "inline";
 }
 
+function unpauseCountdown(){
+	var playImg = getElem("refresh_play");
+	var pauseImg = getElem("refresh_pause");
+
+	showCountDownMsg();
+	countDown();
+
+	pauseImg.style.display = "inline";
+	playImg.style.display = "none";
+}
+
 function onPlayPauseClick() {
 	var playImg = getElem("refresh_play");
 	var pauseImg = getElem("refresh_pause");
 
-    	if(isCountDownRunning()) {
+    if(isCountDownRunning()) {
 		showPausedMsg();
 		stopCountDownTimeout();
 
