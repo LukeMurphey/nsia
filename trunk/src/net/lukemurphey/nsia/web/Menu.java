@@ -80,8 +80,6 @@ public class Menu {
 		Vector<Link> menu = new Vector<Link>();
 		menu.addAll(getSystemMenuItems(context));
 		
-		menu.addAll(getSiteGroupMenuItems(context, null));
-		
 		menu.addAll(getUserMenuItems(context, null));
 		
 		menu.addAll(getGroupMenuItems(context, null));
