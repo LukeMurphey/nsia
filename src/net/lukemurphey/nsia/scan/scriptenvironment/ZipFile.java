@@ -12,7 +12,7 @@ import net.lukemurphey.nsia.scan.CharsetDetector;
 import net.lukemurphey.nsia.scan.EncodingDetectionFailedException;
 
 /**
- * This class represents zip archive and allows information about the archive to be obtained and files to be extracted
+ * This class represents a zip archive and allows information about the archive to be obtained and files to be extracted
  * @author Luke
  *
  */
