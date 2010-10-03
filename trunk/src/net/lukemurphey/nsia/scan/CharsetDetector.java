@@ -22,10 +22,23 @@ public class CharsetDetector extends nsDetector {
 	
 	private CharsetDetectorObserver observer = new CharsetDetectorObserver();
 	
+	/**
+	 * Detect the character set from the given data.
+	 * @param sample
+	 * @return
+	 * @throws EncodingDetectionFailedException
+	 */
 	public static String detectCharset( byte[] sample ) throws EncodingDetectionFailedException{
 		return detectCharset( sample, sample.length);
 	}
 	
+	/**
+	 * Detect the character set from the given data.
+	 * @param sample
+	 * @param length
+	 * @return
+	 * @throws EncodingDetectionFailedException
+	 */
 	public static String detectCharset( byte[] sample, int length ) throws EncodingDetectionFailedException{
 		
 		CharsetDetector charsetDetect = new CharsetDetector();
@@ -46,7 +59,7 @@ public class CharsetDetector extends nsDetector {
 		
 	}
 	
-	public CharsetDetector(){
+	private CharsetDetector(){
 		super.Init(observer);
 	}
 }
