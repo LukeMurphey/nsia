@@ -4,8 +4,6 @@ import java.nio.charset.*;
 
 import net.lukemurphey.nsia.MimeType;
 
-import org.mozilla.intl.chardet.*;
-
 /**
  * This class represents data that will be analyzed. The objective of this class is to facilitate conversion between raw bytes and a String by detecting the character set
  * encoding (using the algorithm used by Mozilla/Firefox). This class will normalize the input string to UTF-16. Furthermore, this class will cache the converted data in 
@@ -309,54 +307,6 @@ public class DataSpecimen {
 	
 	public static String detectedCharacterSet( byte[] sample ) throws EncodingDetectionFailedException{
 		return CharsetDetector.detectCharset(sample);
-	}
-	
-	private static class CharsetDetectorObserver implements nsICharsetDetectionObserver{
-		
-		public String detectedCharset;
-		public boolean found = false;
-		public void Notify(String charset){
-			detectedCharset = charset;
-			found = true;
-		}
-	}
-	
-	/**
-	 * This class attempts to identify the character set of the given data using the algorithm used in Mozilla. 
-	 * @author luke
-	 *
-	 */
-	private static class CharsetDetector extends nsDetector {
-		
-		private CharsetDetectorObserver observer = new CharsetDetectorObserver();
-		
-		public static String detectCharset( byte[] sample ) throws EncodingDetectionFailedException{
-			return detectCharset( sample, sample.length);
-		}
-		
-		public static String detectCharset( byte[] sample, int length ) throws EncodingDetectionFailedException{
-			
-			CharsetDetector charsetDetect = new CharsetDetector();
-			
-			if( charsetDetect.isAscii(sample, sample.length) ){
-				return "ASCII";
-			}
-			else{
-				charsetDetect.DoIt(sample, length, false);
-			}
-			
-			if( charsetDetect.observer.found == true){
-				return charsetDetect.observer.detectedCharset;
-			}
-			else{
-				throw new EncodingDetectionFailedException();
-			}
-			
-		}
-		
-		public CharsetDetector(){
-			super.Init(observer);
-		}
 	}
 	
 	public static byte[] subArray( byte[] bytes, int start){
