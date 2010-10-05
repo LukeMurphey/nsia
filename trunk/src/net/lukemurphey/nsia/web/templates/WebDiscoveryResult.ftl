@@ -112,7 +112,8 @@
         <#if ( findings?size == 0)>
             <#if scanRuleFilter?? || contentTypeFilter??>
         <tr>
-            <td colspan="99"><#assign message>No resources match the provided filter.<p/><a href="${request.thisURL}">[Clear Filter]</a></#assign><@getinfodialog title="No Findings" message=message /><td>
+            <td colspan="99"><#assign message>No resources match the provided filter.<p/><a href="${request.thisURL}">[Clear Filter]</a></#assign>
+            <@getinfodialog title="No Findings" message=message /><td>
         </tr>
             <#else>
         <tr>
@@ -121,9 +122,32 @@
             </#if>
         <#else>
         <br/>
+            <#if scanRuleFilter?? && contentTypeFilter??>
+        <tr>
+            <td colspan="4">
+                <#assign message>Displaying findings that matched the <u>${scanRuleFilter?html}</u> definition and the <u>${contentTypeFilter?html}</u> content-type.<br><a href="${request.thisURL}">[Clear Filter]</a></#assign>
+                <@getinfodialog title="Filters Applied" message=message />
+            </td>
+        </tr>
+            <#elseif scanRuleFilter??>
+        <tr>
+            <td colspan="4">
+                <#assign message>Displaying findings that matched the <u>${scanRuleFilter?html}</u> definition.<br><a href="${request.thisURL}">[Clear Filter]</a></#assign>
+                <@getinfodialog title="Filters Applied" message=message />
+            </td>
+        </tr>
+            <#elseif contentTypeFilter??>
+        <tr>
+            <td colspan="4">
+                <#assign message>Displaying findings that matched the <u>${contentTypeFilter?html}</u> content-type.<br><a href="${request.thisURL}">[Clear Filter]</a></#assign>
+                <@getinfodialog title="Filters Applied" message=message />
+            </td>
+        </tr>
+            </#if>
         <tr class="Background0">
             <td colspan="4" class="Text_3">Scan Findings</td>
         </tr>
+        
             <#list findings as finding>
             <#assign severity=finding.maxSeverity />
             <#if ( finding.resultCode == SCAN_COMPLETED && finding.deviations == 0 )>
@@ -203,12 +227,12 @@
             <input class="button" type="submit" name="Action" value="Next">
         </#if>
         
-        <#if ( contentTypeFilterEscaped?? )>
-            <input type="hidden" name="ContentTypeFilter" value="${contentTypeFilterEscaped?html}">
+        <#if ( contentTypeFilter?? )>
+            <input type="hidden" name="ContentTypeFilter" value="${contentTypeFilter?html}">
         </#if>
         
-        <#if ( scanRuleFilterEscaped?? )>
-            <input type="hidden" name="RuleFilter" value="${scanRuleFilterEscaped?html}">
+        <#if ( scanRuleFilter?? )>
+            <input type="hidden" name="RuleFilter" value="${scanRuleFilter?html}">
         </#if>
             <input type="hidden" name="S" value="${firstScanResultID?c}">
             <input type="hidden" name="E" value="${lastScanResultID?c}">
