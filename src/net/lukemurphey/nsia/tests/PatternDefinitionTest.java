@@ -1165,4 +1165,45 @@ public class PatternDefinitionTest extends TestCase {
 			fail("Input should have been accepted");
 		}
 	}
+	
+	public void testVeriableSet() throws InvalidDefinitionException, UnpurposedDefinitionException{
+		PatternDefinition threatSig = PatternDefinition.parse("Alert(Test.Exec.SetVar){Severity=Low; Message=Exploit; String=L33t; Set=Test;}");
+		
+		Variables variables = new Variables();
+		String data = "L33taaaabbbb";
+		
+		if( !threatSig.evaluate(data, variables) ){
+			fail("Input should have been accepted");
+		}
+		else if( !variables.isSet("Test") ){
+			fail("Variable should have been set but was not");
+		}
+	}
+	
+	public void testVeriableIfSet() throws InvalidDefinitionException, UnpurposedDefinitionException{
+		PatternDefinition threatSig = PatternDefinition.parse("Alert(Test.Exec.SetVar){Severity=Low; Message=Exploit; String=L33t; IfSet=Test;}");
+		
+		Variables variables = new Variables();
+		variables.set("Test");
+		String data = "L33taaaabbbb";
+		
+		if( !threatSig.evaluate(data, variables) ){
+			fail("Input should have been accepted");
+		}
+	}
+	
+	public void testVeriableUnSet() throws InvalidDefinitionException, UnpurposedDefinitionException{
+		PatternDefinition threatSig = PatternDefinition.parse("Alert(Test.Exec.SetVar){Severity=Low; Message=Exploit; String=L33t; Unset=Test;}");
+		
+		Variables variables = new Variables();
+		variables.set("Test");
+		String data = "L33taaaabbbb";
+		
+		if( !threatSig.evaluate(data, variables) ){
+			fail("Input should have been accepted");
+		}
+		else if( variables.isSet("Test") ){
+			fail("Variable should have not been set but was");
+		}
+	}
 }
