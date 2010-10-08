@@ -258,4 +258,28 @@ public class ScriptDefinitionTest extends TestCase {
 		}
 	}
 	
+	public void testSetVariable() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
+		
+		// 1 -- Perform a scan against a URL, make sure the URL loads the native array items
+		Application app = TestApplication.getApplication();
+		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "SetVariable.js" );
+		
+		HostConfiguration hostConfig = new HostConfiguration();
+		hostConfig.setHost("google.com", 80, "http");
+		HttpMethod httpMethod = new GetMethod( "/" );
+		httpMethod.setFollowRedirects(true);
+		HttpClient httpClient = new HttpClient();
+		httpClient.executeMethod( hostConfig, httpMethod );
+		
+		HttpResponseData httpResponse = new HttpResponseData( httpMethod, "http://google.com" );
+		
+		// 2 -- Make sure the variable was set
+		Variables vars = new Variables();
+		sig.evaluate(httpResponse,vars, 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+		
+		if( !vars.isSet("Test") ){
+			fail("The definition did not set the correctly");
+		}
+	}
+	
 }
