@@ -7,7 +7,10 @@
 	<property file="dev/local.properties" />
 	<property file="dev/default.properties" />
 	
-    <target name="jar" depends="check_default_definitions_exists" description="Create core NSIA JAR file">
+	<target name="jar" depends="check_default_definitions_exists,__jar" description="Create core NSIA JAR file">
+	</target>
+	
+    <target name="__jar">
 		
         <!-- 1: Get the build number -->
         <taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask" />
