@@ -23,7 +23,10 @@ import net.lukemurphey.nsia.SiteGroupManagement;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.SessionManagement.SessionInfo;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor;
 import net.lukemurphey.nsia.scan.DefinitionPolicyManagement;
@@ -471,8 +474,28 @@ public class DefinitionPolicyView extends View {
 					throw new ViewFailedException(e);
 				}
 				
+				// Perform the changes
 				try {
 					processChanges(request, context, siteGroup);
+					
+					// Log that the policy was changed
+					if( siteGroup == null ){
+						Application.getApplication().logEvent( new EventLogMessage( EventType.DEFAULT_SCAN_POLICY_MODIFIED,
+								new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+								new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ))
+								);
+					}
+					else{
+						Application.getApplication().logEvent( new EventLogMessage( EventType.SCAN_POLICY_MODIFIED,
+								new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+								new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+								new EventLogField( FieldName.SITE_GROUP_NAME, siteGroup.getGroupName() ),
+								new EventLogField( FieldName.SITE_GROUP_ID, siteGroup.getGroupId() ))
+								);
+					}
+					
+
+					
 				} catch (GeneralizedException e) {
 					throw new ViewFailedException(e);
 				}
