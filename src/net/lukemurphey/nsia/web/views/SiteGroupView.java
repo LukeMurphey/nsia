@@ -30,6 +30,7 @@ import net.lukemurphey.nsia.WorkerThread.State;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
 import net.lukemurphey.nsia.scan.HttpSeekingScanRule;
 import net.lukemurphey.nsia.scan.RuleBaselineException;
@@ -296,6 +297,14 @@ public class SiteGroupView extends View {
 			Shortcuts.checkDelete(context.getSessionInfo(), siteGroup.getObjectId(), "Delete rule " + ruleID +  " (" + scanRule.getRuleType() + "\\" + scanRule.getSpecimenDescription() + ") for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")");
 			
 			ScanRule.deleteRule(ruleID);
+			
+			// Log that the rule was deleted
+			Application.getApplication().logEvent( new EventLogMessage( EventType.RULE_DELETED,
+					new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+					new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+					new EventLogField( FieldName.RULE_ID, ruleID ))
+					);
+			
 			rulesDeleted++;
 		}
 		
