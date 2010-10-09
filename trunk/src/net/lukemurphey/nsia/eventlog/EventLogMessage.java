@@ -161,7 +161,19 @@ public class EventLogMessage {
 		RESPONSE_ACTION_FAILED(EventLogSeverity.WARNING, "Response Module: Action failed"),
 		STARTUP_ERROR(EventLogSeverity.WARNING, "System: Startup error"),
 		DEFINITION_UPDATE_REQUEST_FAILED(EventLogSeverity.WARNING, "System: Definition update request failed"),
-		RULE_BASELINE_FAILED(EventLogSeverity.WARNING, "Scanner: Rule baseline request failed");
+		RULE_BASELINE_FAILED(EventLogSeverity.WARNING, "Scanner: Rule baseline request failed"),
+		SYSTEM_CONFIGURATION_CHANGED(EventLogSeverity.NOTICE, "Authentication: User logged out"),
+		LICENSE_UPDATED(EventLogSeverity.INFORMATIONAL, "System: License updated"),
+		DATABASE_INDEXES_DEFRAGMENTED(EventLogSeverity.INFORMATIONAL, "System: Database indexes defragmented"),
+		DATABASE_BACKUP_COMPLETED(EventLogSeverity.NOTICE, "System: Database backup completed"),
+		RULE_REENABLED(EventLogSeverity.WARNING, "Scan Rule Management: Rule re-enabled"), 
+		RULE_ADDED(EventLogSeverity.WARNING, "Scan Rule Management: Rule added"), 
+		RULE_DISABLED(EventLogSeverity.NOTICE, "Scan Rule Management: Rule disabled"), 
+		RULE_DELETED(EventLogSeverity.NOTICE, "Scan Rule Management: Rule deleted"), 
+		RULE_MODIFIED(EventLogSeverity.NOTICE, "Scan Rule Management: Rule modified"),
+		RULE_EXCEPTION_ADDED(EventLogSeverity.WARNING, "Scan Rule Management: Rule exception added"),
+		RULE_EXCEPTION_DELETED(EventLogSeverity.WARNING, "Scan Rule Management: Rule exception deleted"),
+		SCAN_POLICY_MODIFIED(EventLogSeverity.WARNING, "Scan Rule Management: Scan policy modified");
 
 		private EventType(EventLogSeverity severity, String name){
 			this.severity = severity;
