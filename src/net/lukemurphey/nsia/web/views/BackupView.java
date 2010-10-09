@@ -13,6 +13,10 @@ import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.WorkerThread;
 import net.lukemurphey.nsia.Application.WorkerThreadDescriptor;
 import net.lukemurphey.nsia.WorkerThread.State;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
@@ -64,6 +68,12 @@ public class BackupView extends View {
 		if( "Backup".equalsIgnoreCase( request.getParameter("Selected") ) ) {
 			startedNow = true;
 			backupWorker = startBackup();
+			
+			// Log that the database backup was started
+			Application.getApplication().logEvent( new EventLogMessage( EventType.DATABASE_BACKUP_STARTED,
+					new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+					new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ))
+					);
 		}
 		
 		// 4 -- Post the progress dialog if a backup is underway
