@@ -22,7 +22,10 @@ import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupManagement;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.Definition;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor;
@@ -555,6 +558,17 @@ public class ExceptionEditView extends View {
 			}
 			
 			context.addMessage("Exception successfully added", MessageSeverity.SUCCESS);
+			
+			
+			// Log that the exception was created
+			Application.getApplication().logEvent( new EventLogMessage( EventType.RULE_EXCEPTION_ADDED,
+					new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+					new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+					new EventLogField( FieldName.RULE_ID, ruleID ),
+					new EventLogField( FieldName.GROUP_ID, siteGroup.getGroupId() ),
+					new EventLogField( FieldName.GROUP_NAME, siteGroup.getGroupName() ))
+					);
+			
 			processReturn(request, response, context, siteGroup, ruleID);
 			return true;
 		}
