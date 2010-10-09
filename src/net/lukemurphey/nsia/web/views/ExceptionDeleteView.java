@@ -19,6 +19,10 @@ import net.lukemurphey.nsia.NoSessionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupManagement;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.DefinitionPolicyDescriptor;
 import net.lukemurphey.nsia.scan.DefinitionPolicyManagement;
 import net.lukemurphey.nsia.scan.ScanRule;
@@ -88,6 +92,14 @@ public class ExceptionDeleteView extends View {
 		}
 		
 		context.addMessage(exceptionsDeleted + " exceptions have been deleted", MessageSeverity.SUCCESS);
+		
+		// Log that the exception was deleted
+		Application.getApplication().logEvent( new EventLogMessage( EventType.RULE_EXCEPTION_DELETED,
+				new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+				new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+				new EventLogField( FieldName.GROUP_ID, siteGroup.getGroupId() ),
+				new EventLogField( FieldName.GROUP_NAME, siteGroup.getGroupName() ))
+				);
 		
 		return exceptionsDeleted;
 		
