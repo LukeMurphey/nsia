@@ -18,6 +18,10 @@ import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Wildcard;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.HttpSeekingScanRule;
 import net.lukemurphey.nsia.scan.ScanRule;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -172,13 +176,29 @@ public class WebDiscoveryRuleEditView extends View {
 			try {
 				if( isNewRule ){
 					int siteGroupID = Integer.valueOf( request.getParameter("SiteGroupID") );
-					rule.saveNewRuleToDatabase(siteGroupID);
+					long ruleID = rule.saveNewRuleToDatabase(siteGroupID);
+					
+					// Log that the rule was created
+					Application.getApplication().logEvent( new EventLogMessage( EventType.RULE_ADDED,
+							new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+							new EventLogField( FieldName.RULE_ID, ruleID ))
+							);
+					
 					context.addMessage("Rule successfully created", MessageSeverity.SUCCESS);
 					response.sendRedirect( SiteGroupView.getURL(siteGroupID) );
 					return true;
 				}
 				else{
 					rule.saveToDatabase();
+					
+					// Log that the rule was updated
+					Application.getApplication().logEvent( new EventLogMessage( EventType.RULE_MODIFIED,
+							new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+							new EventLogField( FieldName.RULE_ID, rule.getRuleId() ))
+							);
+					
 					context.addMessage("Rule successfully updated", MessageSeverity.SUCCESS);
 					response.sendRedirect( SiteGroupView.getURL( ScanRule.getSiteGroupForRule(rule.getRuleId())) );
 					return true;
