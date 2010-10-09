@@ -162,7 +162,7 @@ public class EventLogMessage {
 		STARTUP_ERROR(EventLogSeverity.WARNING, "System: Startup error"),
 		DEFINITION_UPDATE_REQUEST_FAILED(EventLogSeverity.WARNING, "System: Definition update request failed"),
 		RULE_BASELINE_FAILED(EventLogSeverity.WARNING, "Scanner: Rule baseline request failed"),
-		SYSTEM_CONFIGURATION_CHANGED(EventLogSeverity.NOTICE, "Authentication: User logged out"),
+		SYSTEM_CONFIGURATION_CHANGED(EventLogSeverity.NOTICE, "System: Configuration changed"),
 		LICENSE_UPDATED(EventLogSeverity.INFORMATIONAL, "System: License updated"),
 		DATABASE_INDEXES_DEFRAGMENTED(EventLogSeverity.INFORMATIONAL, "System: Database indexes defragmented"),
 		DATABASE_BACKUP_COMPLETED(EventLogSeverity.NOTICE, "System: Database backup completed"),
@@ -173,6 +173,7 @@ public class EventLogMessage {
 		RULE_MODIFIED(EventLogSeverity.NOTICE, "Scan Rule Management: Rule modified"),
 		RULE_EXCEPTION_ADDED(EventLogSeverity.WARNING, "Scan Rule Management: Rule exception added"),
 		RULE_EXCEPTION_DELETED(EventLogSeverity.WARNING, "Scan Rule Management: Rule exception deleted"),
+		DEFAULT_SCAN_POLICY_MODIFIED(EventLogSeverity.WARNING, "Scan Rule Management: Default scan policy modified"),
 		SCAN_POLICY_MODIFIED(EventLogSeverity.WARNING, "Scan Rule Management: Scan policy modified");
 
 		private EventType(EventLogSeverity severity, String name){
