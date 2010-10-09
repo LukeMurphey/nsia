@@ -17,8 +17,12 @@ import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupManagement;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLog;
+import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogHook;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.SiteGroupStatusEventLogHook;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -83,6 +87,16 @@ public class ActionsListView extends View {
 				if( siteGroupHook.getSiteGroupID() == siteGroup.getGroupId() ){
 					EventLogHook.delete(hookID);
 					eventLog.deleteHook(hookID);
+					
+					// Log that the incident response action was deleted
+					Application.getApplication().logEvent( new EventLogMessage( EventType.RESPONSE_ACTION_DELETED,
+							new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+							new EventLogField( FieldName.RESPONSE_ACTION_ID, hook.getEventLogHookID() ),
+							new EventLogField( FieldName.GROUP_ID, siteGroup.getGroupId() ),
+							new EventLogField( FieldName.GROUP_NAME, siteGroup.getGroupName() ))
+							);
+					
 					hooksDeleted++;
 				}
 			}
