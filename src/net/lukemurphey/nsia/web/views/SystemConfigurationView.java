@@ -17,6 +17,10 @@ import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.InvalidLocalPartException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.GenericUtils.SMTPEncryption;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -264,46 +268,56 @@ public class SystemConfigurationView extends View {
 		if( name != null ){
 			
 			ApplicationConfiguration config = Application.getApplication().getApplicationConfiguration();
+			boolean parameterSet = false;
 			
 			try{
 				// Authentication setup
 				if( value != null && ParameterTitles.AUTH_LOGIN_AGGREGATION.equals(name) ){
 					config.setAuthenticationAttemptAggregationCount( getAsLong(value));
 					context.addMessage("Login aggregation updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.AUTH_LOGIN_BANNER.equals(name) ){
 					config.setLoginBanner( value );
 					context.addMessage("Login banner updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.AUTH_LOGIN_FAILURE_LIMIT.equals(name) ){
 					config.setAuthenticationAttemptLimit( getAsLong(value) );
 					context.addMessage("Login failure limit updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.AUTH_PASSWORD_HASH_ITERATIONS.equals(name) ){
 					config.setHashIterations( getAsLong(value) );
 					context.addMessage("Password hash iteration count updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				
 				// Server settings
 				else if( ParameterTitles.SERVER_AUTO_UPDATE_DEFINITIONS.equals(name) ){
 					config.setAutoDefinitionUpdating( getAsBoolean(value) );
 					context.addMessage("Definitions auto-update updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.SERVER_PORT.equals(name) ){
 					config.setServerPort( getAsInt(value) );
 					context.addMessage("Server port updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( ParameterTitles.SERVER_SSL_ENABLED.equals(name) ){
 					config.setSslEnabled( getAsBoolean(value) );
 					context.addMessage("SSL setting updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.SERVER_SSL_KEY_PASSWORD.equals(name) ){
 					config.setSslKeyPassword( value );
 					context.addMessage("SSL key password updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.SERVER_SSL_PASSWORD.equals(name) ){
 					config.setSslPassword( value );
 					context.addMessage("SSL password updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( ParameterTitles.SERVER_WEB_ACCESS.equals(name) ){
 					//config.set( getAsBoolean(value) );
@@ -311,20 +325,24 @@ public class SystemConfigurationView extends View {
 				else if( ParameterTitles.SERVER_AUTO_UPDATE_DEFINITIONS.equals(name) ){
 					config.setAutoDefinitionUpdating( getAsBoolean(value) );
 					context.addMessage("Definitions auto-update updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				
 				// Session management
 				else if( value != null && ParameterTitles.SESSION_IDENTIFIER_LIFETIME.equals(name) ){
 					config.setSessionIdentifierLifetime( ( getAsLong(value) ) );
 					context.addMessage("Session identifier lifetime updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.SESSION_INACTIVITY_THRESHOLD.equals(name) ){
 					config.setSessionInactivityThreshold( ( getAsLong(value) ) );
 					context.addMessage("Session inactivity threshold updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.SESSION_LIFETIME.equals(name) ){
 					config.setSessionLifetime( ( getAsLong(value) ) );
 					context.addMessage("Session lifetime updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				
 				// Email address setup
@@ -332,6 +350,7 @@ public class SystemConfigurationView extends View {
 					try {
 						config.setEmailFromAddress( EmailAddress.getByAddress(value) );
 						context.addMessage("Email from address updated", MessageSeverity.SUCCESS);
+						parameterSet = true;
 					} catch (UnknownHostException e) {
 						throw new FieldValidationFailedException("The host in the email address is invalid");
 					} catch (InvalidLocalPartException e) {
@@ -341,64 +360,89 @@ public class SystemConfigurationView extends View {
 				else if( value != null && ParameterTitles.EMAIL_PASSWORD.equals(name) ){
 					config.setEmailPassword( value );
 					context.addMessage("Email password updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.EMAIL_SMTP_PORT.equals(name) ){
 					config.setEmailSMTPPort( getAsInt( value ) );
 					context.addMessage("Email SMTP port updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.EMAIL_SMTP_SERVER.equals(name) ){
 					config.setEmailSMTPServer( value );
 					context.addMessage("SMTP server updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.EMAIL_USERNAME.equals(name) ){
 					config.setEmailUsername( value );
 					context.addMessage("SMTP username updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.EMAIL_SMTP_ENCRYPTION.equals(name) ){
 					config.setEmailSMTPEncryption( SMTPEncryption.valueOf(value) );
 					context.addMessage("SMTP encryption setting updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				
 				// Log configuration
 				else if( ParameterTitles.LOG_ENABLED.equals(name) ){
 					config.setLogServerEnabled( getAsBoolean(value) );
 					context.addMessage("Log setting updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.LOG_FORMAT.equals(name) ){
 					config.setLogFormat( value );
 					context.addMessage("Log format updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.LOG_SERVER.equals(name) ){
 					config.setLogServerAddress( value );
 					context.addMessage("Log server updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.LOG_SERVER_PORT.equals(name) ){
 					config.setLogServerPort( getAsInt(value) );
 					context.addMessage("Log server port updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.LOG_TRANSPORT.equals(name) ){
 					config.setLogServerProtocol(value);
 					context.addMessage("Log transport updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( value != null && ParameterTitles.LICENSE_KEY.equals(name) ){
 					config.setLicenseKey(value);
 					context.addMessage("License key updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				
 				// Scanner configuration
 				else if( value != null && ParameterTitles.SCANNER_HTTP_THREADS.equals(name) ){
 					config.setMaxHTTPScanThreads( getAsInt(value) );
 					context.addMessage("Scanner HTTP thread limit updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				
 				else if( ParameterTitles.SCANNER_RESCAN_EDITED_RULES.equals(name) ){
 					config.setRescanOnEditEnabled( getAsBoolean(value) );
 					context.addMessage("Scanner re-scan setting updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
 				else if( ParameterTitles.SCANNER_SCAN_DEFAULT_ENABLED.equals(name) ){
 					config.setDefaultScanningEnabled( getAsBoolean(value) );
 					context.addMessage("Scanner default setting updated", MessageSeverity.SUCCESS);
+					parameterSet = true;
 				}
+				
+				// Log that the parameter was set
+				if( parameterSet == true ){
+					Application.getApplication().logEvent( new EventLogMessage( EventType.SYSTEM_CONFIGURATION_CHANGED,
+							new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+							new EventLogField( FieldName.PARAMETER, name ),
+							new EventLogField( FieldName.PARAMETER_VALUE, value ))
+							);
+				}
+				
 			}
 			catch(NoDatabaseConnectionException e){
 				throw new ViewFailedException(e);
