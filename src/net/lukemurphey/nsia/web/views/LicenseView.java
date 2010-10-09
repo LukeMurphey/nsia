@@ -15,6 +15,10 @@ import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
 import net.lukemurphey.nsia.LicenseManagement.LicenseStatus;
+import net.lukemurphey.nsia.eventlog.EventLogField;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -87,6 +91,15 @@ public class LicenseView extends View {
 					}
 					
 					config.setLicenseKey(licenseKey);
+					
+					// Log that the parameter was set
+					Application.getApplication().logEvent( new EventLogMessage( EventType.SYSTEM_CONFIGURATION_CHANGED,
+							new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+							new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+							new EventLogField( FieldName.PARAMETER, "license_key" ),
+							new EventLogField( FieldName.PARAMETER_VALUE, licenseKey ))
+							);
+					
 					license = config.getLicense(false); //Get the updated license status
 				}
 			}
