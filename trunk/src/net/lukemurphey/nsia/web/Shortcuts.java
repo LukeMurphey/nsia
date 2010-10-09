@@ -260,7 +260,6 @@ public class Shortcuts {
 			
 			ObjectPermissionDescriptor acl = accessControl.getUserPermissions(sessionInfo.getUserId(), objectId, true);
 			
-			long userId = sessionInfo.getUserId();
 			UserDescriptor user = userManagement.getUserDescriptor( sessionInfo.getUserId());
 			String userName = null;
 			
@@ -276,8 +275,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return true;
 			}
@@ -291,8 +289,7 @@ public class Shortcuts {
 							new EventLogField( FieldName.OPERATION, "Create" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
 							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-							new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 					
 					return false;
 				}
@@ -303,8 +300,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return true;
 			}
@@ -315,8 +311,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return false;
 			}
@@ -327,8 +322,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Create" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return false;
 			}
@@ -419,7 +413,6 @@ public class Shortcuts {
 
 			ObjectPermissionDescriptor acl = accessControl.getUserPermissions(sessionInfo.getUserId(), objectId, true);
 			
-			long userId = sessionInfo.getUserId();
 			UserDescriptor user = userManagement.getUserDescriptor( sessionInfo.getUserId());
 			String userName = null;
 			
@@ -434,8 +427,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 
 				return true;
 			}
@@ -449,8 +441,7 @@ public class Shortcuts {
 							new EventLogField( FieldName.OPERATION, "Execute" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
 							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-							new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 					
 					return false;
 				}
@@ -461,8 +452,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return true;
 			}
@@ -473,8 +463,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return false;
 			}
@@ -485,8 +474,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Execute" ),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return false;
 			}
@@ -577,7 +565,6 @@ public class Shortcuts {
 
 			ObjectPermissionDescriptor acl = accessControl.getUserPermissions(sessionInfo.getUserId(), objectId, true);
 			
-			long userId = sessionInfo.getUserId();
 			UserDescriptor user = userManagement.getUserDescriptor( sessionInfo.getUserId());
 			String userName = null;
 			
@@ -592,8 +579,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 
 				
 				return true;
@@ -608,8 +594,7 @@ public class Shortcuts {
 							new EventLogField( FieldName.OPERATION, "Modify"),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
 							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-							new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 					
 					return false;
 				}
@@ -620,8 +605,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return true;
 			}
@@ -632,8 +616,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return false;
 			}
@@ -644,8 +627,7 @@ public class Shortcuts {
 						new EventLogField( FieldName.OPERATION, "Modify"),
 						new EventLogField( FieldName.OBJECT_ID, objectId ),
 						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ),
-						new EventLogField( FieldName.TARGET_USER_ID , userId ) } );
+						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return false;
 			}
