@@ -83,7 +83,7 @@ public class ExceptionDeleteView extends View {
 				}
 			}
 			
-			policyManagement.deletePolicy(exceptionID);
+			policyManagement.deletePolicy(exceptionID);			
 			exceptionsDeleted++;
 		}
 		
