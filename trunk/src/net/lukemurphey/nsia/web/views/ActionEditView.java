@@ -18,9 +18,13 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupManagement;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
+import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogHook;
+import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogSeverity;
 import net.lukemurphey.nsia.eventlog.SiteGroupStatusEventLogHook;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.extension.ArgumentFieldsInvalidException;
 import net.lukemurphey.nsia.extension.Extension;
 import net.lukemurphey.nsia.extension.ExtensionManager;
@@ -98,6 +102,16 @@ public class ActionEditView extends View {
 			hook.saveToDatabase();
 			response.sendRedirect( ActionsListView.getURL(siteGroup.getGroupId()) );
 			context.addMessage("Action successfully updated", MessageSeverity.SUCCESS);
+			
+			// Log that the incident response action was modified
+			Application.getApplication().logEvent( new EventLogMessage( EventType.RESPONSE_ACTION_MODIFIED,
+					new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+					new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+					new EventLogField( FieldName.RESPONSE_ACTION_ID, hook.getEventLogHookID() ),
+					new EventLogField( FieldName.GROUP_ID, siteGroup.getGroupId() ),
+					new EventLogField( FieldName.GROUP_NAME, siteGroup.getGroupName() ))
+					);
+			
 			return true;
 		}
 		catch(ArgumentFieldsInvalidException e){
@@ -129,6 +143,16 @@ public class ActionEditView extends View {
 			Application.getApplication().getEventLog().addHook(hook);
 			response.sendRedirect( ActionsListView.getURL(siteGroup.getGroupId()) );
 			context.addMessage("Action successfully created", MessageSeverity.SUCCESS);
+			
+			// Log that the incident response action was added
+			Application.getApplication().logEvent( new EventLogMessage( EventType.RESPONSE_ACTION_ADDED,
+					new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+					new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
+					new EventLogField( FieldName.RESPONSE_ACTION_ID, hook.getEventLogHookID() ),
+					new EventLogField( FieldName.GROUP_ID, siteGroup.getGroupId() ),
+					new EventLogField( FieldName.GROUP_NAME, siteGroup.getGroupName() ))
+					);
+			
 			return true;
 		}
 		catch(ArgumentFieldsInvalidException e){
