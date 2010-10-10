@@ -1392,12 +1392,9 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			// 1 -- Load the most current scan result
 			HttpSeekingScanResult result = (HttpSeekingScanResult)ScanResultLoader.getLastScanResult(this.scanRuleId);
 			
-			// 2 -- Identify rules categories to create exceptions for
-			//TODO Create method to identify rule categories that should be filtered
+			// 2 -- Identify rules to create exceptions for
 			
-			// 3 -- Identify rules to create exceptions for
-			
-			//	 3.1 -- Don't bother continuing if no scan results exist yet
+			//	 2.1 -- Don't bother continuing if no scan results exist yet
 			if( result == null){
 				return false;
 			}
@@ -1408,7 +1405,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			
 			DefinitionSet definitions = DefinitionArchive.getArchive().getDefinitionSet();
 			
-			//	 3.2 -- Loop through each finding
+			//	 2.2 -- Loop through each finding
 			for( HttpDefinitionScanResult finding : findings )
 			{
 				// Create an entry for each definition match
@@ -1442,7 +1439,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 				
 			}
 			
-			// 4 -- Set the scan data as obsolete
+			// 3 -- Set the scan data as obsolete
 			ScanRule.setScanDataObsolete(this.scanRuleId);
 			
 		}
