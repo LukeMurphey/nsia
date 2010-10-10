@@ -74,11 +74,10 @@ public class ConsoleListener extends Thread{
 		if( globalConsoleListener == null ){
 			globalConsoleListener = new ConsoleListener(application);
 			
-			// TODO Find a permanent solution to the JFreeChart / Console input problem
 			/*
 			 * The code below creates an unused JFreeChart just so that the initialization code for JFreeChart is run. This is a workaround
 			 * for a problem that causes JFreeChart to freeze whenever console input is redirected. Creating a chart before the console input
-			 * is accepted prevent the problem from occurring. More information is available at the following URL:
+			 * is accepted prevents the problem from occurring. More information is available at the following URL:
 			 * 			
 			 * 		http://www.jfree.org/phpBB2/viewtopic.php?p=66469#66469
 			 */
