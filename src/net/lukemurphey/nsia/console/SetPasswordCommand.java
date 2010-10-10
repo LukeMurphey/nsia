@@ -24,7 +24,7 @@ public class SetPasswordCommand extends ConsoleCommand {
 
 	
 	public SetPasswordCommand(Application application, String... names) {
-		super("<username> <password>", "Sets the password for the given username", application, names);
+		super("<username>", "Sets the password for the given username", application, names);
 	}
 
 	public CommandResult run(String input[]){
