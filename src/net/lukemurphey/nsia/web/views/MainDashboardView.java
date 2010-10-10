@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.InsufficientPermissionException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.NoSessionException;
 import net.lukemurphey.nsia.SiteGroupScanResult;
 import net.lukemurphey.nsia.Application.ApplicationStatusDescriptor;
 import net.lukemurphey.nsia.scan.ScanData;
@@ -73,9 +76,32 @@ public class MainDashboardView extends View {
 			throw new ViewFailedException(e);
 		}
 		
-		//TODO Filter site groups that the user cannot access
+		// Filter the list of site groups down to the ones that the user can access
+		Vector<SiteGroupScanResult> resultsFiltered = new Vector<SiteGroupScanResult>();
+		
+		for(int c = 0; c < results.length; c++){
+			long objectID = results[c].getSiteGroupDescriptor().getObjectId();
+			
+			try {
+				Shortcuts.checkRead(context.getSessionInfo(), objectID);
+				resultsFiltered.add( results[c] );
+			} catch (InsufficientPermissionException e) {
+				// The user does not have permission to see this site-group. Don't let them see it.
+			} catch (GeneralizedException e) {
+				// An error occurred. Skip this site-group.
+			} catch (NoSessionException e) {
+				// User does not have a session. Don't let them see this site-group.
+			}
+		}
+		
+		// Covert the list of site-groups that the user can access down to the restricted list
+		results = new SiteGroupScanResult[resultsFiltered.size()];
+		resultsFiltered.toArray(results);
+		
+		// Populate data for the template
 		data.put("sitegroups", results);
 		
+		// Render the resulting page
 		TemplateLoader.renderToResponse("MainDashboard.ftl", data, response);
 		
 		return true;
