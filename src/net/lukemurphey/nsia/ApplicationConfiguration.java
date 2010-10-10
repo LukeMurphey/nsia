@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import net.lukemurphey.nsia.GenericUtils.SMTPEncryption;
 import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
@@ -563,7 +564,11 @@ public class ApplicationConfiguration {
 			throw new InputValidationException("The address is invalid, cannot be empty", "Syslog Server Address", address);
 		}
 		
-		//TODO Need to check syslog server address for validity before accepting
+		// 0.3 -- Need to check syslog server address for validity before accepting
+		if( Pattern.matches("[-a-zA-Z0-9.]+", address) == false ){
+			throw new InputValidationException("The server address is not a valid DNS name or IP address", "Syslog Server Address", address);
+		}
+		
 		// 1 -- Save the parameter
 		appParams.setParameter("Administration.LogServerAddress", address);
 		
