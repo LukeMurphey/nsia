@@ -267,7 +267,7 @@ public class RightsEditView extends View {
 		
 		if( tabIndex == Tab.USER_MANAGEMENT ){
 			rights.add( getRight( "Users.Add", "Create New Users", subjectId, subjectType, accessControl ) ) ;
-			rights.add( getRight( "Users.Edit", "Edit User", subjectId, subjectType, accessControl ) ) ;
+			rights.add( getRight( "Users.Edit", "Edit Users", subjectId, subjectType, accessControl ) ) ;
 			rights.add( getRight( "Users.View", "View Users", subjectId, subjectType, accessControl ) ) ;
 			//rights.add( getRight( "Users.Rights.View", "View Users' Rights", subjectId, subjectType, accessControl ) ) ;
 			rights.add( getRight( "Users.Delete", "Delete Users", subjectId, subjectType, accessControl ) ) ;
