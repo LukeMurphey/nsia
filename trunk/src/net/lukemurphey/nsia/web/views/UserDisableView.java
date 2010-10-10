@@ -44,10 +44,7 @@ public class UserDisableView extends View {
 		Application app = Application.getApplication();
 		
 		try{
-			// 0 -- Precondition check
-			
-			//	 0.1 -- Make sure the user has permission
-			//Shortcuts.checkRight( context.getSessionInfo(), "SiteGroups.Delete" ); //TODO Check permissions
+
 			UserManagement userManagement = new UserManagement(Application.getApplication());
 			
 			// 1 -- Disable the account
