@@ -5,6 +5,7 @@ import java.util.*;
 
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.ScanResult;
 import net.lukemurphey.nsia.scan.ScanResultLoader;
 import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
@@ -315,9 +316,10 @@ public class ScannerController extends Thread{
 					Thread.sleep(200);
 				}
 
+				// Scanning threads not complete for 1 minute since scanner shutdown request; threads forcably terminated
 				if( waitTimeExceeded ){
-					//TODO Log event via event log (that the scan threads need to be forced to terminate)
-					System.err.println("Scanning threads not complete for 1 minute since scanner shutdown request; threads forcably terminated");
+					// Log event via event log (that the scan threads need to be forced to terminate)
+					appRes.logEvent( new EventLogMessage(EventType.SCAN_THREADS_FAILED_TO_TERMINATE) );
 				}
 
 			} // Main while loop
