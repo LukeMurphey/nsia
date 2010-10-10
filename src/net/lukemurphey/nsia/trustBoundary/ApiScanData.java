@@ -17,6 +17,7 @@ import net.lukemurphey.nsia.NoSessionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupScanResult;
 import net.lukemurphey.nsia.Wildcard;
+import net.lukemurphey.nsia.SessionManagement.SessionInfo;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.scan.Definition;
@@ -36,6 +37,7 @@ import net.lukemurphey.nsia.scan.ScanRuleLoader;
 import net.lukemurphey.nsia.scan.ServiceScanRule;
 import net.lukemurphey.nsia.scan.ScanRule.ScanResultLoadFailureException;
 import net.lukemurphey.nsia.scan.ScanRule.ScanRuleLoadFailureException;
+import net.lukemurphey.nsia.web.Shortcuts;
 
 import java.util.regex.*;
 
@@ -66,22 +68,45 @@ public class ApiScanData extends ApiHandler{
 		//	 0.1 -- Make sure the user has a valid session
 		checkSession( sessionIdentifier );
 		
-		//TODO Respect ACLs (for each SiteGroup)
-		
 		// 1 -- Retrieve the data
 		try {
 
-			SiteGroupScanResult[] siteGroupScanResults = scanData.getSiteGroupStatus( );
+			SiteGroupScanResult[] results = scanData.getSiteGroupStatus( );
+			SessionInfo sessionInfo = sessionManagement.getSessionInfo(sessionIdentifier);
 
-			return siteGroupScanResults;
+			// Filter the list of site groups down to the ones that the user can access
+			Vector<SiteGroupScanResult> resultsFiltered = new Vector<SiteGroupScanResult>();
+			
+			for(int c = 0; c < results.length; c++){
+				long objectID = results[c].getSiteGroupDescriptor().getObjectId();
+				
+				try {
+					Shortcuts.checkRead(sessionInfo, objectID);
+					resultsFiltered.add( results[c] );
+				} catch (InsufficientPermissionException e) {
+					// The user does not have permission to see this site-group. Don't let them see it.
+				} catch (GeneralizedException e) {
+					// An error occurred. Skip this site-group.
+				} catch (NoSessionException e) {
+					// User does not have a session. Don't let them see this site-group.
+				}
+			}
+			
+			// Covert the list of site-groups that the user can access down to the restricted list
+			results = new SiteGroupScanResult[resultsFiltered.size()];
+			resultsFiltered.toArray(results);
+			
+			return results;
 		} catch (SQLException e) {
 			appRes.logExceptionEvent(EventLogMessage.EventType.SQL_EXCEPTION, e);
 			throw new GeneralizedException();
 		} catch (NoDatabaseConnectionException e) {
 			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new GeneralizedException();
-		}
-		catch (ScanResultLoadFailureException e) {
+		} catch (ScanResultLoadFailureException e) {
+			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
+			throw new GeneralizedException();
+		} catch (InputValidationException e) {
 			appRes.logExceptionEvent(EventLogMessage.EventType.INTERNAL_ERROR, e);
 			throw new GeneralizedException();
 		}
