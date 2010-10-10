@@ -48,18 +48,20 @@
         </#if>
     </#macro>
     <br>
-    <table width="100%">
-        <tr class="Background0">
-            <td width="128px" class="Text_2">Name</td>
-            <td width="55px" class="Text_2">ID</td>
-            <td width="55px" class="Text_2">Read</td>
-            <td width="55px" class="Text_2">Modify</td>
-            <td width="55px" class="Text_2">Delete</td>
-            <td width="55px" class="Text_2">Execute</td>
-            <td width="55px" class="Text_2">Control</td>
-            <td width="55px" class="Text_2">Create</td>
-            <td width="15%" colspan="2">&nbsp;</td>
-        </tr>
+    <table class="DataTable" width="100%">
+        <thead>
+            <tr class="Background0">
+                <td width="128px" class="TitleText">Name</td>
+                <td width="55px" class="TitleText">ID</td>
+                <td width="55px" class="TitleText">Read</td>
+                <td width="55px" class="TitleText">Modify</td>
+                <td width="55px" class="TitleText">Delete</td>
+                <td width="55px" class="TitleText">Execute</td>
+                <td width="55px" class="TitleText">Control</td>
+                <td width="55px" class="TitleText">Create</td>
+                <td width="15%" colspan="2">&nbsp;</td>
+            </tr>
+        </thead>
     <#list permissions as permission>
         <#if permission.group >
             <#if permission.subject.enabled>
