@@ -341,7 +341,7 @@ public class UserEditView extends View {
 				}
 			}
 			else{
-				if( context.getUser().getUserID() == user.getUserID() && Shortcuts.hasRight( context.getSessionInfo(), "Users.UpdateOwnPassword", "Update user's own account" ) == false ){ //TODO Replace with a more appropriate right name
+				if( context.getUser().getUserID() == user.getUserID() && Shortcuts.hasRight( context.getSessionInfo(), "Users.UpdateOwnPassword", "Update user's own account" ) == false ){
 					Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit your account");
 					return true;
 				}
