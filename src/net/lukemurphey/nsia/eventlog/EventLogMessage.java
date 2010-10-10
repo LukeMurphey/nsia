@@ -174,7 +174,8 @@ public class EventLogMessage {
 		RULE_EXCEPTION_ADDED(EventLogSeverity.WARNING, "Scan Rule Management: Rule exception added"),
 		RULE_EXCEPTION_DELETED(EventLogSeverity.WARNING, "Scan Rule Management: Rule exception deleted"),
 		DEFAULT_SCAN_POLICY_MODIFIED(EventLogSeverity.WARNING, "Scan Rule Management: Default scan policy modified"),
-		SCAN_POLICY_MODIFIED(EventLogSeverity.WARNING, "Scan Rule Management: Scan policy modified");
+		SCAN_POLICY_MODIFIED(EventLogSeverity.WARNING, "Scan Rule Management: Scan policy modified"),
+		SCAN_THREADS_FAILED_TO_TERMINATE(EventLogSeverity.ERROR, "Scanner: Scan thread failed to terminate");
 
 		private EventType(EventLogSeverity severity, String name){
 			this.severity = severity;
