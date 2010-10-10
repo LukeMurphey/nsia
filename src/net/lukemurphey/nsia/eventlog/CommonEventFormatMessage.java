@@ -190,9 +190,8 @@ public class CommonEventFormatMessage {
 				//this.deviceSeverity = escapeField(fields[c].getDescription(), true); //Need to try to convert to int, or ignore
 			}
 		
-			// 2 -- Load the other attributes
+			// 2 -- Load the other attributes as extension fields
 			else{
-				//TODO Need to make sure that name does not overlap with existing entry
 				addExtensionField( new ExtensionField(fields[c].getName().getSimpleNameFormat(), fields[c].getValue())  );
 			}
 		}
