@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.GeneralizedException;
-import net.lukemurphey.nsia.InsufficientPermissionException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
-import net.lukemurphey.nsia.NoSessionException;
 import net.lukemurphey.nsia.SiteGroupScanResult;
 import net.lukemurphey.nsia.Application.ApplicationStatusDescriptor;
 import net.lukemurphey.nsia.scan.ScanData;
@@ -83,14 +81,12 @@ public class MainDashboardView extends View {
 			long objectID = results[c].getSiteGroupDescriptor().getObjectId();
 			
 			try {
-				Shortcuts.checkRead(context.getSessionInfo(), objectID);
-				resultsFiltered.add( results[c] );
-			} catch (InsufficientPermissionException e) {
-				// The user does not have permission to see this site-group. Don't let them see it.
+				if( Shortcuts.canRead(context.getSessionInfo(), objectID, "Check site-group permissions for main-dashboard", false) ){
+					resultsFiltered.add( results[c] );
+				}
+				
 			} catch (GeneralizedException e) {
-				// An error occurred. Skip this site-group.
-			} catch (NoSessionException e) {
-				// User does not have a session. Don't let them see this site-group.
+				throw new ViewFailedException(e);
 			}
 		}
 		
