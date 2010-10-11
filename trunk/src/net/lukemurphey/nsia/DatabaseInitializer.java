@@ -245,7 +245,25 @@ public abstract class DatabaseInitializer {
 		}
 	}
 	
+	/**
+	 * This method will cause the initializer to perform the setup operations. Note that the database connection will be automatically closed when it is done.
+	 * @return
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
+	
 	public DatabaseInitializationState performSetup( ) throws SQLException, NoDatabaseConnectionException{
+		return performSetup( true );
+	}
+	
+	/**
+	 * This method will cause the initializer to perform the setup operations.
+	 * @param autoCloseConnection
+	 * @return
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
+	public DatabaseInitializationState performSetup( boolean autoCloseConnection ) throws SQLException, NoDatabaseConnectionException{
 		
 		// 1 -- Get a list of tables
 		populateTableList();
@@ -298,7 +316,10 @@ public abstract class DatabaseInitializer {
 		if( initResults.getUsersTableState() == Result.TABLE_CREATED)
 			insertDefaultUser();
 		
-		getConnection().close();
+		// 4 -- Close the connection
+		if( autoCloseConnection ){
+			getConnection().close();
+		}
 		
 		return initResults;
 	}
