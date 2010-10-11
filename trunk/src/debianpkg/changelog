@@ -96,3 +96,18 @@ nsia (0.9.6-1) unstable; urgency=low
   * ThreatScript bindings now includes the date that the script was initiated
 
  -- Luke Murphey <luke@threatfactor.com>  Tue, 1 Oct 2010 15:57:00 +0500
+ 
+ nsia (0.9.10-1) unstable; urgency=low
+  
+ * Added validation to the syslog server address
+ * Removed password from sample argument list in the SetPassword command since this should generally be provided when the command prompts for it
+ * Added event log message noting that scan threads could not be terminated
+ * Improved styles used on the access control list
+ * Fixed issue in permission denied template that generated an error when the show_simple variable was not set
+ * Added additional logging of various operations
+ * Rule now logs the ThreatScript output for scan matches
+ * Fixed copyright symbol on about dialog
+ * Various minor user interface improvements
+  
+ -- Luke Murphey <luke@threatfactor.com>  Tue, 10 Oct 2010 21:02:00 +0500
+ 
