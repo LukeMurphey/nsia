@@ -96,7 +96,7 @@ public class Shortcuts {
 	 * @throws GeneralizedException
 	 */
 	public static boolean hasRight( SessionManagement.SessionInfo sessionInfo, String rightName ) throws GeneralizedException{
-		return hasRight( sessionInfo, rightName, null );
+		return hasRight( sessionInfo, rightName, null, true );
 	}
 	
 	/**
@@ -108,12 +108,26 @@ public class Shortcuts {
 	 * @throws GeneralizedException
 	 */
 	public static boolean hasRight( SessionManagement.SessionInfo sessionInfo, String rightName, String annotation ) throws GeneralizedException{
+		return hasRight( sessionInfo, rightName, annotation, true);
+	}
+	
+	/**
+	 * Returns a boolean indicating if the user has the given right.
+	 * @param sessionInfo
+	 * @param rightName
+	 * @param annotation
+	 * @param logEvent
+	 * @return
+	 * @throws GeneralizedException
+	 */
+	public static boolean hasRight( SessionManagement.SessionInfo sessionInfo, String rightName, String annotation, boolean logEvent ) throws GeneralizedException{
 		Application appRes = Application.getApplication();
 		AccessControl accessControl = new AccessControl(appRes);
 		UserManagement userManagement = new UserManagement(appRes);
 		
 		try {	
 
+			// 1 -- Get the right descriptor associated with the object and the user
 			RightDescriptor acl = null;
 			
 			try{
@@ -123,12 +137,14 @@ public class Shortcuts {
 				acl = null;
 			}
 			
+			// 2 -- Get the user information
 			UserDescriptor user = userManagement.getUserDescriptor( sessionInfo.getUserId());
 			String userName = null;
 			
 			if( user != null )
 				userName = user.getUserName();
 			
+			// 3 -- Create the log message
 			EventLogField[] fields;
 			
 			if( annotation != null ){
@@ -145,30 +161,60 @@ public class Shortcuts {
 						new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) };
 			}
 			
-			//Determine if the permissions are sufficient to allow access
+			// 4 -- Determine if the permissions are sufficient to allow access
+			
+			//	 4.1 -- If the user is unrestricted, the ACL's do not apply
 			if( user.isUnrestricted() == true ){
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, fields );
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, fields );
+				}
+				
 				return true;
 			}
+			
+			//	 4.2 -- If no ACLs exist, then deny access by default
 			else if( acl == null ){
 				if( !DEFAULT_DENY ){
 					return false;
 				}
 				else{
-					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, fields );
+					
+					if( logEvent ){
+						appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, fields );
+					}
+					
 					return false;
 				}
 			}
+			
+			//	 4.3 -- Permit access if the ACL permits the activity
 			else if( acl.getRight() == AccessControlDescriptor.Action.PERMIT ){
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, fields );
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, fields );
+				}
+				
 				return true;
 			}
+			
+			//	 4.4 -- Deny the activity if the ACL denies the activity
 			else if( acl.getRight() == AccessControlDescriptor.Action.DENY ){
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, fields );
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, fields );
+				}
+				
 				return false;
 			}
+			
+			//	 4.5 -- By default, deny the activity
 			else{
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, fields );
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, fields );
+				}
+				
 				return false;
 			}
 			
@@ -252,6 +298,19 @@ public class Shortcuts {
 	 * @throws GeneralizedException
 	 */
 	public static boolean canCreate( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation ) throws GeneralizedException{
+		return canCreate(sessionInfo, objectId, annotation, true);
+	}
+	
+	/**
+	 * Returns a boolean indicating if the user has create permissions.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param annotation
+	 * @param logEvent
+	 * @return
+	 * @throws GeneralizedException
+	 */
+	public static boolean canCreate( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation, boolean logEvent ) throws GeneralizedException{
 		Application appRes = Application.getApplication();
 		AccessControl accessControl = new AccessControl(appRes);
 		UserManagement userManagement = new UserManagement(appRes);
@@ -269,13 +328,14 @@ public class Shortcuts {
 			
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Create" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Create" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				}
 				
 				return true;
 			}
@@ -284,45 +344,53 @@ public class Shortcuts {
 					return false;
 				else{
 					
+					if( logEvent ){
+						appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+								new EventLogField( FieldName.MESSAGE, annotation ),
+								new EventLogField( FieldName.OPERATION, "Create" ),
+								new EventLogField( FieldName.OBJECT_ID, objectId ),
+								new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+								new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+					}
+					
+					return false;
+				}
+			else if( acl.getCreatePermission() == AccessControlDescriptor.Action.PERMIT ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Create" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				}
+				
+				return true;
+			}
+			else if( acl.getCreatePermission() == AccessControlDescriptor.Action.DENY ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Create" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				}
+				
+				return false;
+			}
+			else{
+				
+				if( logEvent ){
 					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Create" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
 							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
 							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
-					
-					return false;
 				}
-			else if( acl.getCreatePermission() == AccessControlDescriptor.Action.PERMIT ){
-								
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Create" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
-				
-				return true;
-			}
-			else if( acl.getCreatePermission() == AccessControlDescriptor.Action.DENY ){
-								
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Create" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
-				
-				return false;
-			}
-			else{
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Create" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return false;
 			}
@@ -405,6 +473,19 @@ public class Shortcuts {
 	 * @return
 	 */
 	public static boolean canExecute( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation){
+		return canExecute(sessionInfo, objectId, annotation, true);
+	}
+	
+	/**
+	 * Returns a boolean indicating if the user has execute permissions.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param checkSession
+	 * @param annotation
+	 * @param logEvent
+	 * @return
+	 */
+	public static boolean canExecute( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation, boolean logEvent){
 		Application appRes = Application.getApplication();
 		AccessControl accessControl = new AccessControl(appRes);
 		UserManagement userManagement = new UserManagement(appRes);
@@ -422,12 +503,14 @@ public class Shortcuts {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 		
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Execute" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Execute" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				}
 
 				return true;
 			}
@@ -436,45 +519,53 @@ public class Shortcuts {
 					return false;
 				else{
 					
+					if( logEvent ){
+						appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+								new EventLogField( FieldName.MESSAGE, annotation ),
+								new EventLogField( FieldName.OPERATION, "Execute" ),
+								new EventLogField( FieldName.OBJECT_ID, objectId ),
+								new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+								new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+					}
+					
+					return false;
+				}
+			else if( acl.getExecutePermission() == AccessControlDescriptor.Action.PERMIT ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Execute" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				}
+				
+				return true;
+			}
+			else if( acl.getExecutePermission() == AccessControlDescriptor.Action.DENY ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Execute" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				}
+				
+				return false;
+			}
+			else{
+				
+				if( logEvent ){
 					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Execute" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
 							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
 							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
-					
-					return false;
 				}
-			else if( acl.getExecutePermission() == AccessControlDescriptor.Action.PERMIT ){
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Execute" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
-				
-				return true;
-			}
-			else if( acl.getExecutePermission() == AccessControlDescriptor.Action.DENY ){
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Execute" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
-				
-				return false;
-			}
-			else{
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Execute" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return false;
 			}
@@ -556,7 +647,20 @@ public class Shortcuts {
 	 * @return
 	 * @throws GeneralizedException
 	 */
-	public static boolean canModify( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws GeneralizedException{
+	public static boolean canModify( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation ) throws GeneralizedException{
+		return canModify(sessionInfo, objectId, annotation, true);
+	}
+	
+	/**
+	 * Returns a boolean indicating if the user has modify permissions.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param annotation
+	 * @param logEvent
+	 * @return
+	 * @throws GeneralizedException
+	 */
+	public static boolean canModify( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation, boolean logEvent) throws GeneralizedException{
 		Application appRes = Application.getApplication();
 		AccessControl accessControl = new AccessControl(appRes);
 		UserManagement userManagement = new UserManagement(appRes);
@@ -574,12 +678,14 @@ public class Shortcuts {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Modify"),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Modify"),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				}
 
 				
 				return true;
@@ -589,45 +695,53 @@ public class Shortcuts {
 					return false;
 				else{
 					
+					if( logEvent ){
+						appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+								new EventLogField( FieldName.MESSAGE, annotation ),
+								new EventLogField( FieldName.OPERATION, "Modify"),
+								new EventLogField( FieldName.OBJECT_ID, objectId ),
+								new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+								new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+					}
+					
+					return false;
+				}
+			else if( acl.getModifyPermission() == AccessControlDescriptor.Action.PERMIT ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Modify"),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				}
+				
+				return true;
+			}
+			else if( acl.getModifyPermission() == AccessControlDescriptor.Action.DENY ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Modify"),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
+				}
+				
+				return false;
+			}
+			else{
+				
+				if( logEvent ){
 					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Modify"),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
 							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
 							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
-					
-					return false;
 				}
-			else if( acl.getModifyPermission() == AccessControlDescriptor.Action.PERMIT ){
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Modify"),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
-				
-				return true;
-			}
-			else if( acl.getModifyPermission() == AccessControlDescriptor.Action.DENY ){
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Modify"),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
-				
-				return false;
-			}
-			else{
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Modify"),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() ) } );
 				
 				return false;
 			}
@@ -710,6 +824,19 @@ public class Shortcuts {
 	 * @throws GeneralizedException 
 	 */
 	public static boolean canControl( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws GeneralizedException{
+		return canControl(sessionInfo, objectId, annotation, true);
+	}
+	
+	/**
+	 * Returns a boolean indicating if the user has control permissions.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param annotation
+	 * @param logEvent
+	 * @return
+	 * @throws GeneralizedException 
+	 */
+	public static boolean canControl( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation, boolean logEvent) throws GeneralizedException{
 		
 		Application appRes = Application.getApplication();
 		AccessControl accessControl = new AccessControl(appRes);
@@ -722,18 +849,21 @@ public class Shortcuts {
 			UserDescriptor user = userManagement.getUserDescriptor( sessionInfo.getUserId());
 			String userName = null;
 			
-			if( user != null )
+			if( user != null ){
 				userName = user.getUserName();
+			}
 			
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Control" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Control" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				}
 				
 				return true;
 			}
@@ -742,45 +872,53 @@ public class Shortcuts {
 					return false;
 				else{
 					
+					if( logEvent ){
+						appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+								new EventLogField( FieldName.MESSAGE, annotation ),
+								new EventLogField( FieldName.OPERATION, "Control" ),
+								new EventLogField( FieldName.OBJECT_ID, objectId ),
+								new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+								new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+					}
+					
+					return false;
+				}
+			else if( acl.getControlPermission() == AccessControlDescriptor.Action.PERMIT ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Control" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				}
+				
+				return true;
+			}
+			else if( acl.getControlPermission() == AccessControlDescriptor.Action.DENY ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Control" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				}
+				
+				return false;
+			}
+			else{
+				
+				if( logEvent ){
 					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Control" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
 							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
 							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
-					
-					return false;
 				}
-			else if( acl.getControlPermission() == AccessControlDescriptor.Action.PERMIT ){
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Control" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
-				
-				return true;
-			}
-			else if( acl.getControlPermission() == AccessControlDescriptor.Action.DENY ){
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Control" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
-				
-				return false;
-			}
-			else{
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Control" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
 				
 				return false;
 			}
@@ -863,7 +1001,20 @@ public class Shortcuts {
 	 * @return
 	 * @throws GeneralizedException
 	 */
-	public static boolean canDelete( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws GeneralizedException{
+	public static boolean canDelete( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation ) throws GeneralizedException{
+		return canDelete(sessionInfo, objectId, annotation, true);
+	}
+	
+	/**
+	 * Returns a boolean indicating if the user has delete permissions.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param annotation
+	 * @param logEvent
+	 * @return
+	 * @throws GeneralizedException
+	 */
+	public static boolean canDelete( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation, boolean logEvent) throws GeneralizedException{
 		Application appRes = Application.getApplication();
 		AccessControl accessControl = new AccessControl(appRes);
 		UserManagement userManagement = new UserManagement(appRes);
@@ -881,12 +1032,14 @@ public class Shortcuts {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 	
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Delete" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Delete" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				}
 
 				return true;
 			}
@@ -895,45 +1048,53 @@ public class Shortcuts {
 					return false;
 				else{
 					
+					if( logEvent ){
+						appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+								new EventLogField( FieldName.MESSAGE, annotation ),
+								new EventLogField( FieldName.OPERATION, "Delete" ),
+								new EventLogField( FieldName.OBJECT_ID, objectId ),
+								new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+								new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+					}
+					
+					return false;
+				}
+			else if( acl.getDeletePermission() == AccessControlDescriptor.Action.PERMIT ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Delete" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				}
+				
+				return true;
+			}
+			else if( acl.getDeletePermission() == AccessControlDescriptor.Action.DENY ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Delete" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				}
+				
+				return false;
+			}
+			else{
+				
+				if( logEvent ){
 					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Delete" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
 							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
 							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
-					
-					return false;
 				}
-			else if( acl.getDeletePermission() == AccessControlDescriptor.Action.PERMIT ){
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Delete" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
-				
-				return true;
-			}
-			else if( acl.getDeletePermission() == AccessControlDescriptor.Action.DENY ){
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Delete" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
-				
-				return false;
-			}
-			else{
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Delete" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
 				
 				return false;
 			}
@@ -1016,6 +1177,19 @@ public class Shortcuts {
 	 * @throws GeneralizedException
 	 */
 	public static boolean canRead( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation) throws GeneralizedException{
+		return canRead( sessionInfo, objectId, annotation, true);
+	}
+	
+	/**
+	 * Returns a boolean indicating if the user has read permissions.
+	 * @param sessionInfo
+	 * @param objectId
+	 * @param annotation
+	 * @param logEvent
+	 * @return
+	 * @throws GeneralizedException
+	 */
+	public static boolean canRead( SessionManagement.SessionInfo sessionInfo, long objectId, String annotation, boolean logEvent) throws GeneralizedException{
 		
 		Application appRes = Application.getApplication();
 		AccessControl accessControl = new AccessControl(appRes);
@@ -1034,12 +1208,14 @@ public class Shortcuts {
 			//Determine if the permissions are sufficient to allow access
 			if( user.isUnrestricted() == true ){
 				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Read" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Read" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				}
 				
 				return true;
 			}
@@ -1048,45 +1224,52 @@ public class Shortcuts {
 					return false;
 				else{
 					
+					if( logEvent ){
+						appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
+								new EventLogField( FieldName.MESSAGE, annotation ),
+								new EventLogField( FieldName.OPERATION, "Read" ),
+								new EventLogField( FieldName.OBJECT_ID, objectId ),
+								new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+								new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+					}
+					return false;
+				}
+			else if( acl.getReadPermission() == AccessControlDescriptor.Action.PERMIT ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Read" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				}
+				
+				return true;
+			}
+			else if( acl.getReadPermission() == AccessControlDescriptor.Action.DENY ){
+				
+				if( logEvent ){
+					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
+							new EventLogField( FieldName.MESSAGE, annotation ),
+							new EventLogField( FieldName.OPERATION, "Read" ),
+							new EventLogField( FieldName.OBJECT_ID, objectId ),
+							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
+							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
+				}
+				
+				return false;
+			}
+			else{
+				
+				if( logEvent ){
 					appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
 							new EventLogField( FieldName.MESSAGE, annotation ),
 							new EventLogField( FieldName.OPERATION, "Read" ),
 							new EventLogField( FieldName.OBJECT_ID, objectId ),
 							new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
 							new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
-					
-					return false;
 				}
-			else if( acl.getReadPermission() == AccessControlDescriptor.Action.PERMIT ){
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_PERMIT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Read" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
-				
-				return true;
-			}
-			else if( acl.getReadPermission() == AccessControlDescriptor.Action.DENY ){
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Read" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
-				
-				return false;
-			}
-			else{
-				
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField[] {
-						new EventLogField( FieldName.MESSAGE, annotation ),
-						new EventLogField( FieldName.OPERATION, "Read" ),
-						new EventLogField( FieldName.OBJECT_ID, objectId ),
-						new EventLogField( FieldName.SOURCE_USER_NAME, userName ),
-						new EventLogField( FieldName.SOURCE_USER_ID , sessionInfo.getUserId() )} );
 				
 				return false;
 			}
