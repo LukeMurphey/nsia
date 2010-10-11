@@ -80,15 +80,8 @@ public class ApiScanData extends ApiHandler{
 			for(int c = 0; c < results.length; c++){
 				long objectID = results[c].getSiteGroupDescriptor().getObjectId();
 				
-				try {
-					Shortcuts.checkRead(sessionInfo, objectID);
+				if( Shortcuts.canRead(sessionInfo, objectID, "Check site-group permissions for main-dashboard", false) ){
 					resultsFiltered.add( results[c] );
-				} catch (InsufficientPermissionException e) {
-					// The user does not have permission to see this site-group. Don't let them see it.
-				} catch (GeneralizedException e) {
-					// An error occurred. Skip this site-group.
-				} catch (NoSessionException e) {
-					// User does not have a session. Don't let them see this site-group.
 				}
 			}
 			
