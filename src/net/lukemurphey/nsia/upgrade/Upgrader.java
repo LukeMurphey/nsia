@@ -80,7 +80,7 @@ public class Upgrader {
 			try{
 				Connection connection = app.getDatabaseConnection(DatabaseAccessType.ADMIN);
 				DerbyDatabaseInitializer initializer = new DerbyDatabaseInitializer(connection);
-				initializer.performSetup(); //This method will close the connection automatiically
+				initializer.performSetup(); //This method will close the connection automatically
 			}
 			catch( NoDatabaseConnectionException e ){
 				throw new UpgradeFailureException(e);
