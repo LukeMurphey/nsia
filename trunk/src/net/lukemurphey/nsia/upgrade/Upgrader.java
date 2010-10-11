@@ -1,5 +1,6 @@
 package net.lukemurphey.nsia.upgrade;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -7,8 +8,10 @@ import java.util.regex.Pattern;
 
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.ApplicationConfiguration;
+import net.lukemurphey.nsia.DerbyDatabaseInitializer;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.Application.DatabaseAccessType;
 
 /**
  * This class performs upgrades that require access to the inner parts of NSIA.
@@ -71,7 +74,22 @@ public class Upgrader {
 			}
 		}
 		
-		// 3 -- Save the database schema version
+		// 3 -- Reinitialize the database so that rights and tables are re-populated as necessary
+		if( app.isUsingInternalDatabase() ){
+			
+			try{
+				Connection connection = app.getDatabaseConnection(DatabaseAccessType.ADMIN);
+				DerbyDatabaseInitializer initializer = new DerbyDatabaseInitializer(connection);
+				initializer.performSetup(); //This method will close the connection automatiically
+			}
+			catch( NoDatabaseConnectionException e ){
+				throw new UpgradeFailureException(e);
+			} catch (SQLException e) {
+				throw new UpgradeFailureException(e);
+			}
+		}
+		
+		// 4 -- Save the database schema version
 		setSchemaVersion();
 		
 		return upgradesDone;
