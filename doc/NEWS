@@ -1,5 +1,18 @@
 Below is the history of NSIA with notes about the changes available in each version.
 
+Version 0.9.10 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+
+ * Added validation to the syslog server address
+ * Removed password from sample argument list in the SetPassword command since this should generally be provided when the command prompts for it
+ * Added event log message noting that scan threads could not be terminated
+ * Improved styles used on the access control list
+ * Fixed issue in permission denied template that generated an error when the show_simple variable was not set
+ * Added additional logging of various operations
+ * Rule now logs the ThreatScript output for scan matches
+ * Fixed copyright symbol on about dialog
+ * Various minor user interface improvements
 
 Version 0.9.9 Changes
 ------------------------------------------------------------------
