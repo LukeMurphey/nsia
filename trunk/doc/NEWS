@@ -1,5 +1,13 @@
 Below is the history of NSIA with notes about the changes available in each version.
 
+Version 0.9.11 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+
+ * Reduced the excessive number of eventlog messages when users view the main dashboard
+ * Fixed issue where sub-category exceptions were not being created properly
+ * Database reinitializer is called anytime the database is upgraded to automatically incorporate new rights or tables
+
 Version 0.9.10 Changes
 ------------------------------------------------------------------
 Version includes the following changes:

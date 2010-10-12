@@ -111,3 +111,10 @@ nsia (0.9.6-1) unstable; urgency=low
   
  -- Luke Murphey <luke@threatfactor.com>  Tue, 10 Oct 2010 21:02:00 +0500
  
+  nsia (0.9.11-1) unstable; urgency=low
+  
+ * Reduced the excessive number of eventlog messages when users view the main dashboard
+ * Fixed issue where sub-category exceptions were not being created properly
+ * Database reinitializer is called anytime the database is upgraded to automatically incorporate new rights or tables
+  
+ -- Luke Murphey <luke@threatfactor.com>  Tue, 12 Oct 2010 21:41:00 +0500
