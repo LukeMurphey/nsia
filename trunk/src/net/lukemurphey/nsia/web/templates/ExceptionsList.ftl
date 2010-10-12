@@ -37,7 +37,7 @@
                         <td>${filter.definitionCategory?html}.${filter.definitionSubCategory?html}.*
                     <#elseif ( filter.policyType == NAME )>
                         <td>Definition</td>
-                        <td>${filter.definitionCategory?html}.${filter.definitionSubCategory?html}.${filter.definitionName?html}
+                        <td><#if filter.definitionCategory??>${filter.definitionCategory?html}.</#if>${filter.definitionSubCategory?html}.${filter.definitionName?html}
                     <#elseif ( filter.policyType == URL )>
                         <td>URL</td>
                         <td>${filter.URL?html}
