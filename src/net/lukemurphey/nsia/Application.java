@@ -1720,7 +1720,7 @@ public final class Application {
 			ScannerController.ScannerState scannerState = scanner.getScanningState();
 			
 			if( scannerState == ScannerController.ScannerState.PAUSING ){
-				statusEntries.add( new StatusEntry("Scanner Status", ApplicationStatusDescriptor.STATUS_YELLOW, "Scanner Pausing", "Scanner is preparing to pause") );
+				statusEntries.add( new StatusEntry("Scanner Status", ApplicationStatusDescriptor.STATUS_YELLOW, "Scanner Pausing", "Scanner is pausing") );
 			}
 			else if( scannerState == ScannerController.ScannerState.STARTING ){
 				statusEntries.add( new StatusEntry("Scanner Status", ApplicationStatusDescriptor.STATUS_YELLOW, "Scanner Starting", "Scanner is preparing to begin scans...") );
