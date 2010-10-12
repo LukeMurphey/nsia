@@ -168,14 +168,14 @@ public class DefinitionPolicyDescriptor {
 		return exception;
 	}
 	
-	public static DefinitionPolicyDescriptor createSubCategoryPolicy( int siteGroupId, int ruleID, String definitionName, String definitionSubCategory, URL url, DefinitionPolicyAction action ){
-		DefinitionPolicyDescriptor exception = new DefinitionPolicyDescriptor(siteGroupId, ruleID, definitionName, null, definitionSubCategory, url, action);
+	public static DefinitionPolicyDescriptor createSubCategoryPolicy( int siteGroupId, int ruleID, String category, String subCategory, URL url, DefinitionPolicyAction action ){
+		DefinitionPolicyDescriptor exception = new DefinitionPolicyDescriptor(siteGroupId, ruleID, null, category, subCategory, url, action);
 		
 		return exception;
 	}
 	
-	public static DefinitionPolicyDescriptor createSubCategoryPolicy( int siteGroupId, String definitionName, String definitionSubCategory, URL url, DefinitionPolicyAction action ){
-		DefinitionPolicyDescriptor exception = new DefinitionPolicyDescriptor(siteGroupId, -1, definitionName, null, definitionSubCategory, url, action);
+	public static DefinitionPolicyDescriptor createSubCategoryPolicy( int siteGroupId, String category, String subCategory, URL url, DefinitionPolicyAction action ){
+		DefinitionPolicyDescriptor exception = new DefinitionPolicyDescriptor(siteGroupId, -1, null, category, subCategory, url, action);
 		
 		return exception;
 	}
@@ -198,8 +198,8 @@ public class DefinitionPolicyDescriptor {
 		return exception;
 	}
 	
-	public static DefinitionPolicyDescriptor createSubCategoryPolicy(  String definitionName, String definitionSubCategory, URL url, DefinitionPolicyAction action ){
-		DefinitionPolicyDescriptor exception = new DefinitionPolicyDescriptor(-1, -1, definitionName, null, definitionSubCategory, url, action);
+	public static DefinitionPolicyDescriptor createSubCategoryPolicy(  String category, String subCategory, URL url, DefinitionPolicyAction action ){
+		DefinitionPolicyDescriptor exception = new DefinitionPolicyDescriptor(-1, -1, null, category, subCategory, url, action);
 		
 		return exception;
 	}
