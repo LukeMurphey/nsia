@@ -10,24 +10,25 @@
 	<target name="jar" depends="check_default_definitions_exists,__jar" description="Create core NSIA JAR file">
 	</target>
 	
-    <target name="__jar">
-		
-        <!-- 1: Get the build number -->
+	<target name="__get_build_number">
         <taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask" />
+		
         <svn>
 		   <info target=".." />
            <wcVersion prefix="svn." path="${value.build.workingcopy.directory}" />
         </svn>
-    	
-    	<echo>Building Java archive for build ${svn.revision.max} (current repository is ${svn.info.rev})</echo>
-    	
-        <!-- 2: Update the build information properties file -->
+	</target>
+	
+	<target name="__update_build_info" depends="__get_build_number">
+	
         <propertyfile file="tmp/java/net/lukemurphey/nsia/build.properties" comment="Build Information File">
                 <entry key="build.number" value="${svn.revision.max}" />
                 <entry key="build.date" type="date" value="now" pattern="dd.MM.yyyy HH:mm"/>
         </propertyfile>
-    	
-		<!-- 3: Create the Java archive -->
+	</target>
+		
+    <target name="__jar" depends="__update_build_info,__get_build_number">
+		<!-- Create the Java archive -->
         <jar destfile="bin/nsia.jar"
         	basedir="tmp/java/" 
         	manifest="dev/Manifest.txt"
