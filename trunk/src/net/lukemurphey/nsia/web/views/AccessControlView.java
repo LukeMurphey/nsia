@@ -52,6 +52,13 @@ public class AccessControlView extends View {
 		private Object subject;
 		
 		public PermissionDescriptor( ObjectPermissionDescriptor obj ) throws SQLException, InputValidationException, NoDatabaseConnectionException, NotFoundException{
+			
+			// 0 -- Precondition check
+			if( obj == null ){
+				throw new IllegalArgumentException("ObjectPermissionDescriptor cannot be null");
+			}
+			
+			// 1 -- Initialize the class
 			this.objectDescriptor = obj;
 			
 			subject = populateSubject();
