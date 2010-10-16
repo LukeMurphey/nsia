@@ -349,7 +349,7 @@ public class RightsEditView extends View {
 				}
 				data.put("user", user);
 				breadcrumbs.add( new Link("User Management", UsersView.getURL()) );
-				breadcrumbs.add( new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
+				breadcrumbs.add( new Link("User: " + user.getUserName(), UserView.getURL(user)) );
 				breadcrumbs.add( new Link("Rights", RightsEditView.getURL(user) ) );
 				
 				data.put("menu", Menu.getUserMenuItems(context, user));
@@ -371,10 +371,12 @@ public class RightsEditView extends View {
 			
 			// 3 -- Check permissions
 			if( isUser && Shortcuts.hasRight( context.getSessionInfo(), "Users.View", "View rights for user ID " + subjectID) == false ){
+				breadcrumbs.set( 2, new Link("View User", UserView.getURL(subjectID)) ); //Overwrite the breadcrumb with the username since the user does not have permission to see it
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view user rights");
 				return true;
 			}
 			else if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.View", "View rights for group ID " + subjectID) == false ){
+				breadcrumbs.set( 2, new Link("View Group", GroupView.getURL(subjectID)) ); //Overwrite the breadcrumb with the group name since the group does not have permission to see it
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view group rights");
 				return true;	
 			}
@@ -416,10 +418,12 @@ public class RightsEditView extends View {
 			if( "POST".equalsIgnoreCase( request.getMethod() ) ){
 				
 					if( isUser && Shortcuts.hasRight( context.getSessionInfo(), "Users.Edit", "Edit rights for user ID " + subjectID) == false ){
+						breadcrumbs.add( new Link("View User", UserView.getURL(subjectID)) );
 						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit user rights");
 						return true;
 					}
 					else if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.Edit", "Edit rights for group ID " + subjectID) == false ){
+						breadcrumbs.add( new Link("View Group", GroupView.getURL(subjectID)) );
 						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit group rights");
 						return true;	
 					}
