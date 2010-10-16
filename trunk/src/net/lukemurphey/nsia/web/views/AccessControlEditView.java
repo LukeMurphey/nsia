@@ -258,14 +258,29 @@ public class AccessControlEditView extends View {
 	                if( subjectType.equalsIgnoreCase("Group") ){
 	                    groupId = Integer.parseInt(subject);
 	                    objectPermissionDescriptor = accessControl.getGroupPermissions( groupId, objectId);
-	                    data.put("permission", new AccessControlView.PermissionDescriptor(objectPermissionDescriptor) );
+	                    
+	                    if( objectPermissionDescriptor != null ){
+	                    	data.put("permission", new AccessControlView.PermissionDescriptor(objectPermissionDescriptor) );
+	                    }
+	                    else{
+	                    	throw new ViewFailedException( "Object permission descriptor is null for group ID " + groupId + " and object ID " + objectId);
+	                    }
+	                    
 	                    data.put("subjectType", "Group");
 	                    data.put("subjectID", groupId);
 	                }
 	                else if( subjectType.equalsIgnoreCase("User") ){
 	                    userId = Integer.parseInt(subject);
 	                    objectPermissionDescriptor = accessControl.getUserPermissions( userId, objectId, false);
-	                    data.put("permission", new AccessControlView.PermissionDescriptor(objectPermissionDescriptor) );
+	                    
+	                    // Make sure the object descriptor could be found
+	                    if( objectPermissionDescriptor != null ){
+	                    	data.put("permission", new AccessControlView.PermissionDescriptor(objectPermissionDescriptor) );
+	                    }
+	                    else{
+	                    	throw new ViewFailedException( "Object permission descriptor is null for user ID " + userId + " and object ID " + objectId);
+	                    }
+	                    
 	                    data.put("subjectType", "User");
 	                    data.put("subjectID", userId);
 	                }
