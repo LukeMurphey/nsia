@@ -23,7 +23,8 @@
 	
         <propertyfile file="tmp/java/net/lukemurphey/nsia/build.properties" comment="Build Information File">
                 <entry key="build.number" value="${svn.revision.max}" />
-                <entry key="build.date" type="date" value="now" pattern="dd.MM.yyyy HH:mm"/>
+                <entry key="build.date" type="date" value="now" pattern="dd.MM.yyyy HH:mm" />
+        		<entry key="build.version" value="${value.build.version}" />
         </propertyfile>
 	</target>
 		
