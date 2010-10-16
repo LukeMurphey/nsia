@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.GroupManagement;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
@@ -152,17 +153,34 @@ public class GroupView extends View {
 		Shortcuts.addDashboardHeaders(request, response, data);
 		
 		// 3 -- Check rights
-		// boolean canEdit = Shortcuts.hasRight( context.getSessionInfo(), "Groups.Edit", "Edit user groups");
-		boolean canEnumUsers = true;
+		try {
+			if( Shortcuts.hasRight( context.getSessionInfo(), "Groups.View", "View user ID " + group.getGroupId() + ") " + group.getGroupName() ) == false ){
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view groups");
+				return true;
+			}
+		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		}
+		
+		// 4 -- Determine if the user can enumerate the users
+		boolean canEnumUsers = false;
+		
+		try{
+			canEnumUsers = Shortcuts.hasRight( context.getSessionInfo(), "Groups.Membership.Edit", "List users for group membership");
+		}
+		catch( GeneralizedException e ){
+			throw new ViewFailedException(e);
+		}
+		
 		data.put("can_enum_users", canEnumUsers);
+		
+		// 5 -- Enumerate the users in the list
 		StringBuffer includedUsers = new StringBuffer();
 		Vector<UserGroupInfo> userMembership = new Vector<UserGroupInfo>();
 		
 		try {
 			UserManagement userMgmt = new UserManagement(Application.getApplication());
 			UserDescriptor[] users = userMgmt.getUserDescriptors();
-		
-			//users = groupMgmt.getMembers(group.getGroupId());
 			
 			for (UserDescriptor user : users) {
 				userMembership.add( new UserGroupInfo(user, groupMgmt.isUserMemberOfGroup(user.getUserID(), group.getGroupId())) );
