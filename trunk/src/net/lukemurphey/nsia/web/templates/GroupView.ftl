@@ -36,12 +36,9 @@
      </form>
      
      <br><span class="Text_1">User Membership</span>
-        
+        <#include "Shortcuts.ftl">
      <#if !can_enum_users>
-        <tr>
-            <td colspan="99">" + Html.getWarningNote( "You do not have permission to enumerate who is in what group") + "</td>
-        </tr>
-        </table>
+     	<@warningnote "You do not have permission to enumerate who is in what group" />
      <#else>
         <#if users?size == 0 >
             <#assign message>No users exist yet. Create a user first, then add the user to the group. <p><a href="<@url name="group_editor" args=["New"] />">[Create Group Now]</a></#assign>
