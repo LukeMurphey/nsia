@@ -162,8 +162,6 @@ public class UserView extends View {
 		Vector<Link> breadcrumbs = new Vector<Link>();
 		breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 		breadcrumbs.add(  new Link("User Management", UsersView.getURL()) );
-		breadcrumbs.add(  new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
-		data.put("breadcrumbs", breadcrumbs);
 		
 		//Get the dashboard headers
 		Shortcuts.addDashboardHeaders(request, response, data);
@@ -172,6 +170,10 @@ public class UserView extends View {
 		// 3 -- Check rights
 		try {
 			if( Shortcuts.hasRight( context.getSessionInfo(), "Users.View", "View user ID " + user.getUserID() + ") " + user.getUserName() ) == false ){
+				
+				breadcrumbs.add(  new Link("View User", UserView.getURL(user)) );
+				data.put("breadcrumbs", breadcrumbs);
+				
 				Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view users");
 				return true;
 			}
@@ -210,6 +212,9 @@ public class UserView extends View {
 		}
 		
 		// 5 -- Render the page
+		breadcrumbs.add(  new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
+		data.put("breadcrumbs", breadcrumbs);
+		
 		data.put("included_groups", included_groups);
 		data.put("groups", userGroups);
 		
