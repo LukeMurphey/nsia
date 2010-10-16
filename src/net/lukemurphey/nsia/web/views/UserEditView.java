@@ -315,27 +315,21 @@ public class UserEditView extends View {
 		
 		// Get the breadcrumbs
 		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
-		breadcrumbs.add(  new Link("User Management", UsersView.getURL()) );
-		
-		if( user != null ){
-			breadcrumbs.add(  new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
-			breadcrumbs.add(  new Link("Edit User", createURL("Edit", user.getUserID())) );
-			data.put("title", "User: " + user);
-		}
-		else{
-			breadcrumbs.add(  new Link("New User", createURL("New")) );
-			data.put("title", "New User");
-		}
-		data.put("breadcrumbs", breadcrumbs);
+		breadcrumbs.add( new Link("Main Dashboard", MainDashboardView.getURL()) );
+		breadcrumbs.add( new Link("User Management", UsersView.getURL()) );
 		
 		//Get the dashboard headers
 		Shortcuts.addDashboardHeaders(request, response, data);
+		data.put("breadcrumbs", breadcrumbs);
 		
 		// 3 -- Check the user's rights
 		try {
 			if( user == null ){
 				if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Add", "Create new user account" ) == false ){
+					
+					breadcrumbs.add( new Link("New User", createURL("New")) );
+					data.put("breadcrumbs", breadcrumbs);
+					
 					Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to create users");
 					return true;
 				}
@@ -346,14 +340,18 @@ public class UserEditView extends View {
 					return true;
 				}
 				else if( Shortcuts.hasRight( context.getSessionInfo(), "Users.Edit", "Update another user's account" ) == false ){
-						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit users");
-						return true;
+					
+					breadcrumbs.add( new Link("View User", UserView.getURL(user)) );
+					breadcrumbs.add( new Link("Edit User", createURL("Edit", user.getUserID())) );
+					data.put("breadcrumbs", breadcrumbs);
+					
+					Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit users");
+					return true;
 				}
 			}
 		} catch (GeneralizedException e) {
 			throw new ViewFailedException(e);
 		}
-		
 		
 		// 2 -- Process the data as necessary
 		try {
@@ -364,6 +362,18 @@ public class UserEditView extends View {
 			context.addMessage(e.getMessage(), MessageSeverity.WARNING);
 		}
 		
+		// Finish the breadcrumbs
+		if( user != null ){
+			breadcrumbs.add( new Link("View User: " + user.getUserName(), UserView.getURL(user)) );
+			breadcrumbs.add( new Link("Edit User", createURL("Edit", user.getUserID())) );
+			data.put("title", "User: " + user);
+		}
+		else{
+			breadcrumbs.add( new Link("New User", createURL("New")) );
+			data.put("title", "New User");
+		}
+		
+		data.put("breadcrumbs", breadcrumbs);
 		
 		TemplateLoader.renderToResponse("UserEdit.ftl", data, response);
 		
