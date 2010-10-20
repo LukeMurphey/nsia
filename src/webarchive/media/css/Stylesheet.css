@@ -658,3 +658,19 @@ table.DataTable tr.lastRow td {
 table.DataTable tr.odd_hover td, table.DataTable tr.even_hover td {
 
 }
+
+/* Simple css-based tooltip */
+.tooltip {
+	background-color:#32506f;
+	border:1px solid #fff;
+	padding:10px 15px;
+	width:200px;
+	display:none;
+	color:#fff;
+	text-align:left;
+	font-size:12px;
+
+	/* outline radius for mozilla/firefox only */
+	-moz-box-shadow:0 0 10px #000;
+	-webkit-box-shadow:0 0 10px #000;
+}
