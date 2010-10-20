@@ -75,13 +75,13 @@ public class EmailAction extends Action {
 		FieldLayout layout = new FieldLayout(1);
 		
 		// 1 -- Add the destination address
-		layout.addField( new FieldText("ToAddress", "Destination Address", 1, 1, new EmailAddressValidator()) );
+		layout.addField( new FieldText("ToAddress", "Destination Address", "Enter the destination email address", 1, 1, new EmailAddressValidator()) );
 		
 		// 2 -- Add the subject
-		layout.addField( new FieldText("Subject", "Subject", 1, 1, new MessageValidator("subject")) );
+		layout.addField( new FieldText("Subject", "Subject", "Enter the subject of the email", 1, 1, new MessageValidator("subject")) );
 		
 		// 3 -- Add the body
-		layout.addField( new FieldText("Body", "Body", 1, 5, new MessageValidator("body")) );
+		layout.addField( new FieldText("Body", "Body", "Enter the email message body. Note: you can use substitution variables to add in details such as the specimen/URL ($specimen), number of deviations detected ($deviation_count) or date of the finding ($date).", 1, 5, new MessageValidator("body")) );
 		
 		// 4 -- Return the resulting layout
 		return layout;

@@ -121,10 +121,10 @@ public class CommandAction extends Action{
 		FieldLayout layout = new FieldLayout(1);
 		
 		// 1 -- Add the command field (the location of the executable to run)
-		layout.addField( new FieldText("Command", "Command", 1, 1, new FileFieldValidator(true, false, true)) );
+		layout.addField( new FieldText("Command", "Command", "Enter the full path to the executable to run on the local system", 1, 1, new FileFieldValidator(true, false, true)) );
 		
 		// 2 -- Add the working directory field (the location of the executable to run)
-		layout.addField( new FieldText("WorkingDirectory", "Working Directory", 1, 1, new FileFieldValidator(true, true, false)) );
+		layout.addField( new FieldText("WorkingDirectory", "Working Directory", "Enter the path that the executable ought to run within", 1, 1, new FileFieldValidator(true, true, false)) );
 		
 		// 3 -- Return the resulting layout
 		return layout;

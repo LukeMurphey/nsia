@@ -139,16 +139,16 @@ public class SSHCommandAction extends Action {
 		FieldLayout layout = new FieldLayout(1);
 		
 		// 1 -- Add the hostname field
-		layout.addField( new FieldText("Hostname", "Hostname", 1, 1, new MessageValidator("hostname")) );
+		layout.addField( new FieldText("Hostname", "Hostname", "Enter the name of the server to connect to", 1, 1, new MessageValidator("hostname")) );
 		
 		// 2 -- Add the username field
-		layout.addField( new FieldText("Username", "Login Name", 1, 1, new MessageValidator("login name")) );
+		layout.addField( new FieldText("Username", "Login Name", "Enter the user name to use when authenticating to the remote system", 1, 1, new MessageValidator("login name")) );
 		
 		// 3 -- Add the password field
-		layout.addField( new FieldPassword("Password", "Password", 1, new MessageValidator("password")) );
+		layout.addField( new FieldPassword("Password", "Password", "Enter the password to use when authenticating to the remote system", 1, new MessageValidator("password")) );
 		
 		// 4 -- Add the commands list field
-		layout.addField( new FieldText("Commands", "Commands", 1, 10, new MessageValidator("commands")) );
+		layout.addField( new FieldText("Commands", "Commands", "Enter the commands to be executed on the server (mulitple commands are accepted on separate lines)", 1, 10, new MessageValidator("commands")) );
 		
 		// 3 -- Return the resulting layout
 		return layout;
