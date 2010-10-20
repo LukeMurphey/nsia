@@ -5,6 +5,28 @@
 <#include "FormLayout.ftl">
 
 <#assign content>
+	<#assign jquerytools><script type="text/javascript" language="javascript" src="/media/js/jquery.tools.min.js"></script></#assign>
+    <#assign extrahead=[jquerytools] />
+    <script type="text/javascript">
+		$(document).ready( function(){
+			$("[title]").tooltip({
+		
+				// place tooltip on the right edge
+				position: "center right",
+		
+				// a little tweaking of the position
+				offset: [-2, 10],
+		
+				// use the built-in fadeIn/fadeOut effect
+				effect: "fade",
+		
+				// custom opacity setting
+				opacity: 0.8
+		
+			}).dynamic({ bottom: { direction: 'down', bounce: true } });
+		});
+    </script>
+
     <#if ( hook?? )>
         <div class="Text_2">Edit Response Action</div>Response type: ${hook.action.description?html}<p/>
         <#assign layout=hook.action.layoutWithValues />
