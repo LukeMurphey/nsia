@@ -9,7 +9,11 @@ public class FieldText extends PrototypeField{
 	private FieldValidator validator;
 	
 	public FieldText( String name, String title, int width, int height, FieldValidator validator ){
-		super(name, title);
+		this( name, title, null, width, height, validator);
+	}
+	
+	public FieldText( String name, String title, String help, int width, int height, FieldValidator validator ){
+		super(name, title, help);
 		
 		// 0 -- Precondition check
 		if( width <= 0 ){

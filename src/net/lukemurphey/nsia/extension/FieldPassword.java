@@ -7,7 +7,11 @@ public class FieldPassword extends PrototypeField {
 	private FieldValidator validator = null; 
 	
 	public FieldPassword(String name, String title, int layoutWidth, FieldValidator validator ) {
-		super(name, title, layoutWidth);
+		this(name, title, null, layoutWidth, validator);
+	}
+	
+	public FieldPassword(String name, String title, String help, int layoutWidth, FieldValidator validator ) {
+		super(name, title, help, layoutWidth);
 		
 		
 		// 0 -- Precondition check
