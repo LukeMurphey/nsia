@@ -98,7 +98,7 @@ public class LogFileAction extends Action {
 		layout.addField( new FieldText("Message", "Message", "Enter the text to write to append to the log file. Note: you can use substitution variables to add in details such as the specimen/URL ($specimen), number of deviations detected ($deviation_count) or date of the finding ($date).", 1, 5, new MessageValidator()) );
 		
 		// 2 -- Add the file field (the location of the file to append to)
-		layout.addField( new FieldText("File", "File", "Enter the full path of the file to apped the log entry to", 1, 1, new FileFieldValidator(false, false, true)) );
+		layout.addField( new FieldText("File", "File", "Enter the full path of the file to append the log entry to", 1, 1, new FileFieldValidator(false, false, true)) );
 		
 		// 3 -- Return the resulting layout
 		return layout;
