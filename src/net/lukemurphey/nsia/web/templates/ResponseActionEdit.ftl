@@ -9,7 +9,7 @@
     <#assign extrahead=[jquerytools] />
     <script type="text/javascript">
 		$(document).ready( function(){
-			$("[title]").tooltip({
+			$("td[title]").tooltip({
 		
 				// place tooltip on the right edge
 				position: "center right",

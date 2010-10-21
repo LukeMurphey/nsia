@@ -120,7 +120,7 @@
         });
         
 		$(document).ready( function(){
-			$("[title]").tooltip({
+			$("td[title]").tooltip({
 		
 				// place tooltip on the right edge
 				position: "center right",
@@ -136,7 +136,7 @@
 		
 			}).dynamic({ bottom: { direction: 'down', bounce: true } });
 		});
-        
+
     </script>
 
     <form name="editorform" id="editorform" onSubmit="return submitEditorForm(this.form)" action="<#if rule??><@url name="rule_editor" args=["Edit", rule.ruleId]/><#else><@url name="rule_editor" args=["New"]/></#if>" method="post">
