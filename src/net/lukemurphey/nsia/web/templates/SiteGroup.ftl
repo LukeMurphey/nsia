@@ -55,7 +55,7 @@
                     <table>
                         <tr>
                             <td><a href="<@url name="rule_editor" args=["Edit", rule.ID] />"><img class="imagebutton" alt="configure" src="/media/img/16_Configure"></a></td>
-                            <td><a href="<@url name="rule_editor" args=["Edit", rule.ID] />">Details</a></td>
+                            <td><a href="<@url name="rule_editor" args=["Edit", rule.ID] />">Edit Rule</a></td>
                         </tr>
                     </table>
                 </td>
