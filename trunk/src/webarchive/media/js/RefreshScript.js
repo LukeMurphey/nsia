@@ -37,6 +37,11 @@ function resetCountDown() {
 resetCountDown();
 var c_reloadwidth=200
 
+function refreshView(){
+	document.reloadForm.submit();
+	//$("table.MainTable").load(location.href + '?isajax');
+}
+
 function countDown() {
 	countDownTime--;
 	if( isNaN(countDownTime) ){
@@ -46,7 +51,8 @@ function countDown() {
 	else if (countDownTime < 0 ) {
 		//updateReloadFormValues(true);
 		stopCountDownTimeout();
-		document.reloadForm.submit();
+		refreshView();
+		
 		return;
         }
 
@@ -173,5 +179,5 @@ function onPlayPauseClick() {
 function onReloadClick() {
 	//updateReloadFormValues(true);
 	stopCountDownTimeout();
-	document.reloadForm.submit();
+	refreshView();
 }
