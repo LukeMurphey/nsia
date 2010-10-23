@@ -42,7 +42,7 @@
                 <td class="Text_3">Account Type</td>
                 <td>
                 <#if user.unrestricted>
-                    <span class="WarnText">Unrestricted</span>
+                    <span title="Access controls do not apply to unrestricted users and can therefore perform any operations" class="WarnText">Unrestricted</span>
                 <#else>
                     Normal (Restricted)
                 </#if>
