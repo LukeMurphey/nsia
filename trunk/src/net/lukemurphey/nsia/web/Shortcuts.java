@@ -1400,6 +1400,13 @@ public class Shortcuts {
 	public static Map<String, Object> getMapWithBasics( RequestContext context, HttpServletRequest request ){
 		Map<String, Object> data = new HashMap<String, Object>();
 		
+		if( request.getParameter("isajax") != null ){
+			data.put("isajax", true);
+		}
+		else{
+			data.put("isajax", false);
+		}
+		
 		data.put("version", Application.getVersion());
 		
 		if( Application.getBuildNumber() != null && Application.getBuildNumber().isEmpty() == false ){
