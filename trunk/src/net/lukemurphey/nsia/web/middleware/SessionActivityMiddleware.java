@@ -23,8 +23,8 @@ public class SessionActivityMiddleware extends Middleware {
 		
 		if( sessionInfo != null && sessionInfo.getSessionStatus() == SessionStatus.SESSION_ACTIVE ){
 
-			// 2 -- Determine if the call was due to a script refreshing a view
-			if( request.getParameter("refreshRate") != null ){
+			// 2 -- Determine if the call was due to a script refreshing a view or an AJAX based request
+			if( request.getParameter("refreshRate") != null || request.getParameter("isajax") != null ){
 				return false;
 			}
 			
