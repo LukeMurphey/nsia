@@ -25,7 +25,7 @@
     <#assign htmlclass="StatRed" icon="/media/img/22_Alert">
 </#if>
 <#assign link><@url name="system_status" /></#assign>
-<@statusrow htmlclass=htmlclass icon=icon message="${system_status.longDescription?html}" title="Manager Status" link=link />
+<@statusrow htmlclass=htmlclass icon=icon message="${system_status.longDescription?html}" title="Operational Status" link=link />
 <div style="height: 16px"></div>
 
 <#if (sitegroups?? && (sitegroups?size > 0))>
