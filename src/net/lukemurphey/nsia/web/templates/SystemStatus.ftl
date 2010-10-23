@@ -84,12 +84,12 @@
 </#list>
     <tr>
         <td height="120px" colspan="2" class="BackgroundLoading1">
-            <span class="AlignCenter"><img src="/graph/StatusGraph" alt="StatusGraph"></span>
+            <span class="AlignCenter"><img src="/graph/StatusGraph?t=${current_time_millis?c}" alt="StatusGraph"></span>
         </td>
     </tr>
     <tr>
         <td height="120px" colspan="2" class="BackgroundLoading1">
-            <span class="AlignCenter"><img src="/graph/RulesEvalGraph" alt="RuleStatGraph"></span>
+            <span class="AlignCenter"><img src="/graph/RulesEvalGraph?t=${current_time_millis?c}" alt="RuleStatGraph"></span>
         </td>
     </tr>
 </table><p>
