@@ -24,15 +24,15 @@
                 <td><input class="textInput" size="32" type="text" name="EmailAddress" value="<#if request.getParameter("EmailAddress")??>${request.getParameter("EmailAddress")?html}<#elseif user?? && user.emailAddress??>${user.emailAddress?html}</#if>"></td>
             </tr>
             <#if !user??>
-            <tr class="<#if (form_errors?? && form_errors.fieldHasError("Password"))>ValidationFailed<#else>Background1</#if>">
+            <tr title="Password have must have lower and upper case characters, numbers and at least one special character" class="<#if (form_errors?? && form_errors.fieldHasError("Password"))>ValidationFailed<#else>Background1</#if>">
                 <td class="TitleText">Password</td><td><input class="textInput" size="32" type="password" name="Password"></td>
             </tr>
-            <tr class="<#if (form_errors?? && form_errors.fieldHasError("PasswordConfirm"))>ValidationFailed<#else>Background1</#if>">
+            <tr title="Password have must have lower and upper case characters, numbers and at least one special character" class="<#if (form_errors?? && form_errors.fieldHasError("PasswordConfirm"))>ValidationFailed<#else>Background1</#if>">
                 <td class="TitleText">Password (Confirm)</td>
                 <td><input class="textInput" size="32" type="password" name="PasswordConfirm"></td>
             </tr>
             </#if>
-            <tr class="<#if (form_errors?? && form_errors.fieldHasError("Unrestricted"))>ValidationFailed<#else>Background1</#if>">
+            <tr title="Access controls do not apply to unrestricted users and can therefore perform any operations (this should be restricted to select administrative users)" class="<#if (form_errors?? && form_errors.fieldHasError("Unrestricted"))>ValidationFailed<#else>Background1</#if>">
                 <td class="TitleText">Account Type</td>
                 <td><input type="checkbox"<#if request.getParameter("Unrestricted")??> checked<#elseif (user?? && user.unrestricted)> checked</#if> name="Unrestricted">Unrestricted</td>
             </tr>
