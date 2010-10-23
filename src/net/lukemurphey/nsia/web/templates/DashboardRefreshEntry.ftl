@@ -1,36 +1,98 @@
-<td><script language="JavaScript" type="text/javascript">
-if (document.all || document.getElementById)
-    startit();
-else
-    window.onload = startit;
-</script>
-    <table>
-        <tr>
-            <td><span class="Text_3">Automatic Update</span></td>
-            <td rowspan="200">
-                <form method="get" action="${refresh_url}" name="reloadForm">        
-                    <select name="refreshRate" onchange='onRateChange(this)'>
-                    <#if refresh_rate = "Disable">
-                        <script language="JavaScript">setRefreshRate('Disable'); resetCountDown();</script>
-                    <#else>
-                        <script language="JavaScript">setRefreshRate("${refresh_rate?html}"); resetCountDown();</script>
-                    </#if>
-                        <option value="15" <#if refresh_rate = "15">selected</#if>>15 seconds</option>
-                        <option value="30" <#if refresh_rate = "30">selected</#if>>30 seconds</option>
-                        <option value="60" <#if refresh_rate = "60">selected</#if>>1 minute</option>
-                        <option value="120" <#if refresh_rate = "120">selected</#if>>2 minutes</option>
-                        <option value="300" <#if refresh_rate = "300">selected</#if>>5 minutes</option>
-                        <option value="600" <#if refresh_rate = "600">selected</#if>>10 minutes</option>
-                        <option value="900" <#if refresh_rate = "900">selected</#if>>15 minutes</option>
-                        <option value="Disable" <#if refresh_rate = "Disable">selected</#if>>Disable</option>
-                    </select>
-                </form>
-           </td>
-        <tr>
-            <td width="200"><span style="cursor: hand;" onclick="onPlayPauseClick()">
-            <img style="display: inline" id="refresh_pause" src="/media/img/16_Pause"><img style="display: none" id="refresh_play" src="/media/img/16_Play"></span>
-            &nbsp;Refresh <span id="countDownText">---</span>
-            
-            </td>
-        </tr>
-    </table>
+<td>
+	<table>
+		<tr>
+			<td colspan="2"><span class="Text_3">Automatic Refresh</span></td>
+		</tr>
+		<tr>
+			<td>
+				<img style="display: none" id="refresh_play" src="/media/img/16_Play" />
+				<img id="refresh_pause" src="/media/img/16_Pause" />
+			</td>
+			<td>
+				Updated: <span id="lastRefreshed">---</span>
+			</td>
+		</tr>
+	</table>
+
+	<script type="text/javascript">
+    	var wasPaused = false;
+    	var counterId = -1;
+    	
+    	function unpauseCountdown(){
+    		$('#refresh_play').hide();
+    		$('#refresh_pause').show();
+    		countDown();
+    	}
+    	
+    	function pauseCountdown(){
+    		$('#refresh_play').show();
+    		$('#refresh_pause').hide();
+    		stopCountDownTimeout();
+    	}
+    	
+		function stopCountDownTimeout() {
+			clearTimeout(counterId);
+			counterId = -1;
+		}
+    	
+    	function unpauseTemporarily(){
+			if( wasPaused == false ){
+				unpauseCountdown();
+			}
+    	}
+    	
+    	function pauseTemporarily(){
+			if( isCountDownRunning() ) {
+				wasPaused = false;
+				pauseCountdown();
+			}
+			else{
+				wasPaused = true;
+			}
+		}
+		
+		function isCountDownRunning() {
+			return (counterId != -1);
+		}
+		
+		function refreshView(){
+			<#if refresh_url??>
+			$("table.MainTable").load("${refresh_url}" + '?isajax');
+			</#if>
+		}
+		
+		function countDown(){
+			counterId = setTimeout("refreshView()", 30000);
+		}
+		
+		function pad(number, length) {
+		   
+		    var str = '' + number;
+		    while (str.length < length) {
+		        str = '0' + str;
+		    }
+		   
+		    return str;
+		
+		}
+		
+		function updateDateTime(){
+			var now = new Date();
+			var hour = now.getHours();
+			
+			var ap = "AM";
+			if (hour   > 11) { ap = "PM";        }
+			if (hour   > 12) { hour = hour - 12; }
+			if (hour   == 0) { hour = 12;        }
+			
+			var t = hour + ":" + pad(now.getMinutes(),2) + ":" + pad(now.getSeconds(),2) + " " + ap;
+			$('#lastRefreshed').text(t);
+			
+		}
+		
+		$('#refresh_play').click( function() { unpauseCountdown(); } );
+		$('#refresh_pause').click( function() { pauseCountdown(); } );
+		updateDateTime();
+		countDown();
+		
+    </script>
