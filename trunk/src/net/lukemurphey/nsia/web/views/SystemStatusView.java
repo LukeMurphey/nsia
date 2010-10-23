@@ -311,7 +311,11 @@ public class SystemStatusView extends View {
 		else
 			configuration_stats.add( new SystemStat("SSL Enabled",  "True", StatType.CHECK) );
 		
+		// Put the configuration stats in the template variables list so that the templates can load them
 		data.put("configuration_stats", configuration_stats);
+		
+		// Add the current time to the variables list so that an argument can be added to the images list in order to force the browser to reload the images if they are reloaded by an AJAX request
+		data.put("current_time_millis", System.currentTimeMillis());
 		
 		// 6 -- Get the dashboard headers
 		Shortcuts.addDashboardHeaders(request, response, data, createURL());
