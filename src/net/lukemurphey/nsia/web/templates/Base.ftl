@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<#if !isajax?? || !isajax><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
 <head>
@@ -28,7 +28,7 @@ ${head}
         </table>
     </div>
 
-    <table class="MainTable" cellpadding="0" cellspacing="0" id="MainTable" summary="Main Page Content" align="center">
+    <table class="MainTable" cellpadding="0" cellspacing="0" id="MainTable" summary="Main Page Content" align="center"></#if>
     <tr>
         <td class="TitleRow1" width="100%">
             <table summary="HeaderBanner" cellpadding="0" cellspacing="0" class="HeaderImageTable" width="100%">
@@ -97,8 +97,8 @@ ${head}
 					});
 				}
 			</script>
-    </table>
+    <#if !isajax?? || !isajax></table>
     &nbsp;
 </body>
 
-</html>
+</html></#if>
