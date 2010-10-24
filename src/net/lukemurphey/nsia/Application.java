@@ -1968,7 +1968,7 @@ public final class Application {
 			if( statusDescriptionLongBuffer.length() > 0 )
 				statusDescriptionLong = statusDescriptionLongBuffer.toString();
 			else
-				statusDescriptionLong = "Manager fully operational";
+				statusDescriptionLong = "System fully operational";
 			
 			if( statusDescriptionShortBuffer.length() > 0 )
 				statusDescriptionShort = statusDescriptionShortBuffer.toString();
