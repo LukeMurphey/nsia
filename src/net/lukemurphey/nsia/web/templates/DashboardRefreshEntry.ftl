@@ -55,9 +55,15 @@
 			return (counterId != -1);
 		}
 		
+        function ajaxcallback(responseText, textStatus, XMLHttpRequest) {
+            if( XMLHttpRequest.status != 200 ){
+                window.location.href=window.location.href
+            }
+        }
+		
 		function refreshView(){
 			<#if refresh_url??>
-			$("table.MainTable").load("${refresh_url}" + '?isajax');
+			$("table.MainTable").load("${refresh_url}" + '?isajax', {}, ajaxcallback);
 			</#if>
 		}
 		
