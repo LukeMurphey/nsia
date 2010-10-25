@@ -29,7 +29,7 @@ public class MetaDefinition extends Definition {
 	public static final MetaDefinition RESPONSE_CODE_403 = new MetaDefinition("Forbidden", "Anomaly", "ContentError", 10015, Severity.LOW, Action.ALERT, "A 403 (forbidden) response code was returned");
 	public static final MetaDefinition RESPONSE_CODE_404 = new MetaDefinition("NotFound", "Anomaly", "ContentError", 10016, Severity.LOW, Action.ALERT, "A 404 (not found) response code was returned");
 	public static final MetaDefinition RESPONSE_CODE_405 = new MetaDefinition("MethodNotAllowed", "Anomaly", "ContentError", 10017, Severity.LOW, Action.ALERT, "A 405 (method not allowed) response code was returned");
-	public static final MetaDefinition RESPONSE_CODE_406 = new MetaDefinition("NotAcceptbable", "Anomaly", "ContentError", 10018, Severity.LOW, Action.ALERT, "A 406 (not acceptbable) response code was returned");
+	public static final MetaDefinition RESPONSE_CODE_406 = new MetaDefinition("NotAcceptable", "Anomaly", "ContentError", 10018, Severity.LOW, Action.ALERT, "A 406 (not acceptable) response code was returned");
 	public static final MetaDefinition RESPONSE_CODE_407 = new MetaDefinition("ProxyAuthRequired", "Anomaly", "ContentError", 10019, Severity.LOW, Action.ALERT, "A 407 (proxy authentication required) response code was returned");
 	public static final MetaDefinition RESPONSE_CODE_408 = new MetaDefinition("RequestTimeout", "Anomaly", "ContentError", 10020, Severity.LOW, Action.ALERT, "A 408 (request timeout) response code was returned");
 	public static final MetaDefinition RESPONSE_CODE_409 = new MetaDefinition("Conflict", "Anomaly", "ContentError", 10021, Severity.LOW, Action.ALERT, "A 409 (conflict) response code was returned");
