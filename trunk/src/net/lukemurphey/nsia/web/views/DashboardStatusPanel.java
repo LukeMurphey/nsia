@@ -79,13 +79,13 @@ public class DashboardStatusPanel extends View {
 		ApplicationStatusDescriptor status_desc = app.getManagerStatus();
 		
 		if( status_desc.getOverallStatus() == ApplicationStatusDescriptor.STATUS_GREEN ){
-			data.put("manager", new StatusDescriptor(StatusIndicator.GREEN, "Manager Status: " + status_desc.getShortDescription() ) );
+			data.put("manager", new StatusDescriptor(StatusIndicator.GREEN, "System Status: " + status_desc.getShortDescription() ) );
 		}
 		else if( status_desc.getOverallStatus() == ApplicationStatusDescriptor.STATUS_RED ){
-			data.put("manager", new StatusDescriptor(StatusIndicator.RED, "Manager Status: " + status_desc.getShortDescription() ) );
+			data.put("manager", new StatusDescriptor(StatusIndicator.RED, "System Status: " + status_desc.getShortDescription() ) );
 		}
 		else{
-			data.put("manager", new StatusDescriptor(StatusIndicator.YELLOW, "Manager Status: " + status_desc.getShortDescription() ) );
+			data.put("manager", new StatusDescriptor(StatusIndicator.YELLOW, "System Status: " + status_desc.getShortDescription() ) );
 		}
 		
 		// 2 -- Get scanner status description
