@@ -24,7 +24,7 @@ public class MetaDefinition extends Definition {
 	public static final MetaDefinition HTTP_EXCEPTION = new MetaDefinition("HTTPException", "Anomaly", "ContentError", 10011, Severity.LOW, Action.ALERT, "An HTTP exception occurred while attempting to retrieve the content");
 	
 	public static final MetaDefinition RESPONSE_CODE_400 = new MetaDefinition("BadRequest", "Anomaly", "ContentError", 10012, Severity.LOW, Action.ALERT, "A 400 (bad request) response code was returned");
-	public static final MetaDefinition RESPONSE_CODE_401 = new MetaDefinition("NotAuthorised", "Anomaly", "ContentError", 10013, Severity.LOW, Action.ALERT, "A 401 (not authorised) response code was returned");
+	public static final MetaDefinition RESPONSE_CODE_401 = new MetaDefinition("NotAuthorized", "Anomaly", "ContentError", 10013, Severity.LOW, Action.ALERT, "A 401 (not authorized) response code was returned");
 	public static final MetaDefinition RESPONSE_CODE_402 = new MetaDefinition("PaymentRequired", "Anomaly", "ContentError", 10014, Severity.LOW, Action.ALERT, "A 402 (payment required) response code was returned");
 	public static final MetaDefinition RESPONSE_CODE_403 = new MetaDefinition("Forbidden", "Anomaly", "ContentError", 10015, Severity.LOW, Action.ALERT, "A 403 (forbidden) response code was returned");
 	public static final MetaDefinition RESPONSE_CODE_404 = new MetaDefinition("NotFound", "Anomaly", "ContentError", 10016, Severity.LOW, Action.ALERT, "A 404 (not found) response code was returned");
