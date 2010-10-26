@@ -55,7 +55,7 @@ public class ScanCallback {
 	 * @param scanRuleID
 	 */
 	public void logScanResult( ScanResultCode resultCode, int deviations, String ruleType, String specimen, String message, long scanRuleID ){
-		logScanResult(resultCode, deviations, ruleType, specimen, null, scanRuleID, true);
+		logScanResult(resultCode, deviations, ruleType, specimen, message, scanRuleID, true);
 	}
 	
 	/**
