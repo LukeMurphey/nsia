@@ -272,13 +272,16 @@ public class HttpDefinitionScanRule extends ScanRule{
 				}
 				catch(IllegalArgumentException e){
 					
+					// Determine if the finding was filtered and ignore it if so
+					if( signatureExceptions != null && signatureExceptions.isFiltered(siteGroupID, scanRuleId, MetaDefinition.INVALID_URI, url) ){
+						return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_COMPLETED, new java.sql.Timestamp(System.currentTimeMillis()), url, this.scanRuleId ), null );
+					}
+					
 					// Log the scan issue and return the relevant scan result
 					if( parentResult != null && parentResult.getSpecimenDescription() != null ){
-						logScanResult( ScanResultCode.SCAN_FAILED, 0, HttpSeekingScanRule.RULE_TYPE, url.toString(), "URI is invalid (from " + parentResult.getSpecimenDescription() + ")" );
 						return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_FAILED, new java.sql.Timestamp(System.currentTimeMillis()), url, new DefinitionMatch( MetaDefinition.INVALID_URI, "URI loaded from " + parentResult.getSpecimenDescription()), this.scanRuleId ), null );
 					}
 					else{
-						logScanResult( ScanResultCode.SCAN_FAILED, 0, HttpSeekingScanRule.RULE_TYPE, url.toString(), "URI is invalid" );
 						return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_FAILED, new java.sql.Timestamp(System.currentTimeMillis()), url, new DefinitionMatch( MetaDefinition.INVALID_URI ), this.scanRuleId ), null );
 					}
 				}
