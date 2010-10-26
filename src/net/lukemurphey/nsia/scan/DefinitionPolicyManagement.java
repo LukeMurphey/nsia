@@ -14,8 +14,14 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 
+/**
+ * This class manages definition policies and helps retrieve and delete policies.
+ * @author Luke
+ *
+ */
 public class DefinitionPolicyManagement {
 	
+	// The application that contains the database connection to access
 	private Application application = null;
 
 	public DefinitionPolicyManagement(Application application){
@@ -29,6 +35,12 @@ public class DefinitionPolicyManagement {
 		this.application = application;
 	}
 	
+	/**
+	 * Get the entire policy set.
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public DefinitionPolicySet getPolicySet() throws NoDatabaseConnectionException, SQLException{
 		Connection connection = null;
 		
@@ -43,6 +55,13 @@ public class DefinitionPolicyManagement {
 		}
 	}
 	
+	/**
+	 * Gets the scan policy for the given site-group.
+	 * @param siteGroupID
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public DefinitionPolicySet getPolicySet( long siteGroupID ) throws NoDatabaseConnectionException, SQLException{
 		Connection connection = null;
 		
@@ -57,6 +76,13 @@ public class DefinitionPolicyManagement {
 		}
 	}
 	
+	/**
+	 * Get the scan policy set for the given rule ID.
+	 * @param ruleID
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public DefinitionPolicySet getPolicySetForRule( int ruleID ) throws NoDatabaseConnectionException, SQLException{
 		Connection connection = null;
 		
@@ -71,6 +97,14 @@ public class DefinitionPolicyManagement {
 		}
 	}
 	
+	/**
+	 * Get the policy descriptor with the given ID.
+	 * @param policyID
+	 * @return
+	 * @throws SQLException
+	 * @throws MalformedURLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	public DefinitionPolicyDescriptor getPolicy( int policyID ) throws SQLException, MalformedURLException, NoDatabaseConnectionException{
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -107,26 +141,80 @@ public class DefinitionPolicyManagement {
 		return sigException;
 	}
 	
+	/**
+	 * Delete all category-based scan policies for the given category and site-group.
+	 * @param siteGroupID
+	 * @param categoryName
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public int clearCategoryDescriptors(int siteGroupID, String categoryName ) throws NoDatabaseConnectionException, SQLException{
 		return clearEntries(siteGroupID, -1, null, null, null, categoryName);
 	}
 	
+	/**
+	 * Delete all category-based scan policies for the given category and site-group.
+	 * @param siteGroup
+	 * @param categoryName
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public int clearCategoryDescriptors(SiteGroupDescriptor siteGroup, String categoryName ) throws NoDatabaseConnectionException, SQLException{
 		return clearEntries(siteGroup.getGroupId(), -1, null, null, null, categoryName);
 	}
 	
+	/**
+	 * Delete all subcategory-based scan policies with given sub-category.
+	 * @param categoryName
+	 * @param subCategoryName
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public int clearSubCategoryDescriptors(String categoryName, String subCategoryName ) throws NoDatabaseConnectionException, SQLException{
 		return clearEntries(-1, -1, null, subCategoryName, null, categoryName);
 	}
 	
+	/**
+	 * Delete all subcategory-based scan policies for the given subcategory and site-group.
+	 * @param siteGroupID
+	 * @param categoryName
+	 * @param subCategoryName
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public int clearSubCategoryDescriptors(int siteGroupID, String categoryName, String subCategoryName ) throws NoDatabaseConnectionException, SQLException{
 		return clearEntries(siteGroupID, -1, null, subCategoryName, null, categoryName);
 	}
 	
+	/**
+	 * Delete all category-based scan policies for the given subcategory and site-group.
+	 * @param siteGroup
+	 * @param categoryName
+	 * @param subCategoryName
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public int clearSubCategoryDescriptors(SiteGroupDescriptor siteGroup, String categoryName, String subCategoryName ) throws NoDatabaseConnectionException, SQLException{
 		return clearEntries(siteGroup.getGroupId(), -1, null, subCategoryName, null, categoryName);
 	}
 	
+	/**
+	 * Delete all cscan policies that match the given attributes.
+	 * @param siteGroupId
+	 * @param ruleID
+	 * @param definitionName
+	 * @param definitionSubCategory
+	 * @param url
+	 * @param definitionCategory
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	private int clearEntries( int siteGroupId, int ruleID, String definitionName, String definitionSubCategory, URL url, String definitionCategory ) throws NoDatabaseConnectionException, SQLException{
 		
 		Connection connection = null;
@@ -215,6 +303,13 @@ public class DefinitionPolicyManagement {
 		
 	}
 	
+	/**
+	 * Delete the policy associated with the given ID.
+	 * @param policyID
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public boolean deletePolicy(int policyID) throws NoDatabaseConnectionException, SQLException{
 		
 		// 0 -- precondition check
