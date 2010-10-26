@@ -111,10 +111,25 @@ nsia (0.9.6-1) unstable; urgency=low
   
  -- Luke Murphey <luke@threatfactor.com>  Tue, 10 Oct 2010 21:02:00 +0500
  
-  nsia (0.9.11-1) unstable; urgency=low
+ nsia (0.9.11-1) unstable; urgency=low
   
  * Reduced the excessive number of eventlog messages when users view the main dashboard
  * Fixed issue where sub-category exceptions were not being created properly
  * Database reinitializer is called anytime the database is upgraded to automatically incorporate new rights or tables
   
  -- Luke Murphey <luke@threatfactor.com>  Tue, 12 Oct 2010 21:41:00 +0500
+ 
+ nsia (1.0.0-1) stable; urgency=low
+  
+ * Changed the tabs to improve appearance
+ * Fixed issue where InvalidURI findings could not be filtered out with an exception
+ * Fixed issue where you could not edit or delete group ACLs
+ * Group view now checks permissions
+ * Fixed warning on the group view when the user cannot enumerate users
+ * User name is no longer shown in the breadcrumbs if the user does not have permission to view the user
+ * Added tooltips provide help to various forms
+ * No longer refers to the scanner as the "manager"
+ * Updated the refresh header to support AJAX style page updates
+ * Changed description of the link to edit a rule to "Edit Rule" from "Details"
+  
+ -- Luke Murphey <luke@threatfactor.com>  Mon, 25 Oct 2010 22:45:00 +0500
