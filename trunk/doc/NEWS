@@ -1,5 +1,20 @@
 Below is the history of NSIA with notes about the changes available in each version.
 
+Version 1.0.0 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+
+ * Changed the tabs to improve appearance
+ * Fixed issue where InvalidURI findings could not be filtered out with an exception
+ * Fixed issue where you could not edit or delete group ACLs
+ * Group view now checks permissions
+ * Fixed warning on the group view when the user cannot enumerate users
+ * User name is no longer shown in the breadcrumbs if the user does not have permission to view the user
+ * Added tooltips provide help to various forms
+ * No longer refers to the scanner as the "manager"
+ * Updated the refresh header to support AJAX style page updates
+ * Changed description of the link to edit a rule to "Edit Rule" from "Details"
+
 Version 0.9.11 Changes
 ------------------------------------------------------------------
 Version includes the following changes:
