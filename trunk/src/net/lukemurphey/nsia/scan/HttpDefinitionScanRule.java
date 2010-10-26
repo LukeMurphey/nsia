@@ -32,6 +32,11 @@ import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.Definition.Severity;
 
+/**
+ * The HTTP definition scan rule analyzes a resource with the set of definitions currently available in the definition set.
+ * @author Luke
+ *
+ */
 public class HttpDefinitionScanRule extends ScanRule{
 
 	private URL url = null; 
@@ -74,6 +79,10 @@ public class HttpDefinitionScanRule extends ScanRule{
 		this.waitToLogCompletion = suppress;
 	}
 	
+	/**
+	 * Get a connection manager for the HTTP client.
+	 * @return
+	 */
 	public static synchronized MultiThreadedHttpConnectionManager getConnectionManager(){
 		if( connectionManager == null ){
 			connectionManager = new MultiThreadedHttpConnectionManager();
@@ -106,6 +115,11 @@ public class HttpDefinitionScanRule extends ScanRule{
 		return result;
 	}
 	
+	/**
+	 * Represents a scan result that includes a parser for traversing the HTML code.
+	 * @author Luke
+	 *
+	 */
 	protected static class HttpSignatureScanResultWithParser{
 		
 		private HttpDefinitionScanResult scanResult;
@@ -137,6 +151,12 @@ public class HttpDefinitionScanRule extends ScanRule{
 		
 	}
 	
+	/**
+	 * Perform a scan and return the result along with a parser.
+	 * @param parentScanResult
+	 * @return
+	 * @throws ScanException
+	 */
 	public HttpSignatureScanResultWithParser doScanAndReturnParser( HttpDefinitionScanResult parentScanResult ) throws ScanException {
 		return doScanInternal(parentScanResult);
 	}
@@ -147,6 +167,15 @@ public class HttpDefinitionScanRule extends ScanRule{
 		return result.scanResult;
 	}
 	
+	/**
+	 * Retrieve the exceptions associated with the given site-group. Note that this method returns all of the policies
+	 * for the site-group regardless of the rule ID; the rule ID will be checked when the policy is reviewed to determine
+	 * if it matches a given observation.
+	 * @param siteGroupID
+	 * @return
+	 * @throws SQLException
+	 * @throws NoDatabaseConnectionException
+	 */
 	private DefinitionPolicySet loadSignatureExceptions(long siteGroupID) throws SQLException, NoDatabaseConnectionException{
 		DefinitionPolicyManagement signatureManagement = new DefinitionPolicyManagement(appRes);
 
@@ -165,7 +194,11 @@ public class HttpDefinitionScanRule extends ScanRule{
 		}
 	}
 	
+	/**
+	 * Get the HTTP response from the given URL.
+	 **/ 
 	private HttpResponseData getResponseData(URL url, HttpClient client ) throws HttpException, IOException{
+		
 		// 1 -- Initialize the HTTP client
 		HostConfiguration hostConfig = new HostConfiguration();
 		hostConfig.setHost(url.getHost(), url.getPort(), url.getProtocol());
@@ -204,6 +237,12 @@ public class HttpDefinitionScanRule extends ScanRule{
 		}
 	}
 	
+	/**
+	 * Perform a scan and return a scan result with an HTML parser.
+	 * @param parentResult
+	 * @return
+	 * @throws ScanException
+	 */
 	private HttpSignatureScanResultWithParser doScanInternal( HttpDefinitionScanResult parentResult ) throws ScanException {
 		
 		// 1 -- Load the exception set
@@ -350,10 +389,27 @@ public class HttpDefinitionScanRule extends ScanRule{
 		} 
 	}
 
+	/**
+	 * Log that a definition match occurred.
+	 * @param signatureName
+	 * @param signatureID
+	 * @param url
+	 * @param ruleID
+	 * @param severity
+	 */
 	private void logDefinitionMatch( String signatureName, int signatureID, String url, long ruleID, Severity severity ){
 		logDefinitionMatch(signatureName, signatureID, url, ruleID, severity, null);
 	}
 	
+	/**
+	 * Log that a definition match occurred.
+	 * @param signatureName
+	 * @param signatureID
+	 * @param url
+	 * @param ruleID
+	 * @param severity
+	 * @param definitionOutput
+	 */
 	private void logDefinitionMatch( String signatureName, int signatureID, String url, long ruleID, Severity severity, String definitionOutput ){
 		
 		if( appRes != null ){
@@ -380,10 +436,21 @@ public class HttpDefinitionScanRule extends ScanRule{
 		}
 	}
 	
+	/**
+	 * Log that a definition match occurred.
+	 * @param sig
+	 * @param url
+	 * @param ruleID
+	 */
 	private void logDefinitionMatch( Definition sig, String url, long ruleID){
 		logDefinitionMatch(sig.getFullName(), sig.id, url, ruleID, sig.getSeverity());
 	}
 	
+	/**
+	 * Get the MetaDefinition associated with the given HTTP response code if one exists; otherwise, return null if none applies.
+	 * @param responseCode
+	 * @return
+	 */
 	private MetaDefinition getMetaSignatureFromResponseCode(int responseCode){
 		switch (responseCode) {
 			case 400:  return MetaDefinition.RESPONSE_CODE_400;
