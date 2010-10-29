@@ -5,11 +5,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
     <link rel="shortcut icon" href="/media/img/16_appicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/media/css/Stylesheet.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="/media/css/custom-theme/jquery-ui-1.8rc3.custom.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="/media/css/default-theme/jquery-ui-1.8.5.custom.css" type="text/css" media="all" />
     <title>${title?html}</title>
     <script type="text/javascript" language="javascript" src="/media/js/RefreshScript.js"></script>
     <script type="text/javascript" language="javascript" src="/media/js/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" language="javascript" src="/media/js/jquery-ui-1.8rc3.custom.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/media/js/jquery-ui-1.8.5.custom.min.js"></script>
+    
     <#if extrahead??>
         <#list extrahead as head>
 ${head}
