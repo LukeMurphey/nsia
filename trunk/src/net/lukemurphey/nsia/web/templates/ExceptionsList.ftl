@@ -7,6 +7,7 @@
         <#assign message>No exceptions exist yet.</#assign>
         <@getinfodialog message=message title="No Exceptions Exist" />
     <#else>
+        <#include "SelectAll.ftl">
         <span class="Text_1">Exceptions</span><br />
         <#--Revision ${definition_set_version} (Last Updated ${updated?datetime})<br>-->&nbsp;<br/>
         <form method="get" action="<@url name="exception_delete" args=[ruleID] />">
@@ -15,7 +16,15 @@
             <table width="640" class="DataTable" summary="">
                 <thead>
                     <tr>
-                        <td colspan="2"><span class="Text_3">Type</span></td>
+                        <td colspan="2">
+                            <div style="float:left">
+                                <input type="checkbox" id="selectall">
+                            </div>
+                            <div>
+                                <span class="Text_3">Type</span>
+                            </div>
+
+                        </td>
                         <td><span class="Text_3">Exception</span></td>
                         <td><span class="Text_3">Options</span></td>
                      </tr>
@@ -27,7 +36,7 @@
                 <#else>
                     <tr>
                         <td width="6">
-                            <input type="checkbox" name="ExceptionID" value="${filter.policyID?c}">
+                            <input class="selectable" type="checkbox" name="ExceptionID" value="${filter.policyID?c}">
                         </td>
                     <#if ( filter.policyType == CATEGORY )>
                         <td>Category</td>

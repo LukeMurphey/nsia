@@ -44,13 +44,19 @@
             <#assign message>No users exist yet. Create a user first, then add the user to the group. <p><a href="<@url name="group_editor" args=["New"] />">[Create Group Now]</a></#assign>
             <@getinfodialog title="No Groups Exist" message=message />
         <#else>
+            <#include "SelectAll.ftl">
             <form method="POST" action="<@url name="group_edit_membership" args=[group.groupId] />">
                 <input type="hidden" name="UserID" value="${group.groupId?c}">
                 <input type="hidden" name="Action" value="SetGroup">
             
                 <table width="600">
                     <tr class="Background0">
-                        <td width="200" class="Text_3">User Name</td>
+                        <td width="200" class="Text_3">
+                            <div style="float:left">
+                                <input type="checkbox" id="selectall">
+                            </div>
+                            <div>User Name</div>
+                        </td>
                         <td class="Text_3">User ID</td>
                         <td width="300" class="Text_3">Full Name</td>
                     </tr>
@@ -58,7 +64,7 @@
                 <#list users as user>
                     <tr class="Background1">
                         <td>
-                            <input id="${user.userID}?c" type="checkbox" name="${user.userID?c}" <#if user.memberOf>checked</#if>>
+                            <input id="${user.userID}?c" class="selectable" type="checkbox" name="${user.userID?c}" <#if user.memberOf>checked</#if>>
                             <label for="${user.userID?c}">${user.userName?html}</label>
                             <#if user.enabled >
                                 &nbsp;&nbsp;<img alt="Enabled" src="/media/img/16_User">

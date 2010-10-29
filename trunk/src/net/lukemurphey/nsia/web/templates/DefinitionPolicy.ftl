@@ -3,12 +3,12 @@
 
 <#macro policyrow category >
     <tr>
+    <td width="6"><input class="selectable" type="checkbox" name="DefinitionPolicy" value="${category.name?html}"></td>
     <#if category.enabled >
         <td width="40" align="center" class="StatGreen"><img src="/media/img/22_Check" alt="ok"></td>
     <#else>
         <td width="40" align="center" class="StatRed"><img src="/media/img/22_Alert" alt="alert"></td>
     </#if>
-        <td width="6"><input type="checkbox" name="DefinitionPolicy" value="${category.name?html}"></td>
         <td>${category.name?html}</td>
         
     <#if category.enabled >
@@ -39,7 +39,7 @@
 <br><span class="LightText">Viewing default scan policy</span>
 </#if>
 <p>
-
+<#include "SelectAll.ftl">
 <form action="${request.thisURL}" method="post" action="ScanPolicy">
 <#if (sitegroup??)>
     <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId?c}">
@@ -47,14 +47,17 @@
     <table class="DataTable" width="80%" summary="Definition categories">
         <thead>
             <tr>
-                <td colspan="4">Category</td>
+                <td colspan="4">
+                    <div style="float:left">
+                        <input type="checkbox" id="selectall">
+                    </div>
+                    <div>Category</div>
+                </td>
             </tr>
         </thead>
     <#list categories as category>
         <@policyrow category=category />
     </#list>
-
-
         <tr class="lastRow">
             <td colspan="4">
                 <input type="submit" class="button" name="Action" value="Disable">&nbsp;<input type="submit" class="button" name="Action" value="Enable">
