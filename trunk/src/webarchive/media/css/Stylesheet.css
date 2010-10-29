@@ -674,3 +674,7 @@ table.DataTable tr.odd_hover td, table.DataTable tr.even_hover td {
 	-moz-box-shadow:0 0 10px #000;
 	-webkit-box-shadow:0 0 10px #000;
 }
+
+.refreshTextStart{
+    background-color: #C6FFCB;
+}
