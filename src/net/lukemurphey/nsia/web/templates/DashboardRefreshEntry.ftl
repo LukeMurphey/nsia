@@ -130,8 +130,12 @@
             $('#lastRefreshed').text(t);
 		}
 
-        $('#refresh_play').click( function() { unpauseCountdown(); } );
-        $('#refresh_pause').click( function() { pauseCountdown(); } );
-        updateDateTime();
-        countDown();
+        $(document).ready(function() {
+            $('#refresh_play').click( function() { unpauseCountdown(); } );
+            $('#refresh_pause').click( function() { pauseCountdown(); } );
+            <#if isajax?? && isajax>$('#lastRefreshed').addClass('refreshTextStart');</#if>
+            updateDateTime();
+            <#if isajax?? && isajax>$('#lastRefreshed').animate( {'backgroundColor' : '#FFFFF'}, 1000);</#if>
+            countDown();
+        });
     </script>
