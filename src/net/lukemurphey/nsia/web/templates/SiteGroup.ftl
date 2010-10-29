@@ -5,12 +5,20 @@
 	<#assign message>No rules exist yet. Define a rule set to begin monitoring.<p><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroup.groupId?c}">[Create Rule Now]</a></#assign>
     <@getinfodialog message=message title="No Rules" />
 <#else>
+    <#include "SelectAll.ftl">
     <form action="${request.thisURL}">
         <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId?c}">
         <table class="DataTable" summary="HeaderEntries">
             <thead>
                 <tr>
-                    <td colspan="2"><span class="TitleText">Status</span></td>
+                    <td colspan="2">
+                        <div style="float:left">
+                            <input type="checkbox" id="selectall">
+                        </div>
+                        <div>
+                            <span class="TitleText">Status</span>
+                        </div>
+                    </td>
                     <td><span class="TitleText">Description</span></td>
                     <td><span class="TitleText">Type</span></td>
                     <td><span class="TitleText">Subject</span></td>
@@ -21,6 +29,7 @@
             
             <#list rules as rule>
             <tr>
+            <td align="center"><input class="selectable" type="checkbox" name="RuleID" value="${rule.ID?c}"></td>
             <#-- Output the status icon -->
             <#if (rule.status == STAT_GREEN)>
                 <td width="40" align="center" class="StatGreen"><img src="/media/img/22_Check" alt="ok"></td>
@@ -31,7 +40,6 @@
             <#else>
                 <td width="40" align="center" class="StatYellow"><img src="/media/img/22_Warning" alt="warning"></td>
             </#if>
-            <td align="center"><input type="checkbox" name="RuleID" value="${rule.ID?c}"></td>
             <#-- Output the deviation count -->
             <#if (!rule.statusDescription?? )>
                 <#if ( rule.deviations == -1 )>

@@ -73,13 +73,19 @@
             <#assign message>No groups exist yet. Create a group first, then add the user to the specified group or groups. <p><a href="<@url name="group_editor" args=["New"] />">[Create Group Now]</a></#assign>
             <@getinfodialog title="No Groups Exist" message=message />
         <#else>
+            <#include "SelectAll.ftl">
             <form method="POST" action="<@url name="user_edit_membership" args=[user.userID] />">
                 <input type="hidden" name="UserID" value="${user.userID?c}">
                 <input type="hidden" name="Action" value="SetGroup">
             
                 <table width="600">
                     <tr class="Background0">
-                        <td width="200" class="Text_3">Group Name</td>
+                        <td width="200" class="Text_3">
+                            <div style="float:left">
+                                <input type="checkbox" id="selectall">
+                            </div>
+                            <div>Group Name</div>
+                        </td>
                         <td class="Text_3">GroupID</td>
                         <td width="300" class="Text_3">Group Description</td>
                     </tr>
@@ -87,7 +93,7 @@
                 <#list groups as group>
                     <tr class="Background1">
                         <td>
-                            <input id="${group.ID}" type="checkbox" name="${group.ID}" <#if group.memberOf>checked</#if>>
+                            <input id="${group.ID}" class="selectable" type="checkbox" name="${group.ID}" <#if group.memberOf>checked</#if>>
                             <label for="${group.ID?c}">${group.name?html}</label>
                             <#if group.status = ACTIVE >
                                 &nbsp;&nbsp;<img alt="Enabled" src="/media/img/16_Group">
