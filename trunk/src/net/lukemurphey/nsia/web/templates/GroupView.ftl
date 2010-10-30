@@ -1,7 +1,7 @@
 <#include "GetURLFunction.ftl">
 <#include "GetDialog.ftl">
 <#assign content>
-
+    <#include "PopupDialog.ftl">
     <span class="Text_1">Group Management</span><br />
     <br/>
     
