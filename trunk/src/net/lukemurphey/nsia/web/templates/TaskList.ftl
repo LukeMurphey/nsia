@@ -6,6 +6,7 @@
 <#assign content>
 
 <#if (tasks?size > 0)>
+<#include "PopupDialog.ftl">
 <div class="SectionHeader">Background Tasks</div>
 <p>
 <table class="DataTable">
@@ -50,8 +51,8 @@
             <td>
                 <table>
                     <tr>
-                        <td><a href="<@url name="task_stop" args=[task.uniqueName] />">&nbsp;<img class="imagebutton" src="/media/img/16_Delete"></a></td>
-                        <td><a href="<@url name="task_stop" args=[task.uniqueName] />">Stop</a></td>
+                        <td><a class="taskstop" href="<@url name="task_stop" args=[task.uniqueName] />">&nbsp;<img class="imagebutton" src="/media/img/16_Delete"></a></td>
+                        <td><a class="taskstop" href="<@url name="task_stop" args=[task.uniqueName] />">Stop</a></td>
                     </tr>
                 </table>
             </td>
@@ -59,6 +60,18 @@
     </#list>
     </tbody>
 </table>
+<script type="text/javascript">
+    $(document).ready(
+        function(){
+            $('a.taskstop').click(
+                function(){
+                    openDeleteConfirmDialog( "Are you sure you want to stop this task? ", "Stop Task?", this.href );
+                    return false;
+                }
+            );
+        }
+    );
+</script>
 <#else>
     <p />
     <@getinfodialog title="No Tasks Running" message="No tasks are currently running." />
