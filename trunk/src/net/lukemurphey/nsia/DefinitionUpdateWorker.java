@@ -160,6 +160,11 @@ public class DefinitionUpdateWorker extends TimerTask implements WorkerThread  {
 			else{
 				versionID = archive.getVersionID();
 				definitionsCurrent = true;
+				
+				//Log a message indicating that the definitions were checked but no new ones exist
+				EventLogMessage message = new EventLogMessage(EventType.DEFINITIONS_CURRENT);
+				message.addField(new EventLogField(FieldName.DEFINITION_SET_REVISION, versionID.toString()));
+				Application.getApplication().logEvent(message);
 			}
 		}
 		catch(Exception e){
