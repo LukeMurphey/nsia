@@ -231,7 +231,7 @@ public class ApiDefinitionSet extends ApiHandler {
 		try {
 			archive.updateDefinition(definition, definitionID);
 			
-			appRes.logEvent(EventLogMessage.EventType.DEFINITION_SET_UPDATED, new EventLogField[]{
+			appRes.logEvent(EventLogMessage.EventType.DEFINITION_MODIFIED, new EventLogField[]{
 					new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
 					new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
