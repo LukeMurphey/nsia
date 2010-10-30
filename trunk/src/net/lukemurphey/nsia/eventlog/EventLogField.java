@@ -44,7 +44,7 @@ public class EventLogField{
 		public static final FieldName RESPONSE_ACTION_NAME = FieldName.createFieldName("response_action_name");
 		public static final FieldName RESPONSE_ACTION_DESC = FieldName.createFieldName("response_action_description");
 		public static final FieldName DEFINITION_SET_REVISION = FieldName.createFieldName("definition_set_revision");
-		public static final FieldName DEFINITION_OUTPUT = FieldName.createFieldName("definition_output");
+		public static final FieldName DEFINITION_MESSAGE = FieldName.createFieldName("definition_message");
 		public static final FieldName PARAMETER_VALUE = FieldName.createFieldName("parameter_value");
 		
 		private final Pattern FIELD_NAME_REGEX = Pattern.compile("[A-Za-z0-9]+");
