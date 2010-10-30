@@ -14,8 +14,7 @@
             <td>Title</td>
             <td>User</td>
             <td>Description</td>
-            <td>Progress</td>
-            <td>&nbsp;</td>
+            <td colspan="2">Progress</td>
         </tr>
     </thead>
     <tbody>
@@ -51,7 +50,7 @@
             <td>
                 <table>
                     <tr>
-                        <td><a href="<@url name="task_stop" args=[task.uniqueName] />"&nbsp;<img src="/media/img/16_Delete"></a></td>
+                        <td><a href="<@url name="task_stop" args=[task.uniqueName] />">&nbsp;<img class="imagebutton" src="/media/img/16_Delete"></a></td>
                         <td><a href="<@url name="task_stop" args=[task.uniqueName] />">Stop</a></td>
                     </tr>
                 </table>
