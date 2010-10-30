@@ -1,13 +1,9 @@
 <script type="text/javascript">
     <#-- A dialog to confirm an operation -->
-    function openYesNoDialog(prompt, title, onOK){
+    function openYesNoDialog(prompt, title, onOK, height){
         <#-- Populate the default arguments -->
         if( typeof(title) == 'undefined' ){
             title = "Alert";
-        }
-    
-        if( typeof(okButtonText) == 'undefined' ){
-            okButtonText = "OK";
         }
         
         if( typeof(height) == 'undefined' ){
@@ -40,14 +36,10 @@
             });
     }
     <#-- A dialog to confirm the deletion of an object -->
-    function openDeleteConfirmDialog(prompt, title, onOK){
+    function openDeleteConfirmDialog(prompt, title, onOK, height){
     
         if( typeof(title) == 'undefined' ){
             title = "Alert";
-        }
-    
-        if( typeof(okButtonText) == 'undefined' ){
-            okButtonText = "OK";
         }
         
         if( typeof(height) == 'undefined' ){
