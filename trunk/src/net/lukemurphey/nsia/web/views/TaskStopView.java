@@ -69,13 +69,7 @@ public class TaskStopView extends View {
 			return true;
 		}
 		
-		// 4 -- Confirm that the user wants to terminate the task
-		if( "Stop".equalsIgnoreCase( request.getParameter("Selected") ) == false ){
-			Dialog.getOptionDialog(response, context, data, "Are you sure you want to stop the task?.", "Stop Task?", DialogType.INFORMATION, new Link("Stop", createURL(thread.getUniqueName())), new Link("Cancel", StandardViewList.getURL("task_list")));
-			return true;
-		}
-		
-		// 5 -- Terminate the task
+		// 4 -- Terminate the task
 		thread.getWorkerThread().terminate();
 		context.addMessage("Task was given terminate command", MessageSeverity.SUCCESS);
 		
