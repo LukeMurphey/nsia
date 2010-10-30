@@ -35,6 +35,7 @@
         </#assign>
         <@summaryrow "Resources Scanned" scanned />
         <@summaryrow "Domain" scanResult.specimenDescription />
+        <@summaryrow "Date Scanned" scanResult.scanTime?datetime />
     </table>
     <#-- Render definitions match table -->
     <p>
