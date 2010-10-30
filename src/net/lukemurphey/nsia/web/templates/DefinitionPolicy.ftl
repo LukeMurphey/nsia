@@ -40,7 +40,8 @@
 </#if>
 <p>
 <#include "SelectAll.ftl">
-<form action="${request.thisURL}" method="post" action="ScanPolicy">
+<#include "PopupDialog.ftl">
+<form id="policyeditform" action="${request.thisURL}" method="post" action="ScanPolicy">
 <#if (sitegroup??)>
     <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId?c}">
 </#if>
@@ -60,15 +61,30 @@
     </#list>
         <tr class="lastRow">
             <td colspan="4">
-                <input type="submit" class="button" name="Action" value="Disable">&nbsp;<input type="submit" class="button" name="Action" value="Enable">
-            
+                <input type="submit" class="button" name="Action" value="Disable">
+                &nbsp;<input type="submit" class="button" name="Action" value="Enable">
         <#if sitegroup??>
-            &nbsp;<input type="submit" class="button" name="Action" value="Set Default">
+                &nbsp;<input type="submit" class="button" name="Action" value="Set Default">
         </#if>
             </td>
         </tr>            
     </table>
 </form>
+<script type="text/javascript">
+    $(document).ready(
+        function(){
+            $('#policyeditform').submit(
+                function(){
+                    var count = $('input.selectable:checked').length;
+                    if( count == 0 ){
+                        openDialog("No categories are selected. Please select at least one category first.", "No Categories Selected");
+                        return false;
+                    }
+                }
+             );
+        }
+    );
+</script>
 </#if>
 </#assign>
 <#include "BaseWithNav.ftl">
