@@ -1,21 +1,17 @@
 <script type="text/javascript">
     <#-- A dialog to confirm an operation -->
-    function openYesNoDialog(prompt, title, onOK, height){
+    function openYesNoDialog(prompt, title, onOK){
         <#-- Populate the default arguments -->
         if( typeof(title) == 'undefined' ){
             title = "Alert";
         }
         
-        if( typeof(height) == 'undefined' ){
-            height = 140;
-        }
         <#-- Show the dialog -->
         var $dialog = $('<div></div>')
             .html( '<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>' + prompt + "</p>")
             .dialog({
                 autoOpen: true,
                 title: title,
-                height: height,
                 modal: true,
                 buttons: {
                     Ok: function() {
@@ -36,22 +32,18 @@
             });
     }
     <#-- A dialog to confirm the deletion of an object -->
-    function openDeleteConfirmDialog(prompt, title, onOK, height){
+    function openDeleteConfirmDialog(prompt, title, onOK){
     
         if( typeof(title) == 'undefined' ){
             title = "Alert";
         }
         
-        if( typeof(height) == 'undefined' ){
-            height = 140;
-        }
         <#-- Show the dialog -->
         var $dialog = $('<div></div>')
             .html( '<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>' + prompt + "</p>")
             .dialog({
                 autoOpen: true,
                 title: title,
-                height: height,
                 modal: true,
                 buttons: {
                     Delete: function() {
@@ -72,22 +64,18 @@
             });
      }
     <#-- A dialog alerting the user to an event -->
-    function openDialog(prompt, title, onOK, height){
+    function openDialog(prompt, title, onOK){
         <#-- Populate the default arguments -->
         if( typeof(title) == 'undefined' ){
             title = "Alert";
         }
         
-        if( typeof(height) == 'undefined' ){
-            height = 140;
-        }
         <#-- Show the dialog -->
         var $dialog = $('<div></div>')
             .html( '<p><span style="float:left; margin:0 7px 20px 0;"></span>' + prompt + "</p>")
             .dialog({
                 autoOpen: true,
                 title: title,
-                height: height,
                 modal: true,
                 buttons: {
                     Ok: function() {
