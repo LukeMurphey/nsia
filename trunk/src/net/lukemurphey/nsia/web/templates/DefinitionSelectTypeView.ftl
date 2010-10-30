@@ -2,9 +2,9 @@
 <#include "GetDialog.ftl">
 <#macro ruleselectrow name description typearg >
     <div style="padding:5px;">
-    <div class="ToolIcon" style="float:left;"><a href="<@url name="definition" args=["New"] />?Type=${typearg?html}"<img src="/media/img/32_Add"></a></div>
+    <div class="ToolIcon" style="float:left;"><a href="<@url name="definition" args=["New"] />?Type=${typearg?html}"><img src="/media/img/32_Add"></a></div>
         
-    <div style="position:relative; left:8px;"><a href="<@url name="definition" args=["New"] />?Type=${typearg?html}"<span class="Text_2">${name?html}</span></a><br>${description?html}</div>
+    <div style="position:relative; left:8px;"><a href="<@url name="definition" args=["New"] />?Type=${typearg?html}"><span class="Text_2">${name?html}</span></a><br>${description?html}</div>
     <br></div>
 </#macro>
 
