@@ -40,7 +40,7 @@
                     <td class="Background1">${result.resultCode.description?html}&nbsp;&nbsp;</td>
                 </#if>
                 <#-- 2 -- Output the time that the resource was scanned  -->
-                    <td class="Background1">${result.scanTime}&nbsp;&nbsp;</td>
+                    <td class="Background1">${result.scanTime?datetime}&nbsp;&nbsp;</td>
                 <#-- 3 -- Output the edit option button  -->
                     <td class="Background1">
                         <table>
