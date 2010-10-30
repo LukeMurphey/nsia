@@ -104,10 +104,10 @@
                         function(){
                             var count = $('input.selectable:checked').length;
                             if( count == 1 ){
-                                openDeleteConfirmDialog( "Are you sure you want to delete this rule? This action cannot be undone.", "Delete Sitegroup?", function(){ $('input[value=Delete][type=submit]').click(); } );
+                                openDeleteConfirmDialog( "Are you sure you want to delete this rule? This action cannot be undone.", "Delete Rule?", function(){ $('input[value=Delete][type=submit]').click(); } );
                             }
                             else if( count > 0 ){
-                                openDeleteConfirmDialog( "Are you sure you want to delete these rules? This action cannot be undone.", "Delete Sitegroups?", function(){ $('input[value=Delete][type=submit]').click(); } );
+                                openDeleteConfirmDialog( "Are you sure you want to delete these rules? This action cannot be undone.", "Delete Rules?", function(){ $('input[value=Delete][type=submit]').click(); } );
                             }
                             return false;
                         }
