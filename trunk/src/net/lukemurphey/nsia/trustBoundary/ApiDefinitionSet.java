@@ -231,7 +231,7 @@ public class ApiDefinitionSet extends ApiHandler {
 		try {
 			archive.updateDefinition(definition, definitionID);
 			
-			appRes.logEvent(EventLogMessage.EventType.DEFINITIONS_UPDATED, new EventLogField[]{
+			appRes.logEvent(EventLogMessage.EventType.DEFINITION_SET_UPDATED, new EventLogField[]{
 					new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
 					new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
@@ -266,7 +266,7 @@ public class ApiDefinitionSet extends ApiHandler {
 		try {
 			int definitionID = archive.addDefinition(definition);
 			
-			appRes.logEvent(EventLogMessage.EventType.DEFINITIONS_ADDED, new EventLogField[]{
+			appRes.logEvent(EventLogMessage.EventType.DEFINITION_ADDED, new EventLogField[]{
 					new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
 					new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
@@ -313,7 +313,7 @@ public class ApiDefinitionSet extends ApiHandler {
 		try {
 			archive.removeByID(definitionID);
 			
-			appRes.logEvent(EventLogMessage.EventType.DEFINITIONS_DELETED, new EventLogField[]{
+			appRes.logEvent(EventLogMessage.EventType.DEFINITION_DELETED, new EventLogField[]{
 					new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() )} );
@@ -563,7 +563,7 @@ public class ApiDefinitionSet extends ApiHandler {
 		try {
 			archive.updateDefinitions(xmlString, replaceOfficialOnly);
 			
-			appRes.logEvent(EventLogMessage.EventType.DEFINITIONS_UPDATED, new EventLogField[]{
+			appRes.logEvent(EventLogMessage.EventType.DEFINITION_SET_UPDATED, new EventLogField[]{
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, userDescriptor.getUserName() ),
 					new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, userDescriptor.getUserID() ),
 					new EventLogField( EventLogField.FieldName.IMPORT_SOURCE, "Local file" )} );

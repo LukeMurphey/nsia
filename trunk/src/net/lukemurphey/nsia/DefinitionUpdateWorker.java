@@ -153,7 +153,7 @@ public class DefinitionUpdateWorker extends TimerTask implements WorkerThread  {
 				versionID = archive.updateDefinitions();
 				
 				//Log a message indicating that the definitions were updated
-				EventLogMessage message = new EventLogMessage(EventType.DEFINITIONS_UPDATED);
+				EventLogMessage message = new EventLogMessage(EventType.DEFINITION_SET_UPDATED);
 				message.addField(new EventLogField(FieldName.DEFINITION_SET_REVISION, versionID.toString()));
 				Application.getApplication().logEvent(message);
 			}
