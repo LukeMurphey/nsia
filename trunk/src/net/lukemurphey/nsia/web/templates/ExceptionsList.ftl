@@ -9,7 +9,7 @@
     <#else>
         <#include "SelectAll.ftl">
         <span class="Text_1">Exceptions</span><br />
-        <#--Revision ${definition_set_version} (Last Updated ${updated?datetime})<br>-->&nbsp;<br/>
+        Below is the list of issues that will be overlooked by the scanner<br>&nbsp;<br/>
         <form method="get" action="<@url name="exception_delete" args=[ruleID] />">
             <input type="hidden" name="SiteGroupID" value="${siteGroupID?c}">
             <input type="hidden" name="RuleID" value="${ruleID?c}">
