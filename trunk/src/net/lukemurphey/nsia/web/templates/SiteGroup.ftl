@@ -1,12 +1,13 @@
 <#include "GetURLFunction.ftl">
 <#include "GetDialog.ftl">
 <#assign content>
+<#include "PopupDialog.ftl">
 <#if (scanresults?? & scanresults?size = 0 && rules?size = 0) >
 	<#assign message>No rules exist yet. Define a rule set to begin monitoring.<p><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroup.groupId?c}">[Create Rule Now]</a></#assign>
     <@getinfodialog message=message title="No Rules" />
 <#else>
     <#include "SelectAll.ftl">
-    <form action="${request.thisURL}">
+    <form id="sitegroupform" action="${request.thisURL}">
         <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId?c}">
         <table class="DataTable" summary="HeaderEntries">
             <thead>
@@ -95,6 +96,25 @@
                 <td><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroup.groupId?c}">[Add a new rule]</a></td>
             </tr>
         </table>
+        
+        <script type="text/javascript">
+            $(document).ready(
+                function(){
+                    $('#sitegroupform').submit(
+                        function(){
+                            var count = $('input.selectable:checked').length;
+                            if( count == 1 ){
+                                openDeleteConfirmDialog( "Are you sure you want to delete this rule? This action cannot be undone.", "Delete Sitegroup?", function(){ $('input[value=Delete][type=submit]').click(); } );
+                            }
+                            else if( count > 0 ){
+                                openDeleteConfirmDialog( "Are you sure you want to delete these rules? This action cannot be undone.", "Delete Sitegroups?", function(){ $('input[value=Delete][type=submit]').click(); } );
+                            }
+                            return false;
+                        }
+                     );
+                }
+            );
+        </script>
 </#if>
 </#assign>
 <#include "BaseWithNav.ftl">
