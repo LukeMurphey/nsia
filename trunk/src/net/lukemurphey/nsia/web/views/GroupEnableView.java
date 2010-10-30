@@ -82,7 +82,7 @@ public class GroupEnableView extends View {
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 							new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
 					
-					response.sendRedirect(GroupEditView.getURL(groupID));
+					response.sendRedirect(GroupView.getURL(groupID));
 					return true;
 				}
 				else{
