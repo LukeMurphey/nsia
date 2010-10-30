@@ -79,4 +79,39 @@
                 }
             });
      }
+    <#-- A dialog alerting the user to an event -->
+    function openDialog(prompt, title, onOK, height){
+        <#-- Populate the default arguments -->
+        if( typeof(title) == 'undefined' ){
+            title = "Alert";
+        }
+        
+        if( typeof(height) == 'undefined' ){
+            height = 140;
+        }
+        <#-- Show the dialog -->
+        var $dialog = $('<div></div>')
+            .html( '<p><span style="float:left; margin:0 7px 20px 0;"></span>' + prompt + "</p>")
+            .dialog({
+                autoOpen: true,
+                title: title,
+                height: height,
+                modal: true,
+                buttons: {
+                    Ok: function() {
+                        $( this ).dialog( "close" );
+                        if( onOK == null ){
+                            <#-- Nothing to do -->
+                        }
+                        else if( (typeof onOK) == 'function' ){
+                            onOK();
+                        }
+                        else{
+                            location.href = onOk;
+                        }
+                        return false;
+                    }
+                }
+            });
+    }
 </script>
