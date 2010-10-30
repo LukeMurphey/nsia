@@ -86,7 +86,7 @@ public class DefinitionEntryView extends View {
 			if( localID >= 0 ){
 				archive.updateDefinition(definition);
 				
-				Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITION_SET_UPDATED, new EventLogField[]{
+				Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITION_MODIFIED, new EventLogField[]{
 						new EventLogField( EventLogField.FieldName.DEFINITION_ID, definition.getID() ),
 						new EventLogField( EventLogField.FieldName.DEFINITION_NAME, definition.getFullName() ),
 						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
