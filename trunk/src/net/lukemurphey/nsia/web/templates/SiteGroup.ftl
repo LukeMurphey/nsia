@@ -7,7 +7,7 @@
     <@getinfodialog message=message title="No Rules" />
 <#else>
     <#include "SelectAll.ftl">
-    <form id="sitegroupform" action="${request.thisURL}">
+    <form id="sitegroupform" action="${request.thisURL}" method="POST">
         <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId?c}">
         <table class="DataTable" summary="HeaderEntries">
             <thead>
@@ -84,6 +84,9 @@
                      <input class="button" type="submit" name="Action" value="Scan">
                      <input class="button" type="submit" name="Action" value="Delete">
                      <input class="button" type="submit" name="Action" value="Baseline">
+                     <div style="display:none"> <#-- The following button will be used solely for the jQuery script which needs to call click on a button which does not have an onClick handler (otherwise, infinite loop is caused) -->
+                        <button class="button" name="Action" value="Delete">Delete</button>
+                     </div>
                  </td>
              </tr>
            </tbody>
@@ -102,12 +105,13 @@
                 function(){
                     $('input[value=Delete][type=submit]').click(
                         function(){
+                            
                             var count = $('input.selectable:checked').length;
                             if( count == 1 ){
-                                openDeleteConfirmDialog( "Are you sure you want to delete this rule? This action cannot be undone.", "Delete Rule?", function(){ $('input[value=Delete][type=submit]').click(); } );
+                                openDeleteConfirmDialog( "Are you sure you want to delete this rule? This action cannot be undone.", "Delete Rule?", function(){ $('button[value=Delete]').click(); } );
                             }
                             else if( count > 0 ){
-                                openDeleteConfirmDialog( "Are you sure you want to delete these rules? This action cannot be undone.", "Delete Rules?", function(){ $('input[value=Delete][type=submit]').click(); } );
+                                openDeleteConfirmDialog( "Are you sure you want to delete these rules? This action cannot be undone.", "Delete Rules?", function(){ $('button[value=Delete]').click(); } );
                             }
                             else{
                                 openDialog("No rules are selected. Please select a rule to delete first.", "No Rules Selected");
@@ -126,8 +130,9 @@
                             pauseCountdown();
                         }
                      );
-                    $('input[value=Scan][type=submit]').click(
+                    $('input[value=Scan2][type=submit]').click(
                         function(){
+                            
                             var count = $('input.selectable:checked').length;
                             if( count == 0 ){
                                 openDialog("No rules are selected. Please select a rule to scan first.", "No Rules Selected");
