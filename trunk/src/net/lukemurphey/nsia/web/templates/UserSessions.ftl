@@ -34,7 +34,7 @@
             function(){
                 $('td.sessiondelete a').click(
                     function(){
-                        openDeleteConfirmDialog( "Are you sure you want to delete this session?", "Delete Session?", this.href );
+                        openDeleteConfirmDialog( "Are you sure you want to terminate this session?", "Terminate Session?", this.href );
                         return false;
                     }
                 );
