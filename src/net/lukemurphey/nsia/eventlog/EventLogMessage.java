@@ -64,7 +64,7 @@ public class EventLogMessage {
 		OPERATION_FAILED(EventLogSeverity.ERROR, "System: Operation failed"), 
 		SCANNER_STOPPED(EventLogSeverity.NOTICE, "System: Scanner stopped"), 
 		SCANNER_STARTED(EventLogSeverity.NOTICE, "System: Scanner started"), 
-		DEFINITIONS_UPDATED(EventLogSeverity.NOTICE, "System: Definitions updated"), 
+		DEFINITIONS_UPDATED(EventLogSeverity.NOTICE, "System: Definitions updated"),
 		SCAN_ENGINE_EXCEPTION(EventLogSeverity.ERROR, "System: Scan engine encountered an exception"),
 		DEFINITION_DEBUG_MESSAGE(EventLogSeverity.DEBUG, "Scanner: Definition debug message"), 
 		DEFINITIONS_EXPORTED(EventLogSeverity.NOTICE, "System: Definition set exported"), 
@@ -175,7 +175,8 @@ public class EventLogMessage {
 		RULE_EXCEPTION_DELETED(EventLogSeverity.WARNING, "Scan Rule Management: Rule exception deleted"),
 		DEFAULT_SCAN_POLICY_MODIFIED(EventLogSeverity.WARNING, "Scan Rule Management: Default scan policy modified"),
 		SCAN_POLICY_MODIFIED(EventLogSeverity.WARNING, "Scan Rule Management: Scan policy modified"),
-		SCAN_THREADS_FAILED_TO_TERMINATE(EventLogSeverity.ERROR, "Scanner: Scan thread failed to terminate");
+		SCAN_THREADS_FAILED_TO_TERMINATE(EventLogSeverity.ERROR, "Scanner: Scan thread failed to terminate"),
+		DEFINITIONS_CURRENT(EventLogSeverity.INFORMATIONAL, "System: Definitions checked, no update required");
 
 		private EventType(EventLogSeverity severity, String name){
 			this.severity = severity;
