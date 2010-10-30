@@ -76,7 +76,7 @@
                 <td class="StatBlueSmall"><span style="vertical-align: middle;"><img src="/media/img/16_Information" alt="Informational"></span></td>
                 <td>${entry.severity?html}</td>
             </#if>
-                <td>${entry.date?date}</td>
+                <td>${entry.date?datetime}</td>
                 <td><a href="<@url name="event_log_entry" args=[entry.entryID] /><#if (severity >= 0 || contentFilter?? )>?<#if (severity >= 0)>Severity=${severity}&</#if><#if (contentFilter??)>Content=${contentFilter}&</#if></#if>">[${entry.entryID}]</a></td>
                 <td><@truncate_chars length=70>${entry.message?html}</@truncate_chars></td>
                 <td title="${entry.notes?replace(", ", "\n")?html}"><@truncate_chars length=40>${entry.notes?html}</@truncate_chars></td>

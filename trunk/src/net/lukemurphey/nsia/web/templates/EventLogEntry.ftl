@@ -34,7 +34,7 @@
         </tr>
         <tr>
             <td class="Text_2">Date</td>
-            <td>${entry.formattedDate}</td>
+            <td>${entry.date?datetime}</td>
         </tr>
         <#if entry.notes??>
         <tr>
