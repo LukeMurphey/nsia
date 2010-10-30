@@ -81,9 +81,9 @@
             </#list>
             <tr class="lastRow">
                  <td colspan="7">
-                     <input onClick="showHourglass('Scanning...'); pauseCountdown();" class="button" type="submit" name="Action" value="Scan">
-                     <input onClick="pauseCountdown();" class="button" type="submit" name="Action" value="Delete">
-                     <input onClick="showHourglass('Baselining...'); pauseCountdown();" class="button" type="submit" name="Action" value="Baseline">
+                     <input class="button" type="submit" name="Action" value="Scan">
+                     <input class="button" type="submit" name="Action" value="Delete">
+                     <input class="button" type="submit" name="Action" value="Baseline">
                  </td>
              </tr>
            </tbody>
@@ -100,7 +100,7 @@
         <script type="text/javascript">
             $(document).ready(
                 function(){
-                    $('#sitegroupform').submit(
+                    $('input[value=Delete][type=submit]').click(
                         function(){
                             var count = $('input.selectable:checked').length;
                             if( count == 1 ){
@@ -109,7 +109,32 @@
                             else if( count > 0 ){
                                 openDeleteConfirmDialog( "Are you sure you want to delete these rules? This action cannot be undone.", "Delete Rules?", function(){ $('input[value=Delete][type=submit]').click(); } );
                             }
+                            else{
+                                openDialog("No rules are selected. Please select a rule to delete first.", "No Rules Selected");
+                            }
                             return false;
+                        }
+                     );
+                    $('input[value=Baseline][type=submit]').click(
+                        function(){
+                            var count = $('input.selectable:checked').length;
+                            if( count == 0 ){
+                                openDialog("No rules are selected. Please select a rule to baseline first.", "No Rules Selected");
+                                return false;
+                            }
+                            showHourglass('Baselining...');
+                            pauseCountdown();
+                        }
+                     );
+                    $('input[value=Scan][type=submit]').click(
+                        function(){
+                            var count = $('input.selectable:checked').length;
+                            if( count == 0 ){
+                                openDialog("No rules are selected. Please select a rule to scan first.", "No Rules Selected");
+                                return false;
+                            }
+                            showHourglass('Scanning...');
+                            pauseCountdown();
                         }
                      );
                 }
