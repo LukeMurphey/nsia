@@ -7,6 +7,7 @@
         <#assign message>No exceptions exist yet.</#assign>
         <@getinfodialog message=message title="No Exceptions Exist" />
     <#else>
+        <#include "PopupDialog.ftl">
         <#include "SelectAll.ftl">
         <span class="Text_1">Exceptions</span><br />
         Below is the list of issues that will be overlooked by the scanner<br>&nbsp;<br/>
@@ -58,10 +59,10 @@
                             <table>
                                 <tr>
                                     <td class="imagebutton">
-                                        <a href="<@url name="exception_delete" args=[ruleID] />?ExceptionID=${filter.policyID?c}"><img alt="Delete" src="/media/img/16_Delete" /></a>
+                                        <a class="exceptiondelete" href="<@url name="exception_delete" args=[ruleID] />?ExceptionID=${filter.policyID?c}"><img alt="Delete" src="/media/img/16_Delete" /></a>
                                     </td>
                                     <td>
-                                        <a href="<@url name="exception_delete" args=[ruleID] />?ExceptionID=${filter.policyID?c}">Delete</a>
+                                        <a class="exceptiondelete" href="<@url name="exception_delete" args=[ruleID] />?ExceptionID=${filter.policyID?c}">Delete</a>
                                     </td>
                                 </tr>
                             </table>
@@ -72,11 +73,41 @@
                     <tr class="lastRow">
                         <td colspan="4">
                             <input type="submit" class="button" name="Action" value="Delete">
+                            <div style="display:none"> <#-- The following button will be used solely for the jQuery script which needs to call click on a button which does not have an onClick handler (otherwise, infinite loop is caused) -->
+                                <button class="button" name="Action" value="Delete">Delete</button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </form>
+        <script type="text/javascript">
+            $(document).ready(
+                function(){
+                    $('input[value=Delete][type=submit]').click(
+                        function(){
+                            var count = $('input.selectable:checked').length;
+                            if( count == 1 ){
+                                openDeleteConfirmDialog( "Are you sure you want to delete this exception? This action cannot be undone.", "Delete Exception?", function(){ $('button[value=Delete]').click(); } );
+                            }
+                            else if( count > 0 ){
+                                openDeleteConfirmDialog( "Are you sure you want to delete these exceptions? This action cannot be undone.", "Delete Exceptions?", function(){ $('button[value=Delete]').click(); } );
+                            }
+                            else{
+                                openDialog("No exceptions are selected. Please select an exception to delete first.", "No Exceptions Selected");
+                            }
+                            return false;
+                        }
+                    );
+                    $('a.exceptiondelete').click(
+                        function(){
+                            openDeleteConfirmDialog( "Are you sure you want to delete this exception? This action cannot be undone.", "Delete Exception?", this.href );
+                            return false;
+                        }
+                    );
+                }
+            );
+        </script>
     </#if>
 </#assign>
 <#include "BaseWithNav.ftl">
