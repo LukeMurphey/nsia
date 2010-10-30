@@ -14,6 +14,7 @@
 </#macro>
 
 <#assign content>
+<#include "PopupDialog.ftl">
 <#if definition??>
 <div style="position:relative;">    
     <div>
