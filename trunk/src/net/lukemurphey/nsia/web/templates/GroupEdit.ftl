@@ -3,6 +3,7 @@
 <#include "Forms.ftl">
 
 <#assign content>
+    <#include "PopupDialog.ftl">
     <div><span class="Text_1">Group Management</span>
     <br><span class="LightText"><#if group??>Edit<#else>Create New</#if> Group</span>
     <p></p>
