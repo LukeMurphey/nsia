@@ -293,10 +293,12 @@ public class HttpDefinitionScanRule extends ScanRule{
 					
 					// Log the scan issue and return the relevant scan result
 					if( parentResult != null && parentResult.getSpecimenDescription() != null ){
-						return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_FAILED, new java.sql.Timestamp(System.currentTimeMillis()), url, new DefinitionMatch( MetaDefinition.INVALID_URI, "URI loaded from " + parentResult.getSpecimenDescription()), this.scanRuleId ), null );
+						logDefinitionMatch( MetaDefinition.INVALID_URI.getFullName(), MetaDefinition.INVALID_URI.getID(), this.getSpecimenDescription(), scanRuleId, MetaDefinition.INVALID_URI.getSeverity(), MetaDefinition.INVALID_URI.getMessage() + "; URI loaded from " + parentResult.getSpecimenDescription() );
+						return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_FAILED, new java.sql.Timestamp(System.currentTimeMillis()), url, new DefinitionMatch( MetaDefinition.INVALID_URI, MetaDefinition.INVALID_URI.getMessage() + "; URI loaded from " + parentResult.getSpecimenDescription()), this.scanRuleId ), null );
 					}
 					else{
-						return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_FAILED, new java.sql.Timestamp(System.currentTimeMillis()), url, new DefinitionMatch( MetaDefinition.INVALID_URI ), this.scanRuleId ), null );
+						logDefinitionMatch( MetaDefinition.INVALID_URI.getFullName(), MetaDefinition.INVALID_URI.getID(), this.getSpecimenDescription(), scanRuleId, MetaDefinition.INVALID_URI.getSeverity(), MetaDefinition.INVALID_URI.getMessage() );
+						return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_FAILED, new java.sql.Timestamp(System.currentTimeMillis()), url, new DefinitionMatch( MetaDefinition.INVALID_URI, MetaDefinition.INVALID_URI.getMessage() ), this.scanRuleId ), null );
 					}
 				}
 				
@@ -323,6 +325,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 					results = new Vector<DefinitionMatch>();
 				}
 				else{
+					// Log each definition match
 					for(DefinitionMatch match : results){
 						logDefinitionMatch(match.getDefinitionName(), match.getDefinitionID(), this.getSpecimenDescription(), this.scanRuleId, match.getSeverity(), match.getMessage());
 					}
