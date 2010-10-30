@@ -13,7 +13,7 @@ ${head}
     <style type="text/css">
         @import url('/media/css/Stylesheet.css');
     </style>
-    <script type="text/javascript" language="javascript" src="/media/js/RefreshScript.js"></script>
+    <script type="text/javascript" language="javascript" src="/media/js/viewrefresh.js"></script>
     <script type="text/javascript" language="javascript" src="/media/js/jquery-1.3.2.min.js"></script>
 </head>
 
