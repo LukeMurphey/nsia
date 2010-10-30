@@ -125,6 +125,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 		private HttpDefinitionScanResult scanResult;
 		private Parser parser;
 		private int httpResponseCode = -1;
+		private Vector<URL> extractedURLs = new Vector<URL>();
 		
 		public HttpSignatureScanResultWithParser(HttpDefinitionScanResult scanResult, Parser parser){
 			this.scanResult = scanResult;
@@ -135,6 +136,19 @@ public class HttpDefinitionScanRule extends ScanRule{
 			this.scanResult = scanResult;
 			this.parser = parser;
 			this.httpResponseCode = httpResponseCode;
+		}
+		
+		public HttpSignatureScanResultWithParser(HttpDefinitionScanResult scanResult, Parser parser, Vector<URL> extractedURLs ){
+			this.scanResult = scanResult;
+			this.parser = parser;
+			this.extractedURLs.addAll(extractedURLs);
+		}
+		
+		public HttpSignatureScanResultWithParser(HttpDefinitionScanResult scanResult, Parser parser, int httpResponseCode, Vector<URL> extractedURLs ){
+			this.scanResult = scanResult;
+			this.parser = parser;
+			this.httpResponseCode = httpResponseCode;
+			this.extractedURLs.addAll(extractedURLs);
 		}
 		
 		public HttpDefinitionScanResult getScanResult(){
@@ -436,7 +450,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 			message.addField( new EventLogField(FieldName.URL, url ));
 			
 			if( definitionOutput != null ){
-				message.addField( new EventLogField(FieldName.DEFINITION_OUTPUT, definitionOutput ));
+				message.addField( new EventLogField(FieldName.DEFINITION_MESSAGE, definitionOutput ));
 			}
 			
 			if( ruleID > -1 ){
