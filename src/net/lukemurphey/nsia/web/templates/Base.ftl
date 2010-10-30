@@ -19,7 +19,7 @@ ${head}
 </head>
 
 <body face="Arial, sans-serif">
-    <script type="text/javascript" language="javascript" src="/media/js/MainScript.js"></script>
+    <script type="text/javascript" language="javascript" src="/media/js/hourglass.js"></script>
     <div id="hourglass" class="hourglassInvisible">
         <table summary="StatusWindow">
             <tr>
