@@ -39,7 +39,7 @@
                 }
             });
     }
-    <#-- A dialog to confirm the delection -->
+    <#-- A dialog to confirm the deletion of an object -->
     function openDeleteConfirmDialog(prompt, title, onOK){
     
         if( typeof(title) == 'undefined' ){
