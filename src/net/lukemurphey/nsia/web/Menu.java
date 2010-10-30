@@ -101,7 +101,7 @@ public class Menu {
 			menu.add( new Link("Edit Site Group", SiteGroupEditView.getURL(siteGroup)) );
 			menu.add( new Link("Edit ACLs", AccessControlView.getURL(siteGroup.getObjectId()), new Link.Attribute("onclick", "w=window.open('" + AccessControlView.getURL(siteGroup.getObjectId()) + "', 'AccessControl', 'height=400,width=780,screenX=' + (screen.availWidth - 700)/2 + ',screenY=' + (screen.availHeight - 300)/2 + ',scrollbars=yes,resizable=yes,toolbar=no');return false") ) );
 			menu.add( new Link("Edit Scan Policy", DefinitionPolicyView.getURL(siteGroup) ));
-			menu.add( new Link("Delete Site Group", SiteGroupDeleteView.getURL(siteGroup), new Link.Attribute("onclick", "return confirm('Are you sure you want to delete this Site-Group?')") ) ); // , new Link.Attribute("onclick", "\"$('#delete_dialog').dialog('open');return false;\"")
+			menu.add( new Link("Delete Site Group", SiteGroupDeleteView.getURL(siteGroup), new Link.Attribute("onclick", "openDeleteConfirmDialog( 'Are you sure you want to delete this site-group? This action cannot be undone.', 'Delete Site-Group?', this.href ); return false;") ) );
 			
 			if( siteGroup.isEnabled() ){
 				menu.add( new Link("Disable Site Group", SiteGroupDisableView.getURL(siteGroup) ) );
@@ -136,7 +136,7 @@ public class Menu {
 			}
 			
 			menu.add( new Link("Edit Rights", RightsEditView.getURL(group) ) );
-			menu.add( new Link("Delete Group", GroupDeleteView.getURL(group), new Link.Attribute("onclick", "return confirm('Are you sure you want to delete this group?')") ) );
+			menu.add( new Link("Delete Group", GroupDeleteView.getURL(group), new Link.Attribute("onclick", "openDeleteConfirmDialog( 'Are you sure you want to delete this group? This action cannot be undone.', 'Delete Group?', this.href ); return false;") ) );
 		}
 		
 		return menu;
@@ -247,8 +247,7 @@ public class Menu {
 		
 		menu.add( new Link("Definitions") );
 		if( definition != null && definition.isOfficial() == false ){
-			//menu.add( new Link("Delete Definition", DefinitionDeleteView.getURL(definition.getID()), new Link.Attribute("onclick", "return confirm('Are you sure you want to delete this definition?')") ) );
-			menu.add( new Link("Delete Definition", DefinitionDeleteView.getURL(definition.getID()) ) );
+			menu.add( new Link("Delete Definition", DefinitionDeleteView.getURL(definition.getID()), new Link.Attribute("onclick", "openDeleteConfirmDialog( 'Are you sure you want to delete this definition? This action cannot be undone.', 'Delete Definition?', this.href); return false;") ) );
 		}
 		menu.add( new Link("Update Definitions", DefinitionsUpdateView.getURL() ) );
 		menu.add( new Link("Create New Definition", DefinitionEntryView.getURL() ));
