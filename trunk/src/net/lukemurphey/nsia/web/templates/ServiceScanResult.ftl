@@ -20,6 +20,7 @@
             </#assign>
             <@summaryrow "Ports Scanned" scannedports />
             <@summaryrow "Server" scanResult.specimenDescription />
+            <@summaryrow "Date Scanned" scanResult.scanTime?datetime />
         </table><p/>
         
         <#-- 1 -- Print out list of violations -->
