@@ -17,7 +17,6 @@ import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
-import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.Shortcuts;
 import net.lukemurphey.nsia.web.StandardViewList;
@@ -75,42 +74,31 @@ public class DefinitionDeleteView extends View{
 		}
 		
 		// 3 -- Delete the definition
-		if( "Delete".equalsIgnoreCase(request.getParameter("Selected")) ){
+		try{
+			DefinitionArchive archive = DefinitionArchive.getArchive();
+			archive.removeByID(definitionID);
 			
-			try{
-				DefinitionArchive archive = DefinitionArchive.getArchive();
-				archive.removeByID(definitionID);
-				
-				Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITIONS_DELETED, new EventLogField[]{
-						new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
-						new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
-						new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
-				
-				context.addMessage("Definition successfully deleted", MessageSeverity.INFORMATION);
-				response.sendRedirect( StandardViewList.getURL(DefinitionsView.VIEW_NAME) );
-				return true;
-			}
-			catch( DisallowedOperationException e ){
-				Dialog.getDialog(response, context, data, e.getMessage(), "Delete Disallowed", DialogType.WARNING);
-				return true;
-			} catch (SQLException e) {
-				throw new ViewFailedException(e);
-			} catch (NoDatabaseConnectionException e) {
-				throw new ViewFailedException(e);
-			} catch (DefinitionSetLoadException e) {
-				throw new ViewFailedException(e);
-			} catch (InputValidationException e) {
-				throw new ViewFailedException(e);
-			}
+			Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITIONS_DELETED, new EventLogField[]{
+					new EventLogField( EventLogField.FieldName.DEFINITION_ID, definitionID ),
+					new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
+					new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getUser().getUserID() )} );
+			
+			context.addMessage("Definition successfully deleted", MessageSeverity.INFORMATION);
+			response.sendRedirect( StandardViewList.getURL(DefinitionsView.VIEW_NAME) );
+			return true;
 		}
-		
-		// 4 -- Show the dialog to confirm the deletion
-		else{
-			Shortcuts.addDashboardHeaders(request, response, data);
-			Dialog.getOptionDialog(response, context, data,"Are you sure you want to delete the definition?", "Confirm Deletion", DialogType.WARNING, new Link("Delete", createURL(definitionID)), new Link("Cancel", createURL(definitionID)));
+		catch( DisallowedOperationException e ){
+			Dialog.getDialog(response, context, data, e.getMessage(), "Delete Disallowed", DialogType.WARNING);
+			return true;
+		} catch (SQLException e) {
+			throw new ViewFailedException(e);
+		} catch (NoDatabaseConnectionException e) {
+			throw new ViewFailedException(e);
+		} catch (DefinitionSetLoadException e) {
+			throw new ViewFailedException(e);
+		} catch (InputValidationException e) {
+			throw new ViewFailedException(e);
 		}
-
-		return true;
 	}
 
 }
