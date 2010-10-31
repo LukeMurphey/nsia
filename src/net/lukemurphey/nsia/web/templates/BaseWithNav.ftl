@@ -27,9 +27,25 @@
             <#if (crumb_index > 0)>/</#if> <#if crumb.link??><a class=NavBar href="${crumb.link}"></#if>${crumb.title?html}<#if crumb.link??></a></#if>
             </#list>
             &nbsp;</div>
+            <script type="text/javascript">
+            $(document).ready(function() {
+                $(".messagebox").click( function() {
+                    $(".messagebox").fadeTo(200, 0, function () {
+                        $(".messagebox").slideUp(200);
+                        $(".messagebox").css("display", "none");
+                    });
+                });
+                setTimeout(function() {
+                    $(".messagebox").fadeTo(1000, 0, function () {
+                        $(".messagebox").slideUp(200);
+                        $(".messagebox").css("display", "none");
+                        });
+                    }, 10000);
+            });
+            </script>
             <#if (context??)>
                 <#macro message htmlclass icon message >
-                <table>
+                <table class="messagebox">
                     <tr>
                         <td><img src="${icon}" /></td>
                         <td class="${htmlclass}">${message?html}</td>
