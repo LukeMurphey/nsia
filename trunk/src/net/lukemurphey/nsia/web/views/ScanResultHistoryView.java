@@ -135,7 +135,7 @@ public class ScanResultHistoryView extends View {
 			
 			// 7 -- Add dashboard headers that include a refresh panel if the search is on the first page
 			if( filtered == false ){
-				Shortcuts.addDashboardHeaders(request, response, data, createURL());
+				Shortcuts.addDashboardHeaders(request, response, data, getURL(ruleID));
 			}
 			
 			// 8 -- Get the results
