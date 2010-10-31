@@ -13,7 +13,7 @@
         <table width="660px" class="DataTable">
             <tbody>
                 <tr>
-                    <td class="BackgroundLoading1" height="120"><img src="/graph/RuleScanHistory?RuleID=${ruleID?c}&S=${firstScanResultID?c}" alt="Rule History"></td>
+                    <td class="BackgroundLoading1" height="150"><img src="/graph/RuleScanHistory?RuleID=${ruleID?c}&t=${current_time_millis?c}&S=${firstScanResultID?c}" alt="Rule History"></td>
                 </tr>
             </tbody>
         </table>
