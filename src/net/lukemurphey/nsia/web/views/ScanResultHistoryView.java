@@ -103,24 +103,29 @@ public class ScanResultHistoryView extends View {
 			long lastScanResultId = -1;
 			long startEntry = -1;
 			boolean resultsBefore = false;
+			boolean filtered = false;
 			
 			try{
 				if( request.getParameter("S") != null ){
 					lastScanResultId = Long.valueOf( request.getParameter("S") );
+					filtered = true;
 				}
 				
 				if( request.getParameter("E") != null ){
 					firstScanResultId = Long.valueOf( request.getParameter("E") );
+					filtered = true;
 				}
 				
 				String action = request.getParameter("Action");
 				if( action != null && action.equalsIgnoreCase("Previous") ){
 					startEntry = firstScanResultId;
 					resultsBefore = true;
+					filtered = true;
 				}
 				else if( action != null && action.equalsIgnoreCase("Next") ){
 					startEntry = lastScanResultId;
 					resultsBefore = false;
+					filtered = true;
 				}
 			}
 			catch(NumberFormatException e){
@@ -128,7 +133,12 @@ public class ScanResultHistoryView extends View {
 				return true;
 			}
 			
-			// 4 -- Get the results
+			// 7 -- Add dashboard headers that include a refresh panel if the search is on the first page
+			if( filtered == false ){
+				Shortcuts.addDashboardHeaders(request, response, data, createURL());
+			}
+			
+			// 8 -- Get the results
 			ScanResult[] scanResults = null;
 			
 			int count = 20;
@@ -136,11 +146,11 @@ public class ScanResultHistoryView extends View {
 			long maxEntry = -1;
 			long minEntry = -1;
 			
-			//	 4.1 -- Get the minimum and maximum result identifiers for the rule
+			//	 8.1 -- Get the minimum and maximum result identifiers for the rule
 			maxEntry = ScanResultLoader.getMaxEntry(ruleID);
 			minEntry = ScanResultLoader.getMinEntry(ruleID);
 			
-			//	 4.2 -- Get the scan results
+			//	 8.2 -- Get the scan results
 			if( startEntry > 0){
 				scanResults =  ScanResultLoader.getScanResults(ruleID, startEntry, count, resultsBefore);
 			}
@@ -168,6 +178,9 @@ public class ScanResultHistoryView extends View {
 			data.put("READY", ScanResultCode.READY);
 			data.put("SCAN_FAILED", ScanResultCode.SCAN_FAILED);
 			data.put("UNREADY", ScanResultCode.UNREADY);
+			
+			// Add the current time to the variables list so that an argument can be added to the images list in order to force the browser to reload the images if they are reloaded by an AJAX request
+			data.put("current_time_millis", System.currentTimeMillis());
 			
 			TemplateLoader.renderToResponse("ScanResultHistory.ftl", data, response);
 		
