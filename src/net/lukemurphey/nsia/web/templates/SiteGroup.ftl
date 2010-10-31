@@ -2,11 +2,14 @@
 <#include "GetDialog.ftl">
 <#assign content>
 <#include "PopupDialog.ftl">
+
 <#if (scanresults?? & scanresults?size = 0 && rules?size = 0) >
 	<#assign message>No rules exist yet. Define a rule set to begin monitoring.<p><a href="<@url name="rule_editor" args=["New"] />?SiteGroupID=${sitegroup.groupId?c}">[Create Rule Now]</a></#assign>
     <@getinfodialog message=message title="No Rules" />
 <#else>
     <#include "SelectAll.ftl">
+    <div><span class="Text_1">Monitoring Rules</span>
+    <br><span class="LightText">Below are the rules for the ${sitegroup.groupName?html} site-group</span><p>
     <form id="sitegroupform" action="${request.thisURL}" method="POST">
         <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId?c}">
         <table class="DataTable" summary="HeaderEntries">
