@@ -19,7 +19,7 @@ public class MetaDefinition extends Definition {
 	public static final MetaDefinition CONNECTION_FAILED = new MetaDefinition("ConnectionFailure","Anomaly", "ContentError",  10007, Severity.LOW, Action.ALERT, "A connection to the server could not be established");
 	public static final MetaDefinition PARSE_FAILURE = new MetaDefinition("ParseFailure", "Anomaly", "ContentError", 10008, Severity.LOW, Action.ALERT, "The content could not be parsed");
 	
-	public static final MetaDefinition IO_EXCEPTION = new MetaDefinition("ConnectionFailure", "Anomaly", "ContentError", 10009, Severity.LOW, Action.ALERT, "The content could not be downloaded and evalauted");
+	public static final MetaDefinition IO_EXCEPTION = new MetaDefinition("ConnectionFailure", "Anomaly", "ContentError", 10009, Severity.LOW, Action.ALERT, "The connection to the server failed");
 	public static final MetaDefinition INVALID_URI = new MetaDefinition("InvalidURI", "Anomaly", "ContentError", 10010, Severity.LOW, Action.ALERT, "The given URI is invalid");
 	public static final MetaDefinition HTTP_EXCEPTION = new MetaDefinition("HTTPException", "Anomaly", "ContentError", 10011, Severity.LOW, Action.ALERT, "An HTTP exception occurred while attempting to retrieve the content");
 	
