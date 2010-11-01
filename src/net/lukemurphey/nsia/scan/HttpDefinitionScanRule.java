@@ -21,6 +21,8 @@ import org.htmlparser.util.ParserException;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
@@ -391,9 +393,20 @@ public class HttpDefinitionScanRule extends ScanRule{
 					results.add( new DefinitionMatch(MetaDefinition.HTTP_EXCEPTION, e.getMessage()));
 				}
 			} catch (IOException e) {
-				boolean isTimeout = e.getMessage().startsWith("Connection timed out: connect");
-				boolean isRefused = e.getMessage().startsWith("Connection refused: connect");
 				
+				// Determine if the connection failure is due to a connection failure
+				Pattern isTimeoutRegex = Pattern.compile(".*time.*out.*", Pattern.CASE_INSENSITIVE);
+				Matcher isTimeoutMatcher = isTimeoutRegex.matcher(e.getMessage());
+				
+				boolean isTimeout = isTimeoutMatcher.matches();
+				
+				// Determine if the connection failed due to a refusal
+				Pattern isRefusedRegex = Pattern.compile("(refuse)|(reject)", Pattern.CASE_INSENSITIVE);
+				Matcher isRefusedMatcher = isRefusedRegex.matcher(e.getMessage());
+				
+				boolean isRefused = isRefusedMatcher.matches();
+				
+				// Create the message based on the type of connection problem
 				if(isTimeout && (signatureExceptions == null || signatureExceptions.isFiltered(siteGroupID, scanRuleId, MetaDefinition.CONNECTION_TIMEOUT, url) == false ) ){
 					results.add( new DefinitionMatch(MetaDefinition.CONNECTION_TIMEOUT, e.getMessage()));
 				}
