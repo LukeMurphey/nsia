@@ -408,13 +408,13 @@ public class HttpDefinitionScanRule extends ScanRule{
 				
 				// Create the message based on the type of connection problem
 				if(isTimeout && (signatureExceptions == null || signatureExceptions.isFiltered(siteGroupID, scanRuleId, MetaDefinition.CONNECTION_TIMEOUT, url) == false ) ){
-					results.add( new DefinitionMatch(MetaDefinition.CONNECTION_TIMEOUT, e.getMessage()));
+					results.add( new DefinitionMatch(MetaDefinition.CONNECTION_TIMEOUT, MetaDefinition.CONNECTION_TIMEOUT.getMessage() + ":" + e.getMessage()));
 				}
 				else if(isRefused && (signatureExceptions == null || signatureExceptions.isFiltered(siteGroupID, scanRuleId, MetaDefinition.CONNECTION_REFUSED, url) == false ) ){
-					results.add( new DefinitionMatch(MetaDefinition.CONNECTION_REFUSED, e.getMessage()));
+					results.add( new DefinitionMatch(MetaDefinition.CONNECTION_REFUSED, MetaDefinition.CONNECTION_TIMEOUT.getMessage() + ":" + e.getMessage()));
 				}
 				else if( (!isRefused && !isTimeout) && (signatureExceptions == null || signatureExceptions.isFiltered(siteGroupID, scanRuleId, MetaDefinition.CONNECTION_FAILED, url) == false ) ){
-					results.add( new DefinitionMatch(MetaDefinition.CONNECTION_FAILED, e.getMessage()));
+					results.add( new DefinitionMatch(MetaDefinition.CONNECTION_FAILED, MetaDefinition.CONNECTION_TIMEOUT.getMessage() + ":" + e.getMessage()));
 				}
 			}
 			
