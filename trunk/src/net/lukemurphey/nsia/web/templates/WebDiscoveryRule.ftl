@@ -4,7 +4,7 @@
 <#include "Shortcuts.ftl">
 <#assign content>
     <div><span class="Text_1">HTTP Content Auto-Discovery Rule</span>
-    <br><span class="LightText">Automatically crawls the website in order to identify malicious content</span>
+    <br><span class="LightText">Automatically crawls the website in order to identify malicious content</span><p/>
     <#if (form_errors??)>
     <@getFormErrors form_errors=form_errors />
     </#if>
@@ -167,7 +167,7 @@
             <#-- 4 -- Output the recursion depth -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("RecursionDepth"))>ValidationFailed<#else>Background1</#if>">
                 <td class="TitleText">Levels to Recurse</td>
-                <td title="Limits how many levels deep the scanner will traverse"><input class="textInput" size="40" type="text" name="RecursionDepth" value="<#if request.getParameter("RecursionDepth")??>${request.getParameter("RecursionDepth")?html}<#elseif rule??>${rule.recursionDepth?c}</#if>"></td>
+                <td title="Limits how many levels deep the scanner will traverse"><input class="textInput" size="40" type="text" name="RecursionDepth" value="<#if request.getParameter("RecursionDepth")??>${request.getParameter("RecursionDepth")?html}<#elseif rule??>${rule.recursionDepth?c}<#else>10</#if>"></td>
             </tr>
             <#-- 5 -- Output the scan limit -->
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("ScanLimit"))>ValidationFailed<#else>Background1</#if>">
@@ -193,5 +193,6 @@
                 </td>
             </tr>
          </table>
+         <p/>
 </#assign>
 <#include "BaseWithNav.ftl">
