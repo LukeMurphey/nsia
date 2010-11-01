@@ -413,8 +413,8 @@ public class HttpDefinitionScanRule extends ScanRule{
 				else if(isRefused && (signatureExceptions == null || signatureExceptions.isFiltered(siteGroupID, scanRuleId, MetaDefinition.CONNECTION_REFUSED, url) == false ) ){
 					results.add( new DefinitionMatch(MetaDefinition.CONNECTION_REFUSED, e.getMessage()));
 				}
-				else if( (!isRefused && !isTimeout) && (signatureExceptions == null || signatureExceptions.isFiltered(siteGroupID, scanRuleId, MetaDefinition.IO_EXCEPTION, url) == false ) ){
-					results.add( new DefinitionMatch(MetaDefinition.IO_EXCEPTION, e.getMessage()));
+				else if( (!isRefused && !isTimeout) && (signatureExceptions == null || signatureExceptions.isFiltered(siteGroupID, scanRuleId, MetaDefinition.CONNECTION_FAILED, url) == false ) ){
+					results.add( new DefinitionMatch(MetaDefinition.CONNECTION_FAILED, e.getMessage()));
 				}
 			}
 			
