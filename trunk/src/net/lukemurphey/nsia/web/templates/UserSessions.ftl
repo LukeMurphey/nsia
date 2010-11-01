@@ -8,6 +8,11 @@
     <div><span class="Text_1">User Sessions</span>
     <br><span class="LightText">Lists all users currently logged in</span>
     <p>
+    <#macro sessioninfo session>
+Session last activity: ${session.lastActivity}
+Logged in from: ${session.remoteSourceAddress}
+Client browser: ${session.remoteSourceData}
+    </#macro>
     <table class="DataTable">
         <thead>
             <tr>
@@ -22,7 +27,7 @@
             <tr class="Background1">
                 <td>${session.userId?c}</td>
                 <td><span class="Centered"><a href="<@url name="user" args=[session.userId]/>"><img src="/media/img/16_User"></a><a href="<@url name="user" args=[session.userId]/>">${session.userName?html}</a></span></td>
-                <td>${session.sessionCreated}</td>
+                <td title="<@sessioninfo session/>">${session.sessionCreated}</td>
                 <td>${session.sessionStatus.description?html}</td>
                 <td class="sessiondelete"><@button url=geturl("user_session_end", session.trackingNumber?c) imageURL="/media/img/16_Delete" imageAlt="Terminate" text="Terminate" /></td>
             </tr>
