@@ -1027,7 +1027,7 @@ public class SessionManagement {
 		}
 		
 		/**
-		 * The default constrcutor creates a null session; or one that indicates that no valid session exists. The additional data
+		 * The default constructor creates a null session; or one that indicates that no valid session exists. The additional data
 		 * fields will be null since they do not apply.
 		 *
 		 */
