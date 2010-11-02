@@ -20,10 +20,10 @@ ${head}
 
 <body face="Arial, sans-serif">
     <script type="text/javascript" language="javascript" src="/media/js/hourglass.js"></script>
-    <div id="hourglass" class="hourglassInvisible">
+    <div id="hourglass" style="display:none" class="hourglass">
         <table summary="StatusWindow">
             <tr>
-                <td><img src="/media/img/Loading" alt="loading"></td>
+                <td><img src="/media/img/LoadingDark" alt="loading"></td>
                 <td><span id="hourglassText" class="hourglassText">Processing...</span></td>
             </tr>
         </table>
