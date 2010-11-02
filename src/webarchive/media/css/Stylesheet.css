@@ -520,24 +520,19 @@ span.SideNote{
 }
 
 .hourglassText{
-	color: #9a9ca6;
+	color: white;
 }
 
-.hourglassVisible{
-	position: fixed;
-	right: 1em;
-	top: 0.25em;
-	border: 1px solid black;
-	background: #FFF;
-}
-
-.hourglassInvisible{
-	display: none;
-	position: fixed;
-	right: 1em;
-	top: 0.25em;
-	border: 1px solid black;
-	background: #FFF;
+.hourglass{
+    -webkit-box-shadow: black 0px 0px 5px;
+    padding: 9px;
+    margin-bottom: 15px;
+    border-bottom-left-radius: 14px 14px;
+    background-color: black;
+    position: absolute;
+    z-index: 100;
+    right: 0px;
+    top: 0px;
 }
 
 .mustNotMatch{
