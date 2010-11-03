@@ -37,6 +37,9 @@ import net.lukemurphey.nsia.web.ViewFailedException;
 import net.lukemurphey.nsia.web.SessionMessages.MessageSeverity;
 import net.lukemurphey.nsia.web.templates.TemplateLoader;
 
+/*
+ * This view handles authentication of the user.
+ */
 public class LoginView extends View {
 
 	public LoginView() {
@@ -48,6 +51,7 @@ public class LoginView extends View {
 		return view.createURL();
 	}
 	
+	// A message to be displayed on the login page
 	public static class Message{
 		
 		private String message;
@@ -74,7 +78,7 @@ public class LoginView extends View {
 	@Override
 	public boolean process( HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data ) throws ViewFailedException {
 		
-		//If the user is already logged in, then don't bother showing the view
+		// 1 -- Determine if the user is already logged in. Don't bother showing the view if they are
 		if( context!= null && context.getSessionInfo() != null && context.getSessionInfo().getSessionStatus() == SessionStatus.SESSION_ACTIVE ){
 			try{
 				if( request.getParameter("ReturnTo") != null ){
@@ -94,6 +98,7 @@ public class LoginView extends View {
 			}
 		}
 		
+		// 2 -- Add some of the fields necessary to render the view
 		data.put("title", "Login");
 		
 		Vector<String> headers = new Vector<String>();
@@ -102,17 +107,18 @@ public class LoginView extends View {
 		data.put("dashboard_headers", headers);
 		data.put("show_splitter_border", false);
 		
-		// 1 -- Try to login if requested
 		data.put("alert", MessageSeverity.ALERT);
 		data.put("information", MessageSeverity.INFORMATION);
 		data.put("success", MessageSeverity.SUCCESS);
 		data.put("warning", MessageSeverity.WARNING);
 		
+		// 3 -- If the operation is a POST, then tryto login
 		if( request.getMethod().equalsIgnoreCase("POST") && request.getParameter("Username") != null ){
 			String username = request.getParameter("Username");
 			String password = request.getParameter("Password");
 			data.put("username", username);
 			
+			// 3.1 -- Create the client data object which will record information about the device connecting in
 			ClientData clientData;
 			
 			try {
@@ -121,10 +127,33 @@ public class LoginView extends View {
 				clientData = null;
 			}
 			
+			// 3.2 -- Attempt authentication
 			String sessionID = authenticate(username, password, clientData);
 			
 			if( sessionID != null ){
-				//Authentication was successful
+				
+				// 3.2.1 -- Authentication was successful, clean up any existing sessions associated with the old session ID
+				SessionInfo oldSession = context.getSessionInfo();
+				
+				// Don't bother if the session ID has not been set
+				if( oldSession != null && oldSession.getSessionIdentifier() != null ){
+					
+					// Get a reference to the session manager
+					SessionManagement sessionManagement = new SessionManagement(Application.getApplication());
+					
+					// Terminate the session
+					try {
+						sessionManagement.terminateSession(oldSession.getSessionIdentifier());
+					} catch (NoDatabaseConnectionException e) {
+						throw new ViewFailedException(e);
+					} catch (SQLException e) {
+						throw new ViewFailedException(e);
+					} catch (InputValidationException e) {
+						throw new ViewFailedException(e);
+					}
+				}
+				
+				// 3.2.2 -- Set the new session ID
 				Cookie cookie = new Cookie("SessionID", sessionID);
 				cookie.setPath("/");
 				
@@ -141,6 +170,8 @@ public class LoginView extends View {
 				}
 				
 				response.addCookie(cookie);
+				
+				// 3.2.2 -- Forward the user to the appropriate page if the ForwardTo parameter is set
 				try {
 					String forwardTo = request.getParameter("ForwardTo");
 					if( forwardTo != null ){
@@ -180,10 +211,12 @@ public class LoginView extends View {
 			}
 		}
 		
+		// Show the message that the user was logged out (if they just logged out as indicated by the presence of the LoggedOut parameter
 		if( request.getParameter("LoggedOut") != null ){
 			data.put("message", new Message("You have been successfully logged out", MessageSeverity.INFORMATION));
 		}
 		
+		// Render the page
 		TemplateLoader.renderToResponse("Login.ftl", data, response);
 		
 		return true;
