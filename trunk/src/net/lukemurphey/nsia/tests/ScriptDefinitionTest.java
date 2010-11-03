@@ -1,7 +1,9 @@
 package net.lukemurphey.nsia.tests;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import junit.framework.TestCase;
 
@@ -279,6 +281,31 @@ public class ScriptDefinitionTest extends TestCase {
 		
 		if( !vars.isSet("Test") ){
 			fail("The definition did not set the correctly");
+		}
+	}
+	
+	public void testExtractURLs() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
+		
+		// 1 -- Perform a scan against a URL, make sure the URL loads the native array items
+		Application app = TestApplication.getApplication();
+		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "ExtractURLs.js" );
+		
+		HostConfiguration hostConfig = new HostConfiguration();
+		hostConfig.setHost("google.com", 80, "http");
+		HttpMethod httpMethod = new GetMethod( "/" );
+		httpMethod.setFollowRedirects(true);
+		HttpClient httpClient = new HttpClient();
+		httpClient.executeMethod( hostConfig, httpMethod );
+		
+		HttpResponseData httpResponse = new HttpResponseData( httpMethod, "http://google.com" );
+		
+		// 2 -- Make sure the variable was set
+		Variables vars = new Variables();
+		Result result = sig.evaluate(httpResponse,vars, 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+		Vector<URL> urls = result.getURLs();
+		
+		if( urls.size() != 5 ){
+			fail("The definition did not return the URLs correctly: " + urls.size());
 		}
 	}
 	
