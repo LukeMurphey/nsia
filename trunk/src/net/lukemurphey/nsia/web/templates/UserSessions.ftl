@@ -9,7 +9,8 @@
     <br><span class="LightText">Lists all users currently logged in</span>
     <p>
     <#macro sessioninfo session>
-Session last activity: ${session.lastActivity}
+Session last activity: ${session.lastActivity?datetime}
+Session started: ${session.sessionCreated?datetime}
 Logged in from: ${session.remoteSourceAddress}
 Client browser: ${session.remoteSourceData}
     </#macro>
