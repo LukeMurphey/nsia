@@ -1,5 +1,28 @@
 Below is the history of NSIA with notes about the changes available in each version.
 
+Version 1.0.1 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+ * Improved "processing" animation
+ * Added a select all option to pages with checkboxes
+ * Added event message as a tooltip to the event log page
+ * Eventlog view now shows the time (in addition to the date)
+ * Definition updater now logs a message if no new definitions were found
+ * Built-in definitions are now logged in the scan findings (previously some were not)
+ * Changed the names of the built-in definitions to more accurately describe the finding
+ * Added jQuery delete confirmation dialogs
+ * Old sessions are now deleted when a user re-authenticates
+ * ThreatScripts can now add URLs to be scanned; thus, definitions can extract URLs to be scanned
+ * Added pagination to the exceptions list
+ * Log messages from built-in definitions include a description of when the definition finds
+ * Default recursion depth is set to 10 on the web discovery rule
+ * Message boxes now fade away automatically and will disappear if you click them
+ * Added date scanned to scan result report
+ * Added a header bar with a description of the monitoring rules page
+ * Improved definition log messages to distinguish between operations that affect individual definitions and those affecting the definition set
+ * Fixed issue with select rule type view
+ * Enabling or disabling a group now forwards the user to the page to view the group (instead of editing it)
+ 
 Version 1.0.0 Changes
 ------------------------------------------------------------------
 Version includes the following changes:
