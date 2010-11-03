@@ -36,10 +36,12 @@
                     });
                 });
                 setTimeout(function() {
-                    $(".messagebox").fadeTo(1000, 0, function () {
-                        $(".messagebox").slideUp(200);
-                        $(".messagebox").css("display", "none");
-                        });
+                    if( $(".messagebox").css("display") != "none" ){
+                        $(".messagebox").fadeTo(1000, 0, function () {
+                            $(".messagebox").slideUp(200);
+                            $(".messagebox").css("display", "none");
+                            });
+                        }
                     }, 10000);
             });
             </script>
