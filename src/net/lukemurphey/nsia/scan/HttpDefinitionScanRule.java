@@ -128,7 +128,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 		private HttpDefinitionScanResult scanResult;
 		private Parser parser;
 		private int httpResponseCode = -1;
-		private Vector<URL> extractedURLs = new Vector<URL>();
+		private Vector<URLToScan> extractedURLs = new Vector<URLToScan>();
 		
 		public HttpSignatureScanResultWithParser(HttpDefinitionScanResult scanResult, Parser parser){
 			this.scanResult = scanResult;
@@ -141,20 +141,22 @@ public class HttpDefinitionScanRule extends ScanRule{
 			this.httpResponseCode = httpResponseCode;
 		}
 		
-		public HttpSignatureScanResultWithParser(HttpDefinitionScanResult scanResult, Parser parser, Vector<URL> extractedURLs ){
+		public HttpSignatureScanResultWithParser(HttpDefinitionScanResult scanResult, Parser parser, Vector<URLToScan> extractedURLs ){
 			this.scanResult = scanResult;
 			this.parser = parser;
 			
-			if( extractedURLs != null ){
-				this.extractedURLs.addAll(extractedURLs);
-			}
+			addExtractedURLs(extractedURLs);
 		}
 		
-		public HttpSignatureScanResultWithParser(HttpDefinitionScanResult scanResult, Parser parser, int httpResponseCode, Vector<URL> extractedURLs ){
+		public HttpSignatureScanResultWithParser(HttpDefinitionScanResult scanResult, Parser parser, int httpResponseCode, Vector<URLToScan> extractedURLs ){
 			this.scanResult = scanResult;
 			this.parser = parser;
 			this.httpResponseCode = httpResponseCode;
 
+			addExtractedURLs(extractedURLs);
+		}
+		
+		private void addExtractedURLs( Vector<URLToScan> extractedURLs ){
 			if( extractedURLs != null ){
 				this.extractedURLs.addAll(extractedURLs);
 			}
@@ -172,8 +174,42 @@ public class HttpDefinitionScanRule extends ScanRule{
 			return httpResponseCode;
 		}
 		
-		public Vector<URL> getExtractURLs(){
+		public Vector<URLToScan> getExtractedURLs( boolean urlsThatApplyToDomainLimitOnly ){
 			return extractedURLs;
+		}
+		
+		/**
+		 * Get all of the URLs that should only be scanned if they are in the domain.
+		 * @return
+		 */
+		public Vector<URL> getExtractedURLsDomainUnlimited( ){
+			
+			Vector<URL> urls = new Vector<URL>();
+			
+			for (URLToScan url : extractedURLs) {
+				
+				if( url.ignoreDomainRestriction() ){
+					urls.add( url.getURL() );
+				}
+			}
+			return urls;
+		}
+		
+		/**
+		 * Get all of the URLs that should be scanned regardless of the domain.
+		 * @return
+		 */
+		public Vector<URL> getExtractedURLsDomainLimited( ){
+			
+			Vector<URL> urls = new Vector<URL>();
+			
+			for (URLToScan url : extractedURLs) {
+				
+				if( url.ignoreDomainRestriction() == false ){
+					urls.add( url.getURL() );
+				}
+			}
+			return urls;
 		}
 		
 	}
@@ -290,7 +326,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 			// 1.2 -- Get the signature exceptions
 			signatureExceptions = loadSignatureExceptions(siteGroupID);
 			Vector<DefinitionMatch> results = new Vector<DefinitionMatch>();
-			Vector<URL> extractedURLs = null;
+			Vector<URLToScan> extractedURLs = null;
 			
 			try{
 				// 2 -- Retrieve and parse the content

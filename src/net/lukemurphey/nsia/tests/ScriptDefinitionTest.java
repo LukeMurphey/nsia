@@ -1,7 +1,6 @@
 package net.lukemurphey.nsia.tests;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.Vector;
 
@@ -22,6 +21,7 @@ import net.lukemurphey.nsia.scan.DefinitionEvaluationException;
 import net.lukemurphey.nsia.scan.HttpResponseData;
 import net.lukemurphey.nsia.scan.InvalidDefinitionException;
 import net.lukemurphey.nsia.scan.ScriptDefinition;
+import net.lukemurphey.nsia.scan.URLToScan;
 import net.lukemurphey.nsia.scan.scriptenvironment.Result;
 import net.lukemurphey.nsia.scan.scriptenvironment.Variables;
 
@@ -302,7 +302,7 @@ public class ScriptDefinitionTest extends TestCase {
 		// 2 -- Make sure the variable was set
 		Variables vars = new Variables();
 		Result result = sig.evaluate(httpResponse,vars, 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
-		Vector<URL> urls = result.getURLs();
+		Vector<URLToScan> urls = result.getURLs();
 		
 		if( urls.size() != 5 ){
 			fail("The definition did not return the URLs correctly: " + urls.size());

@@ -3,6 +3,8 @@ package net.lukemurphey.nsia.scan.scriptenvironment;
 import java.net.URL;
 import java.util.Vector;
 
+import net.lukemurphey.nsia.scan.URLToScan;
+
 import sun.org.mozilla.javascript.internal.NativeArray;
 import sun.org.mozilla.javascript.internal.NativeJavaObject;
 
@@ -16,13 +18,13 @@ public class Result{
 	public String description = null;
 	public int detectStart;
 	public int detectEnd;
-	public Vector<URL> urls = new Vector<URL>();
+	public Vector<URLToScan> urls = new Vector<URLToScan>();
 	
 	public Result( Vector<URL> urls ){
 		this.matched = false;
-		this.urls = new Vector<URL>();
+		
 		if( urls != null ){
-			this.urls.addAll(urls);
+			addURLs(urls);
 		}
 	}
 	
@@ -67,11 +69,28 @@ public class Result{
 		return detectEnd;
 	}
 	
-	public Vector<URL> getURLs(){
+	public Vector<URLToScan> getURLs(){
 		return urls;
 	}
 	
+	public int addURLs( Vector<URL> urls ){
+		return addURLs( urls, URLToScan.IGNORE_DOMAIN_RESTRICTION_DEFAULT);
+	}
+	
+	public int addURLs( Vector<URL> urls, boolean ignoreDomainRestriction ){
+
+		for (URL url : urls) {
+			this.urls.add( new URLToScan(url, ignoreDomainRestriction) );
+		}
+		
+		return urls.size();
+	}
+	
 	public int addURLs( NativeArray arr ){
+		return addURLs( arr, URLToScan.IGNORE_DOMAIN_RESTRICTION_DEFAULT);
+	}
+	
+	public int addURLs( NativeArray arr, boolean ignoreDomainRestriction ){
 
 		for (Object o : arr.getIds()) {
 			int index = (Integer) o;
@@ -85,7 +104,7 @@ public class Result{
 			
 			// Make sure the type is correct
 			if( object instanceof URL ){
-				urls.add((URL)object);
+				urls.add( new URLToScan( (URL)object, ignoreDomainRestriction ) );
 			}
 		}
 		
