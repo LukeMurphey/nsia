@@ -33,6 +33,7 @@ import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.scan.Definition.Severity;
+import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionMatchResultSet;
 
 /**
  * The HTTP definition scan rule analyzes a resource with the set of definitions currently available in the definition set.
@@ -143,14 +144,20 @@ public class HttpDefinitionScanRule extends ScanRule{
 		public HttpSignatureScanResultWithParser(HttpDefinitionScanResult scanResult, Parser parser, Vector<URL> extractedURLs ){
 			this.scanResult = scanResult;
 			this.parser = parser;
-			this.extractedURLs.addAll(extractedURLs);
+			
+			if( extractedURLs != null ){
+				this.extractedURLs.addAll(extractedURLs);
+			}
 		}
 		
 		public HttpSignatureScanResultWithParser(HttpDefinitionScanResult scanResult, Parser parser, int httpResponseCode, Vector<URL> extractedURLs ){
 			this.scanResult = scanResult;
 			this.parser = parser;
 			this.httpResponseCode = httpResponseCode;
-			this.extractedURLs.addAll(extractedURLs);
+
+			if( extractedURLs != null ){
+				this.extractedURLs.addAll(extractedURLs);
+			}
 		}
 		
 		public HttpDefinitionScanResult getScanResult(){
@@ -163,6 +170,10 @@ public class HttpDefinitionScanRule extends ScanRule{
 		
 		public int getHttpResponseCode(){
 			return httpResponseCode;
+		}
+		
+		public Vector<URL> getExtractURLs(){
+			return extractedURLs;
 		}
 		
 	}
@@ -279,6 +290,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 			// 1.2 -- Get the signature exceptions
 			signatureExceptions = loadSignatureExceptions(siteGroupID);
 			Vector<DefinitionMatch> results = new Vector<DefinitionMatch>();
+			Vector<URL> extractedURLs = null;
 			
 			try{
 				// 2 -- Retrieve and parse the content
@@ -321,7 +333,9 @@ public class HttpDefinitionScanRule extends ScanRule{
 
 
 				// 3 -- Scan the content for signature matches
-				results = signatureSet.scan(httpResponse, signatureExceptions, siteGroupID, scanRuleId);
+				DefinitionMatchResultSet resultSet = signatureSet.scan(httpResponse, signatureExceptions, siteGroupID, scanRuleId);
+				results = resultSet.getDefinitionMatches();
+				extractedURLs = resultSet.getExtractedURLs();
 				
 				if( results == null ){
 					results = new Vector<DefinitionMatch>();
@@ -368,12 +382,12 @@ public class HttpDefinitionScanRule extends ScanRule{
 				if( results.size() > 0 ){
 					logScanResult( ScanResultCode.SCAN_COMPLETED, results.size(), HttpSeekingScanRule.RULE_TYPE, url.toString(), results.size() + " definitions matched", waitToLogCompletion == false );
 					
-					return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_COMPLETED, new java.sql.Timestamp(System.currentTimeMillis()), url, results, this.scanRuleId, httpResponse.getContentType() ), parser, httpResponse.getResponseCode() );
+					return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_COMPLETED, new java.sql.Timestamp(System.currentTimeMillis()), url, results, this.scanRuleId, httpResponse.getContentType() ), parser, httpResponse.getResponseCode(), resultSet.getExtractedURLs() );
 				}
 				else{
 					logScanResult( ScanResultCode.SCAN_COMPLETED, 0, HttpSeekingScanRule.RULE_TYPE, url.toString(), "0 definitions matched", waitToLogCompletion == false );
 					
-					return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_COMPLETED, new java.sql.Timestamp(System.currentTimeMillis()), url, results, this.scanRuleId, httpResponse.getContentType()), parser, httpResponse.getResponseCode() );
+					return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_COMPLETED, new java.sql.Timestamp(System.currentTimeMillis()), url, results, this.scanRuleId, httpResponse.getContentType()), parser, httpResponse.getResponseCode(), resultSet.getExtractedURLs() );
 				}
 
 			} catch (InvalidDefinitionException e) {
@@ -418,9 +432,13 @@ public class HttpDefinitionScanRule extends ScanRule{
 				}
 			}
 			
+			// Log completion of the scan
 			logScanResult( ScanResultCode.SCAN_COMPLETED, results.size(), HttpSeekingScanRule.RULE_TYPE, url.toString() );
-			return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_COMPLETED, new java.sql.Timestamp(System.currentTimeMillis()), url, results, this.scanRuleId ), null );
-
+			
+			// Create and return the result
+			HttpDefinitionScanResult httpDefScanResult = new HttpDefinitionScanResult(ScanResultCode.SCAN_COMPLETED, new java.sql.Timestamp(System.currentTimeMillis()), url, results, this.scanRuleId );
+			return new HttpSignatureScanResultWithParser(httpDefScanResult, null, extractedURLs );
+			
 		} catch (NoDatabaseConnectionException e) {
 			appRes.logExceptionEvent(EventLogMessage.EventType.DATABASE_FAILURE, e);
 			throw new ScanException("Scan failed: NoDatabaseConnectionException", e);

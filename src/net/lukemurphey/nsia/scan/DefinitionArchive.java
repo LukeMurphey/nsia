@@ -31,6 +31,7 @@ import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
+import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionMatchResultSet;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionType;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
 
@@ -1001,7 +1002,7 @@ public class DefinitionArchive {
 		
 	}
 	
-	public Vector<DefinitionMatch> evaluate( HttpResponseData response, boolean recurseLinkedUrls) throws ScriptException, NoDatabaseConnectionException, SQLException, NoSuchMethodException, InvalidDefinitionException{
+	public DefinitionMatchResultSet evaluate( HttpResponseData response, boolean recurseLinkedUrls) throws ScriptException, NoDatabaseConnectionException, SQLException, NoSuchMethodException, InvalidDefinitionException{
 		return definitionSet.scan(response);
 	}
 	

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Collections;
 import java.io.*;
+import java.net.URL;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -675,14 +676,46 @@ public class DefinitionSet {
 		
 	}
 
-	public Vector<DefinitionMatch> scan(HttpResponseData httpResponse) throws ScriptException, NoDatabaseConnectionException, SQLException, NoSuchMethodException, InvalidDefinitionException{
+	public DefinitionMatchResultSet scan(HttpResponseData httpResponse) throws ScriptException, NoDatabaseConnectionException, SQLException, NoSuchMethodException, InvalidDefinitionException{
 		return scan(httpResponse, null, -1, -1);
 	}
 	
-	public Vector<DefinitionMatch> scan(HttpResponseData httpResponse, DefinitionPolicySet definitionPolicySet, long siteGroupID, long ruleID) throws NoDatabaseConnectionException, SQLException, InvalidDefinitionException{
+	/**
+	 * Represents the results of a scan.
+	 * @author Luke
+	 *
+	 */
+	public static class DefinitionMatchResultSet{
+		
+		private Vector<DefinitionMatch> definitionMatches = new Vector<DefinitionMatch>();
+		
+		private Vector<URL> extractedURLs = new Vector<URL>();
+		
+		public DefinitionMatchResultSet( Vector<DefinitionMatch> definitionMatches, Vector<URL> extractedURLs){
+			if( definitionMatches != null) {
+				this.definitionMatches.addAll(definitionMatches);
+			}
+			
+			if( extractedURLs != null) {
+				this.extractedURLs.addAll(extractedURLs);
+			}
+		}
+		
+		public Vector<DefinitionMatch> getDefinitionMatches(){
+			return definitionMatches;
+		}
+		
+		public Vector<URL> getExtractedURLs(){
+			return extractedURLs;
+		}
+		
+	}
+	
+	public DefinitionMatchResultSet scan(HttpResponseData httpResponse, DefinitionPolicySet definitionPolicySet, long siteGroupID, long ruleID) throws NoDatabaseConnectionException, SQLException, InvalidDefinitionException{
 		
 		synchronized ( this ) {
 			Vector<DefinitionMatch> definitionMatches = new Vector<DefinitionMatch>();
+			Vector<URL> extractedURLs = new Vector<URL>();
 			Variables variables = new Variables();
 			
 			Iterator<Definition> iterator = definitions.iterator();
@@ -700,6 +733,12 @@ public class DefinitionSet {
 						ScriptDefinition script = (ScriptDefinition)definition;
 						result = script.evaluate(httpResponse, variables, ruleID);
 						
+						// Add the extracted URLs
+						if( result.getURLs() != null ){
+							extractedURLs.addAll(result.getURLs());
+						}
+						
+						// Add the scan result to the list if it matched and if it is not ignored by the scan policy
 						if( result.matched() == true ){
 							
 							if( definitionPolicySet != null ){
@@ -751,7 +790,7 @@ public class DefinitionSet {
 				}
 			}
 			
-			return definitionMatches;
+			return new DefinitionMatchResultSet(definitionMatches, extractedURLs);
 		}
 	}
 	
