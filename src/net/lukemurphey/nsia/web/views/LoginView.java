@@ -133,7 +133,11 @@ public class LoginView extends View {
 			if( sessionID != null ){
 				
 				// 3.2.1 -- Authentication was successful, clean up any existing sessions associated with the old session ID
-				SessionInfo oldSession = context.getSessionInfo();
+				SessionInfo oldSession = null;
+				
+				if( context != null ){
+					oldSession = context.getSessionInfo();
+				}
 				
 				// Don't bother if the session ID has not been set
 				if( oldSession != null && oldSession.getSessionIdentifier() != null ){
