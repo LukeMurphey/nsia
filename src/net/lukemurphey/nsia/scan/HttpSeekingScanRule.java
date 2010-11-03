@@ -395,6 +395,41 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		}
 	}
 	
+	
+	/**
+	 * Returns a list of URLs that match the domain. This method also filters URLs that do not have a valid host.
+	 * @param urls
+	 * @return
+	 */
+	private Vector<URL> filterExternalURLs( Vector<URL> urls ){
+		
+		Vector<URL> filteredURLs = new Vector<URL>();
+		
+		// Make sure the URLs list is not null
+		if( urls == null ){
+			return filteredURLs;
+		}
+		
+		// Check each URL
+		Iterator<URL> it = urls.iterator();
+		
+		while( it.hasNext() ){
+			URL newURL = it.next();
+			
+			if( newURL != null
+					&& newURL.getHost() != null
+					&& hostnameIsValid(newURL.getHost())
+					&& domainMatches( newURL ) ){
+				
+				filteredURLs.add(newURL);
+				
+			}
+		}
+		
+		return filteredURLs;
+		
+	}
+	
 	/**
 	 * Perform a scan using multiple threads. This method creates multiple ScanRunner instances to perform actual scans.
 	 * @param sigs
@@ -460,11 +495,11 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 									extractedUrls = extractUrls(result.getScanResult().getUrl(), result.getParser());
 								}
 								else{
-									extractedUrls= new Vector<URL>();
+									extractedUrls = new Vector<URL>();
 								}
 
 								// Add any URLs provided by the definitions
-								extractedUrls.addAll( result.getExtractURLs() );
+								extractedUrls.addAll( filterExternalURLs( result.getExtractURLs() ) );
 								
 								for( URL newURL : extractedUrls ){
 
