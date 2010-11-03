@@ -448,12 +448,24 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 						if( runner.getLevel() < recursionLevels && result.getParser() != null ){
 							
 							// Make sure the content-type is HTML
-							if( result.getScanResult() != null &&
-									(result.getScanResult().getContentType() == null || 
-									 result.getScanResult().getContentType().contains("html")
-									 || result.getScanResult().getContentType().contains("xml") ) ){ 
-								Vector<URL> extractedUrls = extractUrls(result.getScanResult().getUrl(), result.getParser());
+							if( result.getScanResult() != null ){
+								
+								Vector<URL> extractedUrls = null;
+								
+								// Extract the URLs from the HTML file (if it is an HTML)
+								if( result.getScanResult().getContentType() == null
+									|| result.getScanResult().getContentType().contains("html")
+									|| result.getScanResult().getContentType().contains("xml") ){
+									
+									extractedUrls = extractUrls(result.getScanResult().getUrl(), result.getParser());
+								}
+								else{
+									extractedUrls= new Vector<URL>();
+								}
 
+								// Add any URLs provided by the definitions
+								extractedUrls.addAll( result.getExtractURLs() );
+								
 								for( URL newURL : extractedUrls ){
 
 									// Check to see if we have hit the limit. If so, then stop. 
