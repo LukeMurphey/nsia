@@ -11,9 +11,8 @@
     <#macro sessioninfo session>
 Session last activity: ${session.lastActivity?datetime}
 Session started: ${session.sessionCreated?datetime}
-Logged in from: ${session.remoteSourceAddress}
-Client browser: ${session.remoteSourceData}
-    </#macro>
+<#if session.remoteSourceAddress??>Logged in from: ${session.remoteSourceAddress}
+</#if><#if session.remoteSourceData??>Client browser: ${session.remoteSourceData}</#if></#macro>
     <table class="DataTable">
         <thead>
             <tr>
