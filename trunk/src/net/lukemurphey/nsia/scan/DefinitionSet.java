@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Collections;
 import java.io.*;
-import java.net.URL;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -689,9 +688,9 @@ public class DefinitionSet {
 		
 		private Vector<DefinitionMatch> definitionMatches = new Vector<DefinitionMatch>();
 		
-		private Vector<URL> extractedURLs = new Vector<URL>();
+		private Vector<URLToScan> extractedURLs = new Vector<URLToScan>();
 		
-		public DefinitionMatchResultSet( Vector<DefinitionMatch> definitionMatches, Vector<URL> extractedURLs){
+		public DefinitionMatchResultSet( Vector<DefinitionMatch> definitionMatches, Vector<URLToScan> extractedURLs){
 			if( definitionMatches != null) {
 				this.definitionMatches.addAll(definitionMatches);
 			}
@@ -705,7 +704,7 @@ public class DefinitionSet {
 			return definitionMatches;
 		}
 		
-		public Vector<URL> getExtractedURLs(){
+		public Vector<URLToScan> getExtractedURLs(){
 			return extractedURLs;
 		}
 		
@@ -715,7 +714,7 @@ public class DefinitionSet {
 		
 		synchronized ( this ) {
 			Vector<DefinitionMatch> definitionMatches = new Vector<DefinitionMatch>();
-			Vector<URL> extractedURLs = new Vector<URL>();
+			Vector<URLToScan> extractedURLs = new Vector<URLToScan>();
 			Variables variables = new Variables();
 			
 			Iterator<Definition> iterator = definitions.iterator();

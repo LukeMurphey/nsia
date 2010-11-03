@@ -499,7 +499,8 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 								}
 
 								// Add any URLs provided by the definitions
-								extractedUrls.addAll( filterExternalURLs( result.getExtractURLs() ) );
+								extractedUrls.addAll( filterExternalURLs( result.getExtractedURLsDomainLimited() ) );
+								extractedUrls.addAll( result.getExtractedURLsDomainUnlimited() );
 								
 								for( URL newURL : extractedUrls ){
 
