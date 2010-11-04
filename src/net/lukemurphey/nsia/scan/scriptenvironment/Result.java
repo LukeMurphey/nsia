@@ -86,6 +86,27 @@ public class Result{
 		return urls.size();
 	}
 	
+	public void addURL( URL url, boolean ignoreDomainRestriction ){
+		urls.add(  new URLToScan( url, ignoreDomainRestriction ) );
+	}
+	
+	public void addURL( NativeJavaObject url, boolean ignoreDomainRestriction ){
+		
+		Object urlUnWrapped = null;
+		
+		// Unwrap the item if necessary
+		if( url instanceof NativeJavaObject ){
+			NativeJavaObject njo = (NativeJavaObject) url;
+			urlUnWrapped = njo.unwrap();
+		}
+		
+		// Make sure the type is correct
+		if( urlUnWrapped instanceof URL ){
+			addURL( (URL)urlUnWrapped, ignoreDomainRestriction);
+		}		
+		
+	}
+	
 	public int addURLs( NativeArray arr ){
 		return addURLs( arr, URLToScan.IGNORE_DOMAIN_RESTRICTION_DEFAULT);
 	}
@@ -98,13 +119,10 @@ public class Result{
 			
 			// Unwrap the item if necessary
 			if( object instanceof NativeJavaObject ){
-				NativeJavaObject njo = (NativeJavaObject) object;
-				object = njo.unwrap();
+				addURL( (NativeJavaObject)object, ignoreDomainRestriction);
 			}
-			
-			// Make sure the type is correct
-			if( object instanceof URL ){
-				urls.add( new URLToScan( (URL)object, ignoreDomainRestriction ) );
+			else if( object instanceof URL ){
+				addURL( (URL)object, ignoreDomainRestriction);
 			}
 		}
 		
