@@ -88,7 +88,7 @@ ${head}
 				function openAboutDialog(){
 					$( "#aboutdialog" ).dialog({
 						modal: true,
-						width: 350,
+						width: 400,
 						buttons: {
 							Ok: function() {
 								$( this ).dialog( "close" );
