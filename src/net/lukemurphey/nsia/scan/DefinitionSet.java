@@ -710,6 +710,32 @@ public class DefinitionSet {
 		
 	}
 	
+	/**
+	 * Determines if the finding provided is included in the policy (otherwise, it is excluded and should be ignored).
+	 * @param httpResponse
+	 * @param definitionPolicySet
+	 * @param siteGroupID
+	 * @param ruleID
+	 * @param definition
+	 * @return
+	 */
+	private boolean isIncludedInPolicy( HttpResponseData httpResponse, DefinitionPolicySet definitionPolicySet, long siteGroupID, long ruleID, Definition definition){
+		
+		if( definitionPolicySet != null ){
+			if( definitionPolicySet.getPolicyAction(siteGroupID, ruleID, definition.getName(), definition.getCategoryName(), definition.getSubCategoryName(), httpResponse.getLocation()) != DefinitionPolicyAction.EXCLUDE
+				&& definitionPolicySet.getPolicyAction(siteGroupID, ruleID, definition.getName(), definition.getCategoryName(), definition.getSubCategoryName(), httpResponse.getRequestedLocation()) != DefinitionPolicyAction.EXCLUDE
+			   ){
+				return true;
+			}
+		}
+		else{
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
 	public DefinitionMatchResultSet scan(HttpResponseData httpResponse, DefinitionPolicySet definitionPolicySet, long siteGroupID, long ruleID) throws NoDatabaseConnectionException, SQLException, InvalidDefinitionException{
 		
 		synchronized ( this ) {
@@ -732,25 +758,19 @@ public class DefinitionSet {
 						ScriptDefinition script = (ScriptDefinition)definition;
 						result = script.evaluate(httpResponse, variables, ruleID);
 						
-						// Add the extracted URLs
-						if( result.getURLs() != null ){
-							extractedURLs.addAll(result.getURLs());
-						}
-						
 						// Add the scan result to the list if it matched and if it is not ignored by the scan policy
-						if( result.matched() == true ){
+						if( isIncludedInPolicy(httpResponse, definitionPolicySet, siteGroupID, ruleID, script ) ){
 							
-							if( definitionPolicySet != null ){
-								if( definitionPolicySet.getPolicyAction(siteGroupID, ruleID, script.getName(), script.getCategoryName(), script.getSubCategoryName(), httpResponse.getLocation()) != DefinitionPolicyAction.EXCLUDE
-									&& definitionPolicySet.getPolicyAction(siteGroupID, ruleID, script.getName(), script.getCategoryName(), script.getSubCategoryName(), httpResponse.getRequestedLocation()) != DefinitionPolicyAction.EXCLUDE
-								   ){
-									definitionMatches.add( new DefinitionMatch(script.getFullName(), result.getDescription(), script.severity, script.getLocalID() , result.detectStart, result.detectEnd) );
-								}
+							// Add the extracted URLs
+							if( result.getURLs() != null ){
+								extractedURLs.addAll(result.getURLs());
 							}
-							else{
+							
+							if( result.matched() == true ){
 								definitionMatches.add( new DefinitionMatch(script.getFullName(), result.getDescription(), script.severity, script.getLocalID() , result.detectStart, result.detectEnd) );
 							}
 						}
+						
 					}
 					
 					// Evaluate if a standard definition
@@ -759,19 +779,8 @@ public class DefinitionSet {
 						PatternDefinition sig = (PatternDefinition)definition;
 						boolean matched = sig.evaluate(httpResponse.getDataSpecimen(), variables);
 						
-						if( matched == true ){
-							
-							if( definitionPolicySet != null ){
-								if( definitionPolicySet.getPolicyAction(siteGroupID, ruleID, sig.getName(), sig.getCategoryName(), sig.getSubCategoryName(), httpResponse.getLocation()) != DefinitionPolicyAction.EXCLUDE
-									&& definitionPolicySet.getPolicyAction(siteGroupID, ruleID, sig.getName(), sig.getCategoryName(), sig.getSubCategoryName(), httpResponse.getRequestedLocation()) != DefinitionPolicyAction.EXCLUDE
-								   ){
-									definitionMatches.add( new DefinitionMatch(sig.getFullName(), sig.getMessage(), sig.severity, sig.getLocalID()) );
-								}
-							}
-							else{
-								definitionMatches.add( new DefinitionMatch(sig.getFullName(), sig.getMessage(), sig.severity, sig.getLocalID()) );
-							}
-							
+						if( matched == true && isIncludedInPolicy(httpResponse, definitionPolicySet, siteGroupID, ruleID, sig ) ){
+							definitionMatches.add( new DefinitionMatch(sig.getFullName(), sig.getMessage(), sig.severity, sig.getLocalID()) );						
 						}
 						
 					}
