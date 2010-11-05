@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.*;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.MaxMinCount;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
@@ -40,18 +41,66 @@ public class DefinitionPolicySet {
 		sort();
 	}
 	
-	public static DefinitionPolicySet getPolicySetForRule(Connection connection, int ruleID) throws SQLException{
+	public static MaxMinCount getScanPolicyInfoForRule( Connection connection, int ruleID) throws SQLException{
+		
+		// Perform the query
 		PreparedStatement statement = null;
 		ResultSet result = null;
-		DefinitionPolicySet filterSet = new DefinitionPolicySet();
 		
 		try{
-			statement = connection.prepareStatement("Select * from DefinitionPolicy where RuleID = ?");
+			statement = connection.prepareStatement("Select max(DefinitionPolicyID), min(DefinitionPolicyID), count(*) from DefinitionPolicy where RuleID = ?");
 			statement.setInt(1, ruleID);
 			
 			result = statement.executeQuery();
 			
 			while(result.next()){
+				return new MaxMinCount( result.getInt(1), result.getInt(2), result.getInt(3) );
+			}
+			
+		}
+		finally{
+			if(statement != null ){
+				statement.close();
+			}
+			
+			if(result != null ){
+				result.close();
+			}
+		}
+		
+		return null;
+	}
+	
+	public static DefinitionPolicySet getPolicySetForRule(Connection connection, int ruleID) throws SQLException{
+		return getPolicySetForRule(connection, ruleID, 100000, 1);
+	}
+	
+	public static DefinitionPolicySet getPolicySetForRule(Connection connection, int ruleID, int recordCount, int page) throws SQLException{
+	
+		// Set default values for the arguments if they are not valid
+		if( recordCount <= 0 ){
+			recordCount = 25;
+		}
+		
+		if( page <= 0 ){
+			page = 1;
+		}
+		
+		// Perform the query
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		DefinitionPolicySet filterSet = new DefinitionPolicySet();
+		
+		try{
+			statement = connection.prepareStatement("Select * from DefinitionPolicy where RuleID = ? order by DefinitionPolicyID asc", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			statement.setInt(1, ruleID);
+			
+			result = statement.executeQuery();
+			
+			result.setFetchSize(recordCount);
+			result.absolute ( (page - 1) * recordCount);
+			
+			while(result.next() && filterSet.definitionPolicies.size() <= recordCount ){
 				try {
 					filterSet.definitionPolicies.add( DefinitionPolicyDescriptor.loadFromResult(result) );
 				} catch (MalformedURLException e) {
