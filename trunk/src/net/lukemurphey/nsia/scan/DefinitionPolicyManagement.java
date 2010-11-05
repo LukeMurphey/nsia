@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.MaxMinCount;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
@@ -69,6 +70,50 @@ public class DefinitionPolicyManagement {
 		
 		try{
 			return DefinitionPolicySet.getPolicySetForSiteGroup(connection, siteGroupID);
+		} finally {
+			
+			if (connection != null )
+				connection.close();
+		}
+	}
+	
+	/**
+	 * Get minimum, maximum and the total number of entries of policy descriptors for the given rule ID.
+	 * @param ruleID
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
+	public MaxMinCount getScanPolicyInfoForRule( int ruleID ) throws NoDatabaseConnectionException, SQLException{
+		Connection connection = null;
+		
+		connection = application.getDatabaseConnection( Application.DatabaseAccessType.SCANNER );
+		
+		try{
+			return DefinitionPolicySet.getScanPolicyInfoForRule(connection, ruleID);
+		} finally {
+			
+			if (connection != null )
+				connection.close();
+		}
+	}
+	
+	/**
+	 * Get the scan policy set for the given rule ID.
+	 * @param ruleID
+	 * @param recordCount
+	 * @param page
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
+	public DefinitionPolicySet getPolicySetForRule( int ruleID, int recordCount, int page ) throws NoDatabaseConnectionException, SQLException{
+		Connection connection = null;
+		
+		connection = application.getDatabaseConnection( Application.DatabaseAccessType.SCANNER );
+		
+		try{
+			return DefinitionPolicySet.getPolicySetForRule(connection, ruleID, recordCount, page);
 		} finally {
 			
 			if (connection != null )
