@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
+import net.lukemurphey.nsia.MaxMinCount;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.SiteGroupManagement;
@@ -35,6 +36,7 @@ import net.lukemurphey.nsia.web.views.Dialog.DialogType;
 public class ExceptionListView extends View {
 
 	public static final String VIEW_NAME = "exception_list";
+	public static final int EXCEPTIONS_PER_PAGE = 25;
 	
 	public ExceptionListView() {
 		super("Exceptions", VIEW_NAME, Pattern.compile("[0-9]+"));
@@ -74,13 +76,66 @@ public class ExceptionListView extends View {
 			return true;
 		}
 		
-		//	 1.2 -- Get the exceptions for the rule
-		DefinitionPolicyManagement policyMgmt = new DefinitionPolicyManagement(Application.getApplication());
+		//	 1.2 -- Get the page number
+		int page = 1;
+		
+		String pageString = request.getParameter("Page");
+		
+		if( pageString != null ){
+			try{
+				page = Integer.parseInt(pageString);
+			}
+			catch( NumberFormatException e){
+				// Ignore the fact that the page number was wrong
+			}
+		}
+		
+		data.put("page", page);
+		
 		DefinitionPolicySet policies = null;
+		DefinitionPolicyManagement policyMgmt = new DefinitionPolicyManagement(Application.getApplication());
 		
 		try{
-			policies = policyMgmt.getPolicySetForRule( ruleID );
+			
+			//1.3 -- Get the exceptions for the rule
+			policies = policyMgmt.getPolicySetForRule( ruleID, EXCEPTIONS_PER_PAGE, page );
 			data.put("policies", policies);
+			
+			//1.4 -- Get information necessary for pagination
+			MaxMinCount maxMinCount = policyMgmt.getScanPolicyInfoForRule(ruleID);
+			
+			DefinitionPolicyDescriptor policyDesc = null;
+			
+			// Determine if we are at the beginning of the entries
+			if( policies.size() > 0){
+				policyDesc = policies.get(0);
+				
+				if( policyDesc.getPolicyID() > maxMinCount.getMin() ){
+					data.put("backEnabled", true);
+				}
+				else{
+					data.put("backEnabled", false);
+				}
+			}
+			else{
+				data.put("backEnabled", false);
+			}
+			
+			// Determine if we are at the end of the entries
+			if( policies.size() > 0){
+				policyDesc = policies.get( policies.size() - 1 );
+				
+				if( policyDesc.getPolicyID() < maxMinCount.getMax() ){
+					data.put("nextEnabled", true);
+				}
+				else{
+					data.put("nextEnabled", false);
+				}
+			}
+			else{
+				data.put("nextEnabled", false);
+			}
+			
 		}
 		catch(SQLException e){
 			throw new ViewFailedException(e);
