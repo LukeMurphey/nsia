@@ -10,7 +10,7 @@
     </#if>
     <script src="/media/misc/codepress/codepress.js" type="text/javascript"></script>
 	<#assign jquerytools><script type="text/javascript" language="javascript" src="/media/js/jquery.tools.min.js"></script></#assign>
-    <#assign extrahead=[jquerytools] />
+    <#assign extrafooter=[jquerytools] />
     <script type="text/javascript">
         function submitEditorForm(editorform){
             document.editorform.PortsExpectedOpen2.value = cp2.getCode();

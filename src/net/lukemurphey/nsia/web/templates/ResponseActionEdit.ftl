@@ -6,7 +6,7 @@
 
 <#assign content>
 	<#assign jquerytools><script type="text/javascript" language="javascript" src="/media/js/jquery.tools.min.js"></script></#assign>
-    <#assign extrahead=[jquerytools] />
+    <#assign extrafooter=[jquerytools] />
     <script type="text/javascript">
 		$(document).ready( function(){
 			$("td[title]").tooltip({

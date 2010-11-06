@@ -9,7 +9,8 @@
     
     <#assign jquerytools><script type="text/javascript" language="javascript" src="/media/js/jquery.tools.min.js"></script></#assign>
     <#assign tabs><link rel=StyleSheet href="/media/css/Tabs.css"></#assign>
-    <#assign extrahead=[tabs,jquerytools] />
+    <#assign extrahead=[tabs] />
+    <#assign extrafooter=[jquerytools] />
     
     <form action="${rightsurl}" method="post">
 
