@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 
+import net.lukemurphey.nsia.upgrade.processors.ConvertMetaDefinitionExceptions;
 import net.lukemurphey.nsia.upgrade.processors.ScanRuleCreatedTimestamps;
 
 /**
@@ -42,6 +43,7 @@ public class UpgraderList {
 		
 		// 2 -- Add the upgraders to the list
 		upgraders.add( new ScanRuleCreatedTimestamps() );
+		upgraders.add( new ConvertMetaDefinitionExceptions() );
 		
 		// 3 -- Sort the list
 		Collections.sort(upgraders);
