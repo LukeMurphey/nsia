@@ -19,6 +19,14 @@
         $("#content").load("${ajaxurl}", {}, ajaxcallback);
     }
 </script>
+<#if noajaxurl??>
+<#assign meta_refresh>
+<noscript>
+    <meta name='Refresh' http-equiv="Refresh" content="5;URL=${noajaxurl}">
+</noscript>
+</#assign>
+<#assign extrahead=[meta_refresh] />
+</#if>
 <div style="width: 500px; padding: 64px; padding-left:200px;"><div id="content">${content}</div></div>
 </#assign>
 <#include "Base.ftl">
