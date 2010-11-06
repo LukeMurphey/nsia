@@ -1,5 +1,6 @@
 package net.lukemurphey.nsia.web;
 
+import net.lukemurphey.nsia.web.views.AboutView;
 import net.lukemurphey.nsia.web.views.AccessControlDeleteView;
 import net.lukemurphey.nsia.web.views.AccessControlEditView;
 import net.lukemurphey.nsia.web.views.AccessControlView;
@@ -133,6 +134,7 @@ public class StandardViewList {
 				view_list.registerView( new DashboardVersionPanel() );
 				view_list.registerView( new DashboardDefinitionsUpdate() );
 				view_list.registerView( new ApplicationUpdateView() );
+				view_list.registerView( new AboutView() );
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
