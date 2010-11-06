@@ -139,3 +139,10 @@
             countDown();
         });
     </script>
+
+
+<#if refresh_url??>
+<noscript>
+    <meta name='Refresh' http-equiv="Refresh" content="30;URL=${refresh_url}">
+</noscript>
+</#if>
