@@ -148,6 +148,7 @@
                 }
             );
         </script>
+    </div>        
 </#if>
 </#assign>
 <#include "BaseWithNav.ftl">
