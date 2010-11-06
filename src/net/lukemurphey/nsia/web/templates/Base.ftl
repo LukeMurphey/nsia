@@ -106,6 +106,11 @@ ${head}
 			</script>
     <#if !isajax?? || !isajax></table>
     &nbsp;
+    <#if extrafooter??>
+        <#list extrafooter as footer>
+${footer}
+        </#list>
+    </#if>
 </body>
 
 </html></#if>
