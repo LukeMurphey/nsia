@@ -1,4 +1,3 @@
-<td>
 	<table>
 		<tr>
 			<td colspan="2"><span class="Text_3">Automatic Refresh</span></td>
