@@ -8,7 +8,7 @@
 				<img id="refresh_pause" src="/media/img/16_Pause" />
 			</td>
 			<td>
-				Updated: <span id="lastRefreshed">---</span>
+				Updated: <span id="lastRefreshed">--- <noscript>(JavaScript disabled)</noscript></span>
 			</td>
 		</tr>
 	</table>
