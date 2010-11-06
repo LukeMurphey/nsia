@@ -10,7 +10,7 @@
     </#if>
     <#assign codepress><script type="text/javascript" language="javascript" src="/media/misc/codepress/codepress.js"></script></#assign>
     <#assign jquerytools><script type="text/javascript" language="javascript" src="/media/js/jquery.tools.min.js"></script></#assign>
-    <#assign extrahead=[codepress, jquerytools] />
+    <#assign extrafooter=[codepress, jquerytools] />
     <script type="text/javascript">
         function submitEditorForm(editorform){
             document.editorform.StartAddresses2.value = cp1.getCode();
