@@ -60,7 +60,12 @@ public class CommandAction extends Action{
 	public Hashtable<String, String> getValues(){
 		Hashtable<String, String> values = new Hashtable<String, String>();
 		
-		values.put("Command", this.command);
+		if( this.command != null ){
+			values.put("Command", this.command);
+		}
+		else{
+			values.put("Command", "");
+		}
 		
 		if( this.workingDirectory != null ){
 			values.put("WorkingDirectory", this.workingDirectory.getAbsolutePath());
