@@ -83,7 +83,7 @@ ${head}
 				</ul>
     	
 			</div>
-            <span class="Footer"><a href="javascript:openAboutDialog();pauseTemporarily();">About NSIA</a>&nbsp;&nbsp;&nbsp;</span></td></tr>
+            <span class="Footer"><a href="<@url name="about" />" onclick="openAboutDialog();pauseTemporarily();return false;">About NSIA</a>&nbsp;&nbsp;&nbsp;</span></td></tr>
             <script>
 				function openAboutDialog(){
 					$( "#aboutdialog" ).dialog({
