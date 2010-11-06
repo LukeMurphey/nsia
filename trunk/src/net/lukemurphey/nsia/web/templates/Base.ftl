@@ -83,7 +83,7 @@ ${head}
 				</ul>
     	
 			</div>
-            <span class="Footer"><a href="<@url name="about" />" onclick="openAboutDialog();pauseTemporarily();return false;">About NSIA</a>&nbsp;&nbsp;&nbsp;</span></td></tr>
+            <span class="Footer"><a id="aboutdialoglink" href="<@url name="about" />">About NSIA</a>&nbsp;&nbsp;&nbsp;</span></td></tr>
             <script>
 				function openAboutDialog(){
 					$( "#aboutdialog" ).dialog({
@@ -96,7 +96,13 @@ ${head}
 							}
 						}
 					});
+					pauseTemporarily();
+					return false;
 				}
+		      
+		        $(document).ready(function() {
+		              $('#aboutdialoglink').click( openAboutDialog );
+		        });
 			</script>
     <#if !isajax?? || !isajax></table>
     &nbsp;
