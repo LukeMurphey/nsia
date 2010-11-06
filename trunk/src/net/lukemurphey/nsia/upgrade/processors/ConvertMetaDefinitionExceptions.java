@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.scan.MetaDefinition;
 import net.lukemurphey.nsia.upgrade.UpgradeFailureException;
 import net.lukemurphey.nsia.upgrade.UpgradeProcessor;
 
@@ -21,21 +22,26 @@ public class ConvertMetaDefinitionExceptions extends UpgradeProcessor{
 		try{
 			if( application.isUsingInternalDatabase() ){
 				conn = application.getDatabaseConnection(DatabaseAccessType.ADMIN);
-				convertSubCategoryException(conn, "ContentError", "Error", "Anomaly", "Quality", true);
 				
+				convertSubCategoryException(conn, "ContentError", "Error", "Anomaly", "Quality", true);
+				convertCategoryException(conn, "Anomaly", "Quality");
+				
+				for( MetaDefinition def : MetaDefinition.DEFAULT_META_DEFINITIONS ){
+					convertDefinitionException(conn, "ContentError", def.getSubCategoryName(), "Anomaly", def.getCategoryName(), def.getName(), def.getName() );
+				}
 			}
 		}
 		catch( SQLException e ){
-			throw new UpgradeFailureException("Exception throw while attempting to add the 'created' and 'updated' columns to the scan rule table", e);
+			throw new UpgradeFailureException("Exception throw while attempting to update exceptions according to the new meta-definition names", e);
 		}
 		catch( NoDatabaseConnectionException e ){
-			throw new UpgradeFailureException("Exception throw while attempting to add the 'created' and 'updated' columns to the scan rule table", e);
+			throw new UpgradeFailureException("Exception throw while attempting to update exceptions according to the new meta-definition names", e);
 		}
 		
 		return true;
 	}
 	
-	private void convertCategoryException( Connection conn, String oldCategoryName, String newCategoryName ) throws SQLException{
+	private int convertCategoryException( Connection conn, String oldCategoryName, String newCategoryName ) throws SQLException{
 		PreparedStatement statement = null;
 		
 		try{
@@ -44,7 +50,7 @@ public class ConvertMetaDefinitionExceptions extends UpgradeProcessor{
 			statement.setString(1, newCategoryName);
 			statement.setString(2, oldCategoryName);
 			
-			statement.executeUpdate();
+			return statement.executeUpdate();
 			
 		}
 		finally{
@@ -54,7 +60,7 @@ public class ConvertMetaDefinitionExceptions extends UpgradeProcessor{
 		}
 	}
 	
-	private void convertSubCategoryException( Connection conn, String oldSubCategoryName, String newSubCategoryName, String oldCategoryName, String newCategoryName, boolean convertAll ) throws SQLException{
+	private int convertSubCategoryException( Connection conn, String oldSubCategoryName, String newSubCategoryName, String oldCategoryName, String newCategoryName, boolean convertAll ) throws SQLException{
 		
 		PreparedStatement statement = null;
 		
@@ -74,7 +80,7 @@ public class ConvertMetaDefinitionExceptions extends UpgradeProcessor{
 			statement.setString(3, oldCategoryName);
 			statement.setString(4, oldSubCategoryName);
 			
-			statement.executeUpdate();
+			return statement.executeUpdate();
 			
 		}
 		finally{
@@ -84,7 +90,7 @@ public class ConvertMetaDefinitionExceptions extends UpgradeProcessor{
 		}
 	}
 	
-	private void convertDefinitionException( Connection conn, String oldSubCategoryName, String newSubCategoryName, String oldCategoryName, String newCategoryName, String oldDefinitionName,  String newDefinitionName ) throws SQLException{
+	private int convertDefinitionException( Connection conn, String oldSubCategoryName, String newSubCategoryName, String oldCategoryName, String newCategoryName, String oldDefinitionName,  String newDefinitionName ) throws SQLException{
 		
 		PreparedStatement statement = null;
 		
@@ -99,7 +105,7 @@ public class ConvertMetaDefinitionExceptions extends UpgradeProcessor{
 			statement.setString(5, oldSubCategoryName);
 			statement.setString(6, oldDefinitionName);
 			
-			statement.executeUpdate();
+			return statement.executeUpdate();
 			
 		}
 		finally{
