@@ -637,6 +637,7 @@ public class SiteGroupView extends View {
 			if( worker != null && (startedNow || worker.getWorkerThread().getStatus() == State.STARTING || worker.getWorkerThread().getStatus() == State.STARTED ) ){
 				data.put("ajaxurl", createURL(siteGroup.getGroupId()) + "?AJAX=True");
 				data.put("title", "Scanning");
+				data.put("noajaxurl", createURL(siteGroup.getGroupId()));
 				data.put("content", Dialog.getProgressDialog(worker.getWorkerThread().getStatusDescription(), worker.getWorkerThread().getTaskDescription(), worker.getWorkerThread().getProgress(), new Link("Cancel", createURL(siteGroup.getGroupId()))) );
 				
 				response.getWriter().println( TemplateLoader.renderToString("AJAXProgressDialog.ftl", data) );

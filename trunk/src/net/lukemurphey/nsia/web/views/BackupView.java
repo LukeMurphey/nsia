@@ -106,6 +106,7 @@ public class BackupView extends View {
 		if( backupWorker != null && (startedNow || backupWorker.getWorkerThread().getStatus() == State.STARTING || backupWorker.getWorkerThread().getStatus() == State.STARTED ) ){
 			data.put("ajaxurl", createURL() + "?AJAX=True");
 			data.put("title", "Database Backup");
+			data.put("noajaxurl",createURL());
 			data.put("content", Dialog.getProgressDialog(backupWorker.getWorkerThread().getStatusDescription(), backupWorker.getWorkerThread().getTaskDescription(), backupWorker.getWorkerThread().getProgress()) );
 			
 			response.getWriter().println( TemplateLoader.renderToString("AJAXProgressDialog.ftl", data) );

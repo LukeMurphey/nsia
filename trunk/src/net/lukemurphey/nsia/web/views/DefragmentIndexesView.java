@@ -145,6 +145,7 @@ public class DefragmentIndexesView extends View {
 		if( worker != null && (startedNow || worker.getWorkerThread().getStatus() == State.STARTING || worker.getWorkerThread().getStatus() == State.STARTED ) ){
 			data.put("ajaxurl", createURL() + "?AJAX=True");
 			data.put("title", "Reindex Database");
+			data.put("noajaxurl",createURL());
 			data.put("content", Dialog.getProgressDialog(worker.getWorkerThread().getStatusDescription(), worker.getWorkerThread().getTaskDescription(), worker.getWorkerThread().getProgress()) );
 			
 			response.getWriter().println( TemplateLoader.renderToString("AJAXProgressDialog.ftl", data) );

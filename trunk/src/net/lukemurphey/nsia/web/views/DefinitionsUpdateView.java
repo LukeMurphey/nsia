@@ -145,6 +145,7 @@ public class DefinitionsUpdateView extends View {
 		if( worker != null && (startedNow || worker.getStatus() == State.STARTING || worker.getStatus() == State.STARTED)){
 			data.put("ajaxurl", createURL() + "?AJAX=True");
 			data.put("title", "Definition Update");
+			data.put("noajaxurl",createURL());
 			data.put("content", Dialog.getProgressDialog(worker.getStatusDescription(), worker.getTaskDescription(), worker.getProgress()) );
 			
 			response.getWriter().println( TemplateLoader.renderToString("AJAXProgressDialog.ftl", data) );
