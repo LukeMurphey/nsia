@@ -139,8 +139,7 @@
         });
     </script>
 
-
-<#if refresh_url??>
+<#if refresh_url?? && (!isajax?? || !isajax)>
 <noscript>
     <meta name='Refresh' http-equiv="Refresh" content="30;URL=${refresh_url}">
 </noscript>
