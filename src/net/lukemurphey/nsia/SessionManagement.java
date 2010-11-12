@@ -862,8 +862,17 @@ public class SessionManagement {
 				//Do nothing, the sessions don't expire after inactivity
 			}
 			else{
-				if( sessionCreated.getTime() < oldestSessionInactivityThreshold )
+				// Check to determine if the session has expired
+				
+				// Look at the last activity if it is greater than the create time...
+				if( lastActivity != null && lastActivity.getTime() >= sessionCreated.getTime() && lastActivity.getTime() < oldestSessionInactivityThreshold ){
 					status = SessionStatus.SESSION_INACTIVE.getStatusId();
+				}
+				
+				// Otherwise, look at the create time to determine if the session is inactive
+				else if( sessionCreated.getTime() < oldestSessionInactivityThreshold ){
+					status = SessionStatus.SESSION_INACTIVE.getStatusId();
+				}
 			}
 		}
 		
