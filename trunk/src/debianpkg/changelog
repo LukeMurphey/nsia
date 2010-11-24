@@ -161,5 +161,5 @@ nsia (0.9.6-1) unstable; urgency=low
  * Refresh panel now uses a meta-refresh tag to refresh to the view is JavaScript is disabled
  * Fixed issue where command incident response actions could not be created
  
-  -- Luke Murphey <luke@threatfactor.com>  Mon, 25 Nov 2010 22:45:00 +0500
+ -- Luke Murphey <luke@threatfactor.com>  Mon, 25 Nov 2010 22:45:00 +0500
   
