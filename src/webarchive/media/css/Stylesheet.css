@@ -524,10 +524,14 @@ span.SideNote{
 }
 
 .hourglass{
-    -webkit-box-shadow: black 0px 0px 5px;
+    -webkit-box-shadow: 0px 0px 5px black;
+    -moz-box-shadow: 0px 0px 5px black;
+    box-shadow: 0px 0px 5px black;
     padding: 9px;
     margin-bottom: 15px;
     border-bottom-left-radius: 14px 14px;
+    -moz-border-radius-bottomleft: 14px 14px;
+    -webkit-border-bottom-left-radius: 14px 14px;
     background-color: black;
     position: absolute;
     z-index: 100;
