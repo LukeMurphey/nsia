@@ -94,6 +94,7 @@
              </tr>
            </tbody>
         </table>
+    </form>
         
         <table>
             <tr>
