@@ -437,7 +437,7 @@ public class ScriptDefinition extends Definition {
 			ScriptEngine scriptEngine = getScriptEngine();
 			populateBindings(scriptEngine);
 			
-			Invocable invocable = (Invocable)getScriptEngine();
+			Invocable invocable = (Invocable)scriptEngine;
 			
 			try {
 				Object result = invocable.invokeFunction("baseline", env );
