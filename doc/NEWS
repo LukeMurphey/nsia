@@ -18,10 +18,15 @@ Version includes the following changes:
  * Default recursion depth is set to 10 on the web discovery rule
  * Message boxes now fade away automatically and will disappear if you click them
  * Added date scanned to scan result report
- * Added a header bar with a description of the monitoring rules page
+ * Added a header bar with a description to the monitoring rules page
  * Improved definition log messages to distinguish between operations that affect individual definitions and those affecting the definition set
- * Fixed issue with select rule type view
+ * Fixed rendering issue with select rule type view
  * Enabling or disabling a group now forwards the user to the page to view the group (instead of editing it)
+ * Fixed issue that caused the site-group view to be rendered incorrectly when refreshed
+ * Fixed issue where the baseline and terminate ThreatScript definition function calls did not contain the same bindings as the analyze call
+ * Added message to the dashboard refresh header noting that JavaScript was disabled (if not enabled)
+ * Refresh panel now uses a meta-refresh tag to refresh to the view is JavaScript is disabled
+ * Fixed issue where command incident response actions could not be created
  
 Version 1.0.0 Changes
 ------------------------------------------------------------------
