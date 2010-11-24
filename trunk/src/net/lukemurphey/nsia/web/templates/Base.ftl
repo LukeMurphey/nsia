@@ -64,8 +64,8 @@ ${head}
     <tr class="ContentMain">
         <td>
         ${content}
-        </td></tr>
-
+        </td>
+    </tr>
     <tr>
         <td class="Footer" valign="middle" align="right" height="32">
         	<div style="display: none" id="aboutdialog" title="About NSIA">
