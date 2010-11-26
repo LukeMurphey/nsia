@@ -27,7 +27,8 @@ Version includes the following changes:
  * Added message to the dashboard refresh header noting that JavaScript was disabled (if not enabled)
  * Refresh panel now uses a meta-refresh tag to refresh to the view is JavaScript is disabled
  * Fixed issue where command incident response actions could not be created
- 
+ * Added a delete confirmation to the definitions dialog
+  
 Version 1.0.0 Changes
 ------------------------------------------------------------------
 Version includes the following changes:
