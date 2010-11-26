@@ -1,6 +1,7 @@
 <#include "GetURLFunction.ftl">
 <#include "GetDialog.ftl">
 <#assign content>
+<#include "PopupDialog.ftl">
 <#if (definitions?size == 0 && !filter?? )>
     <#assign message>
         No definitions exist yet. Download updated definitions to get the most current official set.<p><a href="<@url name="definitions_update" />">[Update Definitions Now]</a>
@@ -65,8 +66,8 @@
                 <td colspan="2">&nbsp;&nbsp;<a href="<@url name="definition" args=[def.ID] />"><img class="imagebutton" src="/media/img/16_magnifier" alt="View"><span style="vertical-align:top;">&nbsp;View</span></a>&nbsp;</td>
             <#else>
                 <td>Local&nbsp;&nbsp;</td>
-                <td>&nbsp;&nbsp;<a href="<@url name="definition" args=[def.ID] />"><img class="imagebutton" src="/media/img/16_Configure" alt="Edit"><span style="vertical-align:top;">&nbsp;Edit</span></a>&nbsp;</td>
-                <td>&nbsp;&nbsp;<a href="<@url name="definition_delete" args=[def.ID] />"><img class="imagebutton" src="/media/img/16_Delete" alt="Delete"><span style="vertical-align:top;">&nbsp;Delete</span>&nbsp;</a></td>
+                <td>&nbsp;&nbsp;<a id="edit" href="<@url name="definition" args=[def.ID] />"><img class="imagebutton" src="/media/img/16_Configure" alt="Edit"><span style="vertical-align:top;">&nbsp;Edit</span></a>&nbsp;</td>
+                <td>&nbsp;&nbsp;<a id="delete" href="<@url name="definition_delete" args=[def.ID] />"><img class="imagebutton" src="/media/img/16_Delete" alt="Delete"><span style="vertical-align:top;">&nbsp;Delete</span>&nbsp;</a></td>
             </#if>
         </tr>
         </#list>     
@@ -97,5 +98,17 @@
     </#if>
 </#if>
 <p/>
+<script type="text/javascript">
+$(document).ready(
+    function(){
+        $('#delete').click(
+            function(){
+                openDeleteConfirmDialog( "Are you sure you want to delete this definition? This action cannot be undone.", "Delete Definition?", this.href );
+                return false;
+             }
+         );
+    }
+);
+</script>            
 </#assign>
 <#include "BaseWithNav.ftl">
