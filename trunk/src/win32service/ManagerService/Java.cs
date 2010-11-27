@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 
-namespace ManagerService
+namespace ThreatFactor.NSIA.Service
 {
 	/// <summary>
 	/// Provides methods for finding information about the installed Java runtime.
@@ -61,7 +61,6 @@ namespace ManagerService
 	          }
 	    	}
 	    	
-	    	return null;
 		}
 		
 		/// <summary>

@@ -9,8 +9,9 @@ using System;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
+using ThreatFactor.NSIA.Service;
 
-namespace ManagerService
+namespace ThreatFactor.NSIA.Service.Test
 {
 	[TestFixture]
 	public class NSIAServiceTest

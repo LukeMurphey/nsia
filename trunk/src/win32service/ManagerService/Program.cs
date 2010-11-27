@@ -6,7 +6,7 @@ using System.IO;
 using System.Threading;
 using System.ServiceProcess;
 
-namespace ManagerService
+namespace ThreatFactor.NSIA.Service
 {
 
     class Program
@@ -35,7 +35,7 @@ namespace ManagerService
             }*/
 
             // 2 -- Run the service
-            ServiceBase.Run(new ManagerServiceBase());
+            ServiceBase.Run(new NSIAService());
         }
     }
 }

@@ -4,7 +4,8 @@ using System.Collections;
 using System.ComponentModel;
 using System.Configuration.Install;
 using System.ServiceProcess;
-namespace ManagerService
+
+namespace ThreatFactor.NSIA.Service
 {
     /// <SUMMARY>
     /// The code below installs the manager service on the local system.
