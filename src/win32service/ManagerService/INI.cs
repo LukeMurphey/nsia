@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace ManagerService
+namespace ThreatFactor.NSIA.Service
 {
 	/// <summary>
 	/// Provides a method for parsing INI files.
