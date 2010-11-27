@@ -8,7 +8,7 @@
     <ProjectGuid>{3198D2A5-8698-41D7-88AE-CE81DDFBD29B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ManagerService</RootNamespace>
+    <RootNamespace>ThreatFactor.NSIA.Service</RootNamespace>
     <AssemblyName>ThreatFactor NSIA Service</AssemblyName>
     <ApplicationIcon>NSIAService.ico</ApplicationIcon>
     <FileUpgradeFlags>
@@ -33,6 +33,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <DelaySign>False</DelaySign>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
