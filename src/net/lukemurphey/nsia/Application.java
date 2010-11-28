@@ -678,7 +678,7 @@ public final class Application {
 		// 1 -- Configuration file option (-c)
 		FlaggedOption opt1 = new FlaggedOption("configFile")
         		.setStringParser(JSAP.STRING_PARSER)
-        		.setDefault("./config.ini")
+        		.setDefault("../etc/config.ini")
         		.setRequired(false)
         		.setShortFlag('c')
         		.setLongFlag("config");
