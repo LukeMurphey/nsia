@@ -13,7 +13,7 @@ namespace ThreatFactor.NSIA.Service
 	/// <summary>
 	/// Provides a method for parsing INI files.
 	/// </summary>
-	public class INI
+	public class INIFile
 	{
 
 		/// <summary>
