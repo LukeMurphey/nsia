@@ -24,7 +24,7 @@ namespace ThreatFactor.NSIA.Service{
 	    {
 
             // Load the config file
-            config = INI.Parse("../etc/config.ini");
+            config = INIFile.Parse("../etc/config.ini");
 
             //Reset the service to the install directory as opposed to C:\Windows\System32.
             //This will set the directory to the directory containing the current executable.
