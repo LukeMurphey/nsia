@@ -17,7 +17,7 @@ int WinMain(HINSTANCE,HINSTANCE,LPSTR,int){
 
 	HINSTANCE hInst = ShellExecute(0,                           
 			"open",          // Operation to perform
-			"javaw",         // Application name
+			getProperty("JVM.Executable", "javaw").c_str(),         // Application name
 			command.c_str(), // Additional parameters
 			0,               // Default directory
 			SW_SHOW);

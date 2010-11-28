@@ -22,7 +22,7 @@ int main( int argc, char* argv[] ){
 	}
 
 	//If the batch file does not exist, then run it directly
-	std::string command = "java ";
+	std::string command = getProperty("JVM.Executable", "java ");
 	command.append(getCommandArgs( false ));
 	
 	system( command.c_str() );
