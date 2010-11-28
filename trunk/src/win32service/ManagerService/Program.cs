@@ -18,7 +18,7 @@ namespace ThreatFactor.NSIA.Service
         static void Main(string[] Args)
         {
             // 1 -- Determine if the user is attempting to install or uninstall the service
-            /*Boolean install = false;
+            Boolean install = false;
             Boolean uninstall = false;
 
             if (Args.Length > 1 && Args[1].Equals("install", StringComparison.CurrentCultureIgnoreCase))
@@ -31,8 +31,15 @@ namespace ThreatFactor.NSIA.Service
             if (install)
             {
                 ManagerServiceInstaller serviceInstaller = new ManagerServiceInstaller();
-                serviceInstaller.
-            }*/
+                serviceInstaller.Install();
+            }
+
+            // 1.2 -- Uninstall the service and exit
+            if (uninstall)
+            {
+                ManagerServiceInstaller serviceInstaller = new ManagerServiceInstaller();
+                serviceInstaller.Uninstall();
+            }
 
             // 2 -- Run the service
             ServiceBase.Run(new NSIAService());
