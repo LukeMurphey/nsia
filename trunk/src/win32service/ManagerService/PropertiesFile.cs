@@ -11,9 +11,9 @@ using System.IO;
 namespace ThreatFactor.NSIA.Service
 {
 	/// <summary>
-	/// Provides a method for parsing INI files.
+	/// Provides a method for parsing properties files.
 	/// </summary>
-	public class INIFile
+	public class PropertiesFile
 	{
 
 		/// <summary>
@@ -33,21 +33,29 @@ namespace ThreatFactor.NSIA.Service
             
             while (line != null)
             {
-                line = line.Trim();
-                int equalSign = line.IndexOf("=");
-                
-                if (equalSign > 0)
+                // Strip out comments
+                if (line.StartsWith("#") || line.StartsWith("!"))
                 {
-                    string configName = null;
-                    string configValue = null;
-                    
-                    // Get the name
-                    configName = line.Substring(0, equalSign).Trim();
-                    configValue = line.Substring(equalSign+1);
-                    
-                    // Add the value
-                    if(configName != null ){
-                    	config.Add( configName, configValue );
+                    //Skip this line, it's a comment
+                }
+                else
+                {
+                    int equalSign = line.IndexOf("=");
+
+                    if (equalSign > 0)
+                    {
+                        string configName = null;
+                        string configValue = null;
+
+                        // Get the name
+                        configName = line.Substring(0, equalSign).Trim();
+                        configValue = line.Substring(equalSign + 1);
+
+                        // Add the value
+                        if (configName != null)
+                        {
+                            config.Add(configName, configValue);
+                        }
                     }
                 }
 

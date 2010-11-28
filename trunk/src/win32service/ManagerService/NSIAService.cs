@@ -23,19 +23,19 @@ namespace ThreatFactor.NSIA.Service{
 	    protected override void OnStart(string[] args)
 	    {
 
-            // Load the config file
-            config = INIFile.Parse("../etc/config.ini");
-
             //Reset the service to the install directory as opposed to C:\Windows\System32.
             //This will set the directory to the directory containing the current executable.
             Environment.CurrentDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            // Load the config file
+            config = PropertiesFile.Parse(@"..\etc\config.ini");
 
             process = new Process();
 
             // Get the path to the JVM
             if (config != null && config.ContainsKey("JVM.Executable"))
             {
-                process.StartInfo.FileName = config["JVM.Path"];
+                process.StartInfo.FileName = config["JVM.Executable"];
             }
             else
             {
@@ -60,7 +60,7 @@ namespace ThreatFactor.NSIA.Service{
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.WorkingDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
 
-            // Assign an event handler to detect when  the process has stopped
+            // Assign an event handler to detect when the process has stopped
             process.EnableRaisingEvents = true;
             process.Exited += new EventHandler(NSIAStopped);
 
