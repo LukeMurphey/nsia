@@ -30,12 +30,12 @@ int fileExists (char * fileName)
        
 }
 
-std::string getCommandArgs( bool useGUI = false ){
+std::string getProperty( std::string name, std::string defaultValue ){
 	std::string line; 
-	std::string command="";
+	std::string value=defaultValue;
 	
 	std::ifstream configFile;
-	configFile.open("var/config.ini");
+	configFile.open("../etc/config.ini");
 	
 	if( configFile.good() ){
 
@@ -45,20 +45,27 @@ std::string getCommandArgs( bool useGUI = false ){
 			
 			trim(line);
 			
-			int nameStart = line.find("JVM.Arguments");
+			int nameStart = line.find(name);
 			
 			if( nameStart == 0 ){
 				
 				unsigned int endOfName = line.find("=");
 				
 				if( endOfName > 0 && endOfName < line.length() ){
-					command.append( line.substr(endOfName + 1) );
+					value = line.substr(endOfName + 1);
 				}
 			}
 		}
 		
 		configFile.close();
 	}
+
+	return value;
+}
+
+std::string getCommandArgs( bool useGUI = false ){
+	std::string line;
+	std::string command = getProperty("JVM.Arguments", "");
 
 	command.append(" -jar nsia.jar");
 	
