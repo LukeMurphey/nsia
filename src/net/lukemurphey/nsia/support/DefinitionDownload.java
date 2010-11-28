@@ -96,10 +96,16 @@ public class DefinitionDownload {
 		String definitionsXML = null;
 		
 		try {
+			
+			// Print a message indicating that definition are being downloaded
 			if( verbose){
 				System.out.print("Downloading definitions from threatfactor.com...");
 			}
+			
+			// Get the definitions as XML
 			definitionsXML = DefinitionArchive.getCurrentDefinitionsAsString(licenseKey);
+			
+			// Print a message indicating that definition are downloaded
 			if( verbose){
 				System.out.println("Done");
 			}
