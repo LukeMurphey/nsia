@@ -22,63 +22,67 @@ namespace ThreatFactor.NSIA.Service{
 	    /// </SUMMARY>
 	    protected override void OnStart(string[] args)
 	    {
-	    	
-	        // Load the config file
-	        config = INI.Parse("../etc/config.ini");
-	
-	        //Reset the service to the install directory as opposed to C:\Windows\System32.
-	        //This will set the directory to the directory containing the current executable.
-	        Environment.CurrentDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
-	 
-	        process = new Process();
-	        
-	        // Get the path to the JVM
-	        if( config != null && config.ContainsKey("JVM.Executable") ){
-	        	process.StartInfo.FileName = config["JVM.Path"];
-	        }
-	        else{
-	        	process.StartInfo.FileName = Java.GetJavaPath();
-	        }
-	        
-	        // Get the JVM arguments
-	        if( config != null && config.ContainsKey("JVM.Arguments") ){
-	        	process.StartInfo.Arguments = config["JVM.Arguments"] + " -jar nsia.jar" ;
-	        }
-	        else{
-	        	process.StartInfo.Arguments = "-jar nsia.jar" ;
-	        }
-	
-	        // Prepare the process
-	        process.StartInfo.RedirectStandardOutput = true;
-	        process.StartInfo.RedirectStandardInput = true;
-	        process.StartInfo.RedirectStandardError = true;
-	        process.StartInfo.CreateNoWindow = true;
-	        process.StartInfo.UseShellExecute = false;
-	        process.StartInfo.WorkingDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
-	
-	        // Assign an event handler to detect when  the process has stopped
-	        process.EnableRaisingEvents = true;
-	        process.Exited += new EventHandler(managerStopped);
-	
-	        // Start the process (or terminate trying to do so)
-	        try
-	        {
-	            process.Start();
-	            EventLog.WriteEntry(APPLICATION_NAME, "NSIA started as process ID " + process.Id, EventLogEntryType.Information);
-	        }
-	        catch (Exception e)
-	        {
-	            EventLog.WriteEntry(APPLICATION_NAME, "NSIA could not be started: " + e.Message, EventLogEntryType.Error);
-	            this.Stop();
-	        }
+
+            // Load the config file
+            config = INI.Parse("../etc/config.ini");
+
+            //Reset the service to the install directory as opposed to C:\Windows\System32.
+            //This will set the directory to the directory containing the current executable.
+            Environment.CurrentDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            process = new Process();
+
+            // Get the path to the JVM
+            if (config != null && config.ContainsKey("JVM.Executable"))
+            {
+                process.StartInfo.FileName = config["JVM.Path"];
+            }
+            else
+            {
+                process.StartInfo.FileName = Java.GetJavaPath();
+            }
+
+            // Get the JVM arguments
+            if (config != null && config.ContainsKey("JVM.Arguments"))
+            {
+                process.StartInfo.Arguments = config["JVM.Arguments"] + " -jar nsia.jar";
+            }
+            else
+            {
+                process.StartInfo.Arguments = "-jar nsia.jar";
+            }
+
+            // Prepare the process
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardInput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.WorkingDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            // Assign an event handler to detect when  the process has stopped
+            process.EnableRaisingEvents = true;
+            process.Exited += new EventHandler(NSIAStopped);
+
+            // Start the process (or terminate trying to do so)
+            try
+            {
+                process.Start();
+                EventLog.WriteEntry(APPLICATION_NAME, "NSIA started as process ID " + process.Id, EventLogEntryType.Information);
+            }
+            catch (Exception e)
+            {
+                EventLog.WriteEntry(APPLICATION_NAME, "NSIA could not be started: " + e.Message, EventLogEntryType.Error);
+                this.Stop();
+            }
 	    }
 	
 	    protected void ConsoleOutput(object sendingProcess, DataReceivedEventArgs outLine)
 	    {
 	        EventLog.WriteEntry(APPLICATION_NAME, outLine.Data, EventLogEntryType.Information);
 	    }
-	
-	    protected void managerStopped(object sender, EventArgs e)
+
+        protected void NSIAStopped(object sender, EventArgs e)
 	    {
 	        if ( shutdownProcessInitiated == false && process.ExitCode == -1 )
 	        {
@@ -97,9 +101,11 @@ namespace ThreatFactor.NSIA.Service{
 	    /// </SUMMARY>
 	    protected override void OnStop()
 	    {
+
 	        EventLog.WriteEntry(APPLICATION_NAME, "NSIA given shutdown command", EventLogEntryType.Information);
 	
 	        shutdownProcessInitiated = true;
+
 	        try
 	        {
 	            if (process.HasExited == false)
