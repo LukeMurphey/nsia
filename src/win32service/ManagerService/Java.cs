@@ -79,12 +79,28 @@ namespace ThreatFactor.NSIA.Service
 		}
 		
 		/// <summary>
-		/// Get the install path of Java if it exists iin the systme directory
+		/// Get the install path of Java if it exists in the system directory
 		/// </summary>
 		/// <returns></returns>
 		public static string GetInstallPathFromSystem(){
 			string path = Environment.GetFolderPath(Environment.SpecialFolder.System);
 			path += @"\java.exe";
+			
+			if( File.Exists( path ) ){
+				return path;
+			}
+			else{
+				return null;
+			}
+		}
+		
+		/// <summary>
+		/// Get the install path of Java if it exists in the SysWow64 directory
+		/// </summary>
+		/// <returns></returns>
+		public static string GetInstallPathFromSysWow64(){
+			string path = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+			path += @"\syswow64\java.exe";
 			
 			if( File.Exists( path ) ){
 				return path;
@@ -122,6 +138,13 @@ namespace ThreatFactor.NSIA.Service
 	    	
 	    	// 3 -- Determine if the Java runtime is in the system32 drectory
 	    	path = GetInstallPathFromSystem();
+	    	
+	    	if( path != null){
+				return path;
+			}
+	    	
+	    	// 4 -- Determine if the Java runtime is in the syswow64 directory
+	    	path = GetInstallPathFromSysWow64();
 	    	
 	    	if( path != null){
 				return path;
