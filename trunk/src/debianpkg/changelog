@@ -163,7 +163,7 @@ nsia (0.9.6-1) unstable; urgency=low
  * Added a delete confirmation to the definitions dialog
  * Windows service and executables now attempt to find a suitable JVM (helps ensure that NSIA can run if Java does not exist in the path)
  * Executables now pass on arguments to NSIA
- * Fixed issue were config file was not loaded from the correct location
+ * Fixed issue where the config file was not loaded from the correct location
  
  -- Luke Murphey <luke@threatfactor.com>  Mon, 26 Nov 2010 13:00:00 +0500
   
