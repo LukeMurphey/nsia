@@ -13,18 +13,23 @@
  */
 int WinMain(HINSTANCE,HINSTANCE,LPSTR,int){	
 	
+	// 1 -- Find the path of the JVM
+	std::string jvmPath = findJVM( true );
+
+	// 2 -- Get the command path
 	std::string command = getCommandArgs(true);
 
+	// 3 -- Start NSIA
 	HINSTANCE hInst = ShellExecute(0,                           
 			"open",          // Operation to perform
-			getProperty("JVM.Executable", "javaw").c_str(),         // Application name
+			getProperty("JVM.Executable", jvmPath).c_str(),         // Application name
 			command.c_str(), // Additional parameters
 			0,               // Default directory
 			SW_SHOW);
+
+	// 4 -- Handle the return code
 	if(reinterpret_cast<int>(hInst) <= 32)
 	{
-		//MessageBox(0,"Hello, Windows","MinGW Test Program",MB_OK);
-
 		// Could not start application
 		switch(reinterpret_cast<int>(hInst))
 		{
@@ -83,21 +88,6 @@ int WinMain(HINSTANCE,HINSTANCE,LPSTR,int){
 			break;
 		}
 	}
-	//system( command.c_str() );
 
 	return 0;
 }
-
-/*
-  Find the path of the JVM.
- */
-/*String findJVM(){
-
-	// 0 -- Precondition Check
-
-	// 1 -- See if a local (application specific JVM exists)
-
-	// 2 -- Determine if a JVM is specified in the environment
-
-	// 3 -- Search through the filesystem
-}*/

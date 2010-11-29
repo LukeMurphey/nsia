@@ -18,7 +18,10 @@ std::string& trim(std::string& s) {
 	return triml(trimr(s));
 }
 
-int fileExists (char * fileName)
+/*
+ * Determine if a file exists.
+ */
+int fileExists (const char * fileName)
 {
    struct stat buf;
    int i = stat ( fileName, &buf );
@@ -30,9 +33,12 @@ int fileExists (char * fileName)
        
 }
 
+/*
+ * Retrieve the given property from the config file
+ */
 std::string getProperty( std::string name, std::string defaultValue ){
 	std::string line; 
-	std::string value=defaultValue;
+	std::string value = defaultValue;
 	
 	std::ifstream configFile;
 	configFile.open("../etc/config.ini");
@@ -65,7 +71,8 @@ std::string getProperty( std::string name, std::string defaultValue ){
 
 std::string getCommandArgs( bool useGUI = false ){
 	std::string line;
-	std::string command = getProperty("JVM.Arguments", "");
+	std::string command = " ";
+	command.append(getProperty("JVM.Arguments", ""));
 
 	command.append(" -jar nsia.jar");
 	
@@ -76,17 +83,71 @@ std::string getCommandArgs( bool useGUI = false ){
 	return command;
 }
 
-
 /*
-  Find the path of the JVM.
-  */
-/*String findJVM(){
+ * Find the path of the JVM.
+ */
+std::string findJVM( bool useJavaw = false ){
+
+	std::string javaPath;
+
+	// 1 -- Get the Java installation path from the JAVA_HOME environment variable
+	char * javaHome = getenv("JAVA_HOME");
+
+	if( javaHome != NULL ){
+		std::string java = javaHome;
+
+		if( useJavaw ){
+			java.append("\\bin\\javaw.exe");
+		}
+		else{
+			java.append("\\bin\\java.exe");
+		}
+
+		if( fileExists( java.c_str() ) ){
+			return java;
+		}
+	}
+
+	// 2 -- Determine if the Java runtime is in the system32 directory
+	char * systemRoot = getenv("SystemRoot");
 	
-	// 0 -- Precondition Check
+	if( systemRoot != NULL ){
+		std::string system32 = systemRoot;
+
+		if( useJavaw ){
+			system32.append("\\system32\\javaw.exe");
+		}
+		else{
+			system32.append("\\system32\\java.exe");
+		}
+
+		if( fileExists( system32.c_str() ) ){
+			return system32;
+		}
+	}
 	
-	// 1 -- See if a local (application specific JVM exists)
+	// 3 -- Determine if the Java runtime is in the syswow64 directory
+	if( systemRoot != NULL ){
+		std::string syswow64 = systemRoot;
+
+		if( useJavaw ){
+			syswow64.append("\\syswow64\\javaw.exe");
+		}
+		else{
+			syswow64.append("\\syswow64\\java.exe");
+		}
+
+		if( fileExists( syswow64.c_str() ) ){
+			return syswow64;
+		}
+	}
 	
-	// 2 -- Determine if a JVM is specified in the environment
+	// 4 -- Assume that Java is in the path
+	if( useJavaw ){
+		return "javaw.exe";
+	}
+	else{
+		return "java.exe";
+	}
 	
-	// 3 -- Search through the filesystem
-}*/
+}

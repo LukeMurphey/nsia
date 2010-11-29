@@ -21,10 +21,20 @@ int main( int argc, char* argv[] ){
 		execl ("./Start_Server.sh", "Start_Server.sh", (char *)0);
 	}
 
-	//If the batch file does not exist, then run it directly
-	std::string command = getProperty("JVM.Executable", "java ");
+	// 2 -- Find the path of the JVM
+	std::string jvmPath = findJVM();
+
+	// 3 -- Get the path from the configuration file if it was specified
+	std::string command = getProperty("JVM.Executable", jvmPath);
 	command.append(getCommandArgs( false ));
 	
+	// 4 -- Append the arguments
+	for(int c = 1; c < argc; c++){
+		command.append(" ");
+		command.append(argv[c]);
+	}
+
+	// 5 -- Run the application
 	system( command.c_str() );
 	
 	return 0;
