@@ -99,7 +99,7 @@ namespace ThreatFactor.NSIA.Service
 		/// </summary>
 		/// <returns></returns>
 		public static string GetInstallPathFromSysWow64(){
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+            string path = NormalizePath( Environment.GetEnvironmentVariable("SystemRoot") );
 			path += @"\syswow64\java.exe";
 			
 			if( File.Exists( path ) ){
