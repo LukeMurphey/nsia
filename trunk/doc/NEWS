@@ -28,6 +28,9 @@ Version includes the following changes:
  * Refresh panel now uses a meta-refresh tag to refresh to the view is JavaScript is disabled
  * Fixed issue where command incident response actions could not be created
  * Added a delete confirmation to the definitions dialog
+ * Windows service and executables now attempt to find a suitable JVM (helps ensure that NSIA can run if Java does not exist in the path)
+ * Executables now pass on arguments to NSIA
+ * Fixed issue were config file was not loaded from the correct location
   
 Version 1.0.0 Changes
 ------------------------------------------------------------------
