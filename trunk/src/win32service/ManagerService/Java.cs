@@ -136,7 +136,7 @@ namespace ThreatFactor.NSIA.Service
 				return path;
 			}
 	    	
-	    	// 3 -- Determine if the Java runtime is in the system32 drectory
+	    	// 3 -- Determine if the Java runtime is in the system32 directory
 	    	path = GetInstallPathFromSystem();
 	    	
 	    	if( path != null){
