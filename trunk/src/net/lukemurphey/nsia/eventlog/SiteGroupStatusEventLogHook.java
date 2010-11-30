@@ -56,7 +56,7 @@ public class SiteGroupStatusEventLogHook extends EventLogHook {
 		
 		try{
 			// 2 -- Stop if the scope of the event is a SiteGroup and the event matches
-			if( message.getEventType() == EventType.RULE_REJECTED || message.getEventType() == EventType.RULE_FAILED ){
+			if( message.getEventType() == EventType.RULE_COMPLETE_REJECTED || message.getEventType() == EventType.RULE_COMPLETE_FAILED ){
 				EventLogField field = message.getField(EventLogField.FieldName.SITE_GROUP_ID);
 				
 				if( field != null && field.getValue().equals( siteGroupID ) ){
