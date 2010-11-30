@@ -34,7 +34,7 @@
             ${scanResult.accepts + scanResult.deviations - scanResult.incompletes}
         </#assign>
         <@summaryrow "Resources Scanned" scanned />
-        <@summaryrow "Domain" scanResult.specimenDescription />
+        <#if scanResult.specimenDescription??><@summaryrow "Domain" scanResult.specimenDescription /></#if>
         <@summaryrow "Date Scanned" scanResult.scanTime?datetime />
     </table>
     <#-- Render definitions match table -->
