@@ -31,7 +31,7 @@ public abstract class ScanResult {
 	
 	/**
 	 * Get the number of deviations found in the scan. Note that a deviation occurs whenever the scan finds
-	 * something that does not accepted by a rule.  
+	 * something that is not accepted by a rule.  
 	 * @return
 	 */
 	public int getDeviations(){
