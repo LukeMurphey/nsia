@@ -1073,4 +1073,32 @@ public class ApplicationConfiguration {
 		
 		return uniqueID;
 	}
+
+
+	/**
+	 * Determine if automatic database defragmentation is enabled.
+	 * @return
+	 * @throws InputValidationException 
+	 * @throws SQLException 
+	 * @throws NoDatabaseConnectionException 
+	 */
+	public boolean isAutomaticDefragmentationEnabled() throws NoDatabaseConnectionException, SQLException, InputValidationException {
+		return appParams.getParameter("Administration.AutoDefragEnabled", 0) == 1;
+	}
+	
+	/**
+	 * Enable automatic databse defragmentation.
+	 * @param enable
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InputValidationException
+	 */
+	public void setAutomaticDefragmentation( boolean enable ) throws NoDatabaseConnectionException, SQLException, InputValidationException {
+		if( enable == true ){
+			appParams.setParameter("Administration.AutoDefragEnabled",  String.valueOf(1));
+		}
+		else{
+			appParams.setParameter("Administration.AutoDefragEnabled",  String.valueOf(0));
+		}
+	}
 }
