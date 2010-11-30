@@ -70,6 +70,10 @@ public class ScanCallback {
 		logScanResult(resultCode, deviations, ruleType, specimen, null, scanRuleID, sendToEventLog);
 	}
 	
+	public void logScanResult( ScanResultCode resultCode, int deviations, String ruleType, String specimen, String message, long scanRuleID, boolean sendToEventLog, boolean noteScanCompleted ){
+		logScanResult(resultCode, deviations, ruleType, specimen, message, scanRuleID, sendToEventLog, noteScanCompleted, false);
+	}
+	
 	/**
 	 * Logs the fact that the scan completed and increases the scan counts to show that a rule completed.
 	 * @param resultCode
@@ -80,29 +84,51 @@ public class ScanCallback {
 	 * @param scanRuleID
 	 * @param sendToEventLog
 	 * @param noteScanCompleted
+	 * @param ruleCompleted
 	 */
-	public void logScanResult( ScanResultCode resultCode, int deviations, String ruleType, String specimen, String message, long scanRuleID, boolean sendToEventLog, boolean noteScanCompleted ){
+	public void logScanResult( ScanResultCode resultCode, int deviations, String ruleType, String specimen, String message, long scanRuleID, boolean sendToEventLog, boolean noteScanCompleted, boolean ruleCompleted ){
 		if( sendToEventLog ){
 			EventLogMessage logMessage;
 			
+			// Create the base log message
 			if( deviations > 0 ){
-				logMessage = new EventLogMessage(EventType.RULE_REJECTED);
+				if( ruleCompleted ){
+					logMessage = new EventLogMessage(EventType.RULE_COMPLETE_REJECTED);
+				}
+				else{
+					logMessage = new EventLogMessage(EventType.RULE_REJECTED);
+				}
 			}
 			else if( resultCode == ScanResultCode.SCAN_FAILED || resultCode == ScanResultCode.UNREADY ){
-				logMessage = new EventLogMessage(EventType.RULE_FAILED);
+				if( ruleCompleted ){
+					logMessage = new EventLogMessage(EventType.RULE_COMPLETE_FAILED);
+				}
+				else{
+					logMessage = new EventLogMessage(EventType.RULE_FAILED);
+				}
 			}
 			else{
-				logMessage = new EventLogMessage(EventType.RULE_ACCEPTED);
+				if( ruleCompleted ){
+					logMessage = new EventLogMessage(EventType.RULE_COMPLETE_ACCEPTED);
+				}
+				else{
+					logMessage = new EventLogMessage(EventType.RULE_ACCEPTED);
+				}
 			}
 			
+			// Set the message
 			if( message != null ){
 				logMessage.addField(new EventLogField(FieldName.MESSAGE, message));
 			}
 			
-			logMessage.addField(new EventLogField(FieldName.RULE_SPECIMEN, specimen));
+			// Set the specimen
+			if( specimen != null ){
+				logMessage.addField(new EventLogField(FieldName.RULE_SPECIMEN, specimen));
+			}
 			
 			// Get the ID of the site group associated with the rule and add it to the list of details 
 			long siteGroupID = -1;
+			
 			try {
 				siteGroupID = ScanRule.getSiteGroupForRule(scanRuleID);
 				
@@ -115,6 +141,7 @@ public class ScanCallback {
 				application.logExceptionEvent(new EventLogMessage(EventLogMessage.EventType.SQL_EXCEPTION), e);
 			}
 			
+			// Add various related fields
 			logMessage.addField(new EventLogField(FieldName.RULE_TYPE, ruleType));
 			logMessage.addField(new EventLogField(FieldName.RULE_ID, scanRuleID));
 			logMessage.addField(new EventLogField(FieldName.DEVIATIONS, deviations));
@@ -122,6 +149,7 @@ public class ScanCallback {
 			application.logEvent(logMessage);
 		}
 		
+		// Send a message to the monitor noting that the scan was completed
 		if(noteScanCompleted){
 			if( deviations > 0 ){
 				monitor.incrementFailedRulesCount();
