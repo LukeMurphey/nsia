@@ -753,7 +753,20 @@ public final class Application {
 		timer.scheduleAtFixedRate( new TimerTaskWorker(worker, "Definition Updater"), 1000*60*30, 1000*60*60); //Repeat every hour and delay for 30 minutes
 		
 		// 2 -- Start the index defragmenter (if the internal database was used)
-		if( usingInternalDatabase ){
+		boolean autoDefrag = false;
+		
+		try{
+			autoDefrag = appConfig.isAutomaticDefragmentationEnabled();
+		} catch(InputValidationException e){
+			logExceptionEvent( new EventLogMessage( EventLogMessage.EventType.INTERNAL_ERROR ), e);
+		} catch (NoDatabaseConnectionException e) {
+			logExceptionEvent( new EventLogMessage( EventLogMessage.EventType.DATABASE_FAILURE ), e);
+		} catch (SQLException e) {
+			logExceptionEvent( new EventLogMessage( EventLogMessage.EventType.SQL_EXCEPTION ), e);
+		}
+		
+		// Start the database defragment worker if necessary
+		if( usingInternalDatabase && autoDefrag ){
 			reindexer = new ReindexerWorker();
 			Calendar cal = Calendar.getInstance();
 			
