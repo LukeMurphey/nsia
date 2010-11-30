@@ -455,9 +455,9 @@ public class GraphServlet extends HttpServlet {
 		// 3 -- Add the data
 		for(int c = results.length - 1; c >= 0; c--){
 
-			dataSet.addValue( results[c].getIncompletes() , "Incomplete", "" + c);
-			dataSet.addValue( results[c].getDeviations() , "Rejected", "" + c);
-			dataSet.addValue( results[c].getAccepts() , "Passed", "" + c);
+			dataSet.addValue( Math.max(0, results[c].getIncompletes()) , "Incomplete", "" + c);
+			dataSet.addValue( Math.max(0, results[c].getDeviations()) , "Rejected", "" + c);
+			dataSet.addValue( Math.max(0, results[c].getAccepts()) , "Passed", "" + c);
 		}
 
 		
