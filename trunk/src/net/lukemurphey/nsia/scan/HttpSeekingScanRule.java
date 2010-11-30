@@ -906,8 +906,22 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			}
 			
 			// 4 -- Log the results
+			
+			//	4.1 -- Log each specimen that was rejected
 			for(int c = 0; c < findings.size(); c++){
 				logSignatureScanResult(findings.get(c).deviations, findings.get(c).getUrl());
+			}
+			
+			//	4.2 -- Log that the rule has completed
+			{
+				int devs = 0;
+				for( int c = 0; c < findings.size(); c++){
+					if( findings.get(c).deviations > 0){
+						devs++;
+					}
+				}
+				
+				logScanResult(resultCode, devs);
 			}
 			
 			// 5 -- Indicate that the scan is completed and exit
@@ -933,6 +947,10 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		else{
 			logScanResult( ScanResultCode.SCAN_COMPLETED, 0, HttpSeekingScanRule.RULE_TYPE, url.toString(), "0 definitions matched" );
 		}
+	}
+	
+	private void logScanResult( ScanResultCode resultCode, int deviations ){
+		logScanComplete(resultCode, deviations, HttpSeekingScanRule.RULE_TYPE, this.getSpecimenDescription(), true, false);
 	}
 	
 	@Override
