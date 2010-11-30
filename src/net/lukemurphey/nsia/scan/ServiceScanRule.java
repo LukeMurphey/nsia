@@ -237,10 +237,11 @@ public class ServiceScanRule extends ScanRule implements WorkerThread {
 			throw new ScanException("The scan failed due to an exception", e);
 		}
 		
+		ServiceScanResult result = new ServiceScanResult(ScanResultCode.SCAN_COMPLETED, timeOfScan, address, portsToBeScanned, portsExpectedOpen, portDifferences );
 		
-		logScanResult(ScanResultCode.SCAN_COMPLETED, portDifferences.length, ServiceScanRule.RULE_TYPE, "", false);
-		return new ServiceScanResult(ScanResultCode.SCAN_COMPLETED, timeOfScan, address, portsToBeScanned, portsExpectedOpen, portDifferences );
+		logScanComplete(ScanResultCode.SCAN_COMPLETED, result.getDeviations(), ServiceScanRule.RULE_TYPE, "", true, false);
 		
+		return result;
 	}
 
 	public NetworkPortRange[] getPortsToScan(){
