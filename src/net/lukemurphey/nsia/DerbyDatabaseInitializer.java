@@ -83,7 +83,13 @@ public class DerbyDatabaseInitializer extends DatabaseInitializer {
 			indexes.add( new DatabaseIndex("DefinitionScanResultContentTypeIndex", "SignatureScanResult(ContentType)") );
 			indexes.add( new DatabaseIndex("ScanResultRuleIDIndex", "ScanResult(ScanRuleID)") );
 			indexes.add( new DatabaseIndex("ScanResultParentIDIndex", "ScanResult(ParentScanResultID)") );
+			indexes.add( new DatabaseIndex("ScanResultParentIDAndResultIDIndex", "ScanResult(ScanResultID, ParentScanResultID)") );
 			indexes.add( new DatabaseIndex("ScriptEnvironmentScanResultIDIndexDesc", "ScriptEnvironment(ScanResultID Desc)") );
+			indexes.add( new DatabaseIndex("HttpDiscoveryResultScanResultIDIndex", "HttpDiscoveryResult(ScanResultID)") );
+			indexes.add( new DatabaseIndex("SignatureScanResultContentTypeIndex", "SignatureScanResult(ContentType, ScanResultID)") );
+			indexes.add( new DatabaseIndex("SignatureScanResultPKIndex", "SignatureScanResult(ScanResultID)") );
+			indexes.add( new DatabaseIndex("MatchedRuleScanResultIDIndex", "MatchedRule(ScanResultID)") );
+			indexes.add( new DatabaseIndex("MatchedRuleScanResultIDRuleNameIndex", "MatchedRule(ScanResultID, RuleName)") );
 		}
 		
 		return indexes;
