@@ -942,10 +942,10 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	
 	private void logSignatureScanResult( int definitionsMatched, URL url ){
 		if( definitionsMatched > 0 ){
-			logScanResult( ScanResultCode.SCAN_COMPLETED, definitionsMatched, HttpSeekingScanRule.RULE_TYPE, url.toString(), definitionsMatched + " definitions matched" );
+			logScanResult( ScanResultCode.SCAN_COMPLETED, definitionsMatched, HttpSeekingScanRule.RULE_TYPE, url.toString(), definitionsMatched + " definitions matched", true, false );
 		}
 		else{
-			logScanResult( ScanResultCode.SCAN_COMPLETED, 0, HttpSeekingScanRule.RULE_TYPE, url.toString(), "0 definitions matched" );
+			logScanResult( ScanResultCode.SCAN_COMPLETED, 0, HttpSeekingScanRule.RULE_TYPE, url.toString(), "0 definitions matched", true, false );
 		}
 	}
 	
