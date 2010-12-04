@@ -29,8 +29,8 @@
                 <td>${error.definitionVersion?c}</td>
                 <td>${error.definitionID?c}</td>
                 <td>${error.errorName?html}</td>
-                <td>${error.dateFirstOccurred}</td>
-                <td>${error.dateLastOccurred}</td>
+                <td>${error.dateFirstOccurred?datetime}</td>
+                <td>${error.dateLastOccurred?datetime}</td>
             </tr>
         </#list>
         </tbody>
