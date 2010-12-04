@@ -114,6 +114,9 @@ public class HttpDefinitionScanRule extends ScanRule{
 		result = StringUtils.replace(result, "'" , "%27");
 		result = StringUtils.replace(result, "," , "%2C");
 		result = StringUtils.replace(result, ":" , "%3A");
+		
+		// Correct the slashes
+		result = StringUtils.replace(result, "\\" , "/");
 	
 		return result;
 	}
@@ -328,8 +331,10 @@ public class HttpDefinitionScanRule extends ScanRule{
 			Vector<DefinitionMatch> results = new Vector<DefinitionMatch>();
 			Vector<URLToScan> extractedURLs = null;
 			
+			// 2 -- Retrieve and parse the content
 			try{
-				// 2 -- Retrieve and parse the content
+				
+				// 2.1 -- Get the content
 				HttpResponseData httpResponse;
 				try{
 					httpResponse = getResponseData(url, httpClient);
@@ -357,7 +362,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 					return new HttpSignatureScanResultWithParser( new HttpDefinitionScanResult(ScanResultCode.SCAN_COMPLETED, new java.sql.Timestamp(System.currentTimeMillis()), url, this.scanRuleId ), null );
 				}
 
-				//	 2.1 -- Get the parser
+				//	 2.2 -- Parse the content
 				Parser parser = null;
 				
 				try{
