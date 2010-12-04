@@ -41,7 +41,7 @@
 <p>
 <#include "SelectAll.ftl">
 <#include "PopupDialog.ftl">
-<form id="policyeditform" action="${request.thisURL}" method="post" action="ScanPolicy">
+<form id="policyeditform" action="${request.thisURL?html}" method="post" action="ScanPolicy">
 <#if (sitegroup??)>
     <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId?c}">
 </#if>

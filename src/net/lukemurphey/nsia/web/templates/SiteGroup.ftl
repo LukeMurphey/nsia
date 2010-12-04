@@ -10,7 +10,7 @@
     <#include "SelectAll.ftl">
     <div><span class="Text_1">Monitoring Rules</span>
     <br><span class="LightText">Below are the rules for the ${sitegroup.groupName?html} site-group</span><p>
-    <form id="sitegroupform" action="${request.thisURL}" method="POST">
+    <form id="sitegroupform" action="${request.thisURL?html}" method="POST">
         <input type="hidden" name="SiteGroupID" value="${sitegroup.groupId?c}">
         <table class="DataTable" summary="HeaderEntries">
             <thead>
@@ -51,16 +51,16 @@
                 <#elseif ( rule.status == STAT_YELLOW )>
                     <td class="Background1">Connection failed&nbsp;&nbsp;</td>
                 <#elseif ( rule.deviations == 1 )>
-                    <td class="Background1">${rule.deviations} deviation&nbsp;&nbsp;</td>
+                    <td class="Background1">${rule.deviations?c} deviation&nbsp;&nbsp;</td>
                 <#else>
-                    <td class="Background1">${rule.deviations} deviations&nbsp;&nbsp;</td>
+                    <td class="Background1">${rule.deviations?c} deviations&nbsp;&nbsp;</td>
                 </#if>
             <#else>
-                <td class="Background1">${rule.statusDescription}&nbsp;&nbsp;</td>
+                <td class="Background1">${rule.statusDescription?html}&nbsp;&nbsp;</td>
             </#if>
             <#-- Output description -->
-                <td class="Background1">${rule.type}&nbsp;&nbsp;</td>
-                <td class="Background1">${rule.description}&nbsp;&nbsp;</td>
+                <td class="Background1">${rule.type?html}&nbsp;&nbsp;</td>
+                <td class="Background1">${rule.description?html}&nbsp;&nbsp;</td>
 
             <#-- Output the edit option button -->
                 <td class="Background1">

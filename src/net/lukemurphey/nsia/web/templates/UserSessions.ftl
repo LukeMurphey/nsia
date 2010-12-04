@@ -11,8 +11,8 @@
     <#macro sessioninfo session>
 Session last activity: ${session.lastActivity?datetime}
 Session started: ${session.sessionCreated?datetime}
-<#if session.remoteSourceAddress??>Logged in from: ${session.remoteSourceAddress}
-</#if><#if session.remoteSourceData??>Client browser: ${session.remoteSourceData}</#if></#macro>
+<#if session.remoteSourceAddress??>Logged in from: ${session.remoteSourceAddress?html}
+</#if><#if session.remoteSourceData??>Client browser: ${session.remoteSourceData?html}</#if></#macro>
     <table class="DataTable">
         <thead>
             <tr>
@@ -27,7 +27,7 @@ Session started: ${session.sessionCreated?datetime}
             <tr class="Background1">
                 <td>${session.userId?c}</td>
                 <td><span class="Centered"><a href="<@url name="user" args=[session.userId]/>"><img src="/media/img/16_User"></a><a href="<@url name="user" args=[session.userId]/>">${session.userName?html}</a></span></td>
-                <td title="<@sessioninfo session/>">${session.sessionCreated}</td>
+                <td title="<@sessioninfo session/>">${session.sessionCreated?datetime}</td>
                 <td>${session.sessionStatus.description?html}</td>
                 <td class="sessiondelete"><@button url=geturl("user_session_end", session.trackingNumber?c) imageURL="/media/img/16_Delete" imageAlt="Terminate" text="Terminate" /></td>
             </tr>

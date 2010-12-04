@@ -17,7 +17,7 @@
     <#elseif !license_check_completed>
         <#assign message>
             The application license is currently being verified.<p/>If you need support, please go to <a href="http://ThreatFactor.com/Support">ThreatFactor.com</a> now.<p/>
-            <form method="POST" action="${request.thisURL}"><input type="Submit" class="button" value="OK" name="OK"></form>
+            <form method="POST" action="${request.thisURL?html}"><input type="Submit" class="button" value="OK" name="OK"></form>
         </#assign>
         <@getinfodialog title="License Being Verified" message=message />
     <#elseif license.status = EXPIRED>
