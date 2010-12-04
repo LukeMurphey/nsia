@@ -2,7 +2,7 @@
 <#include "GetDialog.ftl">
 
 <#macro getref reference name>
-    <a target="_blank" href="${reference.type.urlPrefix}${reference.value}"> ${name?html} ${reference.value?html}</a><br/>
+    <a target="_blank" href="${reference.type.urlPrefix}${reference.value?html}"> ${name?html} ${reference.value?html}</a><br/>
 </#macro>
 
 <#macro ruleselectrow name description typearg >

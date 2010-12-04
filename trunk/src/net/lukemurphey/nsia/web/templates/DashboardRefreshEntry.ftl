@@ -62,14 +62,14 @@
 
         function getURL(){
         
-            if( getArgument("${refresh_url}", "isajax") != null ){
-                return "${refresh_url}";
+            if( getArgument("${refresh_url?html}", "isajax") != null ){
+                return "${refresh_url?html}";
             }
-            else if( hasArgs("${refresh_url}") ){
-                return "${refresh_url}" + '&isajax';
+            else if( hasArgs("${refresh_url?html}") ){
+                return "${refresh_url?html}" + '&isajax';
             }
             else{
-                return "${refresh_url}" + '?isajax';
+                return "${refresh_url?html}" + '?isajax';
             }
         }
 
@@ -141,6 +141,6 @@
 
 <#if refresh_url?? && (!isajax?? || !isajax)>
 <noscript>
-    <meta name='Refresh' http-equiv="Refresh" content="30;URL=${refresh_url}">
+    <meta name='Refresh' http-equiv="Refresh" content="30;URL=${refresh_url?html}">
 </noscript>
 </#if>

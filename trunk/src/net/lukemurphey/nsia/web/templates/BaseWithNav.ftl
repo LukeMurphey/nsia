@@ -12,7 +12,7 @@
             <#list menu as menu_item>
                 
                 <#if menu_item.link??>
-                <br>&nbsp;&nbsp;&nbsp;<img alt="*" src="/media/img/Arrow" /><a href="${menu_item.link}" <@getattrs menu_item.attributes />>${menu_item.title?html}</a>
+                <br>&nbsp;&nbsp;&nbsp;<img alt="*" src="/media/img/Arrow" /><a href="${menu_item.link?html}" <@getattrs menu_item.attributes />>${menu_item.title?html}</a>
                 <#else>
                 <br>&nbsp;
                 <#if (menu_item_index > 0)><br>&nbsp;</#if>
@@ -24,7 +24,7 @@
             <td valign="top">            
             <div style="margin-bottom: 16px;" class="BottomBorder"><br>
             <#list breadcrumbs as crumb>
-            <#if (crumb_index > 0)>/</#if> <#if crumb.link??><a class=NavBar href="${crumb.link}"></#if>${crumb.title?html}<#if crumb.link??></a></#if>
+            <#if (crumb_index > 0)>/</#if> <#if crumb.link??><a class=NavBar href="${crumb.link?html}"></#if>${crumb.title?html}<#if crumb.link??></a></#if>
             </#list>
             &nbsp;</div>
             <script type="text/javascript">

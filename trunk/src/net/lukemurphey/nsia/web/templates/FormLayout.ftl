@@ -5,7 +5,7 @@
         <td <#if (field.help??)>title="${field.help?html}" </#if>class="Text_3" colspan="${field.layoutWidth?c}">
             <div style="display: table-cell; vertical-align: top">${field.title?html}</div>
         </td>
-        <#assign fieldname>_${field.name}</#assign>
+        <#assign fieldname>_${field.name?html}</#assign>
         <#if ( field.type = "file") >
         <td <#if (field.help??)>title="${field.help?html}" </#if> colspan="${field.layoutWidth?c}">
             <input enctype="multipart/form-data" style="width: 400px" type="file" name="_${field.name?html}">
