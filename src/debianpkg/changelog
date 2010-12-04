@@ -167,3 +167,13 @@ nsia (0.9.6-1) unstable; urgency=low
  
  -- Luke Murphey <luke@threatfactor.com>  Mon, 26 Nov 2010 13:00:00 +0500
   
+ nsia (1.0.2-1) stable; urgency=low
+ 
+ * Changed URL of Java to be downloaded by the installer to be the latest version
+ * Scan history chart will no longer attempt to display negative numbers
+ * Automatic database defragmention is now disabled. You can manually defragment the database using the menu option. Automatic defragmentation is disabled in order to prevent the database from being locked up while the system is running.
+ * An additional log message is created when a rule has completed (as opposed to message just for when each URL is scanned)
+ * Rules are now triggered when a rule completes as opposed to on each individual specimen; this prevents your inbox from being spammed when lots of URLs are found to be deviations.
+ * Fixed XSS issue on pages with redirects
+ 
+ -- Luke Murphey <luke@threatfactor.com>  Mon, 3 Dec 2010 13:00:00 +0500
