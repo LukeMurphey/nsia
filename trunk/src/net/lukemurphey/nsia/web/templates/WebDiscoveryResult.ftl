@@ -113,7 +113,7 @@
         <#if ( findings?size == 0)>
             <#if scanRuleFilter?? || contentTypeFilter??>
         <tr>
-            <td colspan="99"><#assign message>No resources match the provided filter.<p/><a href="${request.thisURL}">[Clear Filter]</a></#assign>
+            <td colspan="99"><#assign message>No resources match the provided filter.<p/><a href="${request.thisURL?html}">[Clear Filter]</a></#assign>
             <@getinfodialog title="No Findings" message=message /><td>
         </tr>
             <#else>
@@ -126,21 +126,21 @@
             <#if scanRuleFilter?? && contentTypeFilter??>
         <tr>
             <td colspan="4">
-                <#assign message>Displaying findings that matched the <u>${scanRuleFilter?html}</u> definition and the <u>${contentTypeFilter?html}</u> content-type.<br><a href="${request.thisURL}">[Clear Filter]</a></#assign>
+                <#assign message>Displaying findings that matched the <u>${scanRuleFilter?html}</u> definition and the <u>${contentTypeFilter?html}</u> content-type.<br><a href="${request.thisURL?html}">[Clear Filter]</a></#assign>
                 <@getinfodialog title="Filters Applied" message=message />
             </td>
         </tr>
             <#elseif scanRuleFilter??>
         <tr>
             <td colspan="4">
-                <#assign message>Displaying findings that matched the <u>${scanRuleFilter?html}</u> definition.<br><a href="${request.thisURL}">[Clear Filter]</a></#assign>
+                <#assign message>Displaying findings that matched the <u>${scanRuleFilter?html}</u> definition.<br><a href="${request.thisURL?html}">[Clear Filter]</a></#assign>
                 <@getinfodialog title="Filters Applied" message=message />
             </td>
         </tr>
             <#elseif contentTypeFilter??>
         <tr>
             <td colspan="4">
-                <#assign message>Displaying findings that matched the <u>${contentTypeFilter?html}</u> content-type.<br><a href="${request.thisURL}">[Clear Filter]</a></#assign>
+                <#assign message>Displaying findings that matched the <u>${contentTypeFilter?html}</u> content-type.<br><a href="${request.thisURL?html}">[Clear Filter]</a></#assign>
                 <@getinfodialog title="Filters Applied" message=message />
             </td>
         </tr>

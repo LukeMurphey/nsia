@@ -71,7 +71,7 @@
             </#if>
             
             <#if stat.href??>
-                <table><tr><td><a <@getattrs stat.href.attributes /> href="${stat.href.link}">${stat.href.title}</a></td></tr></table>
+                <table><tr><td><a <@getattrs stat.href.attributes /> href="${stat.href.link?html}">${stat.href.title?html}</a></td></tr></table>
             </#if>
         </td>
     </tr>

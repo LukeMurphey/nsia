@@ -86,13 +86,13 @@
         <table>
             <tr>
                 <td>
-                    <form method="get" action="${request.thisURL}">
+                    <form method="get" action="${request.thisURL?html}">
                         <input <#if !backEnabled>class="buttonDisabled" disabled<#else>class="button"</#if> type="submit" name="Previous" value="Previous">
                         <input class="button" type="hidden" name="Page" value="${page - 1}">
                     </form>
                 </td>
                 <td>
-                    <form method="get" action="${request.thisURL}">
+                    <form method="get" action="${request.thisURL?html}">
                         <input <#if !nextEnabled>class="buttonDisabled" disabled<#else>class="button"</#if> class="button" type="submit" name="Next" value="Next">
                         <input class="button" type="hidden" name="Page" value="${page + 1}">
                     </form>
