@@ -137,6 +137,12 @@ public abstract class ScanRule implements HashtableSerialization{
 		}
 	}
 	
+	protected void logScanResult( ScanResultCode resultCode, int deviations, String ruleType, String specimen, String message, boolean sendToEventLog, boolean noteScanCompleted ){
+		if( callback != null ){
+			callback.logScanResult(resultCode, deviations, ruleType, specimen, message, this.scanRuleId, sendToEventLog, noteScanCompleted);
+		}
+	}
+	
 	protected void logScanResult( ScanResultCode resultCode, int deviations, String ruleType, String specimen ){
 		if( callback != null ){
 			callback.logScanResult(resultCode, deviations, ruleType, specimen, null, this.scanRuleId);
