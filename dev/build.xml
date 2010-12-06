@@ -268,4 +268,35 @@
             <define name="VERSION" value="${value.build.version}"/>
         </nsis>
 	</target>
+	
+	<target name="compile_bootstrap_windows" description="Compile the bootstrap executables (for the Windows platform)">
+		
+		<exec executable="windres">
+			<arg value="-i" />
+			<arg value="src/bootstrap/resource.rc" />
+			<arg value="-o" />
+			<arg value="src/bootstrap/res.o" />
+		</exec>
+		
+        <exec executable="g++">
+            <arg value="-Wall" />
+            <arg value="-W" />
+            <arg value="src/bootstrap/bootstrapCLI.cpp" />
+            <arg value="src/bootstrap/res.o" />
+            <arg value="-o" />
+            <arg value="bin/ThreatFactor NSIA CLI.exe" />
+        </exec>
+		
+	    <exec executable="g++">
+            <arg value="-Wall" />
+            <arg value="-W" />
+            <arg value="-mwindows" />
+            <arg value="-Wl,-subsystem,windows" />
+            <arg value="src/bootstrap/bootstrapGUIWin32.cpp" />
+            <arg value="src/bootstrap/res.o" />
+            <arg value="-o" />
+            <arg value="bin/ThreatFactor NSIA.exe" />
+        </exec>
+		
+	</target>
 </project>
