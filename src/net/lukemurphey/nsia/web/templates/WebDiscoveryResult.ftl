@@ -34,17 +34,17 @@
             };
         
         <#-- A dialog to confirm the deletion of an object -->
-        function openURLDialog(url){
+        function openURLDialog(url, content_type){
             
             <#-- Show the dialog -->
             var $dialog = $('<div></div>')
-                .html( '<p>Below is the URL associated with the finding. <span style="color:red;font-weight:bold">This link may be malicious</span>. Do not open it without taking necessary precautions.<p><a style="color: blue;" target="url_viewer" href="' + encodeURI(url) + '">' + escapeHTML(url) + '</a></p></p>')
+                .html( '<p>Below is the URL associated with the finding. <span style="color:red;font-weight:bold">This link may be malicious</span>. Do not open it without taking necessary precautions.<p><a style="color: blue;" target="url_viewer" href="' + encodeURI(url) + '">' + escapeHTML(url) + '</a><p>The content type of the file is: ' + escapeHTML(content_type) + '</p></p></p>')
                 .dialog({
                     autoOpen: true,
                     title: "Scan Result URL",
                     modal: true,
                     width: 400,
-                    height: 205,
+                    height: 240,
                     buttons: {
                         Ok: function() {
                             $( this ).dialog( "close" );
@@ -203,7 +203,7 @@
             <td title="${finding.url?html}" style="vertical-align:middle;">
                 <img style="display: none;" id="finding${finding_index?c}on" onclick="toggle('finding${finding_index?c}')" src="/media/img/9_TreeNodeOpen" alt="Node">
                 <img id="finding${finding_index?c}off" onclick="toggle('finding${finding_index}')" src="/media/img/9_TreeNodeClosed" alt="Node">&nbsp;
-                <a onclick="openURLDialog('${finding.url?html}');return false;"><span class="Text_3"><@truncate_chars length=64>${finding.url?html}</@truncate_chars>&nbsp;&nbsp;&nbsp;</span></a>
+                <a onclick="openURLDialog('${finding.url?html}', '<#if finding.contentType??>${finding.contentType?html}<#else>unknown</#if>');return false;"><span class="Text_3"><@truncate_chars length=64>${finding.url?html}</@truncate_chars></span></a>
                 <#assign matches = finding.definitionMatches />
                     <#if (matches?size > 0 )>
                 <div style="display: none;" id="finding${finding_index?c}">
