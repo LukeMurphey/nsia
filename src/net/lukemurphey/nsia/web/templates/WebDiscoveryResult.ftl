@@ -258,7 +258,7 @@
         <#else>
             <input class="button" type="submit" name="Action" value="Next">
         </#if>
-        
+        <a href="<@url name="scan_result_export" args=[scanResult.scanResultID] />">[Export Results to CSV]</a>
         <#if ( contentTypeFilter?? )>
             <input type="hidden" name="ContentTypeFilter" value="${contentTypeFilter?html}">
         </#if>
