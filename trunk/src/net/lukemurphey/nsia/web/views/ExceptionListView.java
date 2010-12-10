@@ -114,7 +114,7 @@ public class ExceptionListView extends View {
 			data.put("policies", policies);
 			
 			//1.5 -- Get information necessary for pagination
-			MaxMinCount maxMinCount = policyMgmt.getScanPolicyInfoForRule(ruleID);
+			MaxMinCount maxMinCount = policyMgmt.getScanPolicyInfoForRule(ruleID, searchText);
 			
 			DefinitionPolicyDescriptor policyDesc = null;
 			
