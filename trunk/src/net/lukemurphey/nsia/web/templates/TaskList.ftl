@@ -23,11 +23,11 @@
         <tr>
             <td class="TitleText">${task.taskDescription?html}</td>
             <td>
-                <#if task.user?? && task.user.id?? >
+                <#if task.user?? >
                 <table>
                     <tr>
                         <td><img style="vertical-align: top;" alt="User" src="/media/img/<#if task.user.unrestricted>16_Admin<#else>16_User</#if>">
-                        <td>&nbsp;<a href="<@url name="user" args=[task.user.id]/>">${task.user.username?html}</a></td>
+                        <td>&nbsp;<a href="<@url name="user" args=[task.user.userID]/>">${task.user.userName?html}</a></td>
                     </tr>
                 </table>
                 <#else>
