@@ -175,5 +175,11 @@ nsia (0.9.6-1) unstable; urgency=low
  * An additional log message is created when a rule has completed (as opposed to message just for when each URL is scanned)
  * Rules are now triggered when a rule completes as opposed to on each individual specimen; this prevents your inbox from being spammed when lots of URLs are found to be deviations.
  * Fixed XSS issue on pages with redirects
+ * Fixed issue where task list did not display the user the initiated it
+ * Added ability to export web discovery scan results to CSV files
+ * Added a dialog to display the URL associated with a scan result
+ * Fixed issue where scan results were counted twice on the system status chart
+ * Incorrect slashes in URLS are now fixed by the scanner automatically
+ * Added additional indexing to improve database performance
  
  -- Luke Murphey <luke@threatfactor.com>  Mon, 3 Dec 2010 13:00:00 +0500
