@@ -402,7 +402,7 @@ public class SiteGroupView extends View {
 			}
 			
 			// 2 -- Start the thread to scan each rule
-			WorkerThreadDescriptor threadDesc = appRes.addWorkerToQueue(worker, getUniqueScanWorkerID(context.getSessionInfo().getUserId(), siteGroupID));
+			WorkerThreadDescriptor threadDesc = appRes.addWorkerToQueue(worker, getUniqueScanWorkerID(context.getSessionInfo().getUserId(), siteGroupID), context.getSessionInfo().getUserId());
 			
 			Thread thread = new Thread(worker);
 			thread.setName("Scanner started by user " + userDescriptor.getUserName());
