@@ -84,13 +84,13 @@ public class DefinitionPolicyManagement {
 	 * @throws NoDatabaseConnectionException
 	 * @throws SQLException
 	 */
-	public MaxMinCount getScanPolicyInfoForRule( int ruleID ) throws NoDatabaseConnectionException, SQLException{
+	public MaxMinCount getScanPolicyInfoForRule( int ruleID, String searchText ) throws NoDatabaseConnectionException, SQLException{
 		Connection connection = null;
 		
 		connection = application.getDatabaseConnection( Application.DatabaseAccessType.SCANNER );
 		
 		try{
-			return DefinitionPolicySet.getScanPolicyInfoForRule(connection, ruleID);
+			return DefinitionPolicySet.getScanPolicyInfoForRule(connection, ruleID, searchText);
 		} finally {
 			
 			if (connection != null )

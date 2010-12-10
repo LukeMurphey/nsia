@@ -41,14 +41,47 @@ public class DefinitionPolicySet {
 		sort();
 	}
 	
-	public static MaxMinCount getScanPolicyInfoForRule( Connection connection, int ruleID) throws SQLException{
+	public static MaxMinCount getScanPolicyInfoForRule( Connection connection, int ruleID ) throws SQLException{
+		return getScanPolicyInfoForRule( connection, ruleID );
+	}
+	
+	public static MaxMinCount getScanPolicyInfoForRule( Connection connection, int ruleID, String searchText) throws SQLException{
 		
 		// Perform the query
 		PreparedStatement statement = null;
 		ResultSet result = null;
 		
 		try{
-			statement = connection.prepareStatement("Select max(DefinitionPolicyID), min(DefinitionPolicyID), count(*) from DefinitionPolicy where RuleID = ?");
+			
+			if( searchText != null && searchText.trim().length() > 0 ){
+				String[] parsedName = searchText.split("[.]", 3);
+				
+				if( parsedName.length == 1 ){
+					statement = connection.prepareStatement("Select max(DefinitionPolicyID), min(DefinitionPolicyID), count(*) from DefinitionPolicy where RuleID = ? and (DefinitionName like ? or DefinitionCategory like ? or DefinitionSubCategory like ? or URL like ?)");
+					statement.setString(2, "%" + parsedName[0] + "%");
+					statement.setString(3, "%" + parsedName[0] + "%");
+					statement.setString(4, "%" + parsedName[0] + "%");
+					statement.setString(5, "%" + searchText + "%");
+				}
+				else if( parsedName.length == 2 ){
+					statement = connection.prepareStatement("Select max(DefinitionPolicyID), min(DefinitionPolicyID), count(*) from DefinitionPolicy where RuleID = ? and ( (DefinitionCategory like ? and DefinitionSubCategory like ?) or URL like ?)");
+					statement.setString(2, "%" + parsedName[0]);
+					statement.setString(3, parsedName[1]+ "%");
+					statement.setString(4, "%" + searchText + "%");
+				}
+				else{
+					statement = connection.prepareStatement("Select max(DefinitionPolicyID), min(DefinitionPolicyID), count(*) from DefinitionPolicy where RuleID = ? and ( (DefinitionName like ? and DefinitionCategory like ? and DefinitionSubCategory like ?) or URL like ?)");
+					statement.setString(2, parsedName[2]+ "%");
+					statement.setString(3, "%" + parsedName[0]);
+					statement.setString(4, parsedName[1]);
+					statement.setString(5, "%" + searchText + "%");
+				}
+			}
+			else{
+				statement = connection.prepareStatement("Select max(DefinitionPolicyID), min(DefinitionPolicyID), count(*) from DefinitionPolicy where RuleID = ?");
+			}
+			
+			
 			statement.setInt(1, ruleID);
 			
 			result = statement.executeQuery();
