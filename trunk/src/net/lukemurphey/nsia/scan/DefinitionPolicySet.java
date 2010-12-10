@@ -76,6 +76,10 @@ public class DefinitionPolicySet {
 	}
 	
 	public static DefinitionPolicySet getPolicySetForRule(Connection connection, int ruleID, int recordCount, int page) throws SQLException{
+		return getPolicySetForRule( connection, ruleID, recordCount, page, null);
+	}
+	
+	public static DefinitionPolicySet getPolicySetForRule(Connection connection, int ruleID, int recordCount, int page, String searchText) throws SQLException{
 	
 		// Set default values for the arguments if they are not valid
 		if( recordCount <= 0 ){
@@ -92,7 +96,36 @@ public class DefinitionPolicySet {
 		DefinitionPolicySet filterSet = new DefinitionPolicySet();
 		
 		try{
-			statement = connection.prepareStatement("Select * from DefinitionPolicy where RuleID = ? order by DefinitionPolicyID asc", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			// Determine if we are going to perform a search based on the content of the policy
+			if( searchText != null && searchText.trim().length() > 0 ){
+				String[] parsedName = searchText.split("[.]", 3);
+				
+				if( parsedName.length == 1 ){
+					statement = connection.prepareStatement("Select * from DefinitionPolicy where RuleID = ? and (DefinitionName like ? or DefinitionCategory like ? or DefinitionSubCategory like ? or URL like ?) order by DefinitionPolicyID asc", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+					statement.setString(2, "%" + parsedName[0] + "%");
+					statement.setString(3, "%" + parsedName[0] + "%");
+					statement.setString(4, "%" + parsedName[0] + "%");
+					statement.setString(5, "%" + searchText + "%");
+				}
+				else if( parsedName.length == 2 ){
+					statement = connection.prepareStatement("Select * from DefinitionPolicy where RuleID = ? and ( (DefinitionCategory like ? and DefinitionSubCategory like ?) or URL like ?) order by DefinitionPolicyID asc", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+					statement.setString(2, "%" + parsedName[0]);
+					statement.setString(3, parsedName[1]+ "%");
+					statement.setString(4, "%" + searchText + "%");
+				}
+				else{
+					statement = connection.prepareStatement("Select * from DefinitionPolicy where RuleID = ? and ( (DefinitionName like ? and DefinitionCategory like ? and DefinitionSubCategory like ?) or URL like ?) order by DefinitionPolicyID asc", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+					statement.setString(2, parsedName[2]+ "%");
+					statement.setString(3, "%" + parsedName[0]);
+					statement.setString(4, parsedName[1]);
+					statement.setString(5, "%" + searchText + "%");
+				}
+			}
+			else{
+				// Create the base query
+				statement = connection.prepareStatement("Select * from DefinitionPolicy where RuleID = ? order by DefinitionPolicyID asc", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			}
+			
 			statement.setInt(1, ruleID);
 			
 			result = statement.executeQuery();
