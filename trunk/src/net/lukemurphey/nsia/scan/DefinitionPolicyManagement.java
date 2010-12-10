@@ -103,6 +103,30 @@ public class DefinitionPolicyManagement {
 	 * @param ruleID
 	 * @param recordCount
 	 * @param page
+	 * @param searchText
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
+	public DefinitionPolicySet getPolicySetForRule( int ruleID, int recordCount, int page, String searchText ) throws NoDatabaseConnectionException, SQLException{
+		Connection connection = null;
+		
+		connection = application.getDatabaseConnection( Application.DatabaseAccessType.SCANNER );
+		
+		try{
+			return DefinitionPolicySet.getPolicySetForRule(connection, ruleID, recordCount, page, searchText);
+		} finally {
+			
+			if (connection != null )
+				connection.close();
+		}
+	}
+	
+	/**
+	 * Get the scan policy set for the given rule ID.
+	 * @param ruleID
+	 * @param recordCount
+	 * @param page
 	 * @return
 	 * @throws NoDatabaseConnectionException
 	 * @throws SQLException
