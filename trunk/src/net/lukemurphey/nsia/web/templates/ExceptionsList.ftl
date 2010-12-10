@@ -3,14 +3,21 @@
 <#include "Forms.ftl">
 <#include "Shortcuts.ftl">
 <#assign content>
-    <#if (!policies?? || policies?size == 0 || policies.excludePolicyCount == 0 )>
-        <#assign message>No exceptions exist yet.</#assign>
+    <#if search?? && (!policies?? || policies?size == 0 || policies.excludePolicyCount == 0 )>
+        <#assign message>No exceptions match your filter<p /><a href="${request.thisURL?html}">[Clear the filter]</a></#assign>
+        <@getinfodialog message=message title="No Exceptions Match" />
+    <#elseif (!policies?? || policies?size == 0 || policies.excludePolicyCount == 0 )>
+        <#assign message>No exceptions exist for this rule yet</#assign>
         <@getinfodialog message=message title="No Exceptions Exist" />
     <#else>
         <#include "PopupDialog.ftl">
         <#include "SelectAll.ftl">
         <span class="Text_1">Exceptions</span><br />
         Below is the list of issues that will be overlooked by the scanner<br>&nbsp;<br/>
+        <form style="margin-bottom: 8px">
+            <input type="text" style="width: 400px" name="Search" value="<#if search??>${search?html}</#if>"/>
+            <input class="button" type="submit" value="Search" />
+        </form>
         <form method="get" action="<@url name="exception_delete" args=[ruleID] />">
             <input type="hidden" name="SiteGroupID" value="${siteGroupID?c}">
             <input type="hidden" name="RuleID" value="${ruleID?c}">

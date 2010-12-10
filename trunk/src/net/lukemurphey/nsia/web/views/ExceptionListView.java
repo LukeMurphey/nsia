@@ -92,16 +92,28 @@ public class ExceptionListView extends View {
 		
 		data.put("page", page);
 		
+		if( request.getParameter("Search") != null ){
+			data.put("search", request.getParameter("Search"));
+		}
+		
 		DefinitionPolicySet policies = null;
 		DefinitionPolicyManagement policyMgmt = new DefinitionPolicyManagement(Application.getApplication());
 		
 		try{
 			
-			//1.3 -- Get the exceptions for the rule
-			policies = policyMgmt.getPolicySetForRule( ruleID, EXCEPTIONS_PER_PAGE, page );
+			//1.3 -- Get the search text
+			String searchText = request.getParameter("Search");
+			
+			//1.4 -- Get the exceptions for the rule
+			if( searchText != null && searchText.trim().length() > 0 ){
+				policies = policyMgmt.getPolicySetForRule( ruleID, EXCEPTIONS_PER_PAGE, page, searchText );
+			}
+			else{
+				policies = policyMgmt.getPolicySetForRule( ruleID, EXCEPTIONS_PER_PAGE, page );
+			}
 			data.put("policies", policies);
 			
-			//1.4 -- Get information necessary for pagination
+			//1.5 -- Get information necessary for pagination
 			MaxMinCount maxMinCount = policyMgmt.getScanPolicyInfoForRule(ruleID);
 			
 			DefinitionPolicyDescriptor policyDesc = null;
@@ -165,11 +177,11 @@ public class ExceptionListView extends View {
 		
 		// 3 -- Create the breadcrumbs
 		Vector<Link> breadcrumbs = new Vector<Link>();
-		breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
-		breadcrumbs.add(  new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroup.getGroupId())) );
-		breadcrumbs.add(  new Link("Edit Rule", RuleEditView.getURL(ruleID)) );
-		breadcrumbs.add(  new Link("Scan History", ScanResultHistoryView.getURL(ruleID)) );
-		breadcrumbs.add(  new Link("Exceptions", createURL(ruleID)) );
+		breadcrumbs.add( new Link("Main Dashboard", MainDashboardView.getURL()) );
+		breadcrumbs.add( new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroup.getGroupId())) );
+		breadcrumbs.add( new Link("Edit Rule", RuleEditView.getURL(ruleID)) );
+		breadcrumbs.add( new Link("Scan History", ScanResultHistoryView.getURL(ruleID)) );
+		breadcrumbs.add( new Link("Exceptions", createURL(ruleID)) );
 		data.put("breadcrumbs", breadcrumbs);
 		
 		// 4 -- Create the menu
