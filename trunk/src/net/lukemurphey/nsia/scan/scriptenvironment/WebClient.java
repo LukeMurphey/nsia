@@ -250,15 +250,20 @@ public class WebClient {
 		HttpClient httpClient = new HttpClient();
 		
 		synchronized (httpMethodMutex) {
-			method.setFollowRedirects(true);
-			httpClient.executeMethod( hostConfig, method );
-			
-			TimeoutThread timeoutThread = new TimeoutThread();
-			timeoutThread.start();
-			HttpResponseData httpResponse = new HttpResponseData(method, downloadBytesMax);
-			httpMethodMutex.notify();
-			method.releaseConnection();
-			return new HttpResult(httpResponse, timeOutReached);
+			try{
+				method.setFollowRedirects(true);
+				httpClient.executeMethod( hostConfig, method );
+				
+				TimeoutThread timeoutThread = new TimeoutThread();
+				timeoutThread.start();
+				HttpResponseData httpResponse = new HttpResponseData(method, downloadBytesMax);
+				
+				return new HttpResult(httpResponse, timeOutReached);
+			}
+			finally{
+				method.releaseConnection();
+				httpMethodMutex.notify();
+			}
 		}
 	}
 	
