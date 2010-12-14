@@ -211,6 +211,13 @@ public class WebClient {
 	 */
 	private class TimeoutThread extends Thread{
 		
+		private boolean stop = false;
+		
+		public void terminate(){
+			stop = true;
+			this.interrupt();
+		}
+		
 		/**
 		 * Start monitoring the thread and call abort if it exceeds the timeout.
 		 */
@@ -220,7 +227,9 @@ public class WebClient {
 				long waitFor = downloadTimeoutSeconds * 1000;
 				
 				synchronized (httpMethodMutex) {
-					httpMethodMutex.wait(waitFor);
+					if( stop == false ){
+						httpMethodMutex.wait(waitFor);
+					}
 				}
 				
 				//Abort the method if we hit the timeout (since we are forcing the download to stop)
@@ -249,20 +258,25 @@ public class WebClient {
 		
 		HttpClient httpClient = new HttpClient();
 		
-		synchronized (httpMethodMutex) {
-			try{
-				method.setFollowRedirects(true);
-				httpClient.executeMethod( hostConfig, method );
-				
-				TimeoutThread timeoutThread = new TimeoutThread();
-				timeoutThread.start();
-				HttpResponseData httpResponse = new HttpResponseData(method, downloadBytesMax);
-				
-				return new HttpResult(httpResponse, timeOutReached);
-			}
-			finally{
-				method.releaseConnection();
+		//Start the timeout thread that will end the operation if client cannot download the content in time
+		TimeoutThread timeoutThread = new TimeoutThread();
+		timeoutThread.setName("Timeout for Web-client to " + url);
+		timeoutThread.start();
+		
+		try{
+			method.setFollowRedirects(true);
+			httpClient.executeMethod( hostConfig, method );
+
+			HttpResponseData httpResponse = new HttpResponseData(method, downloadBytesMax);
+
+			return new HttpResult(httpResponse, timeOutReached);
+		}
+		finally{
+			method.releaseConnection();
+
+			synchronized (httpMethodMutex) {
 				httpMethodMutex.notify();
+				timeoutThread.terminate();
 			}
 		}
 	}
