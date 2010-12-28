@@ -777,7 +777,13 @@ public class DefinitionSet {
 					else if( definition instanceof PatternDefinition){
 						
 						PatternDefinition sig = (PatternDefinition)definition;
-						boolean matched = sig.evaluate(httpResponse.getDataSpecimen(), variables);
+						DataSpecimen specimen = httpResponse.getDataSpecimen();
+						boolean matched = false;
+						
+						// Evaluate the specimen if it is not null (otherwise, it will through an exception)
+						if( specimen != null ){
+							matched = sig.evaluate(specimen, variables);
+						}
 						
 						if( matched == true && isIncludedInPolicy(httpResponse, definitionPolicySet, siteGroupID, ruleID, sig ) ){
 							definitionMatches.add( new DefinitionMatch(sig.getFullName(), sig.getMessage(), sig.severity, sig.getLocalID()) );						
