@@ -638,7 +638,7 @@ FunctionEnd
 
 ; Definitions for Java 6.0
 !define JRE_VERSION "6.0"
-!define JRE_URL "http://javadl.sun.com/webapps/download/AutoDL?BundleId=44398" ;Version 6 Update 22
+!define JRE_URL "http://javadl.sun.com/webapps/download/AutoDL?BundleId=44457" ;Version 6 Update 23
 ;!define JRE_VERSION "5.0"
 ;!define JRE_URL "http://javadl.sun.com/webapps/download/AutoDL?BundleId=18675&/jre-1_5_0_15-windows-i586-p.exe"
 
