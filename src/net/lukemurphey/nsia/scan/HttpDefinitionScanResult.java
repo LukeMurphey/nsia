@@ -455,6 +455,7 @@ public class HttpDefinitionScanResult extends ScanResult {
 			
 			String queryAdd;
 			
+			// Add the filter for scan results relative to a start value
 			if( start > -1 && getResultsBefore ){
 				queryAdd = " and ScanResult.ScanResultID < ?";
 			}
@@ -465,6 +466,7 @@ public class HttpDefinitionScanResult extends ScanResult {
 				queryAdd = "";
 			}
 			
+			// Add the ordering statement
 			String sort;
 			
 			if( getResultsBefore == true ){
@@ -474,6 +476,7 @@ public class HttpDefinitionScanResult extends ScanResult {
 				sort = " order by ScanResult.ScanResultID asc";
 			}
 			
+			// Create the base query
 			if( filter.getContentType() != null && filter.getContentType().length() > 0 && filter.getSignatureName() != null ){
 				statement = connection.prepareStatement("select ScanResult.ScanResultID from SignatureScanResult inner join ScanResult on SignatureScanResult.ScanResultID = ScanResult.ScanResultID inner join MatchedRule on MatchedRule.ScanResultID = ScanResult.ScanResultID where ContentType = ? and RuleName = ? and ParentScanResultID = ? " + queryAdd + " group by ScanResult.ScanResultID " + sort);
 
