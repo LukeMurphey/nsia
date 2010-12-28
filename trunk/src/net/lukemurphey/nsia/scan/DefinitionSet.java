@@ -739,10 +739,17 @@ public class DefinitionSet {
 	public DefinitionMatchResultSet scan(HttpResponseData httpResponse, DefinitionPolicySet definitionPolicySet, long siteGroupID, long ruleID) throws NoDatabaseConnectionException, SQLException, InvalidDefinitionException{
 		
 		synchronized ( this ) {
+			
+			// The list of definition matches:
 			Vector<DefinitionMatch> definitionMatches = new Vector<DefinitionMatch>();
+			
+			// The list of URLs to scan that have been extracted:
 			Vector<URLToScan> extractedURLs = new Vector<URLToScan>();
+			
+			// The list of variables set by the definition:
 			Variables variables = new Variables();
 			
+			// The definition to be evaluated:
 			Iterator<Definition> iterator = definitions.iterator();
 			
 			while( iterator.hasNext() ){
@@ -766,6 +773,7 @@ public class DefinitionSet {
 								extractedURLs.addAll(result.getURLs());
 							}
 							
+							// Add the result to the list of matches if it matches
 							if( result.matched() == true ){
 								definitionMatches.add( new DefinitionMatch(script.getFullName(), result.getDescription(), script.severity, script.getLocalID() , result.detectStart, result.detectEnd) );
 							}
@@ -785,6 +793,7 @@ public class DefinitionSet {
 							matched = sig.evaluate(specimen, variables);
 						}
 						
+						// Report a result if the specimen matches and is not filtered
 						if( matched == true && isIncludedInPolicy(httpResponse, definitionPolicySet, siteGroupID, ruleID, sig ) ){
 							definitionMatches.add( new DefinitionMatch(sig.getFullName(), sig.getMessage(), sig.severity, sig.getLocalID()) );						
 						}
