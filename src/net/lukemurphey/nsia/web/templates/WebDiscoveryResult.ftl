@@ -208,10 +208,10 @@
                     <#if (matches?size > 0 )>
                 <div style="display: none;" id="finding${finding_index?c}">
                         <#list matches as match >
-                    <p>&nbsp;&nbsp;&nbsp;<strong>${match.definitionName?html}:</strong>
+                    <p>&nbsp;&nbsp;&nbsp;<strong>${match.definitionName?html}</strong>
                             <#if ( siteGroup.groupId > -1 )>
                             <#assign returnURL><@url name="scan_result" args=[finding.parentScanResultID] /></#assign>
-                            <a href="<@url name="exception_editor" args=[rule.ruleId]/>?DefinitionName=${match.definitionName?html}&ReturnTo=${returnURL?html}&URL=${finding.url?html}">&nbsp;(Create Exception)</a>
+                            <a href="<@url name="exception_editor" args=[rule.ruleId]/>?DefinitionName=${match.definitionName?html}&ReturnTo=${returnURL?html}&URL=${finding.url?html}">&nbsp;[Create Exception...]</a>
                             </#if>
                         <br>&nbsp;&nbsp;&nbsp;${match.message?html}
                         </#list>
