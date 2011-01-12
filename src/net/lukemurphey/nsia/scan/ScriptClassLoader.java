@@ -3,6 +3,7 @@ package net.lukemurphey.nsia.scan;
 import net.lukemurphey.nsia.scan.scriptenvironment.DeleteMethod;
 import net.lukemurphey.nsia.scan.scriptenvironment.GetMethod;
 import net.lukemurphey.nsia.scan.scriptenvironment.HeadMethod;
+import net.lukemurphey.nsia.scan.scriptenvironment.JSoup;
 import net.lukemurphey.nsia.scan.scriptenvironment.OptionsMethod;
 import net.lukemurphey.nsia.scan.scriptenvironment.PostMethod;
 import net.lukemurphey.nsia.scan.scriptenvironment.PutMethod;
@@ -49,7 +50,8 @@ public class ScriptClassLoader extends ClassLoader {
 				temp.put("ThreatScript.Result", Result.class.getName());
 				temp.put("HTTP.URL", URL.class.getName());
 				temp.put("HTTP.TagNameFilter", org.htmlparser.filters.TagNameFilter.class.getName());
-				
+				temp.put("HTTP.JSoup", JSoup.class.getName());
+				 
 				//Web request methods
 				temp.put("HTTP.GetRequest", GetMethod.class.getName());
 				temp.put("HTTP.PostRequest", PostMethod.class.getName());
