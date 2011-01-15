@@ -31,23 +31,42 @@ import java.text.SimpleDateFormat;
  * @author luke
  *
  */
-
 public class EventLog {
 	
+	// The minimum severity that the log messages must be in order to be sent
 	protected EventLogSeverity loggingLevel = EventLogSeverity.INFORMATIONAL; //Prevents entries from being logged; logged iff severity >= loggingLevel
 	
+	// The logger instance that will used for managing the log messages
 	private static final Logger logger = Logger.getLogger(net.lukemurphey.nsia.eventlog.EventLog.class.getName());
+	
+	// The format of the date for the log messages
 	private static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
 	
+	// The log hooks that will be processed for each log message
 	private Vector<EventLogHook> hooks = new Vector<EventLogHook>();
 	
+	// Indicates if the log messages should be repeated to the console to
 	private boolean repeatToConsole = false;
+	
+	// The message formatter defines the format of the message itself
 	private MessageFormatter formatter = null;
+	
+	// The application that the event logger is for
 	private Application application = null;
+	
+	// The appender that will transmit the logs
 	private SyslogNGAppender syslogAppender = null;
+	
+	// The address to send the log messages to
 	private String logServeraddress = null;
+	
+	// The port on the log server that the messages will be sent to
 	private int logServerport = -1;
+	
+	// Indicates if the messages should be sent to the log server
 	private boolean logServerEnabled = false;
+	
+	// Defines the protocol that will be used for sending the log messages (TCP or UDP)
 	private SyslogNGAppender.Protocol logServerprotocol = null;
 	
 	public class LoggerErrorHandler implements ErrorHandler{
