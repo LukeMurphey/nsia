@@ -360,6 +360,8 @@ public class SyslogNGAppender extends AppenderSkeleton {
 
 			// If the socket was closed then stop
 			if ( socket == null ){
+				
+				// If the last connection attempt failed then wait until the reconnection delay ends
 				if( lastConnectionAttempt < (System.currentTimeMillis() - RECONNECT_DELAY)) {
 					try{
 						if( protocol == Protocol.TCP){
@@ -381,8 +383,9 @@ public class SyslogNGAppender extends AppenderSkeleton {
 						}
 					}
 
+					// Record the last time a connection was attempted
 					lastConnectionAttempt = System.currentTimeMillis();
-
+					
 					if( socket == null ){
 						return false;
 					}

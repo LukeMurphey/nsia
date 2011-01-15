@@ -841,6 +841,8 @@ public final class Application {
 		
 		// Configure external logging
 		try {
+			
+			// Get the address, port and protocol to log to
 			String address = appRes.getApplicationConfiguration().getLogServerAddress();
 			int port = appRes.getApplicationConfiguration().getLogServerPort();
 			boolean enabled = appRes.getApplicationConfiguration().getLogServerEnabled();
@@ -853,9 +855,11 @@ public final class Application {
 				protocol = SyslogNGAppender.Protocol.UDP;
 			}
 			
+			// Get the formatter according to the message format specified
 			MessageFormatter formatter = MessageFormatterFactory.getFormatter( appRes.getApplicationConfiguration().getLogFormat() );
 			appRes.eventlog.setMessageFormatter( formatter );
 			
+			// Set the log server if the address is defined and the port is valid
 			if( address != null && port >= 0 && port <= 65535 ){
 				appRes.eventlog.setLogServer(address, port, protocol, enabled);
 			}
