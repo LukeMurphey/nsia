@@ -473,6 +473,11 @@ public class EventLog {
 		}
 	}
 	
+	/**
+	 * Load the event log hooks from the database.
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public void loadHooks() throws NoDatabaseConnectionException, SQLException{
 		
 		Connection connection = null;
@@ -564,7 +569,7 @@ public class EventLog {
 	}
 	
 	/**
-	 * Add thie given EventLogHook to the current list.
+	 * Add this given EventLogHook to the current list.
 	 * @param hook
 	 */
 	public void addHook( EventLogHook hook ){
