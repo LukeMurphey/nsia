@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/media/css/default-theme/jquery-ui-1.8.5.custom.css" type="text/css" media="all" />
     <title>${title?html}</title>
     <script type="text/javascript" language="javascript" src="/media/js/viewrefresh.js"></script>
-    <script type="text/javascript" language="javascript" src="/media/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/media/js/jquery-1.4.2.min.js"></script><#-- If you change this reference, then make sure to update Basic.ftl too -->
     <script type="text/javascript" language="javascript" src="/media/js/jquery-ui-1.8.5.custom.min.js"></script>
     
     <#if extrahead??>

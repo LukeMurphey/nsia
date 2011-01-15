@@ -14,7 +14,7 @@ ${head}
         @import url('/media/css/Stylesheet.css');
     </style>
     <script type="text/javascript" language="javascript" src="/media/js/viewrefresh.js"></script>
-    <script type="text/javascript" language="javascript" src="/media/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="/media/js/jquery-1.4.2.min.js"></script><#-- If you change this reference, then make sure to update Base.ftl too -->
 </head>
 
 <body class="ContentMain" face="Arial, sans-serif">
