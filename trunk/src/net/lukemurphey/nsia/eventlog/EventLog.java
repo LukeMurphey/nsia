@@ -285,7 +285,7 @@ public class EventLog {
 		this.logServerprotocol = protocol;
 	}
 	
-	public boolean isLogServerLogginEnabled(){
+	public boolean isLogServerLoggingEnabled(){
 		return logServerEnabled;
 	}
 	
