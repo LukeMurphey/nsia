@@ -606,10 +606,21 @@ public class EventLog {
 		return repeatToConsole;
 	}
 	
+	/**
+	 * Log the message. By default, this will send the message to the external log server (if available).
+	 * @param message
+	 * @throws IllegalArgumentException
+	 */
 	public void logEvent( EventLogMessage message ) throws IllegalArgumentException {
 		logEvent( message, true );
 	}
 	
+	/**
+	 * Log the message (to the external server if so requested).
+	 * @param message
+	 * @param sendToExternalLogger
+	 * @throws IllegalArgumentException
+	 */
 	public void logEvent( EventLogMessage message, boolean sendToExternalLogger ) throws IllegalArgumentException {
 		
 		// 0 -- Precondition check
@@ -736,6 +747,13 @@ public class EventLog {
 	private static String getStackTrace(Throwable t){
 		return getStackTrace( t, 50);
 	}
+	
+	/**
+	 * Convert a throwable exception to a string. Stop including the entries deeper that the given limit.
+	 * @param t
+	 * @param max_size
+	 * @return
+	 */
 	private static String getStackTrace(Throwable t, int max_size)
     {
 		StringBuffer buffer = new StringBuffer();
