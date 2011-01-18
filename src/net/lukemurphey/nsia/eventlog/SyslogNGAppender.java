@@ -39,6 +39,9 @@ public class SyslogNGAppender extends AppenderSkeleton {
 	//The delay between a connection failure and an attempt to transmit the log messages again
 	private static int RECONNECT_DELAY = 60000;
 	
+	// The amount of time to wait for a TCP socket to connect
+	private static int DEFAULT_CONNECT_TIMEOUT = 5000;
+	
 	//The maximum size of the log message buffer
 	private int maxBufferSize = 8000;
 	
@@ -79,9 +82,12 @@ public class SyslogNGAppender extends AppenderSkeleton {
 		 * @throws UnknownHostException
 		 * @throws IOException
 		 */
-		public static SocketWrapper createTCPSocket(String serverAddress, int port) throws UnknownHostException, IOException{
+		public static SocketWrapper createTCPSocket(String serverAddress, int port) throws UnknownHostException, SocketTimeoutException, IOException{
 			SocketWrapper wrapper = new SocketWrapper();
-			wrapper.tcpSocket = new Socket(serverAddress, port);
+			Socket socket = new Socket();
+			socket.connect( new InetSocketAddress(serverAddress, port), DEFAULT_CONNECT_TIMEOUT );
+			
+			wrapper.tcpSocket = socket;
 			return wrapper;
 		}
 		
@@ -297,6 +303,7 @@ public class SyslogNGAppender extends AppenderSkeleton {
 			Iterator<LoggingEvent> it = messageCache.iterator();
 			boolean cacheTransmissionStarted = false;
 			
+			// Iterate through each message and attempt to send it
 			while(it.hasNext()){
 				
 				if( sendEvent(it.next()) ){
@@ -376,7 +383,14 @@ public class SyslogNGAppender extends AppenderSkeleton {
 							errorHandler.error("Log server host address could not be resolved: " + e.getMessage(), null, LoggerErrorHandler.LOG_SERVER_CONNECTION_NOT_ESTABLISHED);
 							connectionErrorNoted = true;
 						}
-					} catch (IOException e) {
+					}
+					catch (SocketTimeoutException e) {
+						if( connectionErrorNoted == false ){
+							errorHandler.error("Log server connection timed out: " + e.getMessage(), null, LoggerErrorHandler.LOG_SERVER_CONNECTION_NOT_ESTABLISHED);
+							connectionErrorNoted = true;
+						}
+					}
+					catch (IOException e) {
 						if( connectionErrorNoted == false ){
 							errorHandler.error("Socket connection to the log server could not be created: " + e.getMessage(), null, LoggerErrorHandler.LOG_SERVER_CONNECTION_NOT_ESTABLISHED);
 							connectionErrorNoted = true;
@@ -386,6 +400,7 @@ public class SyslogNGAppender extends AppenderSkeleton {
 					// Record the last time a connection was attempted
 					lastConnectionAttempt = System.currentTimeMillis();
 					
+					// If the socket is still null, then give up since we have no socket to send the data out on
 					if( socket == null ){
 						return false;
 					}
