@@ -175,6 +175,8 @@ public class DefinitionsView extends View {
 				data.put("latest_definitions", DefinitionArchive.getLatestAvailableDefinitionSetID());
 			} catch (XmlRpcException e) {
 				//Unable to get information on newest version
+			} catch (IOException e) {
+				//Unable to get information on newest version
 			}
 			
 			data.put("definition_set_version", definitionSet.getVersionID());
