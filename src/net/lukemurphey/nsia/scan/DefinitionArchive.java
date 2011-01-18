@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -648,7 +649,7 @@ public class DefinitionArchive {
 	 * @throws XmlRpcException
 	 * @throws IOException
 	 */
-	public static DefinitionVersionID getLatestAvailableDefinitionSetID() throws XmlRpcException, IOException{
+	public static DefinitionVersionID getLatestAvailableDefinitionSetID() throws XmlRpcException, UnknownHostException, IOException{
 		XmlRpcClient client = new XmlRpcClient( DEFINITION_SUPPORT_API_URL );
 		
 		Vector<Integer> params = new Vector<Integer>();
