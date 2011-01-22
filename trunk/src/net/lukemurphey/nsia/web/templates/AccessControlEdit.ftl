@@ -53,7 +53,9 @@
                 <table width="100%">
                     <tr class="Background1">
                         <td class="Text_2">Name</td>
-                        <td class="Text_2">Operation</td>
+                        <td>
+                        	<span class="Text_2">Operation</span>
+                        </td>
                     </tr>
         <#-- Create the list of users and groups -->
                     <tr>
@@ -85,7 +87,17 @@
         <#-- 2 -- Create the list of operations -->
                         <td class="AlignedTop">
                             <table>
-        <#--    2.1 -- Read operation -->
+         <#--    3.2.1 -- Create operation -->
+                                <tr>
+                                    <td colspan="2">
+                                        <select id="SetAll">
+			                        		<option value="Allow">Set all to: Allow</option>
+			                        		<option value="Deny">Set all to: Deny</option>
+			                        		<option value="Undefined" selected>Set all to: Undefined</option>
+			                        	</select>
+                                    </td>
+                                </tr>
+        <#--    3.2.2 -- Read operation -->
                                 <tr>
                                     <td>Read:</td>
                                     <td>
@@ -93,7 +105,7 @@
                                     </td>
                                 </tr>
         
-        <#--    3.2.2 -- Write operation -->
+        <#--    3.2.3 -- Write operation -->
                                 <tr>
                                     <td>Modify:</td>
                                     <td>
@@ -101,7 +113,7 @@
                                     </td>
                                 </tr>
         
-        <#--    3.2.3 -- Execute operation -->
+        <#--    3.2.4 -- Execute operation -->
                                 <tr>
                                     <td>Execute:</td>
                                     <td>
@@ -109,7 +121,7 @@
                                     </td>
                                 </tr>
         
-        <#--    3.2.4 -- Delete operation -->
+        <#--    3.2.5 -- Delete operation -->
                                 <tr>
                                     <td>Delete:</td>
                                     <td>
@@ -117,7 +129,7 @@
                                     </td>
                                 </tr>
         
-        <#--    3.2.5 -- Control operation -->
+        <#--    3.2.6 -- Control operation -->
                                 <tr>
                                     <td>Control:</td>
                                     <td>
@@ -125,7 +137,7 @@
                                     </td>
                                 </tr>
         
-        <#--    3.2.6 -- Create operation -->
+        <#--    3.2.7 -- Create operation -->
                                 <tr>
                                     <td>Create:</td>
                                     <td>
@@ -158,5 +170,15 @@
         </tr>
     </table>
 </form>
+<script type="text/javascript">
+function setAll(){
+	set_value = $("#SetAll")[0].value;
+	$("select").each( function(index, element) {
+	    element.value = set_value;
+	});
+}
+
+$('#SetAll').change(setAll);
+</script>
 </#assign>
 <#include "Basic.ftl">
