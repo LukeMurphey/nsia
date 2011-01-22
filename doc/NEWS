@@ -1,5 +1,13 @@
 Below is the history of NSIA with notes about the changes available in each version.
 
+Version 1.0.3 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+ * Access control editor now includes the ability to set all of the permissions without having to set each individual entry
+ * Fixed error on the definitions error page (page displayed an error message as opposed to content)
+ * Changed the TCP connection timeout to 5 seconds in order to prevent the user interface from blocking excessively if the log server is unavailable
+ * Fixed issue where definition view could not be viewed if ThreatFactor.com could not be resolved by NSIA when attempting to download definitions
+ 
 Version 1.0.2 Changes
 ------------------------------------------------------------------
 Version includes the following changes:
