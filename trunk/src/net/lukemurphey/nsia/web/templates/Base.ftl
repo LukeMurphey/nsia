@@ -84,7 +84,7 @@ ${head}
     	
 			</div>
             <span class="Footer"><a id="aboutdialoglink" href="<@url name="about" />">About NSIA</a>&nbsp;&nbsp;&nbsp;</span></td></tr>
-            <script>
+            <script type="text/javascript">
 				function openAboutDialog(){
 					$( "#aboutdialog" ).dialog({
 						modal: true,
