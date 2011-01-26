@@ -136,7 +136,7 @@ public class EndpointIndex extends RESTRequest {
 				}
 
 				// Add it to list
-				endpoints.add( new Endpoint(new URL( url, href ), methodName, requiresLicense ) );
+				endpoints.add( new Endpoint( new URL( url, href ), methodName, requiresLicense ) );
 			}
 		}
 
