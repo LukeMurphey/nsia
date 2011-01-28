@@ -1,7 +1,5 @@
 package net.lukemurphey.nsia.tests;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.apache.xmlrpc.XmlRpcException;
@@ -18,7 +16,6 @@ import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Properties;
 
 
 public class ContentSignatureArchiveTest extends TestCase {
@@ -60,22 +57,8 @@ public class ContentSignatureArchiveTest extends TestCase {
 	}
 	
 	public void testLoadSignaturesFromServer() throws DefinitionUpdateFailedException, DefinitionSetLoadException, NoDatabaseConnectionException, SQLException, InputValidationException, TestApplicationException, IOException {
-		
-		File propsFile = new File("dev/local.properties");
-		String licenseKey = null;
-		
-		if( propsFile.exists() ){
-			
-			// Load the properties file
-			Properties props = new Properties();
-			FileInputStream fis = new FileInputStream(propsFile);
-	        props.load(fis);    
-	        fis.close();
-	        
-	        // Get the license key (if it exists)
-	        licenseKey = props.getProperty("value.test.licensekey", null);
-	        
-		}
+
+		String licenseKey = TestApplication.getProperty("value.test.licensekey");
         
 		if( licenseKey != null ){
 			Application app = TestApplication.getApplication();

@@ -90,14 +90,6 @@ public class EndpointIndex extends RESTRequest {
 			throw new RESTRequestFailedException("Unable to parse URL form list of endpoints", e);
 		}
 	}
-
-	public void setEndpointURL( URL endpointURL ){
-		if( endpointURL == null ){
-			throw new IllegalArgumentException("The endpoint URL cannot be null");
-		}
-		
-		this.url = endpointURL;
-	}
 	
 	/**
 	 * Get the list of endpoints from the given response
@@ -152,6 +144,26 @@ public class EndpointIndex extends RESTRequest {
 	public static Endpoint[] getEndpoints( URL url ) throws RESTRequestFailedException{
 		EndpointIndex getEndpoints = new EndpointIndex( url );
 		return getEndpoints.getEndpoints( );
+	}
+	
+	/**
+	 * Get the endpoint with the given name.
+	 * @param url
+	 * @param name
+	 * @return
+	 * @throws RESTRequestFailedException
+	 */
+	public static Endpoint getEndpoint( URL url, String name ) throws RESTRequestFailedException{
+		EndpointIndex getEndpoints = new EndpointIndex( url );
+		Endpoint[] endpoints = getEndpoints.getEndpoints( );
+		
+		for (Endpoint endpoint : endpoints) {
+			if( endpoint.getName().equalsIgnoreCase( name )){
+				return endpoint;
+			}
+		}
+		
+		return null;
 	}
 	
 }

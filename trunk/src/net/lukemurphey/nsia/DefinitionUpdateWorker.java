@@ -1,6 +1,6 @@
 package net.lukemurphey.nsia;
 
-import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
+import net.lukemurphey.nsia.LicenseDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;

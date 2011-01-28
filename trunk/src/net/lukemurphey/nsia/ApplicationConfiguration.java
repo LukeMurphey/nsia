@@ -8,8 +8,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import net.lukemurphey.nsia.GenericUtils.SMTPEncryption;
-import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
-import net.lukemurphey.nsia.LicenseManagement.LicenseStatus;
+import net.lukemurphey.nsia.LicenseDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.MessageFormatter;
@@ -617,7 +616,7 @@ public class ApplicationConfiguration {
 	 * @return
 	 */
 	public synchronized boolean isLicenseValid(){
-		return LicenseManagement.validate(license);
+		return license.isValid();
 	}
 	
 	/**
@@ -655,7 +654,7 @@ public class ApplicationConfiguration {
 		boolean lastCheckFresh;
 		
 		// 1.1 -- If the license could not be validated, then try every 15 minutes
-		if(license != null && license.getStatus() == LicenseStatus.UNVALIDATED ){
+		if(license != null && license.getStatus() == LicenseDescriptor.LicenseStatus.UNVALIDATED ){
 			lastCheckFresh = (licenseLastChecked + 900000) > System.currentTimeMillis();
 		}
 		
