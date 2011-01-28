@@ -166,4 +166,18 @@ public class EndpointIndex extends RESTRequest {
 		return null;
 	}
 	
+	/**
+	 * Get the endpoint with the given name.
+	 * @param name
+	 * @return
+	 * @throws RESTRequestFailedException
+	 */
+	public static Endpoint getEndpoint( String name ) throws RESTRequestFailedException{
+		try {
+			return getEndpoint( new URL( DEFAULT_ENDPOINT ), name );
+		} catch (MalformedURLException e) {
+			throw new RESTRequestFailedException("Default endpoint is not a valid URL");
+		}
+	}
+	
 }
