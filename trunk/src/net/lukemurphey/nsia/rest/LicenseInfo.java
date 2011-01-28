@@ -18,14 +18,18 @@ import org.w3c.dom.Element;
  *
  */
 public class LicenseInfo extends RESTRequest {
-
-	private String licenseKey;
-	private String installationID;
 	
-	public LicenseInfo( URL endPointURL, String licenseKey, String installationID ){
+	public LicenseInfo( String id, String password ) throws RESTRequestFailedException{
+		// Find the endpoint URL in the index on the server
+		setEndpointURL( EndpointIndex.getEndpoint("license").getURL() );
+		this.id = id;
+		this.password = password;
+	}
+	
+	public LicenseInfo( URL endPointURL, String id, String password ){
 		setEndpointURL(endPointURL);
-		this.licenseKey = licenseKey;
-		this.installationID = installationID;
+		this.id = id;
+		this.password = password;
 	}
 	
 	private LicenseDescriptor parseLicenseData(Document doc) throws MalformedURLException, ParseException{
@@ -84,7 +88,7 @@ public class LicenseInfo extends RESTRequest {
 	public LicenseDescriptor getLicenseInformation( ) throws RESTRequestFailedException{
 		
 		// Perform the HTTP request to get the end-points
-		Document doc = doGet( url, installationID, licenseKey );
+		Document doc = doGet( url, id, password );
 		
 		try {
 			return parseLicenseData( doc );
