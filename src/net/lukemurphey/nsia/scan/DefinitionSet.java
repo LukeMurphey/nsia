@@ -185,10 +185,15 @@ public class DefinitionSet {
 		private int formatID;
 		private int revisionID;
 		private String extendedInfo;
+		private Date revisionDate;
 		
 		private static final String VERSION_FORMAT_REGEX = "([0-9]+)\\.([0-9]+)[ \\t]*(.*)" ;
 		
 		public DefinitionVersionID( String version ){
+			this( version, null);
+		}
+		
+		public DefinitionVersionID( String version, Date revisionDate ){
 			
 			// 0 -- Precondition check
 			if( version == null ){
@@ -218,6 +223,9 @@ public class DefinitionSet {
 					extendedInfo = null;
 				}
 			}
+			
+			// 2 -- Store the date field
+			this.revisionDate = revisionDate;
 		}
 		
 		public int formatID(){
@@ -230,6 +238,10 @@ public class DefinitionSet {
 		
 		public String extendedInfo(){
 			return extendedInfo;
+		}
+		
+		public Date getRevisionDate(){
+			return revisionDate;
 		}
 		
 		public boolean equals( DefinitionVersionID versionID ){
@@ -1102,3 +1114,4 @@ public class DefinitionSet {
 		return definitions.iterator();
 	}
 }
+;
