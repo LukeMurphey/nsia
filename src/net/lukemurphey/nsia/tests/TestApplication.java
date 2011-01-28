@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Properties;
 
 import com.martiansoftware.jsap.JSAPException;
 
@@ -21,6 +22,31 @@ public class TestApplication {
 	public static Application getApplication() throws TestApplicationException{
 		return getApplication( false );
 	}
+	
+	/**
+	 * Get the given property from the local properties file.
+	 * @param name
+	 * @return
+	 * @throws IOException
+	 */
+	public static String getProperty( String name ) throws IOException{
+		File propsFile = new File("dev/local.properties");
+		
+		if( propsFile.exists() ){
+			
+			// Load the properties file
+			Properties props = new Properties();
+			FileInputStream fis = new FileInputStream(propsFile);
+	        props.load(fis);    
+	        fis.close();
+	        
+	        // Get the property (if it exists)
+	        return props.getProperty(name, null);
+		}
+		
+		return null;
+	}
+	
 	public synchronized static Application getApplication( boolean startServices ) throws TestApplicationException{
 		try{
 			if( app == null ){

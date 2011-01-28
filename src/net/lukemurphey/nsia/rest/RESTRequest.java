@@ -152,14 +152,41 @@ public class RESTRequest {
 	}
 	
 	/**
+	 * Set the URL of the endpoint.
+	 * @param endpointURL
+	 */
+	public void setEndpointURL( URL endpointURL ){
+		if( endpointURL == null ){
+			throw new IllegalArgumentException("The endpoint URL cannot be null");
+		}
+		
+		this.url = endpointURL;
+	}
+	
+	/**
 	 * Perform a get request against the given URL.
 	 * @param url
 	 * @return
 	 * @throws RESTRequestFailedException
 	 */
 	protected Document doGet( URL url ) throws RESTRequestFailedException{
-		GetMethod get = null;
+		return doGet( url, null, null );
+	}
 
+	/**
+	 * Perform a get request against the given URL.
+	 * @param url
+	 * @param id
+	 * @param authenticationData
+	 * @return
+	 * @throws RESTRequestFailedException
+	 */
+	protected Document doGet( URL url, String id, String password ) throws RESTRequestFailedException{
+		GetMethod get = null;
+		
+		this.id = id;
+		this.password = password;
+		
 		try{
 			get = new GetMethod(url.toExternalForm());
 			return doHTTP( get );

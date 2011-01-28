@@ -15,7 +15,7 @@ import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.ApplicationStatusDescriptor;
-import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
+import net.lukemurphey.nsia.LicenseDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLog;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;

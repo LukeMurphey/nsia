@@ -11,7 +11,7 @@ import net.lukemurphey.nsia.InsufficientPermissionException;
 import net.lukemurphey.nsia.InvalidLocalPartException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NoSessionException;
-import net.lukemurphey.nsia.LicenseManagement.LicenseDescriptor;
+import net.lukemurphey.nsia.LicenseDescriptor;
 import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
