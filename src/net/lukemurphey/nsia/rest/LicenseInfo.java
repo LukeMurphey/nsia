@@ -80,7 +80,7 @@ public class LicenseInfo extends RESTRequest {
 	
 	public static LicenseDescriptor getLicenseInformation( URL url, String licenseKey, String installationID ) throws RESTRequestFailedException{
 		
-		LicenseInfo licenseInfo = new LicenseInfo( url, licenseKey, installationID );
+		LicenseInfo licenseInfo = new LicenseInfo( url, installationID, licenseKey );
 		
 		return licenseInfo.getLicenseInformation();
 	}
@@ -88,7 +88,7 @@ public class LicenseInfo extends RESTRequest {
 	public LicenseDescriptor getLicenseInformation( ) throws RESTRequestFailedException{
 		
 		// Perform the HTTP request to get the end-points
-		Document doc = doGet( url, id, password );
+		Document doc = doGet( );
 		
 		try {
 			return parseLicenseData( doc );

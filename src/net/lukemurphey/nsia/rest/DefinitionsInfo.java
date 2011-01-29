@@ -55,7 +55,7 @@ public class DefinitionsInfo extends RESTRequest {
 	public DefinitionVersionID getCurrentDefinitionsVersion( ) throws RESTRequestFailedException{
 		
 		// Perform the HTTP request to get the end-points
-		Document doc = doGet( url );
+		Document doc = doGet( );
 		
 		try {
 			return parseDefinitionsData( doc );

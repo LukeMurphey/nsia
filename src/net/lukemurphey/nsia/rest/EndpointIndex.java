@@ -75,7 +75,7 @@ public class EndpointIndex extends RESTRequest {
 	public Endpoint[] getEndpoints( ) throws RESTRequestFailedException{
 		
 		// Perform the HTTP request to get the end-points
-		Document doc = doGet( url );
+		Document doc = doGet( );
 		
 		// Parse out the methods
 		Vector<Endpoint> endpoints;
