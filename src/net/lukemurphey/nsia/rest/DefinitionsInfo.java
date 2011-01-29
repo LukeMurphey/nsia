@@ -3,8 +3,10 @@ package net.lukemurphey.nsia.rest;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import net.lukemurphey.nsia.scan.DefinitionSet;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
 
 import org.w3c.dom.Document;
@@ -31,7 +33,10 @@ public class DefinitionsInfo extends RESTRequest {
 
 			// Get the expiration date
 			String dateString = el.getAttribute("Date");
-			Date date = parseStandardDateFormat(dateString);
+			//Date date = parseStandardDateFormat(dateString);
+			
+			SimpleDateFormat dateFormat = new SimpleDateFormat(DefinitionSet.DEFINITION_SET_DATE_FORMAT);
+			Date date = dateFormat.parse(dateString);
 			
 			return new DefinitionVersionID(version, date);
 		}
