@@ -1,8 +1,12 @@
 package net.lukemurphey.nsia.rest;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -162,16 +166,6 @@ public class RESTRequest {
 		
 		this.url = endpointURL;
 	}
-	
-	/**
-	 * Perform a get request against the given URL.
-	 * @param url
-	 * @return
-	 * @throws RESTRequestFailedException
-	 */
-	protected Document doGet( URL url ) throws RESTRequestFailedException{
-		return doGet( url, null, null );
-	}
 
 	/**
 	 * Perform a get request against the given URL.
@@ -181,15 +175,32 @@ public class RESTRequest {
 	 * @return
 	 * @throws RESTRequestFailedException
 	 */
-	protected Document doGet( URL url, String id, String password ) throws RESTRequestFailedException{
+	protected Document doGet() throws RESTRequestFailedException{
 		GetMethod get = null;
-		
-		this.id = id;
-		this.password = password;
 		
 		try{
 			get = new GetMethod(url.toExternalForm());
 			return doHTTP( get );
+		}
+		finally{
+			if( get != null ){
+				get.releaseConnection();
+			}
+		}
+	}
+	
+	/**
+	 * Perform a GET request to the server and return the results as a string.
+	 * @param url
+	 * @return
+	 * @throws RESTRequestFailedException
+	 */
+	protected String doGetToString() throws RESTRequestFailedException{
+		GetMethod get = null;
+		
+		try{
+			get = new GetMethod(url.toExternalForm());
+			return doHTTPToString( get );
 		}
 		finally{
 			if( get != null ){
@@ -206,42 +217,11 @@ public class RESTRequest {
 	 */
 	protected Document doHTTP( HttpMethod method ) throws RESTRequestFailedException{
 		
-		// Tell the method to perform authentication if an ID was provided
-		if( id != null ){
-			method.setDoAuthentication( true );
-		}
-		
+		RESTHelper helper = new RESTHelper();
 		this.method = method;
-		InputStream is = null;
-		HttpClient client = null;
-		
-		//Start the timeout thread that will terminate the operation if is freezes
-		TimeoutThread timeoutThread = new TimeoutThread();
-		timeoutThread.start();
 		
 		try{
-			
-			// Start the HTTP client
-			client = getHttpClient();
-			int status = client.executeMethod( method );
-			
-			// Throw an exception if the timeout was reached
-			if( timeoutReached ){
-				throw new RESTRequestFailedException("REST request timed out");
-			}
-			
-			// Stop if authentication failed
-			if( status == 401 ){
-				throw new RESTRequestAuthFailedException();
-			}
-			
-			// Throw an error if the server did not respond correctly to the response
-			if( status != 200 ){
-				throw new RESTRequestFailedException("HTTP request failed (returned HTTP code " + status + " for " + method.getURI() + ")", status);
-			}
-			
-			// Get the response from the server
-			is = method.getResponseBodyAsStream();
+			helper.startStream();
 			
 			// Parse the XML and create the method objects
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -249,12 +229,9 @@ public class RESTRequest {
 			Document doc = null;
 			
 			db = dbf.newDocumentBuilder();
-			doc = db.parse( is );
+			doc = db.parse( helper.is );
 			
 			return doc;
-			
-		} catch (HttpException e) {
-			throw new RESTRequestFailedException("REST request failed due to an HTTP exception", e);
 		} catch (IOException e) {
 			throw new RESTRequestFailedException("REST request failed due to an IO exception", e);
 		} catch (ParserConfigurationException e) {
@@ -263,7 +240,74 @@ public class RESTRequest {
 			throw new RESTRequestFailedException("REST request failed since the response could not parsed", e);
 		}
 		finally{
+			if( helper != null ){
+				helper.streamDone();
+			}
+		}
+		
+	}
+	
+	/**
+	 * This helper class performs the operations necessary to create and close a stream to the server.
+	 * @author Luke
+	 *
+	 */
+	class RESTHelper{
+		
+		public InputStream is = null;
+		public HttpClient client = null;
+		
+		//Start the timeout thread that will terminate the operation if is freezes
+		public TimeoutThread timeoutThread = new TimeoutThread();
+		
+		public RESTHelper(){ }
+		
+		public InputStream startStream() throws RESTRequestFailedException{
 			
+			// Tell the method to perform authentication if an ID was provided
+			if( id != null ){
+				method.setDoAuthentication( true );
+			}
+			
+			HttpClient client = null;
+			
+			//Start the timeout thread that will terminate the operation if is freezes
+			TimeoutThread timeoutThread = new TimeoutThread();
+			timeoutThread.start();
+			
+			try{
+				
+				// Start the HTTP client
+				client = getHttpClient();
+				int status = client.executeMethod( method );
+				
+				// Throw an exception if the timeout was reached
+				if( timeoutReached ){
+					throw new RESTRequestFailedException("REST request timed out");
+				}
+				
+				// Stop if authentication failed
+				if( status == 401 ){
+					throw new RESTRequestAuthFailedException();
+				}
+				
+				// Throw an error if the server did not respond correctly to the response
+				if( status != 200 ){
+					throw new RESTRequestFailedException("HTTP request failed (returned HTTP code " + status + " for " + method.getURI() + ")", status);
+				}
+				
+				// Get the response from the server
+				is = method.getResponseBodyAsStream();
+				return is;
+				
+			} catch (HttpException e) {
+				throw new RESTRequestFailedException("REST request failed due to an HTTP exception", e);
+			} catch (IOException e) {
+				throw new RESTRequestFailedException("REST request failed due to an IO exception", e);
+			}
+		}
+		
+		public void streamDone() throws RESTRequestFailedException{
 			// Release the HTTP connection
 			method.releaseConnection();
 			
@@ -289,6 +333,40 @@ public class RESTRequest {
 			}
 		}
 		
+	}
+	
+	/**
+	 * Do the HTTP transfer to the server and return the response as a string.
+	 * @param method
+	 * @return
+	 * @throws RESTRequestFailedException
+	 */
+	protected String doHTTPToString( HttpMethod method ) throws RESTRequestFailedException{
+		
+		RESTHelper helper = new RESTHelper();
+		this.method = method;
+		
+		try{
+			helper.startStream();
+			Writer writer = new StringWriter();
+			char[] buffer = new char[1024];
+			
+			Reader reader = new BufferedReader( new InputStreamReader(helper.is, "UTF-8") );
+
+			int n;
+			while ((n = reader.read(buffer)) != -1) {
+				writer.write(buffer, 0, n);
+			}
+			
+			return writer.toString();
+		} catch (IOException e) {
+			throw new RESTRequestFailedException("REST request failed due to an IO exception", e);
+		}
+		finally{
+			if( helper != null ){
+				helper.streamDone();
+			}
+		}
 	}
 	
 	// The date format for all dates in XML
