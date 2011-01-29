@@ -12,7 +12,7 @@ import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class DefinitionsInfo extends RESTRequest {
+public class DefinitionsInfo extends RESTEndpointClient {
 
 	public DefinitionsInfo( URL endPointURL ){
 		setEndpointURL(endPointURL);
