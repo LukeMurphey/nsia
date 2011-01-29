@@ -41,7 +41,7 @@ import org.xml.sax.SAXException;
  * @author Luke Murphey
  *
  */
-public class RESTRequest {
+public class RESTEndpointClient {
 	
 	public final int SOCKET_TIMEOUT = 5 * 60 * 1000; // 5 minutes; this timeout applies to the time it takes for the socket to return data (not including the data to initiate the connection, see below for the connection timeout)
 	public final int CONNECTION_TIMEOUT = 30 * 1000; // 30 seconds; this timeout applies to the time it takes to initiate a TCP connection to the manager

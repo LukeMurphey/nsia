@@ -17,7 +17,7 @@ import org.w3c.dom.Element;
  * @author Luke Murphey
  *
  */
-public class LicenseInfo extends RESTRequest {
+public class LicenseInfo extends RESTEndpointClient {
 	
 	public LicenseInfo( String id, String password ) throws RESTRequestFailedException{
 		// Find the endpoint URL in the index on the server
