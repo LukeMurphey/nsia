@@ -2,8 +2,6 @@ package net.lukemurphey.nsia;
 
 import java.io.IOException;
 import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 import org.apache.xmlrpc.XmlRpcClient;
@@ -43,106 +41,6 @@ public class VersionManagement {
 	}
 	
 	/**
-	 * Represents the version of NSIA and allows version identifiers to be compared.
-	 * @author Luke
-	 *
-	 */
-	public static class VersionDescriptor{
-		private static Pattern VERSION_REGEX = Pattern.compile("([0-9]*)?([.]([0-9]*))?([.]([0-9]*))?[ ]*(\\((.*)\\))?"); //([0-9]*)?([.]([0-9]*))?([.]([0-9]*))?[ ]*(\((.*)\))? 
-		
-		private int major;
-		private int minor = -1;
-		private int revision = -1;
-		private String branch;
-		
-		public VersionDescriptor( String version ){
-			Matcher matcher = VERSION_REGEX.matcher(version);
-			
-			if( matcher.find() ){
-				major = Integer.parseInt( matcher.group(1) );
-				
-				try{
-					minor = Integer.parseInt( matcher.group(3) );
-				}
-				catch(NumberFormatException e){
-					minor = -1;
-				}
-				
-				try{
-					revision = Integer.parseInt( matcher.group(5) );
-				}
-				catch(NumberFormatException e){
-					revision = -1;
-				}
-				
-				branch = matcher.group(7);
-			}
-		}
-		
-		public int getMajor(){
-			return major;
-		}
-		
-		public int getMinor(){
-			return minor;
-		}
-		
-		public int getRevision(){
-			return revision;
-		}
-		
-		public String getBranch(){
-			return branch;
-		}
-		
-		public String toString(){
-			String versionID = "" + getMajor();
-			
-			if( getMinor() >= 0 ){
-				versionID += "." + getMinor();
-				
-				if( getRevision() >= 0 ){
-					versionID += "." + getRevision();
-				}
-			}
-			
-			if( getBranch() != null && getBranch().length() > 0){
-				versionID += " (" + getBranch() + ")";
-			}
-			
-			return versionID;
-		}
-		
-		/**
-		 * Determines if a later version exists than the current version of NSIA based on the two version descriptors provided.
-		 * @param current
-		 * @param latestAvailable
-		 * @return
-		 */
-		public static boolean isLaterVersion( VersionDescriptor current, VersionDescriptor latestAvailable ){
-			
-			if( latestAvailable.getBranch() != null && latestAvailable.getBranch().equalsIgnoreCase(current.getBranch()) == false ){
-				return false;
-			}
-			
-			else if( latestAvailable.getMajor() > current.getMajor() ){
-				return true;
-			}
-			
-			else if( latestAvailable.getMajor() == current.getMajor() && latestAvailable.getMinor() > current.getMinor() ){
-				return true;
-			}
-			
-			else if( latestAvailable.getMajor() == current.getMajor() && latestAvailable.getMinor() == current.getMinor() && latestAvailable.getRevision() > current.getRevision() ){
-				return true;
-			}
-			
-			return false;
-			
-		}
-	}
-	
-	/**
 	 * Indicates if a newer version of NSIA is available.
 	 * @param dontBlock
 	 * @return
@@ -157,10 +55,10 @@ public class VersionManagement {
 			return false;
 		}
 		
-		VersionDescriptor latestAvailable = new VersionDescriptor(version);
-		VersionDescriptor current = new VersionDescriptor(Application.getVersion());
+		ApplicationVersionDescriptor latestAvailable = new ApplicationVersionDescriptor(version);
+		ApplicationVersionDescriptor current = new ApplicationVersionDescriptor(Application.getVersion());
 		
-		if( VersionDescriptor.isLaterVersion(current, latestAvailable) ){
+		if( ApplicationVersionDescriptor.isLaterVersion(current, latestAvailable) ){
 			return true;
 		}
 		else {
@@ -228,10 +126,10 @@ public class VersionManagement {
 	public static boolean isUpdateAvailable() throws XmlRpcException, IOException{
 		String latestVersion = getNewestVersionAvailableID( false );
 		
-		VersionDescriptor latestAvailable = new VersionDescriptor(latestVersion);
-		VersionDescriptor current = new VersionDescriptor(Application.getVersion());
+		ApplicationVersionDescriptor latestAvailable = new ApplicationVersionDescriptor(latestVersion);
+		ApplicationVersionDescriptor current = new ApplicationVersionDescriptor(Application.getVersion());
 		
-		if( VersionDescriptor.isLaterVersion(current, latestAvailable) ){
+		if( ApplicationVersionDescriptor.isLaterVersion(current, latestAvailable) ){
 			return true;
 		}
 		else{
