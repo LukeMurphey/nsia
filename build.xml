@@ -14,7 +14,7 @@
         <taskdef name="svn" classpath="dev/lib/svnant.jar;dev/lib/svnClientAdapter.jar;dev/lib/svnjavahl.jar" classname="org.tigris.subversion.svnant.SvnTask" />
 		
         <svn>
-		   <info target=".." />
+		   <info target="." />
            <wcVersion prefix="svn." path="${value.build.workingcopy.directory}" />
         </svn>
 	</target>
