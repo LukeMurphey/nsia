@@ -80,7 +80,7 @@ Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 !endif
 
 !ifdef OUT_FILE
-    OutFile ${OUT_FILE}
+    OutFile "${OUT_FILE}"
 !endif
 
 InstallDir "$PROGRAMFILES\ThreatFactor NSIA"
