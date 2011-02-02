@@ -70,8 +70,8 @@
 	</target>
 	
     <target name="zip" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create the zip file used for installing NSIA">
-    	<mkdir dir="tmp/packages"/>
-        <zip destfile="tmp/packages/ThreatFactor NSIA(${value.build.version}).zip"
+    	<mkdir dir="${value.build.packageoutput.directory}"/>
+        <zip destfile="${value.build.packageoutput.directory}/ThreatFactor NSIA(${value.build.version}).zip"
             basedir="."
         	includesfile="dev/include_list.txt"
         	whenempty="create"
@@ -122,7 +122,7 @@
 	</target>
 	
 	<target name="dpkg" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package">
-		<mkdir dir="tmp/packages"/>
+		<mkdir dir="${value.build.packageoutput.directory}"/>
 		
 		<!-- 1: Create root directory -->
 		<mkdir dir="${value.build.debianpackage.directory}/nsia-${value.build.version}" />
@@ -198,19 +198,19 @@
 		</exec>
 
 		<!-- 7: Copy the resulting file to bin -->
-		<move file="${value.build.debianpackage.directory}/nsia-${value.build.version}.deb" tofile="tmp/packages/nsia-${value.build.version}.deb" />
+		<move file="${value.build.debianpackage.directory}/nsia-${value.build.version}.deb" tofile="${value.build.packageoutput.directory}/nsia-${value.build.version}.deb" />
 		
 	</target>
 	
 	<target name="buildall" depends="webarchive,jar,zip,debianpackage,windowsinstaller"/>
 	
 	<target name="debianpackage" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
-		<mkdir dir="tmp/packages"/>
+		<mkdir dir="${value.build.packageoutput.directory}"/>
 		
 		<!-- 1: Get the DebAntTask task -->
 		<taskdef name="deb" classpath="dev/lib/jdeb-0.8.jar;dev/lib/commons-compress-1.1.jar" classname="org.vafer.jdeb.ant.DebAntTask" />
 		
-		<deb destfile="tmp/packages/nsia-${value.build.version}.deb" control="src/debianpkg" verbose="true" >
+		<deb destfile="${value.build.packageoutput.directory}/nsia-${value.build.version}.deb" control="src/debianpkg" verbose="true" >
 			
 			<!-- 2: Add documentation -->
 			<tarfileset prefix="opt/nsia/doc" dir="doc" defaultexcludes="true">
@@ -254,17 +254,19 @@
 	
 	<target name="windowsinstaller_nsispathundefined" depends="check_nsispathdefined,check_web_archive_exists,check_nsia_archive_exists" unless="isnsispathdefined">
 		<taskdef name="nsis" classpath="dev/lib/nsisant-1.2.jar" classname="net.sf.nsisant.Task" />
-		<mkdir dir="tmp/packages"/>
+		<mkdir dir="${value.build.packageoutput.directory}"/>
         <nsis script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
             <define name="VERSION" value="${value.build.version}"/>
+        	<define name="OUT_FILE" value="${value.build.packageoutput.directory}/ThreatFactor NSIA Setup(${value.build.version}).exe"/>
         </nsis>
 	</target>
 	
 	<target name="windowsinstaller_nsispathdefined" depends="check_nsispathdefined,check_web_archive_exists,check_nsia_archive_exists" if="isnsispathdefined">
 		<taskdef name="nsis" classpath="dev/lib/nsisant-1.2.jar" classname="net.sf.nsisant.Task" />
-		<mkdir dir="tmp/packages"/>
+		<mkdir dir="${value.build.packageoutput.directory}"/>
         <nsis path="${value.build.makensis.directory}" script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
             <define name="VERSION" value="${value.build.version}"/>
+        	<define name="OUT_FILE" value="${value.build.packageoutput.directory}/ThreatFactor NSIA Setup(${value.build.version}).exe"/>
         </nsis>
 	</target>
 	
