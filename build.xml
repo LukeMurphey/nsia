@@ -1,226 +1,227 @@
 <project default="package" name="nsia">
-	
+
 	<!--
 	Load the properties files, Local is loaded first since properties are immutable (cannot be changed
 	by later property files) and we want the local properties to override the default properties
 	-->
 	<property file="dev/local.properties" />
 	<property file="dev/default.properties" />
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: get_build_number
          ================================= -->
 	<target name="get_build_number">
-        <taskdef name="svn" classpath="dev/lib/svnant.jar;dev/lib/svnClientAdapter.jar;dev/lib/svnjavahl.jar" classname="org.tigris.subversion.svnant.SvnTask" />
-		
-        <svn>
-		   <info target="." />
-           <wcVersion prefix="svn." path="${value.build.workingcopy.directory}" />
-        </svn>
+		<taskdef name="svn" classpath="dev/lib/svnant.jar;dev/lib/svnClientAdapter.jar;dev/lib/svnjavahl.jar" classname="org.tigris.subversion.svnant.SvnTask" />
+
+		<svn>
+			<info target="." />
+			<wcVersion prefix="svn." path="${value.build.workingcopy.directory}" />
+		</svn>
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: update_build_info
          ================================= -->
 	<target name="update_build_info" depends="get_build_number">
-        <propertyfile file="tmp/java/net/lukemurphey/nsia/build.properties" comment="Build Information File">
-                <entry key="build.number" value="${svn.revision.max}" />
-                <entry key="build.date" type="date" value="now" pattern="dd.MM.yyyy HH:mm" />
-        		<entry key="build.version" value="${value.build.version}" />
-        </propertyfile>
+		<propertyfile file="${value.build.java_output}/net/lukemurphey/nsia/build.properties" comment="Build Information File">
+			<entry key="build.number" value="${svn.revision.max}" />
+			<entry key="build.date" type="date" value="now" pattern="dd.MM.yyyy HH:mm" />
+			<entry key="build.version" value="${value.build.version}" />
+		</propertyfile>
 	</target>
-		
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: jar
          ================================= -->
-    <target name="jar" depends="check_default_definitions_exists,update_build_info" description="Create core NSIA JAR file">
+	<target name="jar" depends="check_default_definitions_exists,update_build_info" description="Create core NSIA JAR file">
 		<!-- Create the Java archive -->
-        <jar destfile="bin/nsia.jar"
-        	basedir="tmp/java/" 
+		<jar destfile="bin/nsia.jar"
+        	basedir="${value.build.java_output}" 
         	manifest="dev/Manifest.txt"
         	excludes="*.svn"
         	includes="net/**"
         />
-    </target>
-	
-    <!-- ================================= 
+	</target>
+
+	<!-- ================================= 
           target: check_nsia_archive_exists
          ================================= -->
-    <target name="check_nsia_archive_exists">
-        <available file="bin/nsia.jar" property="nsia_jar_present"/>
-    </target>
-    
-    <!-- ================================= 
+	<target name="check_nsia_archive_exists">
+		<available file="bin/nsia.jar" property="nsia_jar_present"/>
+	</target>
+
+	<!-- ================================= 
           target: check_default_definitions_exists
          ================================= -->
-    <target name="check_default_definitions_exists">
-        <available file="tmp/java/net/lukemurphey/nsia/scan/default_definitions.xml" property="default_definitions_present"/>
-    </target>
-    
-    <!-- ================================= 
+	<target name="check_default_definitions_exists">
+		<available file="tmp/java/net/lukemurphey/nsia/scan/default_definitions.xml" property="default_definitions_present"/>
+	</target>
+
+	<!-- ================================= 
           target: assert_default_definitions_exists
          ================================= -->
-    <target name="assert_default_definitions_exists" depends="check_default_definitions_exists" unless="default_definitions_present">
-        <fail>Default definitions file does not exist</fail>
-    </target>
-	
-    <!-- ================================= 
+	<target name="assert_default_definitions_exists" depends="check_default_definitions_exists" unless="default_definitions_present">
+		<fail>Default definitions file does not exist</fail>
+	</target>
+
+	<!-- ================================= 
           target: check_web_archive_exists
          ================================= -->
-    <target name="check_web_archive_exists">
-        <available file="lib/webConsole.war" property="webconsole_war_present"/>
-    </target>
-	
-    <!-- ================================= 
+	<target name="check_web_archive_exists">
+		<available file="lib/webConsole.war" property="webconsole_war_present"/>
+	</target>
+
+	<!-- ================================= 
           target: assert_nsia_archive_exists
          ================================= -->
 	<target name="assert_nsia_archive_exists" depends="check_nsia_archive_exists" unless="nsia_jar_present">
 		<fail>NSIA Java archive does not exist</fail>
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: assert_web_archive_exists
          ================================= -->
-    <target name="assert_web_archive_exists" depends="check_web_archive_exists" unless="webconsole_war_present">
-    	<fail>Warning: Web console archive does not exist</fail>
-    </target>
-	
-    <!-- ================================= 
+	<target name="assert_web_archive_exists" depends="check_web_archive_exists" unless="webconsole_war_present">
+		<fail>Warning: Web console archive does not exist</fail>
+	</target>
+
+	<!-- ================================= 
           target: web_archive
          ================================= -->
-    <target name="web_archive" description="Create the web-archive used by the NSIA web-application" >
-	    <jar destfile="lib/webConsole.war"
+	<target name="web_archive" description="Create the web-archive used by the NSIA web-application" >
+		<jar destfile="lib/webConsole.war"
 	        basedir="src/webarchive"
 	    	excludes="*.svn"
 	    />
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: zip_package
          ================================= -->
-    <target name="zip_package" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create the zip file used for installing NSIA">
-    	<mkdir dir="${value.build.packageoutput.directory}" />
-        <zip destfile="${value.build.packageoutput.directory}/ThreatFactor NSIA(${value.build.version}).zip"
+	<target name="zip_package" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create the zip file used for installing NSIA">
+		<mkdir dir="${value.build.packageoutput.directory}" />
+		<zip destfile="${value.build.packageoutput.directory}/ThreatFactor NSIA(${value.build.version}).zip"
             basedir="."
         	includesfile="dev/include_list.txt"
         	whenempty="create"
         />
-    </target>
-	
-    <!-- ================================= 
+	</target>
+
+	<!-- ================================= 
           target: clean
          ================================= -->
 	<target name="clean" description="Clean up archives creating by this build script" >
-	    <delete>
-	    	<fileset file="tmp/packages" />
-	    	<fileset file="bin/nsia.jar" />
-	    	<fileset file="lib/webConsole.war" />
-	    </delete>
+		<delete>
+			<fileset file="tmp/packages" />
+			<fileset file="bin/nsia.jar" />
+			<fileset file="lib/webConsole.war" />
+			<fileset file="${value.build.java_output}" />
+		</delete>
 	</target>
-  
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: clean_dot_svns
          ================================= -->
 	<target name="clean_dot_svns" description="Clean up the .svn directories found in the java-bin directory (prevents SVN from thinking the java-bin directory should under revision control)">
 		<echo level="info">Remove svn-files...</echo>
 		<delete includeemptydirs="true" >
-		    <fileset dir="tmp/java" defaultexcludes="false" >
-		        <include name="**/.svn/" />
-		    </fileset>
+			<fileset dir="${value.build.java_output}" defaultexcludes="false" >
+				<include name="**/.svn/" />
+			</fileset>
 		</delete>
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: sql_shell
          ================================= -->
 	<target name="sql_shell" description="Starts the interactive interpreter used for administrating the Java database" >
 		<!-- java -Dij.database=jdbc:derby:var/database -jar lib/derbyrun.jar ij -->
 		<java fork="true" jar="lib/derbyrun.jar">
 			<sysproperty key="ij.database" value="jdbc:derby:var/database" />
-			<arg value="ij" />    
+			<arg value="ij" />
 		</java>
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: download_definitions
          ================================= -->
-    <target name="download_definitions" description="Download the latest definitions set and export into the NSIA directory (so it can be included in the NSIA.jar)">
-    	<java classname="net.lukemurphey.nsia.support.DefinitionDownload">
-    		<arg value="${value.build.licensekey}" />
-    		<arg value="-f" />
-    		<arg value="../tmp/java/net/lukemurphey/nsia/scan/default_definitions.xml" />
-            <classpath>
-              <pathelement location="lib/JSAP-2.0b.jar" />
-              <pathelement location="lib/xmlrpc-2.0.jar" />
-              <pathelement location="lib/commons-codec-1.3.jar" />
-              <pathelement location="tmp/java" />
-            </classpath>
-    	</java>
-    </target>
-	
-    <!-- ================================= 
+	<target name="download_definitions" description="Download the latest definitions set and export into the NSIA directory (so it can be included in the NSIA.jar)">
+		<java classname="net.lukemurphey.nsia.support.DefinitionDownload">
+			<arg value="${value.build.licensekey}" />
+			<arg value="-f" />
+			<arg value="${value.build.java_output}/net/lukemurphey/nsia/scan/default_definitions.xml" />
+			<classpath>
+				<pathelement location="lib/JSAP-2.0b.jar" />
+				<pathelement location="lib/xmlrpc-2.0.jar" />
+				<pathelement location="lib/commons-codec-1.3.jar" />
+				<pathelement location="${value.build.java_output}" />
+			</classpath>
+		</java>
+	</target>
+
+	<!-- ================================= 
           target: clean_dpkg
          ================================= -->
 	<target name="clean_dpkg" description="Clean the files created by the Debian package creator">
 		<delete dir="${value.build.debianpackage.directory}" />
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: dpkg
          ================================= -->
 	<target name="dpkg" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package">
 		<mkdir dir="${value.build.packageoutput.directory}"/>
-		
+
 		<!-- 1: Create root directory -->
 		<mkdir dir="${value.build.debianpackage.directory}/nsia-${value.build.version}" />
-		
-	    <!-- 2: Copy directory structure -->
+
+		<!-- 2: Copy directory structure -->
 		<copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/DEBIAN">
 			<fileset dir="src/debianpkg">
 				<exclude name="**/.svn/" />
 			</fileset>
 		</copy>
-		
+
 		<!-- 3: Add the necessary files -->
-		
+
 		<!-- 3.1: populate the bin directory -->
-        <copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/bin">
-            <fileset dir="bin" defaultexcludes="true">
-                <exclude name="**/.svn/" />
-            	<include name="nsia.jar" />
-            	<include name="run.sh" />
-            </fileset>
-        </copy>
-		
+		<copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/bin">
+			<fileset dir="bin" defaultexcludes="true">
+				<exclude name="**/.svn/" />
+				<include name="nsia.jar" />
+				<include name="run.sh" />
+			</fileset>
+		</copy>
+
 		<!-- 3.2: populate the lib directory -->
 		<copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/lib">
-			  <fileset dir="lib" defaultexcludes="false">
-			    <exclude name="**/.svn/" />
-		      </fileset>
+			<fileset dir="lib" defaultexcludes="false">
+				<exclude name="**/.svn/" />
+			</fileset>
 		</copy>
-		
-        <!-- 3.3: populate the etc directory -->
-        <copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/etc">
-              <fileset dir="etc" defaultexcludes="false">
-                <exclude name="**/.svn/" />
-              	<exclude name="**/init.d/" />
-              </fileset>
-        </copy>
-		
-        <!-- 3.4: populate the init.d directory -->
-        <copy file="etc/init.d/ubuntu/nsia.sh" tofile="${value.build.debianpackage.directory}/nsia-${value.build.version}/etc/init.d/nsia" />
+
+		<!-- 3.3: populate the etc directory -->
+		<copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/etc">
+			<fileset dir="etc" defaultexcludes="false">
+				<exclude name="**/.svn/" />
+				<exclude name="**/init.d/" />
+			</fileset>
+		</copy>
+
+		<!-- 3.4: populate the init.d directory -->
+		<copy file="etc/init.d/ubuntu/nsia.sh" tofile="${value.build.debianpackage.directory}/nsia-${value.build.version}/etc/init.d/nsia" />
 
 		<!-- 3.5: populate the doc directory -->
 		<copy todir="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/doc">
 			<fileset dir="doc" defaultexcludes="true">
-		    	<include name="LICENSE" />
+				<include name="LICENSE" />
 				<include name="README" />
 				<include name="AUTHORS" />
 				<include name="INSTALL" />
 				<include name="NEWS" />
-		    </fileset>
+			</fileset>
 		</copy>
-		
+
 		<!-- 4: Set scripts to executable -->
 		<chmod file="${value.build.debianpackage.directory}/nsia-${value.build.version}/etc/init.d/nsia" perm="755" />
 		<chmod file="${value.build.debianpackage.directory}/nsia-${value.build.version}/opt/nsia/bin/run.sh" perm="755" />
@@ -228,16 +229,16 @@
 		<chmod file="${value.build.debianpackage.directory}/nsia-${value.build.version}/DEBIAN/postrm" perm="755" />
 		<chmod file="${value.build.debianpackage.directory}/nsia-${value.build.version}/DEBIAN/preinst" perm="755" />
 		<chmod file="${value.build.debianpackage.directory}/nsia-${value.build.version}/DEBIAN/prerm" perm="755" />
-		
+
 		<!-- 5: Set owner to root -->
 		<chown owner="root">
 			<fileset dir="${value.build.debianpackage.directory}/" includes="**/*" />
 		</chown>
-		
+
 		<chgrp group="root">
 			<fileset dir="${value.build.debianpackage.directory}/" includes="**/*" />
 		</chgrp>
-		
+
 		<!-- 6: Call dpkg -->
 		<exec executable="dpkg" dir="${value.build.debianpackage.directory}" osfamily="unix">
 			<arg value="-b"/>
@@ -246,58 +247,58 @@
 
 		<!-- 7: Copy the resulting file to bin -->
 		<move file="${value.build.debianpackage.directory}/nsia-${value.build.version}.deb" tofile="${value.build.packageoutput.directory}/nsia-${value.build.version}.deb" />
-		
+
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: package
          ================================= -->
 	<target name="package" depends="web_archive,jar,zip_package,debian_package,windows_installer_package"/>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: debian_package
          ================================= -->
 	<target name="debian_package" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
 		<mkdir dir="${value.build.packageoutput.directory}"/>
-		
+
 		<!-- 1: Get the DebAntTask task -->
 		<taskdef name="deb" classpath="dev/lib/jdeb-0.8.jar;dev/lib/commons-compress-1.1.jar" classname="org.vafer.jdeb.ant.DebAntTask" />
-		
+
 		<deb destfile="${value.build.packageoutput.directory}/nsia-${value.build.version}.deb" control="src/debianpkg" verbose="true" >
-			
+
 			<!-- 2: Add documentation -->
 			<tarfileset prefix="opt/nsia/doc" dir="doc" defaultexcludes="true">
-		    	<include name="LICENSE" />
+				<include name="LICENSE" />
 				<include name="README" />
 				<include name="AUTHORS" />
 				<include name="INSTALL" />
 				<include name="NEWS" />
-		    </tarfileset>
-			
+			</tarfileset>
+
 			<!-- 3: Add the libraries -->
 			<tarfileset prefix="opt/nsia/lib" dir="lib" defaultexcludes="false">
 				<exclude name="**/.svn/" />
 			</tarfileset>
-			
+
 			<!-- 4: Add the binaries -->
-            <tarfileset prefix="opt/nsia/bin" dir="bin" defaultexcludes="true">
-            	<include name="nsia.jar" />
-            </tarfileset>
-			
+			<tarfileset prefix="opt/nsia/bin" dir="bin" defaultexcludes="true">
+				<include name="nsia.jar" />
+			</tarfileset>
+
 			<tarfileset prefix="opt/nsia/bin" dir="bin" filemode="755" defaultexcludes="true">
 				<include name="run.sh" />
 			</tarfileset>
-			
+
 			<!-- 5: Add the startup script -->
 			<tarfileset prefix="etc/init.d" dir="etc/init.d/ubuntu" filemode="755" defaultexcludes="true">
 				<include name="nsia" />
 			</tarfileset>
 
 		</deb>
-		
+
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: check_nsis_path_defined
          ================================= -->
 	<target name="check_nsis_path_defined">
@@ -305,106 +306,115 @@
 			<isset property="value.build.makensis.directory"/>
 		</condition>
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: windows_installer_package
          ================================= -->
 	<target name="windows_installer_package" depends="windows_installer_package_nsis_path_undefined,windows_installer_package_nsis_path_defined" description="Creates a Windows installer" />
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: windows_installer_package_nsis_path_undefined
          ================================= -->
 	<target name="windows_installer_package_nsis_path_undefined" depends="check_nsis_path_defined,check_web_archive_exists,check_nsia_archive_exists" unless="isnsispathdefined">
 		<taskdef name="nsis" classpath="dev/lib/nsisant-1.2.jar" classname="net.sf.nsisant.Task" />
 		<mkdir dir="${value.build.packageoutput.directory}"/>
-        <nsis script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
-            <define name="VERSION" value="${value.build.version}"/>
-        	<define name="OUT_FILE" value="${value.build.packageoutput.directory}/ThreatFactor NSIA Setup(${value.build.version}).exe"/>
-        </nsis>
+		<nsis script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
+			<define name="VERSION" value="${value.build.version}"/>
+			<define name="OUT_FILE" value="${value.build.packageoutput.directory}/ThreatFactor NSIA Setup(${value.build.version}).exe"/>
+		</nsis>
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: windows_installer_package_nsis_path_defined
          ================================= -->
 	<target name="windows_installer_package_nsis_path_defined" depends="check_nsis_path_defined,check_web_archive_exists,check_nsia_archive_exists" if="isnsispathdefined">
 		<taskdef name="nsis" classpath="dev/lib/nsisant-1.2.jar" classname="net.sf.nsisant.Task" />
 		<mkdir dir="${value.build.packageoutput.directory}"/>
-        <nsis path="${value.build.makensis.directory}" script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
-            <define name="VERSION" value="${value.build.version}"/>
-        	<define name="OUT_FILE" value="${value.build.packageoutput.directory}/ThreatFactor NSIA Setup(${value.build.version}).exe"/>
-        </nsis>
+		<nsis path="${value.build.makensis.directory}" script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
+			<define name="VERSION" value="${value.build.version}"/>
+			<define name="OUT_FILE" value="${value.build.packageoutput.directory}/ThreatFactor NSIA Setup(${value.build.version}).exe"/>
+		</nsis>
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: compile_bootstrap_windows
          ================================= -->
 	<target name="compile_bootstrap_windows" description="Compile the bootstrap executables (for the Windows platform)">
-		
+
 		<exec executable="windres">
 			<arg value="-i" />
 			<arg value="src/bootstrap/resource.rc" />
 			<arg value="-o" />
 			<arg value="src/bootstrap/res.o" />
 		</exec>
-		
-        <exec executable="g++">
-            <arg value="-Wall" />
-            <arg value="-W" />
-            <arg value="src/bootstrap/bootstrapCLI.cpp" />
-            <arg value="src/bootstrap/res.o" />
-            <arg value="-o" />
-            <arg value="bin/ThreatFactor NSIA CLI.exe" />
-        </exec>
-		
-	    <exec executable="g++">
-            <arg value="-Wall" />
-            <arg value="-W" />
-            <arg value="-mwindows" />
-            <arg value="-Wl,-subsystem,windows" />
-            <arg value="src/bootstrap/bootstrapGUIWin32.cpp" />
-            <arg value="src/bootstrap/res.o" />
-            <arg value="-o" />
-            <arg value="bin/ThreatFactor NSIA.exe" />
-        </exec>
-		
+
+		<exec executable="g++">
+			<arg value="-Wall" />
+			<arg value="-W" />
+			<arg value="src/bootstrap/bootstrapCLI.cpp" />
+			<arg value="src/bootstrap/res.o" />
+			<arg value="-o" />
+			<arg value="bin/ThreatFactor NSIA CLI.exe" />
+		</exec>
+
+		<exec executable="g++">
+			<arg value="-Wall" />
+			<arg value="-W" />
+			<arg value="-mwindows" />
+			<arg value="-Wl,-subsystem,windows" />
+			<arg value="src/bootstrap/bootstrapGUIWin32.cpp" />
+			<arg value="src/bootstrap/res.o" />
+			<arg value="-o" />
+			<arg value="bin/ThreatFactor NSIA.exe" />
+		</exec>
+
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: compile_core
          ================================= -->
 	<target name="compile_core" description="Compile the core Java application">
 		<mkdir dir="${value.build.java_output}" />
-	    <javac destdir="${value.build.java_output}" srcdir="src" > <!-- excludes="net/lukemurphey/nsia/tests/**" -->
-	    	<classpath>
-           		<fileset dir="lib">
+		<javac destdir="${value.build.java_output}" srcdir="src" >
+			<!-- excludes="net/lukemurphey/nsia/tests/**" -->
+			<classpath>
+				<fileset dir="lib">
 					<include name="**/*.jar" />
 				</fileset>
-           		<fileset dir="dev/lib">
+				<fileset dir="dev/lib">
 					<include name="junit.jar" />
 				</fileset>
 			</classpath>
+			<compilerarg value="-Xlint" />
 		</javac>
+		
+		<!-- Copy the non source code files over that may be referenced by the classes -->
+		<copy todir="${value.build.java_output}">
+			<fileset dir="src">
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
 	</target>
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: unit_test
          ================================= -->
-	<target name="unit_test" description="Run the unit tests">
+	<target name="unit_test" depends="compile_core,download_definitions" description="Run the unit tests">
 		<junit printsummary="on">
-	    	<classpath>
-           		<fileset dir="lib">
+			<classpath>
+				<fileset dir="lib">
 					<include name="**/*.jar" />
 				</fileset>
-           		<fileset dir="dev/lib">
+				<fileset dir="dev/lib">
 					<include name="junit.jar" />
 				</fileset>
-               	<fileset dir="bin">
-    				<include name="nsia.jar" />
-    			</fileset>
+				<fileset dir="bin">
+					<include name="nsia.jar" />
+				</fileset>
 			</classpath>
 			<formatter type="brief" usefile="false" />
 			<batchtest>
-				<fileset dir="tmp/java" includes="net/lukemurphey/nsia/tests/**/*.class" />
+				<fileset dir="${value.build.java_output}" includes="net/lukemurphey/nsia/tests/**/*.class" />
 			</batchtest>
 		</junit>
 	</target>
