@@ -1,4 +1,4 @@
-<project default="buildall" name="nsia">
+<project default="package" name="nsia">
 	
 	<!--
 	Load the properties files, Local is loaded first since properties are immutable (cannot be changed
@@ -7,10 +7,7 @@
 	<property file="dev/local.properties" />
 	<property file="dev/default.properties" />
 	
-	<target name="jar" depends="check_default_definitions_exists,__jar" description="Create core NSIA JAR file">
-	</target>
-	
-	<target name="__get_build_number">
+	<target name="get_build_number">
         <taskdef name="svn" classpath="dev/lib/svnant.jar;dev/lib/svnClientAdapter.jar;dev/lib/svnjavahl.jar" classname="org.tigris.subversion.svnant.SvnTask" />
 		
         <svn>
@@ -19,7 +16,7 @@
         </svn>
 	</target>
 	
-	<target name="__update_build_info" depends="__get_build_number">
+	<target name="update_build_info" depends="get_build_number">
 	
         <propertyfile file="tmp/java/net/lukemurphey/nsia/build.properties" comment="Build Information File">
                 <entry key="build.number" value="${svn.revision.max}" />
@@ -28,7 +25,7 @@
         </propertyfile>
 	</target>
 		
-    <target name="__jar" depends="__update_build_info,__get_build_number">
+    <target name="jar" depends="check_default_definitions_exists,update_build_info" description="Create core NSIA JAR file">
 		<!-- Create the Java archive -->
         <jar destfile="bin/nsia.jar"
         	basedir="tmp/java/" 
@@ -38,39 +35,39 @@
         />
     </target>
 	
-    <target name="__check_nsia_archive_exists">
+    <target name="check_nsia_archive_exists">
         <available file="bin/nsia.jar" property="nsia_jar_present"/>
     </target>
     
-    <target name="__check_default_definitions_exists">
+    <target name="check_default_definitions_exists">
         <available file="tmp/java/net/lukemurphey/nsia/scan/default_definitions.xml" property="default_definitions_present"/>
     </target>
     
-    <target name="check_default_definitions_exists" depends="__check_default_definitions_exists" unless="default_definitions_present">
+    <target name="assert_default_definitions_exists" depends="check_default_definitions_exists" unless="default_definitions_present">
         <fail>Default definitions file does not exist</fail>
     </target>
 	
-    <target name="__check_web_archive_exists">
+    <target name="check_web_archive_exists">
         <available file="lib/webConsole.war" property="webconsole_war_present"/>
     </target>
 	
-	<target name="check_nsia_archive_exists" depends="__check_nsia_archive_exists" unless="nsia_jar_present">
+	<target name="assert_nsia_archive_exists" depends="check_nsia_archive_exists" unless="nsia_jar_present">
 		<fail>NSIA Java archive does not exist</fail>
 	</target>
 	
-    <target name="check_web_archive_exists" depends="__check_web_archive_exists" unless="webconsole_war_present">
+    <target name="assert_web_archive_exists" depends="check_web_archive_exists" unless="webconsole_war_present">
     	<fail>Warning: Web console archive does not exist</fail>
     </target>
 	
-    <target name="webarchive" description="Create the web-archive used by the NSIA web-application" >
+    <target name="web_archive" description="Create the web-archive used by the NSIA web-application" >
 	    <jar destfile="lib/webConsole.war"
 	        basedir="src/webarchive"
 	    	excludes="*.svn"
 	    />
 	</target>
 	
-    <target name="zip" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create the zip file used for installing NSIA">
-    	<mkdir dir="${value.build.packageoutput.directory}"/>
+    <target name="zip_package" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create the zip file used for installing NSIA">
+    	<mkdir dir="${value.build.packageoutput.directory}" />
         <zip destfile="${value.build.packageoutput.directory}/ThreatFactor NSIA(${value.build.version}).zip"
             basedir="."
         	includesfile="dev/include_list.txt"
@@ -86,7 +83,7 @@
 	    </delete>
 	</target>
   
-	<target name="svnbinclean" description="Clean up the .svn directories found in the java-bin directory (prevents SVN from thinking the java-bin directory should under revision control)">
+	<target name="clean_dot_svns" description="Clean up the .svn directories found in the java-bin directory (prevents SVN from thinking the java-bin directory should under revision control)">
 		<echo level="info">Remove svn-files...</echo>
 		<delete includeemptydirs="true" >
 		    <fileset dir="tmp/java" defaultexcludes="false" >
@@ -96,14 +93,14 @@
 	</target>
 	
 	<!-- java -Dij.database=jdbc:derby:var/database -jar lib/derbyrun.jar ij -->
-	<target name="sqlshell" description="Starts the interactive interpreter used for administrating the Java database" >
+	<target name="sql_shell" description="Starts the interactive interpreter used for administrating the Java database" >
 		  <java fork="true" jar="lib/derbyrun.jar">
 		  	<sysproperty key="ij.database" value="jdbc:derby:var/database" />
 		  	 <arg value="ij" />    
 		  </java>
 	</target>
 	
-    <target name="downloaddefinitions" description="Download the latest definitions set and export into the NSIA directory (so it can be included in the NSIA.jar)">
+    <target name="download_definitions" description="Download the latest definitions set and export into the NSIA directory (so it can be included in the NSIA.jar)">
     	<java classname="net.lukemurphey.nsia.support.DefinitionDownload">
     		<arg value="${value.build.licensekey}" />
     		<arg value="-f" />
@@ -117,7 +114,7 @@
     	</java>
     </target>
 	
-	<target name="dpkgclean" description="Clean the files created by the Debian package creator">
+	<target name="clean_dpkg" description="Clean the files created by the Debian package creator">
 		<delete dir="${value.build.debianpackage.directory}" />
 	</target>
 	
@@ -202,9 +199,9 @@
 		
 	</target>
 	
-	<target name="buildall" depends="webarchive,jar,zip,debianpackage,windowsinstaller"/>
+	<target name="package" depends="web_archive,jar,zip_package,debian_package,windows_installer_package"/>
 	
-	<target name="debianpackage" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
+	<target name="debian_package" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
 		<mkdir dir="${value.build.packageoutput.directory}"/>
 		
 		<!-- 1: Get the DebAntTask task -->
@@ -244,15 +241,15 @@
 		
 	</target>
 	
-	<target name="check_nsispathdefined">
+	<target name="check_nsis_path_defined">
 		<condition property="isnsispathdefined">
 			<isset property="value.build.makensis.directory"/>
 		</condition>
 	</target>
 	
-	<target name="windowsinstaller" depends="windowsinstaller_nsispathundefined,windowsinstaller_nsispathdefined" description="Creates a Windows installer" />
+	<target name="windows_installer_package" depends="windows_installer_package_nsis_path_undefined,windows_installer_package_nsis_path_defined" description="Creates a Windows installer" />
 	
-	<target name="windowsinstaller_nsispathundefined" depends="check_nsispathdefined,check_web_archive_exists,check_nsia_archive_exists" unless="isnsispathdefined">
+	<target name="windows_installer_package_nsis_path_undefined" depends="check_nsis_path_defined,check_web_archive_exists,check_nsia_archive_exists" unless="isnsispathdefined">
 		<taskdef name="nsis" classpath="dev/lib/nsisant-1.2.jar" classname="net.sf.nsisant.Task" />
 		<mkdir dir="${value.build.packageoutput.directory}"/>
         <nsis script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
@@ -261,7 +258,7 @@
         </nsis>
 	</target>
 	
-	<target name="windowsinstaller_nsispathdefined" depends="check_nsispathdefined,check_web_archive_exists,check_nsia_archive_exists" if="isnsispathdefined">
+	<target name="windows_installer_package_nsis_path_defined" depends="check_nsis_path_defined,check_web_archive_exists,check_nsia_archive_exists" if="isnsispathdefined">
 		<taskdef name="nsis" classpath="dev/lib/nsisant-1.2.jar" classname="net.sf.nsisant.Task" />
 		<mkdir dir="${value.build.packageoutput.directory}"/>
         <nsis path="${value.build.makensis.directory}" script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
@@ -300,4 +297,19 @@
         </exec>
 		
 	</target>
+	
+	<target name="compile_core" description="Compile the core Java application">
+		<mkdir dir="${value.build.java_output}" />
+	    <javac destdir="${value.build.java_output}" srcdir="src" > <!-- excludes="net/lukemurphey/nsia/tests/**" -->
+	    	<classpath>
+           		<fileset dir="lib">
+					<include name="**/*.jar" />
+				</fileset>
+           		<fileset dir="dev/lib">
+					<include name="junit.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	
 </project>
