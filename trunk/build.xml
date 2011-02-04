@@ -31,9 +31,9 @@
 	</target>
 
 	<!-- ================================= 
-          target: jar
+          target: assemble_jar
          ================================= -->
-	<target name="jar" depends="check_default_definitions_exists,update_build_info" description="Create core NSIA JAR file">
+	<target name="assemble_jar" depends="check_default_definitions_exists,update_build_info" description="Create core NSIA JAR file">
 		<!-- Create the Java archive -->
 		<jar destfile="bin/nsia.jar"
         	basedir="${value.build.java_output}" 
@@ -51,10 +51,17 @@
 	</target>
 
 	<!-- ================================= 
+          target: assert_nsia_archive_exists
+         ================================= -->
+	<target name="assert_nsia_archive_exists" depends="check_nsia_archive_exists" unless="nsia_jar_present">
+		<fail>NSIA Java archive does not exist</fail>
+	</target>
+	
+	<!-- ================================= 
           target: check_default_definitions_exists
          ================================= -->
 	<target name="check_default_definitions_exists">
-		<available file="tmp/java/net/lukemurphey/nsia/scan/default_definitions.xml" property="default_definitions_present"/>
+		<available file="${value.build.java_output}/net/lukemurphey/nsia/scan/default_definitions.xml" property="default_definitions_present"/>
 	</target>
 
 	<!-- ================================= 
@@ -70,14 +77,7 @@
 	<target name="check_web_archive_exists">
 		<available file="lib/webConsole.war" property="webconsole_war_present"/>
 	</target>
-
-	<!-- ================================= 
-          target: assert_nsia_archive_exists
-         ================================= -->
-	<target name="assert_nsia_archive_exists" depends="check_nsia_archive_exists" unless="nsia_jar_present">
-		<fail>NSIA Java archive does not exist</fail>
-	</target>
-
+	
 	<!-- ================================= 
           target: assert_web_archive_exists
          ================================= -->
@@ -86,25 +86,13 @@
 	</target>
 
 	<!-- ================================= 
-          target: web_archive
+          target: assemble_web_archive
          ================================= -->
-	<target name="web_archive" description="Create the web-archive used by the NSIA web-application" >
+	<target name="assemble_web_archive" description="Create the web-archive used by the NSIA web-application" >
 		<jar destfile="lib/webConsole.war"
 	        basedir="src/webarchive"
 	    	excludes="*.svn"
 	    />
-	</target>
-
-	<!-- ================================= 
-          target: zip_package
-         ================================= -->
-	<target name="zip_package" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create the zip file used for installing NSIA">
-		<mkdir dir="${value.build.packageoutput.directory}" />
-		<zip destfile="${value.build.packageoutput.directory}/ThreatFactor NSIA(${value.build.version}).zip"
-            basedir="."
-        	includesfile="dev/include_list.txt"
-        	whenempty="create"
-        />
 	</target>
 
 	<!-- ================================= 
@@ -132,6 +120,13 @@
 	</target>
 
 	<!-- ================================= 
+          target: clean_dpkg
+         ================================= -->
+	<target name="clean_dpkg" description="Clean the files created by the Debian package creator">
+		<delete dir="${value.build.debianpackage.directory}" />
+	</target>
+	
+	<!-- ================================= 
           target: sql_shell
          ================================= -->
 	<target name="sql_shell" description="Starts the interactive interpreter used for administrating the Java database" >
@@ -157,13 +152,6 @@
 				<pathelement location="${value.build.java_output}" />
 			</classpath>
 		</java>
-	</target>
-
-	<!-- ================================= 
-          target: clean_dpkg
-         ================================= -->
-	<target name="clean_dpkg" description="Clean the files created by the Debian package creator">
-		<delete dir="${value.build.debianpackage.directory}" />
 	</target>
 
 	<!-- ================================= 
@@ -253,12 +241,24 @@
 	<!-- ================================= 
           target: package
          ================================= -->
-	<target name="package" depends="web_archive,jar,zip_package,debian_package,windows_installer_package"/>
+	<target name="package" depends="compile_core,download_definitions,assemble_web_archive,assemble_jar,package_zip,package_debian,package_windows_installer" />
 
 	<!-- ================================= 
-          target: debian_package
+          target: package_zip
          ================================= -->
-	<target name="debian_package" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
+	<target name="package_zip" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create the zip file used for installing NSIA">
+		<mkdir dir="${value.build.packageoutput.directory}" />
+		<zip destfile="${value.build.packageoutput.directory}/ThreatFactor NSIA(${value.build.version}).zip"
+            basedir="."
+        	includesfile="dev/include_list.txt"
+        	whenempty="create"
+        />
+	</target>
+	
+	<!-- ================================= 
+          target: package_debian
+         ================================= -->
+	<target name="package_debian" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
 		<mkdir dir="${value.build.packageoutput.directory}"/>
 
 		<!-- 1: Get the DebAntTask task -->
@@ -308,14 +308,14 @@
 	</target>
 
 	<!-- ================================= 
-          target: windows_installer_package
+          target: package_windows_installer
          ================================= -->
-	<target name="windows_installer_package" depends="windows_installer_package_nsis_path_undefined,windows_installer_package_nsis_path_defined" description="Creates a Windows installer" />
+	<target name="package_windows_installer" depends="package_windows_installer_nsis_path_undefined,package_windows_installer_nsis_path_defined" description="Creates a Windows installer" />
 
 	<!-- ================================= 
-          target: windows_installer_package_nsis_path_undefined
+          target: package_windows_installer_nsis_path_undefined
          ================================= -->
-	<target name="windows_installer_package_nsis_path_undefined" depends="check_nsis_path_defined,check_web_archive_exists,check_nsia_archive_exists" unless="isnsispathdefined">
+	<target name="package_windows_installer_nsis_path_undefined" depends="check_nsis_path_defined,check_web_archive_exists,check_nsia_archive_exists" unless="isnsispathdefined">
 		<taskdef name="nsis" classpath="dev/lib/nsisant-1.2.jar" classname="net.sf.nsisant.Task" />
 		<mkdir dir="${value.build.packageoutput.directory}"/>
 		<nsis script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
@@ -325,9 +325,9 @@
 	</target>
 
 	<!-- ================================= 
-          target: windows_installer_package_nsis_path_defined
+          target: package_windows_installer_nsis_path_defined
          ================================= -->
-	<target name="windows_installer_package_nsis_path_defined" depends="check_nsis_path_defined,check_web_archive_exists,check_nsia_archive_exists" if="isnsispathdefined">
+	<target name="package_windows_installer_nsis_path_defined" depends="check_nsis_path_defined,check_web_archive_exists,check_nsia_archive_exists" if="isnsispathdefined">
 		<taskdef name="nsis" classpath="dev/lib/nsisant-1.2.jar" classname="net.sf.nsisant.Task" />
 		<mkdir dir="${value.build.packageoutput.directory}"/>
 		<nsis path="${value.build.makensis.directory}" script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
