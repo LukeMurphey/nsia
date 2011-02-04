@@ -408,13 +408,16 @@
 				<fileset dir="dev/lib">
 					<include name="junit.jar" />
 				</fileset>
-				<fileset dir="bin">
-					<include name="nsia.jar" />
-				</fileset>
+				<dirset dir="${value.build.java_output}" />
 			</classpath>
+			<!-- Uncomment the following if you want more verbose output -->
 			<formatter type="brief" usefile="false" />
 			<batchtest>
-				<fileset dir="${value.build.java_output}" includes="net/lukemurphey/nsia/tests/**/*.class" />
+				<fileset dir="${value.build.java_output}" includes="net/lukemurphey/nsia/tests/**/*.class">
+					<exclude name="net/lukemurphey/nsia/tests/TestApplication.class" />
+					<exclude name="net/lukemurphey/nsia/tests/TestApplicationException.class" />
+					<exclude name="net/lukemurphey/nsia/tests/TestResources.class" />
+				</fileset>
 			</batchtest>
 		</junit>
 	</target>
