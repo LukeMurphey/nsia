@@ -33,7 +33,7 @@
 	<!-- ================================= 
           target: assemble_jar
          ================================= -->
-	<target name="assemble_jar" depends="check_default_definitions_exists,update_build_info" description="Create core NSIA JAR file">
+	<target name="assemble_jar" depends="compile_core,download_definitions,check_default_definitions_exists,update_build_info" description="Create core NSIA JAR file">
 		<!-- Create the Java archive -->
 		<jar destfile="bin/nsia.jar"
         	basedir="${value.build.java_output}" 
@@ -241,12 +241,12 @@
 	<!-- ================================= 
           target: package
          ================================= -->
-	<target name="package" depends="compile_core,download_definitions,assemble_web_archive,assemble_jar,package_zip,package_debian,package_windows_installer" />
+	<target name="package" depends="assemble_web_archive,assemble_jar,package_zip,package_debian,package_windows_installer" />
 
 	<!-- ================================= 
           target: package_zip
          ================================= -->
-	<target name="package_zip" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create the zip file used for installing NSIA">
+	<target name="package_zip" depends="assemble_web_archive,assemble_jar,check_web_archive_exists,check_nsia_archive_exists" description="Create the zip file used for installing NSIA">
 		<mkdir dir="${value.build.packageoutput.directory}" />
 		<zip destfile="${value.build.packageoutput.directory}/ThreatFactor NSIA(${value.build.version}).zip"
             basedir="."
@@ -258,7 +258,7 @@
 	<!-- ================================= 
           target: package_debian
          ================================= -->
-	<target name="package_debian" depends="check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
+	<target name="package_debian" depends="assemble_web_archive,assemble_jar,check_web_archive_exists,check_nsia_archive_exists" description="Create a Debian package using jDeb (which should allow packages to built on any platform)">
 		<mkdir dir="${value.build.packageoutput.directory}"/>
 
 		<!-- 1: Get the DebAntTask task -->
@@ -310,7 +310,7 @@
 	<!-- ================================= 
           target: package_windows_installer
          ================================= -->
-	<target name="package_windows_installer" depends="package_windows_installer_nsis_path_undefined,package_windows_installer_nsis_path_defined" description="Creates a Windows installer" />
+	<target name="package_windows_installer" depends="assemble_web_archive,assemble_jar,package_windows_installer_nsis_path_undefined,package_windows_installer_nsis_path_defined" description="Creates a Windows installer" />
 
 	<!-- ================================= 
           target: package_windows_installer_nsis_path_undefined
