@@ -405,7 +405,7 @@
           target: test
          ================================= -->
 	<target name="test" depends="compile_core,download_definitions" description="Run the unit tests">
-		<junit printsummary="on">
+		<junit printsummary="on" failureProperty="test.result.failure">
 			<classpath>
 				<fileset dir="lib">
 					<include name="**/*.jar" />
@@ -415,16 +415,20 @@
 				</fileset>
 				<dirset dir="${value.build.java_output}" />
 			</classpath>
-			<!-- Uncomment the following if you want more verbose output -->
-			<formatter type="brief" usefile="false" />
+			<!-- Uncomment the following if you want more verbose output 
+			<formatter type="brief" usefile="false" /> -->
 			<batchtest>
 				<fileset dir="${value.build.java_output}" includes="net/lukemurphey/nsia/tests/**/*.class">
 					<exclude name="net/lukemurphey/nsia/tests/TestApplication.class" />
 					<exclude name="net/lukemurphey/nsia/tests/TestApplicationException.class" />
 					<exclude name="net/lukemurphey/nsia/tests/TestResources.class" />
+					<exclude name="net/lukemurphey/nsia/tests/**/*$*.class" /> <!-- We are not going to nest test cases within other classes --> 
 				</fileset>
 			</batchtest>
 		</junit>
+		
+		<!-- Stop if an error was found -->
+		<fail message="Test failed" if="test.result.failure" />
 	</target>
 
 </project>
