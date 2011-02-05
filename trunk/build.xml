@@ -385,7 +385,7 @@
 					<include name="junit.jar" />
 				</fileset>
 			</classpath>
-			<compilerarg value="-Xlint" />
+			<compilerarg value="-Xlint:-path" />
 		</javac>
 		
 		<!-- Copy the non source code files over that may be referenced by the classes -->
