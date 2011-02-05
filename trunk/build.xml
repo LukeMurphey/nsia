@@ -241,12 +241,12 @@
 	<!-- ================================= 
           target: test_and_package
          ================================= -->
-	<target name="test_and_package" depends="test,package" />
+	<target name="test_and_package" depends="test,package" description="Perform the tests and then create the packages (if the tests succeed)" />
 	
 	<!-- ================================= 
           target: package
          ================================= -->
-	<target name="package" depends="assemble_web_archive,assemble_jar,package_zip,package_debian,package_windows_installer" />
+	<target name="package" depends="assemble_web_archive,assemble_jar,package_zip,package_debian,package_windows_installer" description="Create the various packages used for installing NSIA" />
 
 	<!-- ================================= 
           target: package_zip
