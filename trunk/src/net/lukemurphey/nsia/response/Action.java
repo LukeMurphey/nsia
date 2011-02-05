@@ -38,10 +38,20 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+/**
+ * The Action class provides a mechanism for performing various actions when an rule is finds deviations in a website.
+ * @author Luke
+ *
+ */
 public abstract class Action implements Serializable  {
 	
 	private static final long serialVersionUID = -5095063314974282138L;
 
+	/**
+	 * The message variable class represents a variable that will be used for substitution in the message.
+	 * @author Luke
+	 *
+	 */
 	public static class MessageVariable{
 		private String name;
 		private String value;
@@ -75,6 +85,11 @@ public abstract class Action implements Serializable  {
 			return value;
 		}
 		
+		/**
+		 * Get the list of message variables in the form of $variable.
+		 * @param logMessage
+		 * @return
+		 */
 		public static Vector<MessageVariable> getMessageVariables(EventLogMessage logMessage){
 			Vector<MessageVariable> vars = new Vector<MessageVariable>();
 			
@@ -97,6 +112,11 @@ public abstract class Action implements Serializable  {
 			return vars;
 		}
 		
+		/**
+		 * Get a list of template variables that are similar to the Freemarker syntax (${variable})
+		 * @param logMessage
+		 * @return
+		 */
 		public static Vector<MessageVariable> getMessageVariablesFreemarker(EventLogMessage logMessage){
 			Vector<MessageVariable> vars = new Vector<MessageVariable>();
 			
@@ -119,6 +139,13 @@ public abstract class Action implements Serializable  {
 			return vars;
 		}
 		
+		/**
+		 * Process the provided template (which contains Freemarker syntax) and perform substitution using 
+		 * the given variables.
+		 * @param templateStr
+		 * @param vars
+		 * @return
+		 */
 		public String processMessageTemplate( String templateStr, HashMap<String, Object> vars){
 			StringReader reader = new StringReader(templateStr);
 			Configuration cfg = new Configuration();
@@ -141,6 +168,12 @@ public abstract class Action implements Serializable  {
 			return null;
 		}
 		
+		/**
+		 * Process the message template and perform substitution using the supplied variables.
+		 * @param template
+		 * @param vars
+		 * @return
+		 */
 		public static String processMessageTemplate( String template, Vector<MessageVariable> vars){
 			
 			// 1 -- Identify each variable in the text
@@ -182,14 +215,36 @@ public abstract class Action implements Serializable  {
 		}
 	}
 	
+	// A description of the incident response action
 	protected String description;
+	
+	// A detailed description of the incident response action
 	protected String extendedDescription;
+	
+	// The ID of the action
 	private int actionID = -1;
 	
+	/**
+	 * Execute the action on the given log message
+	 * @param logMessage
+	 * @throws ActionFailedException
+	 */
 	public abstract void execute(EventLogMessage logMessage) throws ActionFailedException;
 	
+	/**
+	 * Execute the action based on the scan result
+	 * @param scanResult
+	 * @throws ActionFailedException
+	 */
 	public abstract void execute(ScanResult scanResult) throws ActionFailedException;
 	
+	/**
+	 * Get the complete message from the provided template using the given scan result
+	 * @param templateString
+	 * @param scanResult
+	 * @return
+	 * @throws ActionFailedException
+	 */
 	protected String getMessage(String templateString, ScanResult scanResult) throws ActionFailedException{
 		try{
 			Configuration cfg = new Configuration();
@@ -213,7 +268,7 @@ public abstract class Action implements Serializable  {
 		}
 	}
 	
-	protected Action(String description, String extenededDescription){
+	protected Action(String description, String extendedDescription){
 		
 		// 0 -- Precondition check
 		if( description == null ){
@@ -223,25 +278,50 @@ public abstract class Action implements Serializable  {
 		
 		// 1 -- Initialize the class
 		this.description = description;
-		this.extendedDescription = extenededDescription;
+		this.extendedDescription = extendedDescription;
 	}
 	
+	/**
+	 * Get a long description of the action
+	 * @return
+	 */
 	public String getUserLongDescription(){
 		return extendedDescription;
 	}
 	
+	/**
+	 * Get a short description of the action
+	 * @return
+	 */
 	public String getDescription(){
 		return description;
 	}
 	
+	/**
+	 * Get the ID of the action (this is the primary key for this entry in the database)
+	 * @return
+	 */
 	public int getActionID(){
 		return actionID;
 	}
 	
+	/**
+	 * Get the arguments that are used to configure this action
+	 * @return
+	 */
 	public abstract Hashtable<String, String> getValues();
 	
+	/**
+	 * Get the field layout with the values of this action embedded
+	 * @return
+	 */
 	public abstract FieldLayout getLayoutWithValues();
 	
+	/**
+	 * Configure the action based upon the arguments in the hashtable
+	 * @param arguments
+	 * @throws ArgumentFieldsInvalidException
+	 */
 	public void configure( Hashtable<String, String> arguments ) throws ArgumentFieldsInvalidException{
 		
 		// 1 -- Get a list of the fields that must be configured
@@ -283,6 +363,12 @@ public abstract class Action implements Serializable  {
 	 */
 	protected abstract void setField(String name, String value);
 	
+	/**
+	 * Save the configuration of this action to the database
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws IOException
+	 */
 	public void save() throws NoDatabaseConnectionException, SQLException, IOException{
 		
 		// 1 -- Get the serialized stream from the object
@@ -373,6 +459,14 @@ public abstract class Action implements Serializable  {
 		
 	}
 	
+	/**
+	 * Load the action that corresponds to the supplied ID
+	 * @param connection
+	 * @param actionID
+	 * @return
+	 * @throws SQLException
+	 * @throws ActionInstantiationException
+	 */
 	public static Action loadFromDatabase( Connection connection, int actionID ) throws SQLException, ActionInstantiationException{
 		
 		// 0 -- Precondition check
@@ -425,6 +519,13 @@ public abstract class Action implements Serializable  {
 		
 	}
 	
+	/**
+	 * Get a description of this action in terms of its configuration. For example, if an action sends
+	 * an email then this method may return tehe email address that the action is going to send to.
+	 * This helps to distinguish this action from other actions (for example, in a list in the user 
+	 * interface).
+	 * @return
+	 */
 	public abstract String getConfigDescription();
 }
 
