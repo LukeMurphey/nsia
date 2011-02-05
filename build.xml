@@ -239,6 +239,11 @@
 	</target>
 
 	<!-- ================================= 
+          target: test_and_package
+         ================================= -->
+	<target name="test_and_package" depends="test,package" />
+	
+	<!-- ================================= 
           target: package
          ================================= -->
 	<target name="package" depends="assemble_web_archive,assemble_jar,package_zip,package_debian,package_windows_installer" />
@@ -397,9 +402,9 @@
 	</target>
 
 	<!-- ================================= 
-          target: unit_test
+          target: test
          ================================= -->
-	<target name="unit_test" depends="compile_core,download_definitions" description="Run the unit tests">
+	<target name="test" depends="compile_core,download_definitions" description="Run the unit tests">
 		<junit printsummary="on">
 			<classpath>
 				<fileset dir="lib">
