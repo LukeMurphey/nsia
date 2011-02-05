@@ -220,7 +220,7 @@ public abstract class DatabaseInitializer {
 		indexList = new String[indexListVector.size()];
 		
 		for(int c = 0; c < indexListVector.size(); c++){
-			indexList[c] = (String)indexListVector.get(c);
+			indexList[c] = indexListVector.get(c);
 		}
 	}
 	
@@ -241,7 +241,7 @@ public abstract class DatabaseInitializer {
 		tableList = new String[tableListVector.size()];
 		
 		for(int c = 0; c < tableListVector.size(); c++){
-			tableList[c] = (String)tableListVector.get(c);
+			tableList[c] = tableListVector.get(c);
 		}
 	}
 	

@@ -793,7 +793,7 @@ public class SessionManagement {
 			SessionInfo[] sessionInfo = null;
 			sessionInfo = new SessionInfo[ sessionsVector.size()];
 			for( int c = 0; c < sessionsVector.size(); c++){
-				sessionInfo[c] = (SessionInfo)sessionsVector.get(c);
+				sessionInfo[c] = sessionsVector.get(c);
 			}
 			
 			// Return the result

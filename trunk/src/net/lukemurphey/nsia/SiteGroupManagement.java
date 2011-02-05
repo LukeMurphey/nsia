@@ -419,7 +419,7 @@ public class SiteGroupManagement {
 			SiteGroupDescriptor[] descriptors = new SiteGroupDescriptor[groups.size()];
 			
 			for( int d = 0; d < groups.size(); d++){
-				descriptors[d] = (SiteGroupDescriptor)groups.get(d);
+				descriptors[d] = groups.get(d);
 			}
 			
 			return descriptors;
@@ -619,7 +619,7 @@ public class SiteGroupManagement {
 		public Hashtable<String, Object> toHashtable(){
 			Hashtable<String, Object> hash = new Hashtable<String, Object>();
 			
-			hash.put("SiteGroupID", Integer.valueOf((int)groupId));
+			hash.put("SiteGroupID", Integer.valueOf(groupId));
 			hash.put("SiteGroupDescription", groupDescription);
 			hash.put("SiteGroupName", groupName);
 			hash.put("SiteGroupStatus", Integer.valueOf(groupState.ordinal()));

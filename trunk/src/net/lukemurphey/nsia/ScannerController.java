@@ -281,7 +281,7 @@ public class ScannerController extends Thread{
 						// 3 -- Wait for the dispatched threads to complete
 						while( scanThreads.size() > 0){
 							for( int c = 0; c < scanThreads.size(); c++){
-								Thread thread = (Thread) scanThreads.get(c);
+								Thread thread = scanThreads.get(c);
 								if( thread == null || !thread.isAlive() )
 									scanThreads.remove(c);
 							}
@@ -308,7 +308,7 @@ public class ScannerController extends Thread{
 					if( (System.currentTimeMillis() - waitStart) < 60000 )
 						waitTimeExceeded = true;
 					for( int c = 0; c < scanThreads.size(); c++){
-						Thread thread = (Thread) scanThreads.get(c);
+						Thread thread = scanThreads.get(c);
 						if( thread == null || !thread.isAlive() )
 							scanThreads.remove(c);
 					}
@@ -367,7 +367,7 @@ public class ScannerController extends Thread{
 		while( scanThreads.size() >= getMaxScanThreads() ){
 			//Try cleaning out any expired threads
 			for( int c = 0; c < scanThreads.size(); c++ ){
-				Thread curThread = (Thread)scanThreads.get(c);
+				Thread curThread = scanThreads.get(c);
 				if( curThread == null || !curThread.isAlive() )
 					scanThreads.remove(c);
 			}
@@ -529,7 +529,7 @@ public class ScannerController extends Thread{
 			// 2 -- Convert the vector to an array
 			ScanResult[] scanResultsArray = new ScanResult[scanResults.size()];
 			for( int c = 0; c < scanResults.size(); c++){
-				ScanResult scanResult = (ScanResult)scanResults.get(c);
+				ScanResult scanResult = scanResults.get(c);
 				scanResultsArray[c] = scanResult;
 			}
 			
@@ -772,7 +772,7 @@ public class ScannerController extends Thread{
 		// 2 -- Convert the vector to an array
 		ScanResult[] scanResultsArray = new ScanResult[scanResults.size()];
 		for( int c = 0; c < scanResults.size(); c++){
-			ScanResult scanResult = (ScanResult)scanResults.get(c);
+			ScanResult scanResult = scanResults.get(c);
 			scanResultsArray[c] = scanResult;
 		}
 		
@@ -831,7 +831,7 @@ public class ScannerController extends Thread{
 			// 2 -- Convert the vector to an array
 			ScanResult[] scanResultsArray = new ScanResult[scanResults.size()];
 			for( int c = 0; c < scanResults.size(); c++){
-				ScanResult scanResult = (ScanResult)scanResults.get(c);
+				ScanResult scanResult = scanResults.get(c);
 				scanResultsArray[c] = scanResult;
 			}
 			

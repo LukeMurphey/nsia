@@ -156,7 +156,7 @@ public class ScanRuleLoader {
 		ScanRule[] scanRules = new ScanRule[ scanRulesVector.size() ];
 		
 		for( int c = 0; c < scanRulesVector.size(); c++ ){
-			scanRules[c] = (ScanRule)scanRulesVector.get(c);
+			scanRules[c] = scanRulesVector.get(c);
 		}
 		
 		return scanRules;

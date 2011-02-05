@@ -384,7 +384,7 @@ public class HttpStaticScanRule extends ScanRule {
 		//Upload the header results to the scan result object
 		scanResult.headerResults = new HttpHeaderScanResult[headerRuleMatches.size()];
 		for(int c = 0; c < headerRuleMatches.size(); c++){
-			scanResult.headerResults[c] = (HttpHeaderScanResult)headerRuleMatches.get(c);
+			scanResult.headerResults[c] = headerRuleMatches.get(c);
 		}
 		
 		
@@ -411,7 +411,7 @@ public class HttpStaticScanRule extends ScanRule {
 		HttpHeaderScanResult headerRuleResult = null;
 		
 		for(int c = 0; c < headerRules.size(); c++){
-			HttpHeaderRule headerRule = (HttpHeaderRule)headerRules.get(c);
+			HttpHeaderRule headerRule = headerRules.get(c);
 			
 			int result = getDoesHeaderPassRule(headerName, headerValue, c);
 			
@@ -648,7 +648,7 @@ public class HttpStaticScanRule extends ScanRule {
 		
 		
 		// 1 -- Determine if the rule matches
-		HttpHeaderRule headerRule = (HttpHeaderRule)headerRules.get(headerRuleIndex);
+		HttpHeaderRule headerRule = headerRules.get(headerRuleIndex);
 		boolean ruleMatches = headerRule.doesNameMatch(headerName);
 		
 		if( ruleMatches == false )
@@ -839,7 +839,7 @@ public class HttpStaticScanRule extends ScanRule {
 		
 		// 1 -- Find the rule and remove it
 		for( int c = 0; c < headerRules.size(); c++){
-			HttpHeaderRule headerRule = (HttpHeaderRule)headerRules.get(c);
+			HttpHeaderRule headerRule = headerRules.get(c);
 			
 			//Found the rule, remove it and return
 			if( headerRule.getRuleId() == headerRuleId ){
@@ -1166,7 +1166,7 @@ public class HttpStaticScanRule extends ScanRule {
 		
 		// 1 -- Make sure the rule exists and update it in memory
 		for( int c = 0; c < headerRules.size(); c++){
-			HttpHeaderRule rule = (HttpHeaderRule)headerRules.get(c);
+			HttpHeaderRule rule = headerRules.get(c);
 			
 			//Found the rule, update it and return
 			if( rule != null && rule.getRuleId() == headerRuleId ){
@@ -1217,7 +1217,7 @@ public class HttpStaticScanRule extends ScanRule {
 		
 		HttpHeaderRule[] httpHeaderRulesArray = new HttpHeaderRule[headerRules.size()];
 		for( int c = 0; c < headerRules.size(); c++ ){
-			httpHeaderRulesArray[c] = (HttpHeaderRule)headerRules.get(c);
+			httpHeaderRulesArray[c] = headerRules.get(c);
 		}
 		
 		return httpHeaderRulesArray;
@@ -1230,7 +1230,7 @@ public class HttpStaticScanRule extends ScanRule {
 	 */
 	public HttpHeaderRule getHeaderRule( String headerName ){
 		for(int c = 0; c < headerRules.size(); c++){
-			HttpHeaderRule headerRule = (HttpHeaderRule)headerRules.get(c);
+			HttpHeaderRule headerRule = headerRules.get(c);
 			if( headerRule.doesNameMatch(headerName) )
 				return headerRule;
 		}

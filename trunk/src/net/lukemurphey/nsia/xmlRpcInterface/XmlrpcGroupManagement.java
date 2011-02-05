@@ -136,7 +136,7 @@ public class XmlrpcGroupManagement extends XmlrpcHandler {
 		
 		hashtable.put( "GroupName", groupDescriptor.getGroupName());
 		hashtable.put( "GroupDescription", groupDescriptor.getDescription());
-		hashtable.put( "GroupID", Integer.valueOf( (int)groupDescriptor.getGroupId() ));
+		hashtable.put( "GroupID", Integer.valueOf( groupDescriptor.getGroupId() ));
 		hashtable.put( "GroupStatus", Integer.valueOf( groupDescriptor.getGroupState().ordinal() ) );
 		
 		return hashtable;
@@ -162,7 +162,7 @@ public class XmlrpcGroupManagement extends XmlrpcHandler {
 		Hashtable<String, Object> hashtable = new Hashtable<String, Object>();
 		hashtable.put( "GroupName", groupDescriptor.getGroupName());
 		hashtable.put( "GroupDescription", groupDescriptor.getDescription());
-		hashtable.put( "GroupID", Integer.valueOf( (int)groupDescriptor.getGroupId() ));
+		hashtable.put( "GroupID", Integer.valueOf( groupDescriptor.getGroupId() ));
 		hashtable.put( "GroupStatus", Integer.valueOf( groupDescriptor.getGroupState().ordinal() ) );
 		
 		return hashtable;
@@ -216,7 +216,7 @@ public class XmlrpcGroupManagement extends XmlrpcHandler {
 			GroupManagement.GroupDescriptor groupDescriptor = groupDescriptors[c]; 
 			groupDesc.put( "GroupName", groupDescriptor.getGroupName());
 			groupDesc.put( "GroupDescription", groupDescriptor.getDescription());
-			groupDesc.put( "GroupID", Integer.valueOf( (int)groupDescriptor.getGroupId() ));
+			groupDesc.put( "GroupID", Integer.valueOf( groupDescriptor.getGroupId() ));
 			groupDesc.put( "GroupStatus", Integer.valueOf( groupDescriptor.getGroupState().ordinal()) );
 			
 			groupDescVector.add(groupDesc);

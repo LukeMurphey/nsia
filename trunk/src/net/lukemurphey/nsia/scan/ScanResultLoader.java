@@ -426,12 +426,12 @@ public class ScanResultLoader {
 			
 			if( getResultsAfter == true ){
 				for( int c = 0; c < scanResults.size(); c++){
-					resultsArray[resultsArray.length - 1 - c] = (ScanResult)scanResults.get(c);
+					resultsArray[resultsArray.length - 1 - c] = scanResults.get(c);
 				}
 			}
 			else{
 				for( int c = 0; c < scanResults.size(); c++){
-					resultsArray[c] = (ScanResult)scanResults.get(c);
+					resultsArray[c] = scanResults.get(c);
 				}
 			}
 			

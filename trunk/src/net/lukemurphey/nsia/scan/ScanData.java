@@ -78,7 +78,7 @@ public class ScanData  {
 			SiteGroupScanResult[] siteGroupResultsArray = new SiteGroupScanResult[siteGroupResultsVector.size()];
 			
 			for(int c = 0; c < siteGroupResultsVector.size(); c++){
-				siteGroupResultsArray[c] = (SiteGroupScanResult)siteGroupResultsVector.get(c);
+				siteGroupResultsArray[c] = siteGroupResultsVector.get(c);
 			}
 			
 			return siteGroupResultsArray;
@@ -348,7 +348,7 @@ public class ScanData  {
 			// 1.3 -- Convert to array
 			ScanResult[] scanResultListArray = new ScanResult[scanResultList.size()];
 			for( int c = 0; c < scanResultList.size(); c++){
-				scanResultListArray[c] = (ScanResult)scanResultList.get(c);
+				scanResultListArray[c] = scanResultList.get(c);
 			}
 			
 			// 2 -- Return results

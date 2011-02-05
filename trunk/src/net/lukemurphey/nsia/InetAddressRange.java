@@ -335,10 +335,10 @@ public class InetAddressRange{
 		}
 		
 		// 1 -- Compute the value
-		int addressInt = ((int)addressBytes[0]) * 16777216;
-		addressInt += ((int)addressBytes[1])* 65536;
-		addressInt += ((int)addressBytes[2])* 256;
-		addressInt += ((int)addressBytes[3]);
+		int addressInt = (addressBytes[0]) * 16777216;
+		addressInt += (addressBytes[1])* 65536;
+		addressInt += (addressBytes[2])* 256;
+		addressInt += (addressBytes[3]);
 		
 		return addressInt;
 	}

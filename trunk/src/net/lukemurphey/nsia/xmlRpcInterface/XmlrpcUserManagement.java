@@ -144,7 +144,7 @@ public class XmlrpcUserManagement extends XmlrpcHandler {
 			userInfo.put( "EmailAddress", userDescriptor.getEmailAddress());
 		
 		userInfo.put( "Username", userDescriptor.getUserName());
-		userInfo.put( "UserID", Integer.valueOf( (int)userDescriptor.getUserID() ));
+		userInfo.put( "UserID", Integer.valueOf( userDescriptor.getUserID() ));
 		userInfo.put( "UnrestrictedAccount", Boolean.valueOf( userDescriptor.isUnrestricted() ));
 		userInfo.put( "AccountStatus", Integer.valueOf( userDescriptor.getAccountStatus().ordinal() ));
 		userInfo.put( "Fullname", userDescriptor.getFullname());
@@ -175,7 +175,7 @@ public class XmlrpcUserManagement extends XmlrpcHandler {
 			if( userDescriptor[c].getEmailAddress() != null )
 					userInfo.put( "EmailAddress", userDescriptor[c].getEmailAddress().toString() );
 			userInfo.put( "Username", userDescriptor[c].getUserName());
-			userInfo.put( "UserID", Integer.valueOf( (int)userDescriptor[c].getUserID() ));
+			userInfo.put( "UserID", Integer.valueOf( userDescriptor[c].getUserID() ));
 			userInfo.put( "UnrestrictedAccount", Boolean.valueOf( userDescriptor[c].isUnrestricted() ));
 			userInfo.put( "AccountStatus", Integer.valueOf( userDescriptor[c].getAccountStatus().ordinal() ));
 			
@@ -214,7 +214,7 @@ public class XmlrpcUserManagement extends XmlrpcHandler {
 		
 		hashtable.put( "EmailAddress", userDescriptor.getEmailAddress().toString());
 		hashtable.put( "Username", userDescriptor.getUserName());
-		hashtable.put( "UserID", Integer.valueOf( (int)userDescriptor.getUserID() ) );
+		hashtable.put( "UserID", Integer.valueOf( userDescriptor.getUserID() ) );
 		hashtable.put( "UnrestrictedAccount", String.valueOf( userDescriptor.isUnrestricted() ));
 		hashtable.put( "AccountStatus", Integer.valueOf( userDescriptor.getAccountStatus().ordinal() ));
 		hashtable.put( "Fullname", userDescriptor.getFullname());
