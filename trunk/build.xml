@@ -375,7 +375,7 @@
          ================================= -->
 	<target name="compile_core" description="Compile the core Java application">
 		<mkdir dir="${value.build.java_output}" />
-		<javac destdir="${value.build.java_output}" srcdir="src" >
+		<javac destdir="${value.build.java_output}" srcdir="src" includeantruntime="false">
 			<!-- excludes="net/lukemurphey/nsia/tests/**" -->
 			<classpath>
 				<fileset dir="lib">
