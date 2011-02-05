@@ -146,7 +146,7 @@ public class XmlrpcSiteGroupManagement extends XmlrpcHandler {
 		
 		hashtable.put( "SiteGroupName", groupDescriptor.getGroupName());
 		hashtable.put( "SiteGroupDescription", groupDescriptor.getDescription());
-		hashtable.put( "SiteGroupID", Integer.valueOf( (int)groupDescriptor.getGroupId() ));
+		hashtable.put( "SiteGroupID", Integer.valueOf( groupDescriptor.getGroupId() ));
 		hashtable.put( "SiteGroupStatus", Integer.valueOf( groupDescriptor.getGroupState().ordinal() ) );
 		
 		return hashtable;
@@ -173,7 +173,7 @@ public class XmlrpcSiteGroupManagement extends XmlrpcHandler {
 			SiteGroupManagement.SiteGroupDescriptor groupDescriptor = groupDescriptors[c]; 
 			groupDesc.put( "SiteGroupName", groupDescriptor.getGroupName());
 			groupDesc.put( "SiteGroupDescription", groupDescriptor.getDescription());
-			groupDesc.put( "SiteGroupID", Integer.valueOf( (int)groupDescriptor.getGroupId() ));
+			groupDesc.put( "SiteGroupID", Integer.valueOf( groupDescriptor.getGroupId() ));
 			groupDesc.put( "SiteGroupStatus", Integer.valueOf( groupDescriptor.getGroupState().ordinal() ) );
 			
 			groupDescVector.add(groupDesc);

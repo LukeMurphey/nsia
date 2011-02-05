@@ -88,7 +88,7 @@ public class Firewall {
 		FirewallRule[] firewallRulesArray = new FirewallRule[firewallRules.size()];
 		
 		for(int c = 0; c < firewallRules.size(); c++ ){
-			firewallRulesArray[c] = (FirewallRule)firewallRules.get(c);
+			firewallRulesArray[c] = firewallRules.get(c);
 		}
 		
 		return firewallRulesArray;
@@ -198,7 +198,7 @@ public class Firewall {
 		Iterator<FirewallRule> iterator = firewallRules.iterator();
 		
 		while( iterator.hasNext() ){
-			FirewallRule currentRule = (FirewallRule)iterator.next();
+			FirewallRule currentRule = iterator.next();
 			FirewallRule.Result status = currentRule.isAccepted( address );
 			
 			if( status == FirewallRule.Result.REJECT )
@@ -233,7 +233,7 @@ public class Firewall {
 		
 		Iterator<FirewallRule> currentIterator = firewallRules.iterator();
 		while( currentIterator.hasNext() ){
-			FirewallRule firewallRule = (FirewallRule) currentIterator.next();
+			FirewallRule firewallRule = currentIterator.next();
 			
 			if( firewallRule.isAccepted( address ) != Result.NOT_MATCH )
 				matchedRules.add( firewallRule );
@@ -267,7 +267,7 @@ public class Firewall {
 		Iterator<FirewallRule> currentIterator = firewallRules.iterator();
 		
 		while( currentIterator.hasNext() ){
-			FirewallRule currentRule = (FirewallRule) currentIterator.next();
+			FirewallRule currentRule = currentIterator.next();
 			if( currentRule.getRuleId() == ruleId )
 				return currentRule;
 		}
@@ -291,7 +291,7 @@ public class Firewall {
 		// 1 -- Cycle through the rules to determine if any of them match the given ID
 		Iterator<FirewallRule> currentIterator = firewallRules.iterator();
 		while( currentIterator.hasNext() ){
-			FirewallRule currentRule = (FirewallRule) currentIterator.next();
+			FirewallRule currentRule =currentIterator.next();
 			if( currentRule.getRuleId() == ruleId )
 				return true;
 		}
@@ -325,7 +325,7 @@ public class Firewall {
 			// 2 -- Remove the rule from the firewall rule list
 			boolean ruleFound = false;
 			for( int c = 0; c < firewallRules.size(); c++ ){
-				FirewallRule firewallRule = (FirewallRule)firewallRules.get(c);
+				FirewallRule firewallRule = firewallRules.get(c);
 				if( firewallRule.getRuleId() == ruleId ){
 					firewallRules.remove(c);
 					ruleFound = true;

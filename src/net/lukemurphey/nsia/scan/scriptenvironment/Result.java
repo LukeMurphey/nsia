@@ -95,10 +95,7 @@ public class Result{
 		Object urlUnWrapped = null;
 		
 		// Unwrap the item if necessary
-		if( url instanceof NativeJavaObject ){
-			NativeJavaObject njo = (NativeJavaObject) url;
-			urlUnWrapped = njo.unwrap();
-		}
+		urlUnWrapped = url.unwrap();
 		
 		// Make sure the type is correct
 		if( urlUnWrapped instanceof URL ){

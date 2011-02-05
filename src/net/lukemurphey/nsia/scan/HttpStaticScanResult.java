@@ -335,7 +335,7 @@ public class HttpStaticScanResult extends ScanResult {
 			
 			HttpHeaderScanResult[] headerResultsArray = new HttpHeaderScanResult[headerResults.size()];
 			for ( int c = 0; c < headerResults.size(); c++)
-				headerResultsArray[c] = (HttpHeaderScanResult)headerResults.get(c);
+				headerResultsArray[c] = headerResults.get(c);
 			
 			scanResult.headerResults = headerResultsArray;
 			

@@ -1048,7 +1048,7 @@ public class AccessControl {
 		// 2 -- Produce the array version of the list
 		ObjectPermissionDescriptor[] acl = new ObjectPermissionDescriptor[aces.size()];
 		for(int c = 0; c < aces.size(); c++){
-			ObjectPermissionDescriptor entry = (ObjectPermissionDescriptor)aces.get(c);
+			ObjectPermissionDescriptor entry = aces.get(c);
 			acl[c] = entry;
 		}
 		

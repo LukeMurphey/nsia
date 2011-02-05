@@ -1436,7 +1436,7 @@ public final class Application {
 			
 			String[] warningsArray = new String[warnings.size()];
 			for( int c = 0; c < warnings.size(); c++ ){
-				warningsArray[c] = (String)warnings.get(c);
+				warningsArray[c] = warnings.get(c);
 			}
 			
 			return warningsArray;
@@ -1780,7 +1780,7 @@ public final class Application {
 		statusEntriesArray = new StatusEntry[statusEntries.size()];
 
 		for(int c = 0; c < statusEntries.size(); c++){
-			statusEntriesArray[c] = (StatusEntry)statusEntries.get(c);
+			statusEntriesArray[c] = statusEntries.get(c);
 		}
 		
 		return new ApplicationStatusDescriptor( statusEntriesArray );

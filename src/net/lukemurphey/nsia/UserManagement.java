@@ -201,7 +201,7 @@ public class UserManagement {
 			// 2 -- Convert the vector to an array
 			UserDescriptor[] userDescriptorsArray = new UserDescriptor[userDescriptors.size()];
 			for( int c = 0; c < userDescriptors.size(); c++ ){
-				userDescriptorsArray[c] = (UserDescriptor)userDescriptors.get(c);
+				userDescriptorsArray[c] = userDescriptors.get(c);
 			}
 			
 			return userDescriptorsArray;

@@ -472,7 +472,7 @@ public class GroupManagement {
 			GroupDescriptor[] descriptors = new GroupDescriptor[groups.size()];
 			
 			for( int d = 0; d < groups.size(); d++){
-				descriptors[d] = (GroupDescriptor)groups.get(d);
+				descriptors[d] = groups.get(d);
 			}
 			
 			return descriptors;
