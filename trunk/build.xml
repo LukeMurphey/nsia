@@ -99,11 +99,11 @@
           target: clean
          ================================= -->
 	<target name="clean" description="Clean up archives creating by this build script" >
-		<delete>
-			<fileset file="tmp/packages" />
+		<delete includeEmptyDirs="true">
+			<fileset dir="tmp/packages" />
 			<fileset file="bin/nsia.jar" />
 			<fileset file="lib/webConsole.war" />
-			<fileset file="${value.build.java_output}" />
+			<fileset dir="${value.build.java_output}" />
 		</delete>
 	</target>
 
