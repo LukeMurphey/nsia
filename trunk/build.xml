@@ -389,8 +389,8 @@
 		</javac>
 		
 		<!-- Copy the non source code files over that may be referenced by the classes -->
-		<copy todir="${value.build.java_output}">
-			<fileset dir="src">
+		<copy todir="${value.build.java_output}/net">
+			<fileset dir="src/net">
 				<exclude name="**/*.java"/>
 			</fileset>
 		</copy>
