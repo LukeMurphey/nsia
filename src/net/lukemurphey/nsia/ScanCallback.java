@@ -2,6 +2,7 @@ package net.lukemurphey.nsia;
 
 import java.sql.SQLException;
 
+import net.lukemurphey.nsia.SiteGroupManagement.SiteGroupDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
@@ -127,18 +128,30 @@ public class ScanCallback {
 			}
 			
 			// Get the ID of the site group associated with the rule and add it to the list of details 
-			long siteGroupID = -1;
+			int siteGroupID = -1;
 			
 			try {
 				siteGroupID = ScanRule.getSiteGroupForRule(scanRuleID);
 				
 				if( siteGroupID >= 0 ){
 					logMessage.addField(new EventLogField(FieldName.SITE_GROUP_ID, siteGroupID));
+					
+					// Try to get the site group name
+					SiteGroupManagement siteGroupManagement = new SiteGroupManagement(this.application);
+					SiteGroupDescriptor siteGroup = siteGroupManagement.getGroupDescriptor(siteGroupID);
+					
+					if( siteGroup != null ){
+						logMessage.addField(new EventLogField(FieldName.SITE_GROUP_NAME, siteGroup.getGroupName()));
+					}
 				}
 			} catch (SQLException e) {
 				application.logExceptionEvent(new EventLogMessage(EventLogMessage.EventType.SQL_EXCEPTION), e);
 			} catch (NoDatabaseConnectionException e) {
 				application.logExceptionEvent(new EventLogMessage(EventLogMessage.EventType.SQL_EXCEPTION), e);
+			} catch (InputValidationException e) {
+				application.logExceptionEvent(new EventLogMessage(EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Unable to get the site-group name when creating a message")), e);
+			} catch (NotFoundException e) {
+				application.logExceptionEvent(new EventLogMessage(EventLogMessage.EventType.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Unable to get the site-group name when creating a message")), e);
 			}
 			
 			// Add various related fields
