@@ -182,6 +182,7 @@ public abstract class Definition {
 		public final static Type RHSA = new Type(11, "http://rhn.redhat.com/errata/", ".html");
 		public final static Type MICROSOFT_KB = new Type(12, "http://support.microsoft.com/kb/");
 		public final static Type MICROSOFT_SB = new Type(13, "http://www.microsoft.com/technet/security/bulletin/", ".mspx");
+		public final static Type CWE = new Type(14, "http://cwe.mitre.org/data/definitions/", ".html");
 		
 		/**
 		 * This class represents the possible Snort reference types.
@@ -287,6 +288,9 @@ public abstract class Definition {
 			}
 			else if( type.equalsIgnoreCase("microsoft_bulletin") ){
 				return new Reference(Reference.MICROSOFT_SB, argument);
+			}
+			else if( type.equalsIgnoreCase("cwe") ){
+				return new Reference(Reference.CWE, argument);
 			}
 			else{
 				throw new InvalidDefinitionException("Reference name (\"" + type + "\" is invalid");
