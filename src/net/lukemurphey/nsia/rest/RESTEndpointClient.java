@@ -75,7 +75,15 @@ public class RESTEndpointClient {
 		HttpClient client = new HttpClient(getConnectionManager());
 
 		// Supply credentials if defined
-		if( id != null ){
+		if( password != null ){
+			
+			// If the id is not defined, then just set it to an empty string
+			String id = this.id;
+			
+			if( id == null ){
+				id = "";
+			}
+			
 			client.getState().setCredentials(
 					new AuthScope(url.getHost(), url.getPort(), "threatfactor_nsia"),
 					new UsernamePasswordCredentials(id, password)
