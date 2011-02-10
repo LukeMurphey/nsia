@@ -391,7 +391,9 @@ public final class Application {
 					}
 					
 					// 1.2b -- If the error is due to the fact that the database does not exist, then try to create it
-					if( e.getMessage().equalsIgnoreCase("Cannot create PoolableConnectionFactory (Database '" + embeddedDatabasePath + "' not found.)")){
+					File databaseFile = new File(embeddedDatabasePath);
+					
+					if( databaseFile.exists() == false || e.getMessage().equalsIgnoreCase("Cannot create PoolableConnectionFactory (Database '" + embeddedDatabasePath + "' not found.)")){
 						System.out.print("Creating and initializing the internal database...");
 						try{
 							connectToInternalDatabase(true);
