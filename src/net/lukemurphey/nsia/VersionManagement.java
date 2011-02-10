@@ -37,7 +37,7 @@ public class VersionManagement {
 	 * Indicates if a newer version of NSIA is available.
 	 * @param dontBlock
 	 * @return
-	 * @throws XmlRpcException
+	 * @throws RESTRequestFailedException
 	 * @throws IOException
 	 */
 	public static boolean isNewerVersionAvailable( boolean dontBlock ) throws RESTRequestFailedException, IOException{
