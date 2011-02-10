@@ -7,8 +7,6 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.xmlrpc.XmlRpcException;
-
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.ApplicationVersionDescriptor;
 import net.lukemurphey.nsia.VersionManagement;
