@@ -88,14 +88,15 @@ public class RESTEndpointClient {
 					new AuthScope(url.getHost(), url.getPort(), "threatfactor_nsia"),
 					new UsernamePasswordCredentials(id, password)
 			);
+			
+			/* The parameter below will cause the HTTP client to provide the authentication credentials during the first
+			 * HTTP request. Otherwise, two HTTP requests will be performed.
+			 *
+			 * See http://hc.apache.org/httpclient-3.x/authentication.html#Preemptive_Authentication for details.
+			 */
+			client.getParams().setAuthenticationPreemptive(true);
 		}
 
-		/* The parameter below will cause the HTTP client to provide the authentication credentials during the first
-		 * HTTP request. Otherwise, two HTTP requests will be performed.
-		 *
-		 * See http://hc.apache.org/httpclient-3.x/authentication.html#Preemptive_Authentication for details.
-		 */
-		client.getParams().setAuthenticationPreemptive(true);
 		return client;
 	}
 	
