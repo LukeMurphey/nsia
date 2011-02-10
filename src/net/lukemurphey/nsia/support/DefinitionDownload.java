@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
+import net.lukemurphey.nsia.rest.DefinitionsDownload;
 import net.lukemurphey.nsia.rest.RESTRequestFailedException;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
-import net.lukemurphey.nsia.scan.DefinitionUpdateFailedException;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
 
 import com.martiansoftware.jsap.FlaggedOption;
@@ -102,13 +102,13 @@ public class DefinitionDownload {
 			}
 			
 			// Get the definitions as XML
-			definitionsXML = DefinitionArchive.getCurrentDefinitionsAsString(licenseKey);
+			definitionsXML = DefinitionsDownload.getDefinitionsAsString(licenseKey, "Command-line");
 			
 			// Print a message indicating that definition are downloaded
 			if( verbose){
 				System.out.println("Done");
 			}
-		} catch (DefinitionUpdateFailedException e) {
+		} catch (RESTRequestFailedException e) {
 			System.err.println();
             System.err.println("Unable to retrieve the definitions from threatfactor.com");
             System.exit(1);
