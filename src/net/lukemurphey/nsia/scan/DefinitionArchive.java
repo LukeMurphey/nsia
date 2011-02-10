@@ -30,18 +30,18 @@ import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.NotFoundException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
+import net.lukemurphey.nsia.rest.DefinitionsDownload;
+import net.lukemurphey.nsia.rest.DefinitionsInfo;
+import net.lukemurphey.nsia.rest.RESTRequestFailedException;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionMatchResultSet;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionType;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
 
-import org.apache.xmlrpc.XmlRpcClient;
-import org.apache.xmlrpc.XmlRpcException;
-
 public class DefinitionArchive {
-	
-	public static final String DEFINITION_SUPPORT_API_URL = "https://threatfactor.com/xmlrpc/";
 	
 	/* The definition version refers to the format of the definitions that definition engine accepts. As updates to the scanning engine are released,
 	 * older scanning engines can still receive definitions updates though they won't be able to accept new definitions that use the updated
@@ -440,29 +440,22 @@ public class DefinitionArchive {
 	/**
 	 * Gets the date of the latest definitions set from the server.
 	 * @return
-	 * @throws XmlRpcException
+	 * @throws RESTRequestFailedException
 	 * @throws IOException
 	 * @throws ParseException 
+	 * @throws RESTRequestFailedException 
 	 */
-	public static Date getLatestAvailableDefinitionSetDate() throws XmlRpcException, IOException, ParseException{
-		XmlRpcClient client = new XmlRpcClient( DEFINITION_SUPPORT_API_URL );
+	public static Date getLatestAvailableDefinitionSetDate() throws IOException, ParseException, RESTRequestFailedException{
 		
-		Vector<Integer> params = new Vector<Integer>();
-		params.add( Integer.valueOf(DEFINITION_VERSION) );
+		DefinitionsInfo info = new DefinitionsInfo();
+		DefinitionVersionID version = info.getCurrentDefinitionsVersion();
 		
-		SimpleDateFormat dateFormat = new SimpleDateFormat(DefinitionSet.DEFINITION_SET_DATE_FORMAT);
-		
-		Object result = client.execute( "Definitions.latestDate", params );
-		
-		if ( result != null && result instanceof XmlRpcException ){
-			throw (XmlRpcException)result;
+		if( version != null && version.getRevisionDate() != null ){
+			return version.getRevisionDate();
 		}
-        if ( result != null && result instanceof String ){
-            return dateFormat.parse(result.toString());
-        }
-        else{
-        	return null;
-        }
+		else{
+			return null;
+		}
 	}
 	
 	/*
@@ -480,7 +473,7 @@ public class DefinitionArchive {
 			}
 			
 		}
-		catch (XmlRpcException e) {
+		catch (RESTRequestFailedException e) {
 			Application.getApplication().getEventLog().logEvent( new EventLogMessage(EventType.DEFINITION_UPDATE_REQUEST_FAILED));
 		}
 		catch (IOException e) {
@@ -498,30 +491,33 @@ public class DefinitionArchive {
 	 */
 	public static String getCurrentDefinitionsAsString(String key) throws DefinitionUpdateFailedException{
 		
+		String uniqueInstallID = null;
+		
+		// Try to get the unique installation identifier
 		try{
-			XmlRpcClient client = new XmlRpcClient( DEFINITION_SUPPORT_API_URL );
-			
-			Vector<Object> params = new Vector<Object>();
-			params.add( Integer.valueOf(DEFINITION_VERSION) );
-			params.add( key );
-			
-			Object result = client.execute( "Definitions.latestDefinitions", params );
-	
-			if ( result != null && result instanceof XmlRpcException ){
-				throw new DefinitionUpdateFailedException( "Error when attempting to retrieve definition updates from server", (XmlRpcException)result );
-			}
-	        if ( result != null && result instanceof String ){
-	            String definitionsXml = (String)result;
-	            
-	            return definitionsXml;
-	        }
-	        else{
-	        	return null;
-	        }
-		} catch(XmlRpcException e){
-			throw new DefinitionUpdateFailedException( "Error when attempting to retrieve definition updates from server", e );
-		} catch (IOException e) {
-			throw new DefinitionUpdateFailedException( "Error when attempting to retrieve definition updates from server", e );
+			Application.getApplication().getApplicationConfiguration().getUniqueInstallationID();
+		}
+		catch(InputValidationException e){
+			//Could not get a unique install ID. Log the problem and just use an empty string.
+			uniqueInstallID = "";
+			Application.getApplication().logExceptionEvent( new EventLogMessage( EventType.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Unable to get unique installation identifier") ), e);
+		} catch (NoDatabaseConnectionException e) {
+			//Could not get a unique install ID. Log the problem and just use an empty string.
+			uniqueInstallID = "";
+			Application.getApplication().logExceptionEvent( new EventLogMessage( EventType.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Unable to get unique installation identifier") ), e);
+		} catch (SQLException e) {
+			//Could not get a unique install ID. Log the problem and just use an empty string.
+			uniqueInstallID = "";
+			Application.getApplication().logExceptionEvent( new EventLogMessage( EventType.INTERNAL_ERROR, new EventLogField(FieldName.MESSAGE, "Unable to get unique installation identifier") ), e);
+		}
+		
+		// Get the definitions as a string
+		try{
+			DefinitionsDownload definitionsDownload = new DefinitionsDownload(uniqueInstallID, key);
+			return definitionsDownload.getDefinitionsAsString();
+		}
+		catch(RESTRequestFailedException e){
+			throw new DefinitionUpdateFailedException(e);
 		}
 	}
 	
@@ -594,8 +590,8 @@ public class DefinitionArchive {
 	 * Retrieves the latest set of definitions from the server and applies them.
 	 * @return
 	 * @throws IOException 
-	 * @throws XmlRpcException 
-	 * @throws DefinitionSetLoadException 
+	 * @throws RESTRequestFailedException
+	 * @throws DefinitionSetLoadException
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 * @throws DefinitionArchiveException 
@@ -646,26 +642,15 @@ public class DefinitionArchive {
 	/**
 	 * Gets the version identifier of the latest definition set from the server.
 	 * @return
-	 * @throws XmlRpcException
+	 * @throws RESTRequestFailedException
 	 * @throws IOException
 	 */
-	public static DefinitionVersionID getLatestAvailableDefinitionSetID() throws XmlRpcException, UnknownHostException, IOException{
-		XmlRpcClient client = new XmlRpcClient( DEFINITION_SUPPORT_API_URL );
+	public static DefinitionVersionID getLatestAvailableDefinitionSetID() throws RESTRequestFailedException, UnknownHostException, IOException{
 		
-		Vector<Integer> params = new Vector<Integer>();
-		params.add( Integer.valueOf(DEFINITION_VERSION) );
+		DefinitionsInfo info = new DefinitionsInfo();
+		DefinitionVersionID version = info.getCurrentDefinitionsVersion();
 		
-		Object result = client.execute( "Definitions.latestID", params );
-
-		if ( result != null && result instanceof XmlRpcException ){
-			throw (XmlRpcException)result;
-		}
-        if ( result != null && result instanceof String ){
-            return new DefinitionVersionID( result.toString() );
-        }
-        else{
-        	return null;
-        }
+		return version;
 	}
 	
 	/**

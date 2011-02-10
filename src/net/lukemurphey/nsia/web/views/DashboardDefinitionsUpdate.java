@@ -7,13 +7,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.xmlrpc.XmlRpcException;
-
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
+import net.lukemurphey.nsia.rest.RESTRequestFailedException;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionSet;
 import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
@@ -109,7 +108,7 @@ public class DashboardDefinitionsUpdate extends View {
 				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
 			} catch (InputValidationException e) {
 				Application.getApplication().getEventLog().logExceptionEvent( new EventLogMessage(EventType.INTERNAL_ERROR) , e);
-			} catch (XmlRpcException e) {
+			} catch (RESTRequestFailedException e) {
 				Application.getApplication().getEventLog().logEvent( new EventLogMessage(EventType.DEFINITION_UPDATE_REQUEST_FAILED));
 			} catch (IOException e) {
 				Application.getApplication().getEventLog().logEvent( new EventLogMessage(EventType.DEFINITION_UPDATE_REQUEST_FAILED));

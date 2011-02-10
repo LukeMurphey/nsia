@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.xmlrpc.XmlRpcException;
 
 import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.rest.RESTRequestFailedException;
 import net.lukemurphey.nsia.scan.Definition;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionSet;
@@ -173,7 +173,7 @@ public class DefinitionsView extends View {
 			
 			try {
 				data.put("latest_definitions", DefinitionArchive.getLatestAvailableDefinitionSetID());
-			} catch (XmlRpcException e) {
+			} catch (RESTRequestFailedException e) {
 				//Unable to get information on newest version
 			} catch (IOException e) {
 				//Unable to get information on newest version

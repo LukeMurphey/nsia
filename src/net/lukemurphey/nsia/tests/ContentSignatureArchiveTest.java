@@ -2,12 +2,11 @@ package net.lukemurphey.nsia.tests;
 
 import java.io.IOException;
 
-import org.apache.xmlrpc.XmlRpcException;
-
 import junit.framework.TestCase;
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.rest.RESTRequestFailedException;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
 import net.lukemurphey.nsia.scan.DefinitionUpdateFailedException;
@@ -24,7 +23,7 @@ public class ContentSignatureArchiveTest extends TestCase {
 		TestApplication.stopApplication();
 	}
 	
-	public void testGetLatestID() throws XmlRpcException, IOException{
+	public void testGetLatestID() throws RESTRequestFailedException, IOException{
 		DefinitionVersionID latestID = DefinitionArchive.getLatestAvailableDefinitionSetID();
 		
 		if( latestID == null ){
@@ -38,7 +37,7 @@ public class ContentSignatureArchiveTest extends TestCase {
 		}
 	}
 	
-	public void testRevisionIDParse() throws XmlRpcException, IOException{
+	public void testRevisionIDParse() throws IOException{
 		
 		DefinitionVersionID rev = new DefinitionVersionID("1.2 beta");
 		
@@ -47,7 +46,7 @@ public class ContentSignatureArchiveTest extends TestCase {
 		}
 	}
 	
-	public void testRevisionDate() throws XmlRpcException, IOException, ParseException{
+	public void testRevisionDate() throws RESTRequestFailedException, IOException, ParseException{
 		
 		Date date = DefinitionArchive.getLatestAvailableDefinitionSetDate();
 		

@@ -3,9 +3,8 @@ package net.lukemurphey.nsia.trustBoundary;
 import java.io.IOException;
 import java.sql.*;
 
-import org.apache.xmlrpc.XmlRpcException;
-
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.ApplicationVersionDescriptor;
 import net.lukemurphey.nsia.DelayedShutdown;
 import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.GenericUtils;
@@ -22,6 +21,7 @@ import net.lukemurphey.nsia.UserManagement.UserDescriptor;
 import net.lukemurphey.nsia.eventlog.EventLogField;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.rest.RESTRequestFailedException;
 
 /**
  * Class provides an interface to the system configuration and status methods.
@@ -534,10 +534,10 @@ public class ApiSystem extends ApiHandler{
 	 * @return
 	 * @throws GeneralizedException
 	 */
-	public String getNewestVersionAvailableID( boolean dontBlock) throws GeneralizedException{
+	public ApplicationVersionDescriptor getNewestVersionAvailableID( boolean dontBlock) throws GeneralizedException{
 		try {
 			return VersionManagement.getNewestVersionAvailableID( dontBlock );
-		} catch (XmlRpcException e) {
+		} catch (RESTRequestFailedException e) {
 			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (IOException e) {
@@ -548,8 +548,8 @@ public class ApiSystem extends ApiHandler{
 	
 	public boolean isNewerVersionAvailableID( boolean dontBlock) throws GeneralizedException{
 		try {
-			return VersionManagement.isNewerVersionAvailableID( dontBlock );
-		} catch (XmlRpcException e) {
+			return VersionManagement.isNewerVersionAvailable( dontBlock );
+		} catch (RESTRequestFailedException e) {
 			appRes.logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 			throw new GeneralizedException();
 		} catch (IOException e) {
