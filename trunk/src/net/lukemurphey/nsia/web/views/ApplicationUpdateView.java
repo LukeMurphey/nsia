@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.xmlrpc.XmlRpcException;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.ApplicationVersionDescriptor;
 import net.lukemurphey.nsia.VersionManagement;
 import net.lukemurphey.nsia.eventlog.EventLogMessage;
+import net.lukemurphey.nsia.rest.RESTRequestFailedException;
 import net.lukemurphey.nsia.web.Link;
 import net.lukemurphey.nsia.web.Menu;
 import net.lukemurphey.nsia.web.RequestContext;
@@ -37,8 +39,12 @@ public class ApplicationUpdateView extends View {
 	
 	public static String getNewestVersionAvailableID( boolean dontBlock){
 		try {
-			return VersionManagement.getNewestVersionAvailableID( dontBlock );
-		} catch (XmlRpcException e) {
+			ApplicationVersionDescriptor versionInfo = VersionManagement.getNewestVersionAvailableID( dontBlock );
+			
+			if( versionInfo != null ){
+				return versionInfo.toString();
+			}
+		} catch (RESTRequestFailedException e) {
 			Application.getApplication().logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
 		} catch (IOException e) {
 			Application.getApplication().logExceptionEvent( EventLogMessage.EventType.INTERNAL_ERROR, e );
@@ -70,10 +76,10 @@ public class ApplicationUpdateView extends View {
 		data.put("title", "Version Update");
 		
 		try{
-			data.put("is_newer",  VersionManagement.isNewerVersionAvailableID( true ));
+			data.put("is_newer", VersionManagement.isNewerVersionAvailable( true ));
 			data.put("new_version", getNewestVersionAvailableID(true));
 		}
-		catch(XmlRpcException e){
+		catch(RESTRequestFailedException e){
 			//Ignore, dialog will display a warning because the version could not be obtained
 			data.put("is_newer", true);
 		}

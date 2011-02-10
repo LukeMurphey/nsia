@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
-import org.apache.xmlrpc.XmlRpcException;
-
+import net.lukemurphey.nsia.rest.RESTRequestFailedException;
 import net.lukemurphey.nsia.scan.DefinitionArchive;
 import net.lukemurphey.nsia.scan.DefinitionUpdateFailedException;
 import net.lukemurphey.nsia.scan.DefinitionSet.DefinitionVersionID;
@@ -63,7 +62,7 @@ public class DefinitionDownload {
 			//System.out.print("Getting definition set version information from threatfactor.com...");
 			definitionVersionID = DefinitionArchive.getLatestAvailableDefinitionSetID();
 			//System.out.println("Done");
-		} catch (XmlRpcException e) {
+		} catch (RESTRequestFailedException e) {
 			System.out.println("Unable to get version of current definitions: " + e.getMessage());
 		} catch (IOException e) {
 			System.out.println("Unable to get version of current definitions: " + e.getMessage());
@@ -80,7 +79,7 @@ public class DefinitionDownload {
 			//System.out.print("Getting definition set date from threatfactor.com...");
 			definitionDate = DefinitionArchive.getLatestAvailableDefinitionSetDate();
 			//System.out.println("Done");
-		} catch (XmlRpcException e) {
+		} catch (RESTRequestFailedException e) {
 			System.out.println("Unable to get date of current definitions: " + e.getMessage());
 		} catch (IOException e) {
 			System.out.println("Unable to get date of current definitions: " + e.getMessage());

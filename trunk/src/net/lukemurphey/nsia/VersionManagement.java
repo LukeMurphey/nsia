@@ -1,11 +1,9 @@
 package net.lukemurphey.nsia;
 
 import java.io.IOException;
-import java.util.Vector;
 
-
-import org.apache.xmlrpc.XmlRpcClient;
-import org.apache.xmlrpc.XmlRpcException;
+import net.lukemurphey.nsia.rest.ApplicationVersionInfo;
+import net.lukemurphey.nsia.rest.RESTRequestFailedException;
 
 /**
  * Provides mechanisms for determining if a newer version of NSIA is available.
@@ -14,24 +12,19 @@ import org.apache.xmlrpc.XmlRpcException;
  */
 public class VersionManagement {
 
-	private static final String NSIA_SUPPORT_API_URL = "https://threatfactor.com/xmlrpc/";
-	private static String cachedVersionInfo = null;
+	private static ApplicationVersionDescriptor cachedVersionInfo = null;
 	private static boolean versionBeingChecked = false;
 	private static long versionLastChecked = -1;
 	
-	private static synchronized String getVersionID() throws XmlRpcException, IOException{
-		XmlRpcClient client = new XmlRpcClient( NSIA_SUPPORT_API_URL );
+	private static synchronized ApplicationVersionDescriptor getVersionID() throws RESTRequestFailedException, IOException{
 		
-		Vector<String> params = new Vector<String>();
-		params.add("release");
+		ApplicationVersionInfo appInfo = new ApplicationVersionInfo();
 		
-		Object result = client.execute( "NSIA.latestVersion", params );
-
-		if ( result != null && result instanceof XmlRpcException ){
-			throw (XmlRpcException)result;
-		}
-        if ( result != null && result instanceof String && result.toString().length() > 0 ){
-        	cachedVersionInfo = result.toString();
+		ApplicationVersionDescriptor result = appInfo.getCurrentApplicationVersion();
+		
+		
+        if ( result != null ){
+        	cachedVersionInfo = result;
         }
         else{
         	cachedVersionInfo = null;
@@ -47,15 +40,14 @@ public class VersionManagement {
 	 * @throws XmlRpcException
 	 * @throws IOException
 	 */
-	public static boolean isNewerVersionAvailableID( boolean dontBlock ) throws XmlRpcException, IOException{
+	public static boolean isNewerVersionAvailable( boolean dontBlock ) throws RESTRequestFailedException, IOException{
 		
-		String version = getNewestVersionAvailableID(dontBlock);
+		ApplicationVersionDescriptor latestAvailable = getNewestVersionAvailableID(dontBlock);
 		
-		if( version == null || version.length() == 0){
+		if( latestAvailable == null ){
 			return false;
 		}
 		
-		ApplicationVersionDescriptor latestAvailable = new ApplicationVersionDescriptor(version);
 		ApplicationVersionDescriptor current = new ApplicationVersionDescriptor(Application.getVersion());
 		
 		if( ApplicationVersionDescriptor.isLaterVersion(current, latestAvailable) ){
@@ -70,10 +62,10 @@ public class VersionManagement {
 	 * Get the newest available version ID for NSIA.
 	 * @param dontBlock
 	 * @return
-	 * @throws XmlRpcException
+	 * @throws RESTRequestFailedException
 	 * @throws IOException
 	 */
-	public static synchronized String getNewestVersionAvailableID( boolean dontBlock ) throws XmlRpcException, IOException{
+	public static synchronized ApplicationVersionDescriptor getNewestVersionAvailableID( boolean dontBlock ) throws RESTRequestFailedException, IOException{
 		
 		// 1.1 -- Determine if the cached version information is recent (check every 4 hours or 14400000 seconds)
 		boolean lastCheckFresh = (versionLastChecked + 14400000) > System.currentTimeMillis();
@@ -123,10 +115,15 @@ public class VersionManagement {
 		
 	}
 	
-	public static boolean isUpdateAvailable() throws XmlRpcException, IOException{
-		String latestVersion = getNewestVersionAvailableID( false );
+	/**
+	 * Returns a boolean indicating if a newer version of the application is available.
+	 * @return
+	 * @throws RESTRequestFailedException
+	 * @throws IOException
+	 */
+	public static boolean isUpdateAvailable() throws RESTRequestFailedException, IOException{
+		ApplicationVersionDescriptor latestAvailable = getNewestVersionAvailableID( false );
 		
-		ApplicationVersionDescriptor latestAvailable = new ApplicationVersionDescriptor(latestVersion);
 		ApplicationVersionDescriptor current = new ApplicationVersionDescriptor(Application.getVersion());
 		
 		if( ApplicationVersionDescriptor.isLaterVersion(current, latestAvailable) ){

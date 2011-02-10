@@ -6,10 +6,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.xmlrpc.XmlRpcException;
-
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.VersionManagement;
+import net.lukemurphey.nsia.rest.RESTRequestFailedException;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.URLInvalidException;
 import net.lukemurphey.nsia.web.View;
@@ -26,7 +25,7 @@ public class DashboardVersionPanel extends View {
 	public String getPanel( HttpServletRequest request, Map<String, Object> data, Application app) throws ViewFailedException{
 		
 		try{
-			if( VersionManagement.isNewerVersionAvailableID( true ) ){
+			if( VersionManagement.isNewerVersionAvailable( true ) ){
 				String newestVersion = ApplicationUpdateView.getNewestVersionAvailableID(true);
 				data.put("new_version", newestVersion);
 				return TemplateLoader.renderToString("DashboardVersionWarning.ftl", data);
@@ -34,7 +33,7 @@ public class DashboardVersionPanel extends View {
 		}
 		catch(IOException e){
 			throw new ViewFailedException(e);
-		} catch (XmlRpcException e) {
+		} catch (RESTRequestFailedException e) {
 			throw new ViewFailedException(e);
 		}
 		
