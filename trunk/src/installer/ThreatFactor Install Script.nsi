@@ -76,7 +76,7 @@ Page custom LoginPasswordForm LoginPasswordFormLeave
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 
 !ifndef OUT_FILE
-    OutFile "../../tmp/packages/ThreatFactor NSIA Setup(${VERSION}).exe"
+    OutFile "../../tmp/packages/ThreatFactor NSIA Setup(${PRODUCT_VERSION}).exe"
 !endif
 
 !ifdef OUT_FILE
