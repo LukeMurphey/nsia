@@ -84,20 +84,26 @@ public class DefinitionsImportView extends View {
 					    	// Get the file as a string
 					    	String xmlString = getString( stream, 16000000 );
 					    	
-					    	// Import the XML string
-					    	DefinitionArchive archive = DefinitionArchive.getArchive();
-							archive.updateDefinitions(xmlString, false);
-							
-							// Log that the import occurred
-							Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITION_SET_UPDATED, new EventLogField[]{
-									new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),
-									new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getSessionInfo().getUserId() ),
-									new EventLogField( EventLogField.FieldName.IMPORT_SOURCE, "Local file" )} );
-							
-							// Give the user a message
-							context.addMessage("Definitions successfully imported", MessageSeverity.SUCCESS);
-							response.sendRedirect( StandardViewList.getURL(DefinitionsView.VIEW_NAME) );
-							return true;
+					    	// Make sure that the definitions are valid
+					    	if( xmlString == null || xmlString.length() == 0 ){
+					    		context.addMessage("Definition file is not valid (is empty)", MessageSeverity.WARNING);
+					    	}
+					    	else{
+						    	// Import the XML string
+						    	DefinitionArchive archive = DefinitionArchive.getArchive();
+								archive.updateDefinitions(xmlString, false);
+								
+								// Log that the import occurred
+								Application.getApplication().logEvent(EventLogMessage.EventType.DEFINITION_SET_UPDATED, new EventLogField[]{
+										new EventLogField( EventLogField.FieldName.SOURCE_USER_NAME, context.getSessionInfo().getUserName() ),
+										new EventLogField( EventLogField.FieldName.SOURCE_USER_ID, context.getSessionInfo().getUserId() ),
+										new EventLogField( EventLogField.FieldName.IMPORT_SOURCE, "Local file" )} );
+								
+								// Give the user a message
+								context.addMessage("Definitions successfully imported", MessageSeverity.SUCCESS);
+								response.sendRedirect( StandardViewList.getURL(DefinitionsView.VIEW_NAME) );
+								return true;
+					    	}
 					    }
 					}
 				}
