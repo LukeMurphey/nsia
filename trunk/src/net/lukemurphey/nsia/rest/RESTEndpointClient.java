@@ -45,7 +45,7 @@ public class RESTEndpointClient {
 	
 	public final int SOCKET_TIMEOUT = 5 * 60 * 1000; // 5 minutes; this timeout applies to the time it takes for the socket to return data (not including the data to initiate the connection, see below for the connection timeout)
 	public final int CONNECTION_TIMEOUT = 30 * 1000; // 30 seconds; this timeout applies to the time it takes to initiate a TCP connection to the manager
-	public final int REQUEST_TIMEOUT = 30 * 60 * 1000; //30 minutes; this timeout applies to the time that the entire request takes (even if a successful TCP connection is made and the socket returns some data)
+	public final int REQUEST_TIMEOUT = 1 * 60 * 1000; //1 minute; this timeout applies to the time that the entire request takes (even if a successful TCP connection is made and the socket returns some data)
 	
 	// The HTTP connection manager the configured the HTTP client
 	protected HttpConnectionManager manager = null;
@@ -321,9 +321,9 @@ public class RESTEndpointClient {
 			method.releaseConnection();
 			
 			// Terminate the timeout thread
-			synchronized ( timeoutMutex) {
+			synchronized ( timeoutMutex ) {
 				timeoutThread.terminate();
-				//timeoutThread.notify();
+				timeoutMutex.notify();
 			}
 			
 			// Close any idle connections
