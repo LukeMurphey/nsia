@@ -1,7 +1,7 @@
 <project default="package" name="nsia">
 
 	<!--
-	Load the properties files, Local is loaded first since properties are immutable (cannot be changed
+	Load the properties files, local is loaded first since properties are immutable (cannot be changed
 	by later property files) and we want the local properties to override the default properties
 	-->
 	<property file="dev/local.properties" />
