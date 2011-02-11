@@ -67,6 +67,7 @@ public class DefinitionSet {
 		
 		this.definitionVersionString = versionIdentifier;
 		
+		// Clone the date so that the caller cannot manipulate the internal date stored within this class after it has been initialized 
 		if( definitionSetDate != null ){
 			this.definitionSetDate = (Date)definitionSetDate.clone();
 		}
@@ -93,6 +94,7 @@ public class DefinitionSet {
 		this.definitions = definitions;
 		this.definitionVersionString = version;
 		
+		// Clone the date so that the caller cannot manipulate the internal date stored within this class after it has been initialized 
 		if( definitionSetDate != null ){
 			this.definitionSetDate = (Date)definitionSetDate.clone();
 		}
@@ -103,6 +105,11 @@ public class DefinitionSet {
 		getCustomDefinitionsCount();
 	}
 	
+	/**
+	 * This comparator allows two definitions to be compared (useful for sorting).
+	 * @author Luke Murphey
+	 *
+	 */
 	private static class DefinitionComparator implements java.util.Comparator<Definition> {
         public int compare(Definition sig1, Definition sig2) {
         	
@@ -236,22 +243,43 @@ public class DefinitionSet {
 			this.revisionDate = revisionDate;
 		}
 		
+		/**
+		 * The ID of the format version.
+		 * @return
+		 */
 		public int formatID(){
 			return formatID;
 		}
 		
+		/**
+		 * The revision ID (incremented with each non-backwards compatible change that requires an upgrade to the scan engines)
+		 * @return
+		 */
 		public int revisionID(){
 			return revisionID;
 		}
 		
+		/**
+		 * Return the extended information string (beta, release, experimental, etc.)
+		 * @return
+		 */
 		public String extendedInfo(){
 			return extendedInfo;
 		}
 		
+		/**
+		 * Get the date that the definition set was modified.
+		 * @return
+		 */
 		public Date getRevisionDate(){
 			return revisionDate;
 		}
 		
+		/**
+		 * Determine if the definition version is the same as another.
+		 * @param versionID
+		 * @return
+		 */
 		public boolean equals( DefinitionVersionID versionID ){
 			if( versionID != null
 					&& versionID.formatID == this.formatID
