@@ -425,7 +425,19 @@ public class DefinitionSet {
 		String date = rootElement.getAttribute("Date");
 		String version = rootElement.getAttribute("Version");
 		
-		// 2 -- Load each of the definitions
+		// 2 -- Make sure the meta-data is valid
+		
+		//	 2.1 -- Check the definition set date
+		if( date == null || date.length() == 0 ){
+			throw new DefinitionSetLoadException("Definition set date is invalid (is empty)");
+		}
+		
+		//	 2.2 -- Check the definition set version
+		if( version == null || version.length() == 0 ){
+			throw new DefinitionSetLoadException("Definition set version is invalid (is empty)");
+		}
+		
+		// 3 -- Load each of the definitions
 		Vector<Definition> sigs = new Vector<Definition>();
 		NodeList definitionNodes = rootElement.getElementsByTagName("Definition");
 
@@ -451,7 +463,7 @@ public class DefinitionSet {
 				}
 			}
 			catch( UnpurposedDefinitionException e){
-				throw new DefinitionSetLoadException("Invalid definition observed (has not purpose): " + getTextContent(element), e);
+				throw new DefinitionSetLoadException("Invalid definition observed (has no purpose): " + getTextContent(element), e);
 			}
 			catch( InvalidDefinitionException e){
 				throw new DefinitionSetLoadException("Invalid definition detected (could not be parsed): " + getTextContent(element), e);
