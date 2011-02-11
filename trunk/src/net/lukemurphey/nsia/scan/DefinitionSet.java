@@ -66,7 +66,14 @@ public class DefinitionSet {
 		}
 		
 		this.definitionVersionString = versionIdentifier;
-		this.definitionSetDate = (Date)definitionSetDate.clone();
+		
+		if( definitionSetDate != null ){
+			this.definitionSetDate = (Date)definitionSetDate.clone();
+		}
+		else{
+			this.definitionSetDate = null;
+		}
+		
 		getCustomDefinitionsCount();
 	}
 	
@@ -85,6 +92,7 @@ public class DefinitionSet {
 		// 1 -- Add the definitions and set the parameters
 		this.definitions = definitions;
 		this.definitionVersionString = version;
+		
 		if( definitionSetDate != null ){
 			this.definitionSetDate = (Date)definitionSetDate.clone();
 		}
