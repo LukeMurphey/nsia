@@ -96,20 +96,20 @@ public class Menu {
 	public static Vector<Link> getSiteGroupMenuItems( RequestContext context, SiteGroupDescriptor siteGroup ) throws URLInvalidException{
 		Vector<Link> menu = new Vector<Link>();
 		
-		menu.add( new Link("Site Groups") );
-		menu.add( new Link("Add Site Group", SiteGroupEditView.getURL() ) );
+		menu.add( new Link("Site-groups") );
+		menu.add( new Link("Add Site-group", SiteGroupEditView.getURL() ) );
 		
 		if( siteGroup != null ){
-			menu.add( new Link("Edit Site Group", SiteGroupEditView.getURL(siteGroup)) );
+			menu.add( new Link("Edit Site-group", SiteGroupEditView.getURL(siteGroup)) );
 			menu.add( new Link("Edit ACLs", AccessControlView.getURL(siteGroup.getObjectId()), new Link.Attribute("onclick", "w=window.open('" + AccessControlView.getURL(siteGroup.getObjectId()) + "', 'AccessControl', 'height=400,width=780,screenX=' + (screen.availWidth - 700)/2 + ',screenY=' + (screen.availHeight - 300)/2 + ',scrollbars=yes,resizable=yes,toolbar=no');return false") ) );
 			menu.add( new Link("Edit Scan Policy", DefinitionPolicyView.getURL(siteGroup) ));
-			menu.add( new Link("Delete Site Group", SiteGroupDeleteView.getURL(siteGroup), new Link.Attribute("onclick", "openDeleteConfirmDialog( 'Are you sure you want to delete this site-group? This action cannot be undone.', 'Delete Site-Group?', this.href ); return false;") ) );
+			menu.add( new Link("Delete Site-group", SiteGroupDeleteView.getURL(siteGroup), new Link.Attribute("onclick", "openDeleteConfirmDialog( 'Are you sure you want to delete this site-group? This action cannot be undone.', 'Delete Site-group?', this.href ); return false;") ) );
 			
 			if( siteGroup.isEnabled() ){
-				menu.add( new Link("Disable Site Group", SiteGroupDisableView.getURL(siteGroup) ) );
+				menu.add( new Link("Disable Site-group", SiteGroupDisableView.getURL(siteGroup) ) );
 			}
 			else{
-				menu.add( new Link("Enable Site Group", SiteGroupEnableView.getURL(siteGroup)) );
+				menu.add( new Link("Enable Site-group", SiteGroupEnableView.getURL(siteGroup)) );
 			}
 		}
 		
