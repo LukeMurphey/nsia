@@ -16,7 +16,7 @@ import org.w3c.dom.NodeList;
 public class EndpointIndex extends RESTEndpointClient {
 
 	// This is the default REST endpoint that lists all of the available endpoints
-	public static final String DEFAULT_ENDPOINT = "http://threatfactor.com/rest/NSIA/";
+	public static final String DEFAULT_ENDPOINT = "https://threatfactor.com/rest/NSIA/";
 	
 	/**
 	 * Represents the available REST endpoints
