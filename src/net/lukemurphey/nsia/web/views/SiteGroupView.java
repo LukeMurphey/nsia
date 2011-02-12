@@ -500,7 +500,7 @@ public class SiteGroupView extends View {
 			breadcrumbs.add( new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 			
 			if( siteGroup != null ){
-				breadcrumbs.add( new Link("Site Group: " + siteGroup.getGroupName(), createURL( siteGroup.getGroupId() )) );
+				breadcrumbs.add( new Link("Site-group: " + siteGroup.getGroupName(), createURL( siteGroup.getGroupId() )) );
 			}
 			
 			data.put("breadcrumbs", breadcrumbs);

@@ -105,7 +105,7 @@ public class ScanResultView extends View {
 			// 5 -- Get the breadcrumbs
 			Vector<Link> breadcrumbs = new Vector<Link>();
 			breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
-			breadcrumbs.add(  new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroupID)) );
+			breadcrumbs.add(  new Link("Site-group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroupID)) );
 			breadcrumbs.add(  new Link("Edit Rule", RuleEditView.getURL(scanResult.getRuleID())) );
 			breadcrumbs.add(  new Link("Scan History", ScanResultHistoryView.getURL(scanResult.getRuleID())) );
 			breadcrumbs.add(  new Link("Scan Result", createURL(args[0])) );

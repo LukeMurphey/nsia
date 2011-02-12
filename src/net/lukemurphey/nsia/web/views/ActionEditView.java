@@ -246,7 +246,7 @@ public class ActionEditView extends View {
 			// 3 -- Get the breadcrumbs
 			Vector<Link> breadcrumbs = new Vector<Link>();
 			breadcrumbs.add(  new Link("Main Dashboard", MainDashboardView.getURL()) );
-			breadcrumbs.add(  new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroup.getGroupId())) );
+			breadcrumbs.add(  new Link("Site-group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroup.getGroupId())) );
 			breadcrumbs.add(  new Link("Actions", ActionsListView.getURL( siteGroup.getGroupId() ) ) );
 			
 			if( "Edit".equalsIgnoreCase(args[0])){
