@@ -224,19 +224,19 @@ public class GenericUtils {
 	}
 	
 	/**
-	 * Send an email.
+	 * Send an email. Sends an email and returns true if the email was sent. If the application is not properly configured to send emails then the method will return false.
 	 * @param toAddress
 	 * @param subject
 	 * @param body
 	 * @throws MessagingException
 	 * @throws MailServerConnectionFailedException 
 	 */
-	public static void sendMail( EmailAddress toAddress, String subject, String body ) throws MessagingException {
+	public static boolean sendMail( EmailAddress toAddress, String subject, String body ) throws MessagingException {
 		Application app = Application.getApplication();
 		ApplicationConfiguration config = app.getApplicationConfiguration();
 		
 		try {
-			sendMail( toAddress, subject, body, config.getEmailFromAddress(), config.getEmailSMTPServer(), config.getEmailUsername(), config.getEmailPassword(), config.getEmailSMTPPort(), config.getEmailSMTPEncryption() );
+			return sendMail( toAddress, subject, body, config.getEmailFromAddress(), config.getEmailSMTPServer(), config.getEmailUsername(), config.getEmailPassword(), config.getEmailSMTPPort(), config.getEmailSMTPEncryption() );
 		} catch (UnknownHostException e) {
 			throw new MessagingException("Host is unknown", e);
 		} catch (NoDatabaseConnectionException e) {
@@ -281,7 +281,7 @@ public class GenericUtils {
 	}
 	
 	/**
-	 * Send an email.
+	 * Sends an email and returns true if the email was sent. If the application is not properly configured to send emails then the method will return false.
 	 * @param toAddress
 	 * @param subject
 	 * @param body
@@ -293,11 +293,11 @@ public class GenericUtils {
 	 * @param encryption
 	 * @throws MessagingException 
 	 */
-	public static void sendMail(EmailAddress toAddress, String subject, String body, EmailAddress fromAddress, String smtpServer, String username, String password, int port, SMTPEncryption encryption ) throws MessagingException { 
+	public static boolean sendMail(EmailAddress toAddress, String subject, String body, EmailAddress fromAddress, String smtpServer, String username, String password, int port, SMTPEncryption encryption ) throws MessagingException { 
 	    
 		// Make sure the SMTP server and from address was defined
 		if( smtpServer == null || fromAddress == null ){
-			return;
+			return false;
 		}
 		
 		// Set up the properties
@@ -357,6 +357,8 @@ public class GenericUtils {
 	    
 	    transport.sendMessage(msg, msg.getAllRecipients());
 	    transport.close();
+	    
+	    return true;
 	}
 	
 	/**
