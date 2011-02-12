@@ -86,10 +86,25 @@ public class EmailAction extends Action {
 		layout.addField( new FieldText("ToAddress", "Destination Address", "Enter the destination email address", 1, 1, new EmailAddressValidator()) );
 		
 		// 2 -- Add the subject
-		layout.addField( new FieldText("Subject", "Subject", "Enter the subject of the email", 1, 1, new MessageValidator("subject")) );
+		FieldText subject = new FieldText("Subject", "Subject", "Enter the subject of the email", 1, 1, new MessageValidator("subject"));
+		subject.setDefaultValue("NSIA: Deviations Detected in $sitegroup");
+		layout.addField(subject);
 		
 		// 3 -- Add the body
-		layout.addField( new FieldText("Body", "Body", "Enter the email message body. Note: you can use substitution variables to add in details such as the specimen/URL ($specimen), number of deviations detected ($deviation_count) or date of the finding ($date).", 1, 5, new MessageValidator("body")) );
+		FieldText body = new FieldText("Body", "Body", "Enter the email message body. Note: you can use substitution variables to add in details such as the specimen/URL ($specimen), number of deviations detected ($deviation_count) or date of the finding ($date).", 1, 5, new MessageValidator("body"));
+		body.setDefaultValue("NSIA has detected deviations in the site-group $sitegroup \n"
+				+ "Details:\n"
+				+ "------------------------\n"
+				+ "    Rule ID: $rule_id\n"
+				+ "    Site-group: $sitegroup\n"
+				+ "    Site-group ID: $sitegroup_id\n"
+				+ "    Deviations: $deviation_count URLs rejected\n"
+				+ "    Domain: $specimen\n"
+				+ "    Scanner: $scanner_host_name ($scanner_url)\n"
+				+ "    Detected on: $date \n\n"
+				+ "View the detailed results on: $scanner_url_ip/SiteGroup/$sitegroup_id");
+		
+		layout.addField(body);
 		
 		// 4 -- Return the resulting layout
 		return layout;
@@ -128,6 +143,10 @@ public class EmailAction extends Action {
 		
 		if( body != null ){
 			values.put("Body", body);
+		}
+		
+		if( body == null || true ){
+			values.put("Body", "//Sort the list so that the shorter variables don't override the longer ones");
 		}
 		
 		return values;
