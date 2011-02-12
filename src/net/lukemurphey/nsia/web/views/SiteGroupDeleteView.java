@@ -48,7 +48,7 @@ public class SiteGroupDeleteView extends View {
 			
 			//	 0.1 -- Make sure the user has permission
 			if( Shortcuts.hasRight(context.getSessionInfo(), "SiteGroups.Delete", "Delete site-group") == false ){
-				context.addMessage("You do not have permission to delete this site group", MessageSeverity.WARNING);
+				context.addMessage("You do not have permission to delete this site-group", MessageSeverity.WARNING);
 				return false;
 			}
 			
@@ -100,7 +100,7 @@ public class SiteGroupDeleteView extends View {
 		//	 1.1 -- Make sure an ID was provided
 		if( args.length <= 0 ){
 			//Show a dialog indicating that the site group ID provided was not provided
-			Dialog.getDialog(response, context, data, "The Site Group ID was not provided.", "SiteGroup ID Invalid", DialogType.WARNING);
+			Dialog.getDialog(response, context, data, "The Site-group ID was not provided.", "Site-group ID Invalid", DialogType.WARNING);
 			return true;
 		}
 		
@@ -111,7 +111,7 @@ public class SiteGroupDeleteView extends View {
 				siteGroupID = Integer.valueOf(args[0]);
 			}
 			catch(NumberFormatException e){
-				Dialog.getDialog(response, context, data, "The Site Group ID provided is invalid.", "SiteGroup ID Invalid", DialogType.WARNING);
+				Dialog.getDialog(response, context, data, "The Site-group ID provided is invalid.", "Site-group ID Invalid", DialogType.WARNING);
 				return true;
 			}
 		}
@@ -119,7 +119,7 @@ public class SiteGroupDeleteView extends View {
 		// 2 -- Delete the group
 		try {
 			if( deleteGroup(context, siteGroupID) ){
-				context.addMessage("Site group successfully deleted", MessageSeverity.SUCCESS);
+				context.addMessage("Site-group successfully deleted", MessageSeverity.SUCCESS);
 			}
 			else{
 				response.sendRedirect( SiteGroupView.getURL(siteGroupID) );

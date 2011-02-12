@@ -59,7 +59,7 @@ public class SiteGroupEnableView extends View {
 			SiteGroupManagement siteGroupManagement = new SiteGroupManagement(Application.getApplication());
 			siteGroup = siteGroupManagement.getGroupDescriptor(groupId);
 			
-			Shortcuts.checkModify(context.getSessionInfo(), siteGroup.getObjectId(), "Enable site group");
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroup.getObjectId(), "Enable site-group");
 			
 			// 1 -- Enable the group
 			if( siteGroupManagement.enableGroup( groupId ) ){
@@ -107,7 +107,7 @@ public class SiteGroupEnableView extends View {
 		//	 1.1 -- Make sure an ID was provided
 		if( args.length <= 0 ){
 			//Show a dialog indicating that the site group ID provided was not provided
-			Dialog.getDialog(response, context, data, "The Site Group ID was not provided.", "SiteGroup ID Invalid", DialogType.WARNING);
+			Dialog.getDialog(response, context, data, "The Site-group ID was not provided.", "Site-group ID Invalid", DialogType.WARNING);
 			return true;
 		}
 		
@@ -118,7 +118,7 @@ public class SiteGroupEnableView extends View {
 				siteGroupID = Integer.valueOf(args[0]);
 			}
 			catch(NumberFormatException e){
-				Dialog.getDialog(response, context, data, "The Site Group ID provided is invalid.", "SiteGroup ID Invalid", DialogType.WARNING);
+				Dialog.getDialog(response, context, data, "The Site-group ID provided is invalid.", "Site-group ID Invalid", DialogType.WARNING);
 				return true;
 			}
 		}
@@ -126,15 +126,15 @@ public class SiteGroupEnableView extends View {
 		// 2 -- Enable the group
 		try {
 			enableGroup(context, siteGroupID);
-			context.addMessage("Site group successfully enabled", MessageSeverity.SUCCESS);
+			context.addMessage("Site-group successfully enabled", MessageSeverity.SUCCESS);
 		} catch (InsufficientPermissionException e) {
-			context.addMessage("You do not have permission to enable this site group", MessageSeverity.WARNING);
+			context.addMessage("You do not have permission to enable this site-group", MessageSeverity.WARNING);
 		} catch (GeneralizedException e) {
 			throw new ViewFailedException(e);
 		} catch (NoSessionException e) {
 			throw new ViewFailedException(e);
 		} catch (NotFoundException e) {
-			Dialog.getDialog(response, context, data, "No Site-Group exists with the given identifier", "Site-Group Not Found", DialogType.WARNING);
+			Dialog.getDialog(response, context, data, "No Site-group exists with the given identifier", "Site-group Not Found", DialogType.WARNING);
 			return true;
 		}
 		

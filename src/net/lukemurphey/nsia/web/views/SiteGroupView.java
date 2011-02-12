@@ -267,7 +267,7 @@ public class SiteGroupView extends View {
 	 * @return
 	 */
 	public static String getUniqueScanWorkerID( int userID, long siteGroupID ){
-		return "Scan by user ID " + userID + " for SiteGroup ID " + siteGroupID;
+		return "Scan by user ID " + userID + " for site-group ID " + siteGroupID;
 	}
 	
 	/**
@@ -479,21 +479,21 @@ public class SiteGroupView extends View {
 				try {
 					siteGroup = mgmr.getGroupDescriptor( Integer.valueOf( args[0]) );
 				} catch (NotFoundException e) {
-					Dialog.getDialog(response, context, data, "The SiteGroup ID provided is not valid", "SiteGroup ID Invalid", DialogType.WARNING);
+					Dialog.getDialog(response, context, data, "The site-group ID provided is not valid", "site-group ID Invalid", DialogType.WARNING);
 					return true;
 				}
 				catch (NumberFormatException e) {
-					Dialog.getDialog(response, context, data, "The SiteGroup ID provided is not valid", "SiteGroup ID Invalid", DialogType.WARNING);
+					Dialog.getDialog(response, context, data, "The site-group ID provided is not valid", "site-group ID Invalid", DialogType.WARNING);
 					return true;
 				}
 			}
 			else{
-				Dialog.getDialog(response, context, data, "The SiteGroup ID provided is not valid", "SiteGroup ID Invalid", DialogType.WARNING);
+				Dialog.getDialog(response, context, data, "The site-group ID provided is not valid", "site-group ID Invalid", DialogType.WARNING);
 				return true;
 			}
 			
 			// 2 -- Prepare the view
-			data.put("title", "Site Groups");
+			data.put("title", "Site-Groups");
 			
 			// 	2.1 -- Get the breadcrumbs
 			Vector<Link> breadcrumbs = new Vector<Link>();
@@ -510,7 +510,7 @@ public class SiteGroupView extends View {
 			
 			// 3 -- Check permissions
 			if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId(), "View site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
-				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site group");
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site-group");
 				return true;
 			}
 			
@@ -538,7 +538,7 @@ public class SiteGroupView extends View {
 					else{
 						
 						if( Shortcuts.canExecute( context.getSessionInfo(), siteGroup.getObjectId(), "Scan rules for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
-							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to scan this site group");
+							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to scan this site-group");
 							return true;
 						}
 						
@@ -548,7 +548,7 @@ public class SiteGroupView extends View {
 						} catch (DuplicateEntryException e) {
 							//Ignore, the scanner thread was already started
 						} catch (InsufficientPermissionException e) {
-							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to scan this site group");
+							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to scan this site-group");
 							return true;
 						}
 					}
@@ -558,7 +558,7 @@ public class SiteGroupView extends View {
 				if( "Cancel".equalsIgnoreCase( request.getParameter("Selected") ) ) {
 					
 					if( Shortcuts.canExecute( context.getSessionInfo(), siteGroup.getObjectId(), "Cancel scanning of rules for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
-						Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to cancel scans for this site group");
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to cancel scans for this site-group");
 						return true;
 					}
 					
@@ -570,7 +570,7 @@ public class SiteGroupView extends View {
 				if( "Baseline".equalsIgnoreCase( request.getParameter("Action") ) ) {
 					
 					if( Shortcuts.canExecute( context.getSessionInfo(), siteGroup.getObjectId(), "Baseline scanning of rules for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
-						Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to execute scans or baseline rules for this site group");
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to execute scans or baseline rules for this site-group");
 						return true;
 					}
 					
@@ -581,7 +581,7 @@ public class SiteGroupView extends View {
 						try {
 							baselineRules(context, getRules(request));
 						} catch (InsufficientPermissionException e) {
-							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to baseline rules in this site group");
+							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to baseline rules in this site-group");
 							return true;
 						}
 					}
@@ -591,7 +591,7 @@ public class SiteGroupView extends View {
 				if( "Delete".equalsIgnoreCase( request.getParameter("Action") ) ) {
 					
 					if( Shortcuts.canDelete( context.getSessionInfo(), siteGroup.getObjectId(), "Delete rules for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
-						Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to delete rules in this site group");
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to delete rules in this site-group");
 						return true;
 					}
 					
@@ -602,7 +602,7 @@ public class SiteGroupView extends View {
 						try {
 							deleteRules(context, getRules(request));
 						} catch (InsufficientPermissionException e) {
-							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to delete rules from this site group");
+							Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to delete rules from this site-group");
 							return true;
 						}
 					}

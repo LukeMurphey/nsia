@@ -74,7 +74,7 @@ public class ScanResultHistoryView extends View {
 				siteGroup = siteGroupMgmt.getGroupDescriptor(siteGroupID);
 			}
 			catch( NotFoundException e ){
-				Dialog.getDialog(response, context, data, "The SiteGroup associated with the rule could not be found", "SiteGroup Invalid", DialogType.WARNING);
+				Dialog.getDialog(response, context, data, "The Site-group associated with the rule could not be found", "Site-group Invalid", DialogType.WARNING);
 				return true;	
 			}
 			
@@ -94,7 +94,7 @@ public class ScanResultHistoryView extends View {
 			
 			// 5 -- Check rights
 			if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId(), "View scan result history for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
-				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site group");
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to view this site-group");
 				return true;
 			}
 			

@@ -112,7 +112,7 @@ public class RuleEditView extends View {
 					siteGroupID = ScanRule.getAssociatedSiteGroupID(rule.getRuleId());
 				}
 				catch(NotFoundException e1){
-					Dialog.getDialog(response, context, data, "No SiteGroup exists with the given ID", "SiteGroup Not Found", DialogType.WARNING);
+					Dialog.getDialog(response, context, data, "No Site-group exists with the given ID", "Site-group Not Found", DialogType.WARNING);
 					return true;
 				}
 			}
@@ -122,7 +122,7 @@ public class RuleEditView extends View {
 				}
 				catch(NumberFormatException e1){
 					Shortcuts.addDashboardHeaders(request, response, data);
-					Dialog.getDialog(response, context, data, "The SiteGroup ID provided is not valid", "SiteGroup ID Invalid", DialogType.WARNING, new Link("Return to the Main Dashboard", MainDashboardView.getURL()));
+					Dialog.getDialog(response, context, data, "The Site-group ID provided is not valid", "Site-group ID Invalid", DialogType.WARNING, new Link("Return to the Main Dashboard", MainDashboardView.getURL()));
 					return true;
 				}
 			}
@@ -133,10 +133,10 @@ public class RuleEditView extends View {
 				SiteGroupManagement mgmr = new SiteGroupManagement(Application.getApplication());
 				siteGroup = mgmr.getGroupDescriptor( siteGroupID );
 			} catch (NotFoundException e1) {
-				Dialog.getDialog(response, context, data, "The SiteGroup ID provided is not valid", "SiteGroup ID Invalid", DialogType.WARNING);
+				Dialog.getDialog(response, context, data, "The Site-group ID provided is not valid", "Site-group ID Invalid", DialogType.WARNING);
 				return true;
 			} catch (NumberFormatException e1) {
-				Dialog.getDialog(response, context, data, "The SiteGroup ID provided is not valid", "SiteGroup ID Invalid", DialogType.WARNING);
+				Dialog.getDialog(response, context, data, "The Site-group ID provided is not valid", "Site-group ID Invalid", DialogType.WARNING);
 				return true;
 			}
 
@@ -173,7 +173,7 @@ public class RuleEditView extends View {
 			
 			// 5 -- Check permissions
 			if( Shortcuts.canModify( context.getSessionInfo(), siteGroup.getObjectId(), "Edit rule for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
-				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to edit rules for this site group");
+				Shortcuts.getPermissionDeniedDialog(response, data, "You do not permission to edit rules for this site-group");
 				return true;
 			}
 		} catch (SQLException e) {

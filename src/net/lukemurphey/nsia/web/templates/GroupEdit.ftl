@@ -14,7 +14,7 @@
         <#if group??><input type="hidden" name="GroupID" value="${group.groupId?c}"></#if>
         <table class="DataTable">
             <tr class="<#if (form_errors?? && form_errors.fieldHasError("Name"))>ValidationFailed<#else>Background1</#if>">
-                <td class="Text_3">Site Group Name</td>
+                <td class="Text_3">Site-group Name</td>
                 <td><input class="textInput" style="width: 350px;" type="text" name="Name" value="<#if request.getParameter("Name")??>${request.getParameter("Name")?html}<#elseif group??>${group.groupName?html}</#if>"></td>
             </tr>
             <tr style="vertical-align:top" class="<#if (form_errors?? && form_errors.fieldHasError("Description") )>ValidationFailed<#else>Background1</#if>">

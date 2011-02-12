@@ -171,7 +171,7 @@ public class ExceptionListView extends View {
 		} catch (NoDatabaseConnectionException e) {
 			throw new ViewFailedException(e);
 		} catch (NotFoundException e) {
-			Dialog.getDialog(response, context, data, "A SiteGroup with the given identifier could not be found.", "SiteGroup Not Found", DialogType.WARNING);
+			Dialog.getDialog(response, context, data, "A site-group with the given identifier could not be found.", "Site-group Not Found", DialogType.WARNING);
 			return true;
 		}
 		
