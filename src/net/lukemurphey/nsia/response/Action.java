@@ -8,6 +8,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,11 +18,14 @@ import java.sql.SQLException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Vector;
 
 import net.lukemurphey.nsia.Application;
+import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField;
@@ -85,6 +90,42 @@ public abstract class Action implements Serializable  {
 			return value;
 		}
 		
+		@Override
+		public String toString(){
+			return getName() + "::" + getValue();
+		}
+		
+		/**
+		 * Length comparator that sorts strings by length.
+		 * @author Luke Murphey
+		 *
+		 */
+		private static class LengthComparator implements Comparator<String>{
+
+			@Override
+			public int compare(String arg1, String arg0) {
+				
+				if( arg0 == null && arg1 == null ){
+					return 0;
+				}
+				else if( arg0 == null ){
+					return -1;
+				}
+				else if( arg1 == null ){
+					return 1;
+				}
+				else if( arg0.length() < arg1.length() ){
+					return -1;
+				}
+				else if( arg0.length() > arg1.length() ){
+					return 1;
+				}
+				
+				return 0;
+			}
+			
+		}
+		
 		/**
 		 * Get the list of message variables in the form of $variable.
 		 * @param logMessage
@@ -109,6 +150,54 @@ public abstract class Action implements Serializable  {
 			vars.add( new MessageVariable( "$Date", logMessage.getDate().toString() ) );
 			
 			vars.add( new MessageVariable( "$Message", logMessage.getMessageName() ) );
+			
+			// Add a variables for the scanner so that a link can be constructed back to the scanner itself
+			try {
+				InetAddress localhost;
+				localhost = InetAddress.getLocalHost();
+				
+				vars.add( new MessageVariable( "$scanner_host_name", localhost.getHostName() ) );
+				vars.add( new MessageVariable( "$scanner_ip", localhost.getHostAddress() ) );
+				
+				int port = Application.getApplication().getApplicationConfiguration().getServerPort();
+				boolean encryption_enabled = Application.getApplication().getApplicationConfiguration().isSslEnabled();
+				
+				vars.add( new MessageVariable( "$scanner_port", String.valueOf( port ) ) );
+				
+				if( encryption_enabled ){
+					vars.add( new MessageVariable( "$scanner_protocol", "https" ) );
+				}
+				else{
+					vars.add( new MessageVariable( "$scanner_protocol", "http" ) );
+				}
+				
+				if( encryption_enabled && port == 443 ){
+					vars.add( new MessageVariable( "$scanner_url", "https://" + localhost.getHostName() ) );
+					vars.add( new MessageVariable( "$scanner_url_ip", "https://" + localhost.getHostAddress() ) );
+				}
+				else if( !encryption_enabled && port == 80 ){
+					vars.add( new MessageVariable( "$scanner_url", "http://" + localhost.getHostName() ) );
+					vars.add( new MessageVariable( "$scanner_url_ip", "http://" + localhost.getHostAddress() ) );
+				}
+				else if(encryption_enabled){
+					vars.add( new MessageVariable( "$scanner_url", "https://" + localhost.getHostName() + ":" + port ) );
+					vars.add( new MessageVariable( "$scanner_url_ip", "https://" + localhost.getHostAddress() + ":" + port ) );
+				}
+				else{
+					vars.add( new MessageVariable( "$scanner_url", "http://" + localhost.getHostName() + ":" + port ) );
+					vars.add( new MessageVariable( "$scanner_url_ip", "http://" + localhost.getHostAddress() + ":" + port ) );
+				}
+				
+			} catch (UnknownHostException e) {
+				Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to obtain the address of the local scanner") ), e);
+			} catch (NoDatabaseConnectionException e) {
+				Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to obtain the address of the local scanner") ), e);
+			} catch (SQLException e) {
+				Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to obtain the address of the local scanner") ), e);
+			} catch (InputValidationException e) {
+				Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to obtain the address of the local scanner") ), e);
+			}
+			
 			return vars;
 		}
 		
@@ -135,6 +224,54 @@ public abstract class Action implements Serializable  {
 
 			vars.add( new MessageVariable( "${Date}", logMessage.getDate().toString() ) );
 			vars.add( new MessageVariable( "${Message}", logMessage.getMessageName() ) );
+			
+
+			// Add a variables for the scanner so that a link can be constructed back to the scanner itself
+			try {
+				InetAddress localhost;
+				localhost = InetAddress.getLocalHost();
+				
+				vars.add( new MessageVariable( "${scanner_host_name}", localhost.getHostName() ) );
+				vars.add( new MessageVariable( "${scanner_ip}", localhost.getHostAddress() ) );
+				
+				int port = Application.getApplication().getApplicationConfiguration().getServerPort();
+				boolean encryption_enabled = Application.getApplication().getApplicationConfiguration().isSslEnabled();
+				
+				vars.add( new MessageVariable( "${scanner_port}", String.valueOf( port ) ) );
+				
+				if( encryption_enabled ){
+					vars.add( new MessageVariable( "${scanner_protocol}", "https" ) );
+				}
+				else{
+					vars.add( new MessageVariable( "${scanner_protocol}", "http" ) );
+				}
+				
+				if( encryption_enabled && port == 443 ){
+					vars.add( new MessageVariable( "${scanner_url}", "https://" + localhost.getHostName() ) );
+					vars.add( new MessageVariable( "${scanner_url_ip}", "https://" + localhost.getHostAddress() ) );
+				}
+				else if( !encryption_enabled && port == 80 ){
+					vars.add( new MessageVariable( "${scanner_url}", "http://" + localhost.getHostName() ) );
+					vars.add( new MessageVariable( "${scanner_url_ip}", "http://" + localhost.getHostAddress() ) );
+				}
+				else if(encryption_enabled){
+					vars.add( new MessageVariable( "${scanner_url}", "https://" + localhost.getHostName() + ":" + port ) );
+					vars.add( new MessageVariable( "${scanner_url_ip}", "https://" + localhost.getHostAddress() + ":" + port ) );
+				}
+				else{
+					vars.add( new MessageVariable( "${scanner_url}", "http://" + localhost.getHostName() + ":" + port ) );
+					vars.add( new MessageVariable( "${scanner_url_ip}", "http://" + localhost.getHostAddress() + ":" + port ) );
+				}
+				
+			} catch (UnknownHostException e) {
+				Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to obtain the address of the local scanner") ), e);
+			} catch (NoDatabaseConnectionException e) {
+				Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to obtain the address of the local scanner") ), e);
+			} catch (SQLException e) {
+				Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to obtain the address of the local scanner") ), e);
+			} catch (InputValidationException e) {
+				Application.getApplication().logExceptionEvent(new EventLogMessage(EventType.INTERNAL_ERROR, new EventLogField( EventLogField.FieldName.MESSAGE, "Unable to obtain the address of the local scanner") ), e);
+			}
 			
 			return vars;
 		}
@@ -185,6 +322,8 @@ public abstract class Action implements Serializable  {
 				varsWithinTemplate.add( matcher.group(0) );
 			}
 			
+			//Sort the list so that the shorter variables don't override the longer ones
+			Collections.sort(varsWithinTemplate, new LengthComparator() );
 			
 			// 2 -- Find the variable in the list and replace it
 			for( int c = 0; c < varsWithinTemplate.size(); c++ ){
