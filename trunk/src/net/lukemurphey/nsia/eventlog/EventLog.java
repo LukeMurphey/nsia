@@ -8,6 +8,7 @@ import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
 import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
+import net.lukemurphey.nsia.response.ActionFailedException;
 
 import org.apache.log4j.*;
 import org.apache.log4j.spi.ErrorHandler;
@@ -649,6 +650,21 @@ public class EventLog {
 			for (EventLogHook hook : hooks) {
 				try{
 					hook.processEvent(message);
+				}
+				catch(ActionFailedException e){
+					EventLogMessage msg = new EventLogMessage(EventType.RESPONSE_ACTION_FAILED);
+					
+					msg.addField(new EventLogField(FieldName.RESPONSE_ACTION_ID, hook.getEventLogHookID()));
+					msg.addField(new EventLogField(FieldName.RESPONSE_ACTION_NAME, hook.getAction().getDescription()));
+					msg.addField(new EventLogField(FieldName.RESPONSE_ACTION_DESC, hook.getAction().getConfigDescription()));
+					msg.addField(new EventLogField(FieldName.MESSAGE, e.getMessage()));
+					
+					if( e.getCause() != null ){
+						logExceptionEvent(msg, e);
+					}
+					else{
+						logEvent(msg);
+					}
 				}
 				catch(EventLogHookException e){
 					EventLogMessage msg = new EventLogMessage(EventType.RESPONSE_ACTION_FAILED);

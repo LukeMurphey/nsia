@@ -4,6 +4,7 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
 import net.lukemurphey.nsia.response.Action;
+import net.lukemurphey.nsia.response.ActionFailedException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public abstract class EventLogHook implements Serializable{
 	private static final long serialVersionUID = -3742174021147412985L;
 	protected int eventlogHookID = -1;
 	
-	public abstract void processEvent( EventLogMessage message ) throws EventLogHookException;
+	public abstract void processEvent( EventLogMessage message ) throws EventLogHookException, ActionFailedException;
 	
 	public abstract Action getAction();
 	
