@@ -54,13 +54,13 @@
     <tr>
         <td width="4"></td>
         <td><img src="/media/img/16_Add"></td>
-        <td><a href="<@url name="sitegroup" args=["New"] />">[Create another Site Group]</a></td>
+        <td><a href="<@url name="sitegroup" args=["New"] />">[Create another site-group]</a></td>
     </tr>
 </table>
 <#else>
 	<#assign message>
-	No resources are being monitored yet. Create a site group and define a rule to begin monitoring.
-	<p><a href="<@url name="sitegroup" args=["New"] />">[Create Site Group Now]</a></#assign>
+	No resources are being monitored yet. Create a site-group and define a rule to begin monitoring.
+	<p><a href="<@url name="sitegroup" args=["New"] />">[Create Site-group Now]</a></#assign>
 	<@getinfodialog title="No Monitored Resources" message=message />
 </#if>
 </#assign>

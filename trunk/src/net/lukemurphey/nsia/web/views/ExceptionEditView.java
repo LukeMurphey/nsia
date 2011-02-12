@@ -373,7 +373,7 @@ public class ExceptionEditView extends View {
 		Connection connection = null;
 		
 		try{
-			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for site group \"" + siteGroupDesc.getGroupName() + "\" (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() + " and rule ID " + ruleID );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for site-group \"" + siteGroupDesc.getGroupName() + "\" (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() + " and rule ID " + ruleID );
 			
 			String[] sigName = Definition.parseName(rulename);
 			
@@ -407,7 +407,7 @@ public class ExceptionEditView extends View {
 		
 		try{
 			
-			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for site group \"" + siteGroupDesc.getGroupName() + "\" (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() );
+			Shortcuts.checkModify(context.getSessionInfo(), siteGroupDesc.getObjectId(), "Add exception for " + rulename + " for site-group \"" + siteGroupDesc.getGroupName() + "\" (" + siteGroupDesc.getGroupId() + ") and URL " + url.toExternalForm() );
 			
 			String[] sigName = Definition.parseName(rulename);
 			
@@ -616,7 +616,7 @@ public class ExceptionEditView extends View {
 		} catch (NoDatabaseConnectionException e) {
 			throw new ViewFailedException(e);
 		} catch (NotFoundException e) {
-			Dialog.getDialog(response, context, data, "A SiteGroup with the given identifier could not be found.", "SiteGroup Not Found", DialogType.WARNING);
+			Dialog.getDialog(response, context, data, "A site-group with the given identifier could not be found.", "Site-group Not Found", DialogType.WARNING);
 			return true;
 		} catch (DefinitionSetLoadException e) {
 			throw new ViewFailedException(e);
@@ -700,7 +700,7 @@ public class ExceptionEditView extends View {
 		} catch (NotFoundException e) {
 			throw new ViewFailedException(e);
 		} catch (InsufficientPermissionException e) {
-			Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to create exceptions for this site group");
+			Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to create exceptions for this site-group");
 			return true;
 		}
 

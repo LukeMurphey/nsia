@@ -286,10 +286,10 @@ public class RightsEditView extends View {
 			rights.add( getRight( "Groups.Membership.Edit", "Manage Group Membership", subjectId, subjectType, accessControl ) ) ;
 		}
 		else if( tabIndex == Tab.SITE_GROUP_MANAGEMENT ){
-			rights.add( getRight( "SiteGroups.View", "View Site Groups", subjectId, subjectType, accessControl ) ) ;
-			rights.add( getRight( "SiteGroups.Add", "Create New Site Group", subjectId, subjectType, accessControl ) ) ;
-			rights.add( getRight( "SiteGroups.Delete", "Delete Site Groups", subjectId, subjectType, accessControl ) ) ;
-			rights.add( getRight( "SiteGroups.Edit", "Edit Site Groups", subjectId, subjectType, accessControl ) ) ;
+			rights.add( getRight( "SiteGroups.View", "View Site-groups", subjectId, subjectType, accessControl ) ) ;
+			rights.add( getRight( "SiteGroups.Add", "Create New Site-group", subjectId, subjectType, accessControl ) ) ;
+			rights.add( getRight( "SiteGroups.Delete", "Delete Site-groups", subjectId, subjectType, accessControl ) ) ;
+			rights.add( getRight( "SiteGroups.Edit", "Edit Site-groups", subjectId, subjectType, accessControl ) ) ;
 		}
 		else {//if( tabIndex == Tab.SYSTEM_CONFIGURATION){
 			rights.add( getRight( "System.Information.View", "View System Information and Status", subjectId, subjectType, accessControl ) ) ;

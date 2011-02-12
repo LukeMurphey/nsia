@@ -437,8 +437,8 @@ public class DefinitionPolicyView extends View {
 			// 3 -- Check rights
 			try{
 				if( siteGroup != null ){
-					if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId(), "Get scan policy for site group ID " + siteGroup.getGroupId() + "(" + siteGroup.getGroupName() + ")") == false ){
-						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the scan policy for this site group");
+					if( Shortcuts.canRead( context.getSessionInfo(), siteGroup.getObjectId(), "Get scan policy for site-group ID " + siteGroup.getGroupId() + "(" + siteGroup.getGroupName() + ")") == false ){
+						Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to view the scan policy for this site-group");
 						return true;
 					}
 				}
@@ -458,8 +458,8 @@ public class DefinitionPolicyView extends View {
 				
 				try{
 					if( siteGroup != null ){
-						if( Shortcuts.canModify( context.getSessionInfo(), siteGroup.getObjectId(), "Update scan policy for site group ID " + siteGroup.getGroupId() + "(" + siteGroup.getGroupName() + ")") == false ){
-							Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit the scan policy for this site group");
+						if( Shortcuts.canModify( context.getSessionInfo(), siteGroup.getObjectId(), "Update scan policy for site-group ID " + siteGroup.getGroupId() + "(" + siteGroup.getGroupName() + ")") == false ){
+							Shortcuts.getPermissionDeniedDialog(response, data, "You do not have permission to edit the scan policy for this site-group");
 							return true;
 						}
 					}

@@ -125,7 +125,7 @@ public class SiteGroupEditView extends View {
 							else{
 								
 								Application.getApplication().logEvent(EventLogMessage.EventType.OPERATION_FAILED,
-										new EventLogField( FieldName.OPERATION, "Add new site group" ),
+										new EventLogField( FieldName.OPERATION, "Add new site-group" ),
 										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ),
 										new EventLogField( FieldName.SITE_GROUP_NAME, name ) );
@@ -155,14 +155,14 @@ public class SiteGroupEditView extends View {
 							else{
 								
 								Application.getApplication().logEvent(EventLogMessage.EventType.OPERATION_FAILED, new EventLogField[] {
-										new EventLogField( FieldName.OPERATION, "Update site group" ),
+										new EventLogField( FieldName.OPERATION, "Update site-group" ),
 										new EventLogField( FieldName.SITE_GROUP_ID, siteGroup.getGroupId() ),
 										new EventLogField( FieldName.SITE_GROUP_NAME, siteGroup.getGroupName() ) ,
 										new EventLogField( FieldName.SOURCE_USER_NAME, context.getUser().getUserName() ),
 										new EventLogField( FieldName.SOURCE_USER_ID, context.getUser().getUserID() ) }
 										);
 								
-								context.addMessage("Sitegroup could not be updated", MessageSeverity.WARNING);
+								context.addMessage("Site-group could not be updated", MessageSeverity.WARNING);
 								response.sendRedirect( SiteGroupView.getURL( siteGroup.getGroupId() ));
 								return true;
 							}
@@ -206,7 +206,7 @@ public class SiteGroupEditView extends View {
 					siteGroupID = Integer.valueOf(args[1]);
 				}
 				catch( NumberFormatException e ){
-					Dialog.getDialog(response, context, data, "The SiteGroup ID provided is not valid", "SiteGroup ID Invalid", DialogType.WARNING);
+					Dialog.getDialog(response, context, data, "The Site-group ID provided is not valid", "Site-group ID Invalid", DialogType.WARNING);
 					return true;
 				}
 				
@@ -214,7 +214,7 @@ public class SiteGroupEditView extends View {
 					siteGroup = siteGroupManager.getGroupDescriptor(siteGroupID);
 					data.put("sitegroup", siteGroup);
 				} catch (NotFoundException e) {
-					Dialog.getDialog(response, context, data, "No SiteGroup exists with the given ID", "SiteGroup ID Invalid", DialogType.WARNING);
+					Dialog.getDialog(response, context, data, "No Site-group exists with the given ID", "Site-group ID Invalid", DialogType.WARNING);
 					return true;
 				}
 			}
@@ -256,11 +256,11 @@ public class SiteGroupEditView extends View {
 				throw new ViewFailedException(e);
 			} catch (InsufficientPermissionException e) {
 				if( siteGroup == null ){
-					data.put("permission_denied_message", "You do not have permission to create new site groups.");
+					data.put("permission_denied_message", "You do not have permission to create new site-groups.");
 					TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);
 				}
 				else{
-					data.put("permission_denied_message", "You do not have permission to edit this site group.");
+					data.put("permission_denied_message", "You do not have permission to edit this site-group.");
 					data.put("permission_denied_link", new Link("View Site Group", SiteGroupView.getURL(siteGroup)) );
 					TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);
 				}

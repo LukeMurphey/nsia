@@ -209,7 +209,7 @@ public class ActionEditView extends View {
 					siteGroup = siteGroupMgmt.getGroupDescriptor(siteGroupHook.getSiteGroupID());
 				}
 				catch( NotFoundException e ){
-					Dialog.getDialog(response, context, data, "The Sitegroup associated with the given action could not be found", "SiteGroup Not Found", DialogType.INFORMATION);
+					Dialog.getDialog(response, context, data, "The site-group associated with the given action could not be found", "Site-group Not Found", DialogType.INFORMATION);
 					return true;
 				}
 				
@@ -223,14 +223,14 @@ public class ActionEditView extends View {
 					siteGroup = siteGroupMgmt.getGroupDescriptor(siteGroupID);
 				}
 				catch(NotFoundException e){
-					Dialog.getDialog(response, context, data, "The Sitegroup to create the rule for was not specified", "SiteGroup Not Specified", DialogType.INFORMATION);
+					Dialog.getDialog(response, context, data, "The site-group to create the rule for was not specified", "Site-group Not Specified", DialogType.INFORMATION);
 					return true;
 				}
 				
 				data.put("siteGroup", siteGroup);
 			}
 			else{
-				Dialog.getDialog(response, context, data, "The Sitegroup to create the rule for was not specified", "SiteGroup Not Specified", DialogType.INFORMATION);
+				Dialog.getDialog(response, context, data, "The site-group to create the rule for was not specified", "Site-group Not Specified", DialogType.INFORMATION);
 				return true;
 			}
 			
@@ -264,7 +264,7 @@ public class ActionEditView extends View {
 			// 4 -- Check permissions
 			try {
 				if( Shortcuts.canModify(context.getSessionInfo(), siteGroup.getObjectId(), "Edit incident response action for site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")") == false ){
-					data.put("permission_denied_message", "You do not permission to edit this site group.");
+					data.put("permission_denied_message", "You do not permission to edit this site-group.");
 					data.put("permission_denied_link", new Link("View Site Group", SiteGroupView.getURL(siteGroup)) );
 					TemplateLoader.renderToResponse("PermissionDenied.ftl", data, response);
 					return true;
