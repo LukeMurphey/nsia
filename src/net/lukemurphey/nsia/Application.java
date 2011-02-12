@@ -1097,11 +1097,7 @@ public final class Application {
 				}
 			}
 			catch(SQLException e){
-	
-				if( !e.toString().endsWith("shutdown.") ){
-					System.err.println("Exception occurred while shutting down database");
-					e.printStackTrace(System.err);
-				}
+				//Swallow this exception. It is thrown when the database shuts down.
 			}
 			
 			if( !hideOutput ){
