@@ -39,7 +39,7 @@ public class EmailAction extends Action {
 		
 		try{
 			if( GenericUtils.sendMail(toAddress, subjectTmp, bodyTmp) == false ){
-				// Throw an exception if we could not sent=d an email
+				// Throw an exception if we could not send an email
 				throw new ActionFailedException("The action failed to send the email because an email server is not properly configured (at least an SMTP server and from address must be defined)"); 
 			}
 		}
@@ -48,6 +48,11 @@ public class EmailAction extends Action {
 		}
 	}
 
+	/**
+	 * This field validator ensures that the email address is valid.
+	 * @author Luke Murphey
+	 *
+	 */
 	private static class EmailAddressValidator implements FieldValidator{
 
 		public FieldValidatorResult validate(String value) {
