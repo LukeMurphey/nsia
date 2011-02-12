@@ -284,6 +284,36 @@ public class ScriptDefinitionTest extends TestCase {
 		}
 	}
 	
+	public void testSetVariableWithValue() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
+		
+		// 1 -- Perform a scan against a URL, make sure the URL loads the native array items
+		Application app = TestApplication.getApplication();
+		ScriptDefinition sigSet = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "SetVariableWithValue.js" );
+		ScriptDefinition sigRead = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "ReadVariableWithValue.js" );
+		
+		HostConfiguration hostConfig = new HostConfiguration();
+		hostConfig.setHost("google.com", 80, "http");
+		HttpMethod httpMethod = new GetMethod( "/" );
+		httpMethod.setFollowRedirects(true);
+		HttpClient httpClient = new HttpClient();
+		httpClient.executeMethod( hostConfig, httpMethod );
+		
+		HttpResponseData httpResponse = new HttpResponseData( httpMethod, "http://google.com" );
+		
+		// 2 -- Make sure the variable was set
+		Variables vars = new Variables();
+		sigSet.evaluate(httpResponse,vars, 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+		Result result = sigRead.evaluate(httpResponse,vars, 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
+		
+		if( vars.isSet("Test") == false || !"This is the value".equals( (String)vars.get("Test") )  ){
+			fail("The definition did not set the variable correctly");
+		}
+		
+		if( result.matched != true ){
+			fail("The definition did not set the variable correctly");
+		}
+	}
+	
 	public void testExtractURLs() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
 		
 		// 1 -- Perform a scan against a URL, make sure the URL loads the native array items
