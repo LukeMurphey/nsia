@@ -1,4 +1,4 @@
-package net.lukemurphey.nsia.scan;
+package net.lukemurphey.nsia.tests;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -9,6 +9,9 @@ import org.xml.sax.SAXException;
 
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
+import net.lukemurphey.nsia.scan.DefinitionSet;
+import net.lukemurphey.nsia.scan.DefinitionSetLoadException;
+import net.lukemurphey.nsia.scan.DefinitionUpdateFailedException;
 import junit.framework.TestCase;
 
 public class DefinitionSetTest extends TestCase {
