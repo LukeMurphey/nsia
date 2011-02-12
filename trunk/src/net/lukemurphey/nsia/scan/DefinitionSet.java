@@ -475,8 +475,12 @@ public class DefinitionSet {
 		Definition[] definitions = new Definition[sigs.size()];
 		sigs.toArray(definitions);
 		
+		// 4 -- Make sure at least one definition was found
+		if( definitions.length == 0 ){
+			throw new DefinitionSetLoadException("No definitions were found to import");
+		}
 		
-		// 4 -- Create and return the definition set
+		// 5 -- Create and return the definition set
 		SimpleDateFormat dateFormat = new SimpleDateFormat(DEFINITION_SET_DATE_FORMAT);
 		DefinitionSet sigSet;
 		try{
