@@ -229,8 +229,8 @@ public class SiteGroupEditView extends View {
 				data.put("title", "New Site Group");
 			}
 			else{
-				breadcrumbs.add( new Link("Site Group: " + siteGroup.getGroupName(), StandardViewList.getURL(SiteGroupView.VIEW_NAME, siteGroup.getGroupId() )) );
-				breadcrumbs.add( new Link("Edit Site Group", createURL("Edit", siteGroup.getGroupId())) );
+				breadcrumbs.add( new Link("Site-group: " + siteGroup.getGroupName(), StandardViewList.getURL(SiteGroupView.VIEW_NAME, siteGroup.getGroupId() )) );
+				breadcrumbs.add( new Link("Edit Site-group", createURL("Edit", siteGroup.getGroupId())) );
 				data.put("title", "Edit " + siteGroup.getGroupName());
 			}
 			data.put("breadcrumbs", breadcrumbs);

@@ -418,7 +418,7 @@ public class DefinitionPolicyView extends View {
 			breadcrumbs.add(  new Link("Main Dashboard", StandardViewList.getURL("main_dashboard")) );
 			
 			if( siteGroupID > -1 ){
-				breadcrumbs.add( new Link("Site Group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroupID)) );
+				breadcrumbs.add( new Link("Site-group: " + siteGroup.getGroupName(), SiteGroupView.getURL(siteGroupID)) );
 				breadcrumbs.add( new Link("Definition Policy", createURL(siteGroupID)) );
 			}
 			else{
