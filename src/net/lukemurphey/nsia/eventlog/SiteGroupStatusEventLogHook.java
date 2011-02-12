@@ -42,7 +42,7 @@ public class SiteGroupStatusEventLogHook extends EventLogHook {
 	}
 	
 	@Override
-	public void processEvent( EventLogMessage message) throws EventLogHookException {
+	public void processEvent( EventLogMessage message) throws EventLogHookException, ActionFailedException {
 		
 		// 0 -- Precondition check
 		if( message == null ){
@@ -54,19 +54,14 @@ public class SiteGroupStatusEventLogHook extends EventLogHook {
 			return;
 		}
 		
-		try{
-			// 2 -- Stop if the scope of the event is a SiteGroup and the event matches
-			if( message.getEventType() == EventType.RULE_COMPLETE_REJECTED || message.getEventType() == EventType.RULE_COMPLETE_FAILED ){
-				EventLogField field = message.getField(EventLogField.FieldName.SITE_GROUP_ID);
-				
-				if( field != null && field.getValue().equals( siteGroupID ) ){
-					//Perform action
-					action.execute(message);
-				}
+		// 2 -- Stop if the scope of the event is a SiteGroup and the event matches
+		if( message.getEventType() == EventType.RULE_COMPLETE_REJECTED || message.getEventType() == EventType.RULE_COMPLETE_FAILED ){
+			EventLogField field = message.getField(EventLogField.FieldName.SITE_GROUP_ID);
+			
+			if( field != null && field.getValue().equals( siteGroupID ) ){
+				//Perform action
+				action.execute(message);
 			}
-		}
-		catch(ActionFailedException e){
-			throw new EventLogHookException(e);
 		}
 	}
 	
