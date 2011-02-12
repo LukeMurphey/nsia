@@ -38,7 +38,10 @@ public class EmailAction extends Action {
 		String bodyTmp = Action.MessageVariable.processMessageTemplate(body, vars);
 		
 		try{
-			GenericUtils.sendMail(toAddress, subjectTmp, bodyTmp);
+			if( GenericUtils.sendMail(toAddress, subjectTmp, bodyTmp) == false ){
+				// Throw an exception if we could not sent=d an email
+				throw new ActionFailedException("The action failed to send the email because an email server is not properly configured (at least an SMTP server and from address must be defined)"); 
+			}
 		}
 		catch(MessagingException e){
 			throw new ActionFailedException("The action failed to send the email: " + e.getMessage(), e);
