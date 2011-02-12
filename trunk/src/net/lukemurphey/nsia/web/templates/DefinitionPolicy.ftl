@@ -34,7 +34,7 @@
 <#else>
 <span class="Text_1">Scan Policy Management</span>
 <#if (sitegroup??)>
-<br><span class="LightText">Viewing scan policy for Site Group ${sitegroup.groupName?html}</span>
+<br><span class="LightText">Viewing scan policy for site-group ${sitegroup.groupName?html}</span>
 <#else>
 <br><span class="LightText">Viewing default scan policy</span>
 </#if>
