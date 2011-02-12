@@ -145,10 +145,6 @@ public class EmailAction extends Action {
 			values.put("Body", body);
 		}
 		
-		if( body == null || true ){
-			values.put("Body", "//Sort the list so that the shorter variables don't override the longer ones");
-		}
-		
 		return values;
 	}
 
