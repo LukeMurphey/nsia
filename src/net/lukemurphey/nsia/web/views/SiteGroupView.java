@@ -493,7 +493,7 @@ public class SiteGroupView extends View {
 			}
 			
 			// 2 -- Prepare the view
-			data.put("title", "Site-Groups");
+			data.put("title", "Site-groups");
 			
 			// 	2.1 -- Get the breadcrumbs
 			Vector<Link> breadcrumbs = new Vector<Link>();
