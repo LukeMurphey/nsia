@@ -190,5 +190,13 @@ nsia (0.9.6-1) unstable; urgency=low
  * Fixed error on the definitions error page (page displayed an error message as opposed to content)
  * Changed the TCP connection timeout to 5 seconds in order to prevent the user interface from blocking excessively if the log server is unavailable
  * Fixed issue where definition view could not be viewed if ThreatFactor.com could not be resolved by NSIA when attempting to download definitions
+ * Fixed issue where database was not initialized on hosts with non-English operating systems
+ * Fixed issue where system may post a warning when shutting down  on hosts with non-English operating systems
+ * Changed XML-RPC API with REST API
+ * Email incident response action now include default values
+ * Incident response actions now include additional variables including the URL of the scanner and the name of the site-group associated with the rule
+ * A log entry is created if an email could not be sent due to an incomplete email configuration
+ * Definitions sets with no definitions, no date or no version identifier will no longer be loaded (prevents error messages from bad definition imports)
+ * Added CWE reference type to definitions
  
  -- Luke Murphey <luke@threatfactor.com>  Mon, 3 Dec 2010 13:00:00 +0500
