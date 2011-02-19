@@ -250,7 +250,7 @@ public abstract class EventLogHook implements Serializable{
 		// Log that the action was invoked
 		EventLogMessage eventLogMessage = new EventLogMessage(EventType.RESPONSE_ACTION_TRIGGERED,
 				new EventLogField(FieldName.RESPONSE_ACTION_DESC, action.getConfigDescription()),
-				new EventLogField(FieldName.RESPONSE_ACTION_ID, action.getActionID()),
+				new EventLogField(FieldName.RESPONSE_ACTION_ID, getEventLogHookID()),
 				new EventLogField(FieldName.RESPONSE_ACTION_NAME, action.getDescription()));
 
 		// Add the additional fields
