@@ -7,6 +7,11 @@ import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.response.Action;
 import net.lukemurphey.nsia.response.ActionFailedException;
 
+/**
+ * The site-group event log hook initiates incident response actions within the scope of a site-group (at a site-group level).
+ * @author Luke Murphey
+ *
+ */
 public class SiteGroupStatusEventLogHook extends EventLogHook {
 
 	private static final long serialVersionUID = 1L;
@@ -37,6 +42,10 @@ public class SiteGroupStatusEventLogHook extends EventLogHook {
 		this.siteGroupIDInt = siteGroupID;
 	}
 	
+	/**
+	 * Get the site group ID
+	 * @return
+	 */
 	public int getSiteGroupID(){
 		return siteGroupIDInt;
 	}
@@ -59,12 +68,17 @@ public class SiteGroupStatusEventLogHook extends EventLogHook {
 			EventLogField field = message.getField(EventLogField.FieldName.SITE_GROUP_ID);
 			
 			if( field != null && field.getValue().equals( siteGroupID ) ){
-				//Perform action
+				
+				//Perform the action
 				action.execute(message);
+				
+				// Log that the action was invoked
+				logActionCompletion(action, field);
 			}
 		}
 	}
 	
+	@Override
 	public Action getAction(){
 		return action;
 	}
