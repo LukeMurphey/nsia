@@ -3,6 +3,8 @@ package net.lukemurphey.nsia.eventlog;
 import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.Application.DatabaseAccessType;
+import net.lukemurphey.nsia.eventlog.EventLogField.FieldName;
+import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 import net.lukemurphey.nsia.response.Action;
 import net.lukemurphey.nsia.response.ActionFailedException;
 
@@ -29,6 +31,7 @@ public abstract class EventLogHook implements Serializable{
 
 	private static final long serialVersionUID = -3742174021147412985L;
 	protected int eventlogHookID = -1;
+	protected int actionID = -1;
 	
 	public abstract void processEvent( EventLogMessage message ) throws EventLogHookException, ActionFailedException;
 	
@@ -60,6 +63,8 @@ public abstract class EventLogHook implements Serializable{
 				
 				EventLogHook eventlogHook = loadFromDatabase(result);
 				
+				//Action.loadFromDatabase(connection, eventlogHook.actionID);
+				
 				return eventlogHook;
 			}
 		}
@@ -90,6 +95,7 @@ public abstract class EventLogHook implements Serializable{
 		try{
 			// 1 -- Get the identifier for the event log hook
 			hookID = result.getInt("EventLogHookID");
+			int actionID = result.getInt("ActionID");
 			
 			// 2 -- Load bytes of the class to be instantiated
 			//byte[] bytes = result.getBytes("State");
@@ -112,6 +118,7 @@ public abstract class EventLogHook implements Serializable{
 			
 				// 4 -- Assign the identifier
 				eventlogHook.eventlogHookID = hookID;
+				eventlogHook.actionID = actionID;
 				
 				return eventlogHook;
 			}
@@ -223,6 +230,40 @@ public abstract class EventLogHook implements Serializable{
 		
 		
 	}
+	
+	/**
+	 * Log a message noting that the action was successfully invoked.
+	 * @param action
+	 */
+	protected void logActionCompletion( Action action ){
+		logActionCompletion(action, (EventLogField)null);
+	}
+		
+	
+	/**
+	 * Log a message noting that the action was successfully invoked.
+	 * @param action
+	 * @param extraFields
+	 */
+	protected void logActionCompletion( Action action, EventLogField... extraFields ){
+		
+		// Log that the action was invoked
+		EventLogMessage eventLogMessage = new EventLogMessage(EventType.RESPONSE_ACTION_TRIGGERED,
+				new EventLogField(FieldName.RESPONSE_ACTION_DESC, action.getConfigDescription()),
+				new EventLogField(FieldName.RESPONSE_ACTION_ID, action.getActionID()),
+				new EventLogField(FieldName.RESPONSE_ACTION_NAME, action.getDescription()));
+
+		// Add the additional fields
+		if( extraFields != null ){
+			for (EventLogField extraField : extraFields) {
+				eventLogMessage.addField(extraField);
+			}
+		}
+		
+		// Log the event
+		Application.getApplication().logEvent(eventLogMessage);
+	}
+	
 	
 	public void saveToDatabase() throws SQLException, IOException, NoDatabaseConnectionException{
 
