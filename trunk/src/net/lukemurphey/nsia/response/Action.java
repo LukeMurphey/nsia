@@ -633,7 +633,7 @@ public abstract class Action implements Serializable  {
 				ObjectInputStream inStream = new ObjectInputStream(byteInStream);
 				
 				Action action = (Action)inStream.readObject();
-				
+				action.actionID = actionID;
 				return action;
 			}
 		}
