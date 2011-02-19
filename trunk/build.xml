@@ -8,6 +8,16 @@
 	<property file="dev/default.properties" />
 
 	<!-- ================================= 
+          target: update_from_svn
+         ================================= -->
+	<target name="update_from_svn">
+		<taskdef name="svn" classpath="dev/lib/svnant.jar;dev/lib/svnClientAdapter.jar;dev/lib/svnjavahl.jar" classname="org.tigris.subversion.svnant.SvnTask" />
+		<svn>
+			<update dir="${value.build.workingcopy.directory}" revision="HEAD" />
+		</svn>
+	</target>
+	
+	<!-- ================================= 
           target: get_build_number
          ================================= -->
 	<target name="get_build_number">
@@ -96,9 +106,18 @@
 	</target>
 
 	<!-- ================================= 
+          target: clean_packages
+         ================================= -->
+	<target name="clean_packages" description="Clean up the packages created by this build script" >
+		<delete quiet="true" includeEmptyDirs="true">
+			<fileset dir="tmp/packages" />
+		</delete>
+	</target>
+	
+	<!-- ================================= 
           target: clean
          ================================= -->
-	<target name="clean" description="Clean up archives creating by this build script" >
+	<target name="clean" description="Clean up archives created by this build script" >
 		<delete quiet="true" includeEmptyDirs="true">
 			<fileset dir="tmp/packages" />
 			<fileset file="bin/nsia.jar" />
@@ -249,7 +268,7 @@
 	<!-- ================================= 
           target: package
          ================================= -->
-	<target name="package" depends="assemble_web_archive,assemble_jar,package_zip,package_debian,package_windows_installer" description="Create the various packages used for installing NSIA" />
+	<target name="package" depends="clean,assemble_web_archive,assemble_jar,package_zip,package_debian,package_windows_installer" description="Create the various packages used for installing NSIA" />
 
 	<!-- ================================= 
           target: package_zip
