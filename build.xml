@@ -99,7 +99,7 @@
           target: clean
          ================================= -->
 	<target name="clean" description="Clean up archives creating by this build script" >
-		<delete includeEmptyDirs="true">
+		<delete quiet="true" includeEmptyDirs="true">
 			<fileset dir="tmp/packages" />
 			<fileset file="bin/nsia.jar" />
 			<fileset file="lib/webConsole.war" />
