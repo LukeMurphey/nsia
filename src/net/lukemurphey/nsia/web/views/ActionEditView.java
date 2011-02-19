@@ -138,8 +138,11 @@ public class ActionEditView extends View {
 		
 		try{
 			action = (Action)extension.createInstance(modulesArguments);
+			action.save();
+			
 			SiteGroupStatusEventLogHook hook = new SiteGroupStatusEventLogHook(action, siteGroup.getGroupId(), EventLogSeverity.WARNING);
 			hook.saveToDatabase();
+			
 			Application.getApplication().getEventLog().addHook(hook);
 			response.sendRedirect( ActionsListView.getURL(siteGroup.getGroupId()) );
 			context.addMessage("Action successfully created", MessageSeverity.SUCCESS);
