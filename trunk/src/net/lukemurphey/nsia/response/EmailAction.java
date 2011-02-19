@@ -87,16 +87,16 @@ public class EmailAction extends Action {
 		
 		// 2 -- Add the subject
 		FieldText subject = new FieldText("Subject", "Subject", "Enter the subject of the email", 1, 1, new MessageValidator("subject"));
-		subject.setDefaultValue("NSIA: Deviations Detected in $sitegroup");
+		subject.setDefaultValue("NSIA: Deviations Detected in $sitegroup_name");
 		layout.addField(subject);
 		
 		// 3 -- Add the body
 		FieldText body = new FieldText("Body", "Body", "Enter the email message body. Note: you can use substitution variables to add in details such as the specimen/URL ($specimen), number of deviations detected ($deviation_count) or date of the finding ($date).", 1, 5, new MessageValidator("body"));
-		body.setDefaultValue("NSIA has detected deviations in the site-group $sitegroup \n"
+		body.setDefaultValue("NSIA has detected deviations in the site-group $sitegroup_name \n"
 				+ "Details:\n"
 				+ "------------------------\n"
 				+ "    Rule ID: $rule_id\n"
-				+ "    Site-group: $sitegroup\n"
+				+ "    Site-group: $sitegroup_name\n"
 				+ "    Site-group ID: $sitegroup_id\n"
 				+ "    Deviations: $deviation_count URLs rejected\n"
 				+ "    Domain: $specimen\n"
