@@ -438,8 +438,9 @@
 				</fileset>
 				<dirset dir="${value.build.java_output}" />
 			</classpath>
-			<!-- Uncomment the following if you want more verbose output -->
-			<formatter type="xml" usefile="false" />
+			
+			<formatter type="${value.test.junitformat}" usefile="false" if="value.test.junitformat" />
+			
 			<batchtest>
 				<fileset dir="${value.build.java_output}" includes="net/lukemurphey/nsia/tests/**/*.class">
 					<exclude name="net/lukemurphey/nsia/tests/TestApplication.class" />
