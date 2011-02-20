@@ -37,8 +37,6 @@ public class TestResources {
 	
 	public static String getTestResourcePath(){
 		String path = System.getProperty("test.resources.directory");
-
-		//System.out.println("\tPath:" + path);
 		
 		//Return the default path if not overridden
 		if( path == null ){
@@ -86,9 +84,9 @@ public class TestResources {
 		String databaseLocation;
 		
 		if( createIfNonExistant )
-			databaseLocation = "jdbc:derby:tmp/test_database;create=true";
+			databaseLocation = "jdbc:derby:" + getTestResourcePath() + "test_database;create=true";
 		else
-			databaseLocation = "jdbc:derby:tmp/test_database";
+			databaseLocation = "jdbc:derby:" + getTestResourcePath() + "test_database";
 		
 		connectionBroker = new BasicDataSource();
 		connectionBroker.setMaxActive(50);
