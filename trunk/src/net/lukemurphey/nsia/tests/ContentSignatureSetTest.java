@@ -16,7 +16,7 @@ import org.xml.sax.*;
 public class ContentSignatureSetTest extends TestCase {
 	
 	public void testLoadXML() throws IOException, SAXException, ParserConfigurationException, DefinitionSetLoadException{
-		String xml = TestResources.readFileAsString(TestResources.TEST_RESOURCE_DIRECTORY + "NSIA.Definitions");
+		String xml = TestResources.readFileAsString(TestResources.getTestResourcePath() + "NSIA.Definitions");
 
 		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(xml)));
 		

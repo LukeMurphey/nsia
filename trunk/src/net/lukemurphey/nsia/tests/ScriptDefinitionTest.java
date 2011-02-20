@@ -38,7 +38,7 @@ public class ScriptDefinitionTest extends TestCase {
 	}
 	
 	public void testParseMultilineComments() throws ScriptException, InvalidDefinitionException, IOException{
-		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "ValidRule.js" );
+		ScriptDefinition sig = getSignatureFromFile( TestResources.getTestResourcePath() + "ValidRule.js" );
 		if( !sig.getMessage().matches("This is a test")
 				|| !sig.toString().matches("1.2.3") ){
 			fail("The rule was not parsed correctly");
@@ -46,7 +46,7 @@ public class ScriptDefinitionTest extends TestCase {
 	}
 	
 	public void testParseQuotedName() throws ScriptException, InvalidDefinitionException, IOException{
-		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "ValidRuleQuoted.js" );
+		ScriptDefinition sig = getSignatureFromFile( TestResources.getTestResourcePath() + "ValidRuleQuoted.js" );
 		if( !sig.getMessage().matches("This is a test")
 				|| !sig.toString().matches("1.2.3") ){
 			fail("The rule was not parsed correctly: " + sig.getMessage());
@@ -54,11 +54,11 @@ public class ScriptDefinitionTest extends TestCase {
 	}
 	
 	public void testParseSingleLineComment() throws ScriptException, InvalidDefinitionException, IOException{
-		getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "ValidRuleLineComments.js" );
+		getSignatureFromFile( TestResources.getTestResourcePath() + "ValidRuleLineComments.js" );
 	}
 	
 	public void testScriptDefinition() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
-		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "URLExists.js" );
+		ScriptDefinition sig = getSignatureFromFile( TestResources.getTestResourcePath() + "URLExists.js" );
 		
 		HostConfiguration hostConfig = new HostConfiguration();
 		hostConfig.setHost("google.com", 80, "http");
@@ -90,7 +90,7 @@ public class ScriptDefinitionTest extends TestCase {
 		
 		HttpResponseData httpResponse = new HttpResponseData( httpMethod, "http://google.com" );
 		
-		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "ValidRulePackages.js" );
+		ScriptDefinition sig = getSignatureFromFile( TestResources.getTestResourcePath() + "ValidRulePackages.js" );
 		
 		Application app = TestApplication.getApplication();
 		sig.evaluate(httpResponse, new Variables(), 1, app.getDatabaseConnection(DatabaseAccessType.SCANNER));
@@ -127,7 +127,7 @@ public class ScriptDefinitionTest extends TestCase {
 	public void testSetEnvironmentDataNotShared() throws ScriptException, InvalidDefinitionException, IOException, NoDatabaseConnectionException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, DefinitionEvaluationException, TestApplicationException{
 		
 		// 1 -- Perform a scan against a URL, this should cause the script to save the script data with the isSpecimenSpecific flag as false
-		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "SaveDataNotShared.js" );
+		ScriptDefinition sig = getSignatureFromFile( TestResources.getTestResourcePath() + "SaveDataNotShared.js" );
 		Application app = TestApplication.getApplication();
 		
 		{
@@ -167,7 +167,7 @@ public class ScriptDefinitionTest extends TestCase {
 		
 		// 1 -- Perform a scan against a URL, this should cause the script to save the script data with the isSpecimenSpecific flag as false
 		Application app = TestApplication.getApplication();
-		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "SaveDataNoSpecimen.js" );
+		ScriptDefinition sig = getSignatureFromFile( TestResources.getTestResourcePath() + "SaveDataNoSpecimen.js" );
 		
 		{
 			HostConfiguration hostConfig = new HostConfiguration();
@@ -206,7 +206,7 @@ public class ScriptDefinitionTest extends TestCase {
 		
 		// 1 -- Perform a scan against a URL, this should cause the script to save the script data with the isSpecimenSpecific flag as false
 		Application app = TestApplication.getApplication();
-		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "Vector.js" );
+		ScriptDefinition sig = getSignatureFromFile( TestResources.getTestResourcePath() + "Vector.js" );
 		
 		HostConfiguration hostConfig = new HostConfiguration();
 		hostConfig.setHost("google.com", 80, "http");
@@ -235,7 +235,7 @@ public class ScriptDefinitionTest extends TestCase {
 		
 		// 1 -- Perform a scan against a URL, make sure the URL loads the native array items
 		Application app = TestApplication.getApplication();
-		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "VectorNativeArrayConversion.js" );
+		ScriptDefinition sig = getSignatureFromFile( TestResources.getTestResourcePath() + "VectorNativeArrayConversion.js" );
 		
 		HostConfiguration hostConfig = new HostConfiguration();
 		hostConfig.setHost("google.com", 80, "http");
@@ -264,7 +264,7 @@ public class ScriptDefinitionTest extends TestCase {
 		
 		// 1 -- Perform a scan against a URL, make sure the URL loads the native array items
 		Application app = TestApplication.getApplication();
-		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "SetVariable.js" );
+		ScriptDefinition sig = getSignatureFromFile( TestResources.getTestResourcePath() + "SetVariable.js" );
 		
 		HostConfiguration hostConfig = new HostConfiguration();
 		hostConfig.setHost("google.com", 80, "http");
@@ -288,8 +288,8 @@ public class ScriptDefinitionTest extends TestCase {
 		
 		// 1 -- Perform a scan against a URL, make sure the URL loads the native array items
 		Application app = TestApplication.getApplication();
-		ScriptDefinition sigSet = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "SetVariableWithValue.js" );
-		ScriptDefinition sigRead = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "ReadVariableWithValue.js" );
+		ScriptDefinition sigSet = getSignatureFromFile( TestResources.getTestResourcePath() + "SetVariableWithValue.js" );
+		ScriptDefinition sigRead = getSignatureFromFile( TestResources.getTestResourcePath() + "ReadVariableWithValue.js" );
 		
 		HostConfiguration hostConfig = new HostConfiguration();
 		hostConfig.setHost("google.com", 80, "http");
@@ -318,7 +318,7 @@ public class ScriptDefinitionTest extends TestCase {
 		
 		// 1 -- Perform a scan against a URL, make sure the URL loads the native array items
 		Application app = TestApplication.getApplication();
-		ScriptDefinition sig = getSignatureFromFile( TestResources.TEST_RESOURCE_DIRECTORY + "ExtractURLs.js" );
+		ScriptDefinition sig = getSignatureFromFile( TestResources.getTestResourcePath() + "ExtractURLs.js" );
 		
 		HostConfiguration hostConfig = new HostConfiguration();
 		hostConfig.setHost("google.com", 80, "http");

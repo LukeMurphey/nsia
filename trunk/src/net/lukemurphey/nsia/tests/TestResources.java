@@ -33,7 +33,26 @@ public class TestResources {
 	
 	private org.apache.commons.dbcp.BasicDataSource connectionBroker;
 	
-	public static final String TEST_RESOURCE_DIRECTORY = "dev/test/";
+	private static final String TEST_RESOURCE_DIRECTORY = "dev/test/";
+	
+	public static String getTestResourcePath(){
+		String path = System.getProperty("test.resources.directory");
+
+		//System.out.println("\tPath:" + path);
+		
+		//Return the default path if not overridden
+		if( path == null ){
+			return TEST_RESOURCE_DIRECTORY;
+		}
+		
+		//Add the trailing slash if necessary
+		if( !path.endsWith( System.getProperty("file.separator") )){
+			path = path + System.getProperty("file.separator");
+		}
+		
+		return path;
+		
+	}
 	
 	public static String readFileAsString(String filePath) throws java.io.IOException{
         StringBuffer fileData = new StringBuffer(1000);

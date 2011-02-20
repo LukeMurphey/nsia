@@ -428,6 +428,7 @@
          ================================= -->
 	<target name="test" depends="compile_core,download_definitions" description="Run the unit tests">
 		<junit printsummary="on" failureProperty="test.result.failure">
+			<sysproperty key="test.resources.directory" value="${value.build.workingcopy.directory}/dev/test" />
 			<classpath>
 				<fileset dir="lib">
 					<include name="**/*.jar" />
@@ -437,8 +438,8 @@
 				</fileset>
 				<dirset dir="${value.build.java_output}" />
 			</classpath>
-			<!-- Uncomment the following if you want more verbose output 
-			<formatter type="brief" usefile="false" /> -->
+			<!-- Uncomment the following if you want more verbose output -->
+			<formatter type="xml" usefile="false" />
 			<batchtest>
 				<fileset dir="${value.build.java_output}" includes="net/lukemurphey/nsia/tests/**/*.class">
 					<exclude name="net/lukemurphey/nsia/tests/TestApplication.class" />
