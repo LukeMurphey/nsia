@@ -61,7 +61,7 @@ public class TestResources {
 		}
 		
 		//Add the trailing slash if necessary
-		if( !path.endsWith( System.getProperty("file.separator") )){
+		if( path.length() > 0 && !path.endsWith( System.getProperty("file.separator") )){
 			path = path + System.getProperty("file.separator");
 		}
 		
