@@ -7,7 +7,7 @@ Version includes the following changes:
  * Fixed error on the definitions error page (page displayed an error message as opposed to content)
  * Changed the TCP connection timeout to 5 seconds in order to prevent the user interface from blocking excessively if the log server is unavailable
  * Fixed issue where definition view could not be viewed if ThreatFactor.com could not be resolved by NSIA when attempting to download definitions
- * Fixed issue where database was not initialized on hosts with non-English operating systems
+ * Fixed issue where database was not initialized on hosts with non-English operating systems (thanks to Jairo Lindeman Ruiz [jindeman_r@hotmail.com] for identifying and resolving this defect)
  * Fixed issue where system may post a warning when shutting down  on hosts with non-English operating systems
  * Changed XML-RPC API with REST API
  * Email incident response action now include default values
@@ -15,6 +15,9 @@ Version includes the following changes:
  * A log entry is created if an email could not be sent due to an incomplete email configuration
  * Definitions sets with no definitions, no date or no version identifier will no longer be loaded (prevents error messages from bad definition imports)
  * Added CWE reference type to definitions
+ * Incident response actions now log whenever they execute
+ * The installer now directs the user to a newer version of Java (6 update 24)
+ * "Site groups" text is now hyphenated throughout the user interface
  
 Version 1.0.2 Changes
 ------------------------------------------------------------------
