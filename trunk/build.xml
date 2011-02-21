@@ -428,7 +428,7 @@
          ================================= -->
 	<target name="test" depends="compile_core,download_definitions" description="Run the unit tests">
 		<junit printsummary="on" failureProperty="test.result.failure">
-			<sysproperty key="test.resources.directory" value="${value.build.workingcopy.directory}/dev/test" />
+			<sysproperty key="net.lukemurphey.nsia.tests.basedir" value="${basedir}" />
 			<classpath>
 				<fileset dir="lib">
 					<include name="**/*.jar" />

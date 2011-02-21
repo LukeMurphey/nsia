@@ -51,7 +51,7 @@ public class TestApplication {
 		try{
 			if( app == null ){
 				createDatabaseCopy();
-				app = new Application( DEFAULT_TEST_DATABASE_PATH, startServices );
+				app = new Application( TestResources.getBaseDir() + DEFAULT_TEST_DATABASE_PATH, startServices );
 			}
 		}
 		catch(IOException e ){
@@ -77,11 +77,11 @@ public class TestApplication {
 		
 		deleteDatabase();
 		
-		copyDirectory( new File("dev/test/test_database"), new File(DEFAULT_TEST_DATABASE_PATH), true );
+		copyDirectory( new File( TestResources.getBaseDir() + "dev/test/test_database"), new File( TestResources.getBaseDir() + DEFAULT_TEST_DATABASE_PATH ), true );
 	}
 	
 	private static void deleteDatabase(){
-		File test_db = new File(DEFAULT_TEST_DATABASE_PATH);
+		File test_db = new File( TestResources.getBaseDir() + DEFAULT_TEST_DATABASE_PATH);
 		GenericUtils.deleteDirectory( test_db );
 	}
 	

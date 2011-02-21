@@ -35,8 +35,25 @@ public class TestResources {
 	
 	private static final String TEST_RESOURCE_DIRECTORY = "dev/test/";
 	
+	public static String getBaseDir(){
+		String path = System.getProperty("net.lukemurphey.nsia.tests.basedir");
+		
+		//Return the default path if not overridden
+		if( path == null ){
+			return "";
+		}
+		
+		//Add the trailing slash if necessary
+		if( path.length() > 0 && !path.endsWith( System.getProperty("file.separator") )){
+			path = path + System.getProperty("file.separator");
+		}
+		
+		return path;
+		
+	}
+	
 	public static String getTestResourcePath(){
-		String path = System.getProperty("test.resources.directory");
+		String path = getBaseDir();
 		
 		//Return the default path if not overridden
 		if( path == null ){
@@ -48,7 +65,7 @@ public class TestResources {
 			path = path + System.getProperty("file.separator");
 		}
 		
-		return path;
+		return path + TEST_RESOURCE_DIRECTORY;
 		
 	}
 	
