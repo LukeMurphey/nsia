@@ -268,7 +268,7 @@
 	<!-- ================================= 
           target: package
          ================================= -->
-	<target name="package" depends="clean,assemble_web_archive,assemble_jar,package_zip,package_debian,package_windows_installer" description="Create the various packages used for installing NSIA" />
+	<target name="package" depends="compile_core,assemble_web_archive,assemble_jar,package_zip,package_debian,package_windows_installer" description="Create the various packages used for installing NSIA" />
 
 	<!-- ================================= 
           target: package_zip
