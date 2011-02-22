@@ -18,6 +18,7 @@ Version includes the following changes:
  * Incident response actions now log whenever they execute
  * The installer now directs the user to a newer version of Java (6 update 24)
  * "Site groups" text is now hyphenated throughout the user interface
+ * Fixed issue where scanner would throw an exception if a URL with characters that could not be decoded was discovered
  
 Version 1.0.2 Changes
 ------------------------------------------------------------------

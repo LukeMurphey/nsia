@@ -200,8 +200,9 @@ nsia (0.9.6-1) unstable; urgency=low
  * Added CWE reference type to definitions
  * Incident response actions now log whenever they execute
  * "Site groups" text is now hyphenated throughout the user interface
+ * Fixed issue where scanner would throw an exception if a URL with characters that could not be decoded was discovered
  
- -- Luke Murphey <luke@threatfactor.com>  Mon, 21 Dec 2011 15:06:00 +0500
+ -- Luke Murphey <luke@threatfactor.com>  Mon, 22 Feb 2011 12:41:00 +0500
  
  
  
