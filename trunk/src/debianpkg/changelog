@@ -190,7 +190,7 @@ nsia (0.9.6-1) unstable; urgency=low
  * Fixed error on the definitions error page (page displayed an error message as opposed to content)
  * Changed the TCP connection timeout to 5 seconds in order to prevent the user interface from blocking excessively if the log server is unavailable
  * Fixed issue where definition view could not be viewed if ThreatFactor.com could not be resolved by NSIA when attempting to download definitions
- * Fixed issue where database was not initialized on hosts with non-English operating systems (thanks to Jairo Lindeman Ruiz [jindeman_r@hotmail.com] for identifying and resolving this defect)
+ * Fixed issue where database was not initialized on hosts with non-English operating systems (thanks to Jairo Lindeman Ruiz [jindeman_r@hotmail.com] for identifying and helping to resolve this defect)
  * Fixed issue where system may post a warning when shutting down  on hosts with non-English operating systems
  * Changed XML-RPC API with REST API
  * Email incident response action now include default values
