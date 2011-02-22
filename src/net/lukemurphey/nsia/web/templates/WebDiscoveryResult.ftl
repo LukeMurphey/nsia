@@ -38,13 +38,19 @@
             
             <#-- Show the dialog -->
             var $dialog = $('<div></div>')
-                .html( '<p>Below is the URL associated with the finding. <span style="color:red;font-weight:bold">This link may be malicious</span>. Do not open it without taking necessary precautions.<p><a style="color: blue;" target="url_viewer" href="' + encodeURI(url) + '">' + escapeHTML(url) + '</a><p>The content type of the file is: ' + escapeHTML(content_type) + '</p></p></p>')
+                .html( '<div style="padding: 16px;">' +
+'The details of the scan result for the finding is below. Note that the URL should only be opened if you know it is safe or you have taken necessary precautions.' +
+'<table style="margin-left: 16px;margin-top:16px;">' +
+'    <tr><td><strong>URL</strong></td><td><a href="' + encodeURI(url) + '" target="url_viewer" style="color: blue;">' + escapeHTML(url) + '</a></td></tr>' +
+'    <tr><td><strong>Content-Type</strong>&nbsp;</td><td>' + escapeHTML(content_type) + '</td></tr>' +
+'</table>' +
+'</div>' )
                 .dialog({
                     autoOpen: true,
                     title: "Scan Result URL",
                     modal: true,
-                    width: 400,
-                    height: 240,
+                    width: 600,
+                    height: 300,
                     buttons: {
                         Ok: function() {
                             $( this ).dialog( "close" );
