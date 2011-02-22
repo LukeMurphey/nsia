@@ -798,6 +798,10 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 				catch(MalformedURLException e){
 					//Ignore this entry, it is not a valid URL
 				}
+				catch(IllegalArgumentException e){
+					//Ignore this entry, it is not a valid URL
+					//This exception may be thrown if the URL contains invalid characters that cannot be decoded.
+				}
 			}
 		}
 		
