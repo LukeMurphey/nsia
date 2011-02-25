@@ -1,6 +1,7 @@
 package net.lukemurphey.nsia.web;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,8 +54,9 @@ public abstract class View {
 	 * @param request
 	 * @param arguments
 	 * @return boolean indicating if the view matches the request.
+	 * @throws ClientAbortException 
 	 */
-	public boolean process( HttpServletRequest request, HttpServletResponse response, RequestContext context ) throws ViewFailedException{
+	public boolean process( HttpServletRequest request, HttpServletResponse response, RequestContext context ) throws ViewFailedException, ClientAbortException{
 		return process( request, response, context, false);
 	}
 
@@ -66,8 +68,9 @@ public abstract class View {
 	 * @param ignore_arguments Causes the view to process the arguments even if they don't match
 	 * @return
 	 * @throws ViewFailedException
+	 * @throws ClientAbortException 
 	 */
-	public boolean process( HttpServletRequest request, HttpServletResponse response, RequestContext context, boolean ignore_arguments ) throws ViewFailedException{
+	public boolean process( HttpServletRequest request, HttpServletResponse response, RequestContext context, boolean ignore_arguments ) throws ViewFailedException, ClientAbortException{
 		
 		String[] args;
 		
@@ -88,6 +91,9 @@ public abstract class View {
 		
 		try {
 			return process( request, response, context, args, Shortcuts.getMapWithBasics(context, request) );
+		} catch (SocketException e) {
+			// Socket exceptions occur when clients terminate connections or drop off
+			throw new ClientAbortException();
 		} catch (IOException e) {
 			throw new ViewFailedException(e);
 		} catch (URLInvalidException e) {

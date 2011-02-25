@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.lukemurphey.nsia.SessionStatus;
+import net.lukemurphey.nsia.web.ClientAbortException;
 import net.lukemurphey.nsia.web.RequestContext;
 import net.lukemurphey.nsia.web.View;
 import net.lukemurphey.nsia.web.ViewFailedException;
@@ -27,6 +28,8 @@ public class AuthenticationMiddleware extends Middleware {
 				view.process(request, response, context, true);
 			} catch (ViewFailedException e) {
 				throw new MiddlewareException(e);
+			} catch (ClientAbortException e) {
+				// The connection failed to the client. This is likely due to transient network problem and can be safely ignored.
 			}
 			
 			return true;
