@@ -47,8 +47,6 @@ public class GraphServlet extends HttpServlet {
 	private static Hashtable<String,String> cachedCharts = new Hashtable<String,String>();
 	
 	public synchronized void doRequest(HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-
-		//if(true){return;}
 		
 		// 1 -- Set the HTTP response headers
 		int chartCreationFrequency = 10;

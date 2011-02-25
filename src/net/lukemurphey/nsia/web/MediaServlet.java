@@ -100,9 +100,12 @@ public class MediaServlet extends HttpServlet {
 			OutputStream outputStream = response.getOutputStream();
 			outputStream.write(file);
 		
-		}catch(FileNotFoundException e){
+		} catch(FileNotFoundException e){
 			handleFileNotFound(inGet, request, response);
-		}catch(Throwable t){
+		} catch(SocketException e){
+			// This can happen when the socket is forcibly terminated by the client. This can be safely 
+			// ignored since it is common that browsers will close connections.
+		} catch(Throwable t){
 			Application.getApplication().logExceptionEvent(EventLogMessage.EventType.WEB_ERROR, t);
 		}
 		

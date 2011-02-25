@@ -85,6 +85,9 @@ public class WebConsoleServlet extends HttpServlet {
 						break;
 					}
 				}
+				catch(ClientAbortException e){
+					//Ignore client abort exceptions since they are not a problem with the application
+				}
 				catch(ViewFailedException e){
 					throw new ServletException("Exception thrown while generating view", e);
 				}
