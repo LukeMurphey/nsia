@@ -20,6 +20,7 @@ Version includes the following changes:
  * "Site groups" text is now hyphenated throughout the user interface
  * Fixed issue where scanner would throw an exception if a URL with characters that could not be decoded was discovered
  * Improved the URL viewer on the scan results report
+ * Fixed issue where exceptions were logged when web clients could not connected to NSIA due network problems
  
 Version 1.0.2 Changes
 ------------------------------------------------------------------
