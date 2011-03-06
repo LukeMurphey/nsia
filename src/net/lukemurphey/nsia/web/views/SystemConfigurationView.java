@@ -17,7 +17,6 @@ import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.GenericUtils;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.InvalidLocalPartException;
-import net.lukemurphey.nsia.LicenseDescriptor;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.GenericUtils.SMTPEncryption;
 import net.lukemurphey.nsia.eventlog.EventLogField;
