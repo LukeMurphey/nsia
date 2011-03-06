@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +14,7 @@ import net.lukemurphey.nsia.Application;
 import net.lukemurphey.nsia.ApplicationConfiguration;
 import net.lukemurphey.nsia.EmailAddress;
 import net.lukemurphey.nsia.GeneralizedException;
+import net.lukemurphey.nsia.GenericUtils;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.InvalidLocalPartException;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
@@ -594,17 +596,49 @@ public class SystemConfigurationView extends View {
 			scanner_options.add( new Parameter("Scanner Default State", appConfig.isDefaultScanningEnabled(), ParameterTitles.SCANNER_SCAN_DEFAULT_ENABLED.getName(), ParameterType.BOOL) );
 			data.put("scanner_options", scanner_options);
 			
+			// 10 -- Add the user's email address (so that email can be tested)
+			if( context.getUser().getEmailAddress() != null ){
+				data.put("user_email", context.getUser().getEmailAddress());
+			}
+			
+			data.put("email_from_address", appConfig.getEmailFromAddress());
+			data.put("smtp_server", appConfig.getEmailSMTPServer());
+			
+			// 11 -- Send a test email if requested
+			if( request.getParameter("SendTestEmail") != null ){
+				
+				if( context.getUser().getEmailAddress() != null ){
+					
+					// Try to send a sample email to the given address
+					try {
+						if( GenericUtils.sendMail(context.getUser().getEmailAddress(), "Test Email from NSIA", "This is a test email from ThreatFactor NSIA scanner") ){
+							context.addMessage("Email successfully sent to " + context.getUser().getEmailAddress(), MessageSeverity.INFORMATION);
+						}
+						else{
+							context.addMessage("Email could not be sent to " + context.getUser().getEmailAddress(), MessageSeverity.WARNING);
+						}
+					} catch (MessagingException e) {
+						context.addMessage("Email could not be sent: " + e.getMessage(), MessageSeverity.WARNING);
+					}
+				}
+				else{
+					context.addMessage("Your account does not have an email address to send a test message to", MessageSeverity.WARNING);
+				}
+			}
+			
+			// Render the page
 			TemplateLoader.renderToResponse("SystemConfiguration.ftl", data, response);
 
 			return true;
-		}
-		catch( InputValidationException e ){
+		} catch( InputValidationException e ){
 			throw new ViewFailedException(e);
 		} catch (NoDatabaseConnectionException e) {
 			throw new ViewFailedException(e);
 		} catch (SQLException e) {
 			throw new ViewFailedException(e);
 		} catch (GeneralizedException e) {
+			throw new ViewFailedException(e);
+		} catch (InvalidLocalPartException e) {
 			throw new ViewFailedException(e);
 		}
 	}
