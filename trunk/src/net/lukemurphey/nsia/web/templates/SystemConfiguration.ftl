@@ -3,10 +3,11 @@
 <p>
 
 <#include "GetURLFunction.ftl">
+<#include "Shortcuts.ftl">
 
-<#macro config_options options name> 
+<#macro config_options options name extra="" extra_at_bottom=""> 
     <tr>
-        <td class="Text_2">${name?html}</td>
+        <td><span style="margin-right: 8px;" class="Text_2">${name?html}</span><#if extra?trim != "">&nbsp;${extra}</#if></td>
     </tr>
     <#list options as param>
 
@@ -74,8 +75,10 @@
     </tr>
     </#if>
 </#list>
+<#if extra_at_bottom?trim != ""><tr><td style="height:28px;">${extra_at_bottom}</td></tr></#if>
 <tr><td>&nbsp;</td></tr>
 </#macro>
+<#macro extra_message message><span style="background-image: url('/media/img/16_Information'); background-repeat: no-repeat; padding-left: 18px;" class="InfoText">${message}</#macro>
 
 <table width="100%">
     <@config_options options=authentication_options name="Authentication System" />
@@ -83,7 +86,17 @@
     <@config_options options=server_options name="Server Subsystem" />
     <@config_options options=logging_options name="Logging Subsystem" />
     <@config_options options=license_options name="License" />
-    <@config_options options=email_options name="Email" />
+        
+    <#assign email_info>
+    <#if !email_from_address?? && !smtp_server??><@extra_message message="You must define at least an SMTP server and a source email address to complete the email setup" /></#if>
+    <#if email_from_address?? && !smtp_server??><@extra_message message="You must define an SMTP server to complete the email setup" /></#if>
+    <#if !email_from_address?? && smtp_server??><@extra_message message="You must define a source email address to complete the email setup" /></#if>
+    <#if email_from_address?? && smtp_server?? && !user_email??><#assign message>You do not have an email address defined in your user profile. Define an email address for your account in order to send a test email. <a href="${geturl("user_editor", "Edit", session.userId)}">[Edit profile now]</a></#assign><@extra_message message=message /></#if>
+    </#assign>
+    <#assign test_email_link>
+    <#if email_from_address?? && smtp_server?? && user_email??><a href="${request.thisURL?html}?SendTestEmail">Send a test email</a> to ${user_email?html}</#if>
+    </#assign>
+    <@config_options options=email_options name="Email" extra=email_info extra_at_bottom=test_email_link/>
     <@config_options options=scanner_options name="Scanner" />
 </table>
 </#assign>
