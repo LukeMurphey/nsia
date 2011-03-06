@@ -81,11 +81,16 @@
 <#macro extra_message message><span style="background-image: url('/media/img/16_Information'); background-repeat: no-repeat; padding-left: 18px;" class="InfoText">${message}</#macro>
 
 <table width="100%">
-    <@config_options options=authentication_options name="Authentication System" />
+    <@config_options options=authentication_options name="Authentication Subsystem" />
     <@config_options options=session_options name="Session Management Subsystem" />
     <@config_options options=server_options name="Server Subsystem" />
     <@config_options options=logging_options name="Logging Subsystem" />
-    <@config_options options=license_options name="License" />
+    
+    <#assign manage_license_link>
+    <#if license??><a href="${geturl("license")}">Review license details</a><#else><a href="${geturl("license")}">More information</a></#if>
+    </#assign>
+    
+    <@config_options options=license_options name="License" extra_at_bottom=manage_license_link />
         
     <#assign email_info>
     <#if !email_from_address?? && !smtp_server??><@extra_message message="You must define at least an SMTP server and a source email address to complete the email setup" /></#if>
