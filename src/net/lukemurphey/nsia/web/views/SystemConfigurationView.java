@@ -17,6 +17,7 @@ import net.lukemurphey.nsia.GeneralizedException;
 import net.lukemurphey.nsia.GenericUtils;
 import net.lukemurphey.nsia.InputValidationException;
 import net.lukemurphey.nsia.InvalidLocalPartException;
+import net.lukemurphey.nsia.LicenseDescriptor;
 import net.lukemurphey.nsia.NoDatabaseConnectionException;
 import net.lukemurphey.nsia.GenericUtils.SMTPEncryption;
 import net.lukemurphey.nsia.eventlog.EventLogField;
@@ -625,6 +626,9 @@ public class SystemConfigurationView extends View {
 					context.addMessage("Your account does not have an email address to send a test message to", MessageSeverity.WARNING);
 				}
 			}
+			
+			// 12 -- Get the application license
+			data.put("license", appConfig.getLicense());
 			
 			// Render the page
 			TemplateLoader.renderToResponse("SystemConfiguration.ftl", data, response);
