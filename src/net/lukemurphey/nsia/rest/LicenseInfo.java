@@ -71,7 +71,7 @@ public class LicenseInfo extends RESTEndpointClient {
 				status = LicenseStatus.EXPIRED;
 			}
 
-			return new LicenseDescriptor(licensee, key, expirationDate, type, status);
+			return new LicenseDescriptor(licensee, key, expirationDate, type, status, isExpired);
 		}
 		
 		return null;
