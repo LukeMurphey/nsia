@@ -13,6 +13,7 @@ public class LicenseDescriptor{
 	private Date expires;
 	private Type licenseType;
 	private LicenseStatus status;
+	private Boolean expired = null; // If null then the status should be determined from the date. Otherwise, use this field.
 	
 	/**
 	 * Describes the type of the license
@@ -59,6 +60,15 @@ public class LicenseDescriptor{
 		this.licenseKey = licenseKey;
 		this.licenseType = licenseType;
 		this.status = status;
+	}
+
+	public LicenseDescriptor( String licensee, String licenseKey, Date expires, Type licenseType, LicenseStatus status, boolean expired){
+		this.expires = expires;
+		this.licensee = licensee;
+		this.licenseKey = licenseKey;
+		this.licenseType = licenseType;
+		this.status = status;
+		this.expired = expired;
 	}
 	
 	/**
@@ -135,7 +145,7 @@ public class LicenseDescriptor{
 		}
 		
 		// 2 -- Determine if the license has expired
-		if( getExpirationDate().before( new Date() )){
+		if( expired == true || ( expired == null && getExpirationDate().before( new Date() ) ) ){
 			status = LicenseStatus.EXPIRED;
 			return false;
 		}
