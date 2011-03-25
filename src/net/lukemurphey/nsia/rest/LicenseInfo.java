@@ -59,7 +59,10 @@ public class LicenseInfo extends RESTEndpointClient {
 			String licenseExpiredString = el.getAttribute("LicenseExpired");
 			boolean isExpired = false;
 			
-			if( licenseExpiredString == null || licenseExpiredString.length() == 0 ){
+			if(status == LicenseStatus.EXPIRED){
+				isExpired = true;
+			}
+			else if( licenseExpiredString == null || licenseExpiredString.length() == 0 ){
 				isExpired = false;
 			}
 			else if ( licenseExpiredString.equalsIgnoreCase("True") ){
