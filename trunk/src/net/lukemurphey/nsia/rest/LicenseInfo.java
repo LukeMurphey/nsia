@@ -56,7 +56,7 @@ public class LicenseInfo extends RESTEndpointClient {
 			Type type = Type.valueOf(type_string);
 			
 			// Determine if the license has expired (according to the server)
-			String licenseExpiredString = el.getAttribute("LicenseExpired");
+			String licenseExpiredString = el.getAttribute("Expired");
 			boolean isExpired = false;
 			
 			if(status == LicenseStatus.EXPIRED){
