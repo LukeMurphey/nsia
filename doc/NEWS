@@ -1,5 +1,12 @@
 Below is the history of NSIA with notes about the changes available in each version.
 
+Version 1.0.4 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+ * NSIA now determines whether a license is expired using the expired flag defined by the server
+ * Added the ability to send a test email from the configuration page
+ * The configuration page now shows a message if the email configuration is incomplete
+
 Version 1.0.3 Changes
 ------------------------------------------------------------------
 Version includes the following changes:
