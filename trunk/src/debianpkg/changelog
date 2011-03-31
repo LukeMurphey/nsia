@@ -184,7 +184,7 @@ nsia (0.9.6-1) unstable; urgency=low
  
  -- Luke Murphey <luke@threatfactor.com>  Mon, 3 Dec 2010 13:00:00 +0500
  
-  nsia (1.0.3-1) stable; urgency=low
+ nsia (1.0.3-1) stable; urgency=low
  
  * Access control editor now includes the ability to set all of the permissions without having to set each individual entry
  * Fixed error on the definitions error page (page displayed an error message as opposed to content)
@@ -205,6 +205,15 @@ nsia (0.9.6-1) unstable; urgency=low
  * Fixed issue where exceptions were logged when web clients could not connected to NSIA due network problems
  
  -- Luke Murphey <luke@threatfactor.com>  Mon, 26 Feb 2011 15:11:00 +0500
+ 
+ nsia (1.0.4-1) stable; urgency=low
+ 
+ * NSIA now determines whether a license is expired using the expired flag defined by the server
+ * Added the ability to send a test email from the configuration page
+ * The configuration page now shows a message if the email configuration is incomplete
+ 
+ -- Luke Murphey <luke@threatfactor.com>  Fri, 1 Apr 2011 13:00:00 +0500
+ 
  
  
  
