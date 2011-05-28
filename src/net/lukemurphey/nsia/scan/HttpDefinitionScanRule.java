@@ -223,13 +223,13 @@ public class HttpDefinitionScanRule extends ScanRule{
 	 * @return
 	 * @throws ScanException
 	 */
-	public HttpSignatureScanResultWithParser doScanAndReturnParser( HttpDefinitionScanResult parentScanResult ) throws ScanException {
-		return doScanInternal(parentScanResult);
+	public HttpSignatureScanResultWithParser doScanAndReturnParser( HttpDefinitionScanResult parentScanResult, Date parentRuleScanStartDate ) throws ScanException {
+		return doScanInternal(parentScanResult, parentRuleScanStartDate);
 	}
 	
 	@Override
 	public ScanResult doScan() throws ScanException {
-		HttpSignatureScanResultWithParser result = doScanInternal(null);
+		HttpSignatureScanResultWithParser result = doScanInternal(null, new Date() );
 		return result.scanResult;
 	}
 	
@@ -305,11 +305,12 @@ public class HttpDefinitionScanRule extends ScanRule{
 	
 	/**
 	 * Perform a scan and return a scan result with an HTML parser.
-	 * @param parentResult
+	 * @param parentResult The scan result that contained the link that used to get the URL for the current scan object.
+	 * @param ruleScanStartDate The date/time when the scan rule was started
 	 * @return
 	 * @throws ScanException
 	 */
-	private HttpSignatureScanResultWithParser doScanInternal( HttpDefinitionScanResult parentResult ) throws ScanException {
+	private HttpSignatureScanResultWithParser doScanInternal( HttpDefinitionScanResult parentResult, Date ruleScanStartDate ) throws ScanException {
 		
 		// 1 -- Load the exception set
 		DefinitionPolicySet signatureExceptions = null;
@@ -374,7 +375,7 @@ public class HttpDefinitionScanRule extends ScanRule{
 
 
 				// 3 -- Scan the content for signature matches
-				DefinitionMatchResultSet resultSet = signatureSet.scan(httpResponse, signatureExceptions, siteGroupID, scanRuleId);
+				DefinitionMatchResultSet resultSet = signatureSet.scan(httpResponse, signatureExceptions, siteGroupID, scanRuleId, ruleScanStartDate );
 				results = resultSet.getDefinitionMatches();
 				extractedURLs = resultSet.getExtractedURLs();
 				

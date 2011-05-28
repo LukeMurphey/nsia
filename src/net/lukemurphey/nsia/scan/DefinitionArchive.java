@@ -988,8 +988,19 @@ public class DefinitionArchive {
 		
 	}
 	
-	public DefinitionMatchResultSet evaluate( HttpResponseData response, boolean recurseLinkedUrls) throws ScriptException, NoDatabaseConnectionException, SQLException, NoSuchMethodException, InvalidDefinitionException{
-		return definitionSet.scan(response);
+	/**
+	 * Initiate a scan against the given HTTP response data.
+	 * @param response
+	 * @param scanStartTime The date/time that the scan rule was initiated.
+	 * @return
+	 * @throws ScriptException
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws NoSuchMethodException
+	 * @throws InvalidDefinitionException
+	 */
+	public DefinitionMatchResultSet evaluate( HttpResponseData response, Date scanStartTime) throws ScriptException, NoDatabaseConnectionException, SQLException, NoSuchMethodException, InvalidDefinitionException{
+		return definitionSet.scan(response, scanStartTime);
 	}
 	
 	/**

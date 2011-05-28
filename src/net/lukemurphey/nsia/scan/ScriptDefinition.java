@@ -481,23 +481,38 @@ public class ScriptDefinition extends Definition {
 	
 	/**
 	 * This method populates the script engine's environment with classes and objects it needs to execute the definition.
-	 * @param scriptEngine
+	 * @param scriptEngine The script engine that will use the bindings
 	 */
 	private void populateBindings( ScriptEngine scriptEngine ){
+		populateBindings( scriptEngine, null);
+	}
+	
+	/**
+	 * This method populates the script engine's environment with classes and objects it needs to execute the definition.
+	 * @param scriptEngine The script engine that will use the bindings
+	 * @param scanStartTime The date/time that the scan rule was initiated
+	 */
+	private void populateBindings( ScriptEngine scriptEngine, java.util.Date scanStartTime ){
 		//Note: SimpleBindings can also be used to populate the script environment
 		
 		scriptEngine.put("StringUtils", new StringUtils());
 		scriptEngine.put("Debug", new Debug(this));
 		scriptEngine.put("scriptStarted", new java.util.Date());
+		
+		if( scanStartTime != null ){
+			scriptEngine.put("scanStarted", scanStartTime);
+		}
+		
 	}
 	
 	/**
-	 * This method evaluates the given data with this definition. The variables argument includes the list of variables that have been set by other definitions that were evalauted
+	 * This method evaluates the given data with this definition. The variables argument includes the list of variables that have been set by other definitions that were evaluated
 	 * in the current pass. The rule identifier is used in order to load the saved script data for the given definition. This method will attempt to load a database connection
 	 * from the default application class.
 	 * @param httpResponse
 	 * @param variables List of variables set by other definitions evaluated in the current pass
 	 * @param ruleId The rule ID that this definition is being evaluated for (used to load the script data which is stored per definition and rule combination)
+	 * @param scanStartTime The date/time that the scan was started
 	 * @return
 	 * @throws ScriptException
 	 * @throws NoDatabaseConnectionException
@@ -507,12 +522,12 @@ public class ScriptDefinition extends Definition {
 	 * @throws DefinitionEvaluationException 
 	 * @throws SQLException 
 	 */
-	public Result evaluate( HttpResponseData httpResponse, Variables variables, long ruleId ) throws DefinitionEvaluationException, SQLException{
+	public Result evaluate( HttpResponseData httpResponse, Variables variables, long ruleId, java.util.Date scanStartTime ) throws DefinitionEvaluationException, SQLException{
 		Connection connection = null;
 		
 		try{
 			connection = Application.getApplication().getDatabaseConnection(Application.DatabaseAccessType.SCANNER);
-			return evaluate( httpResponse, variables, ruleId, connection );
+			return evaluate( httpResponse, variables, ruleId, connection, scanStartTime );
 		}
 		catch(NoDatabaseConnectionException e){
 			throw new DefinitionEvaluationException("Database connection could not be established", e);
@@ -669,6 +684,25 @@ public class ScriptDefinition extends Definition {
 	 * @throws IOException 
 	 */
 	public Result evaluate( HttpResponseData httpResponse, Variables variables, long ruleId, Connection connection ) throws DefinitionEvaluationException{
+		return evaluate( httpResponse, variables, ruleId, connection, null );
+	}
+	
+	/**
+	 * This method evaluates the given data with this definition. The variables argument includes the list of variables that have been set by other definitions that were evalauted
+	 * in the current pass. The rule identifier is used in order to load the saved script data for the given definition. 
+	 * @param httpResponse
+	 * @param variables List of variables set by other definitions evaluated in the current pass
+	 * @param ruleId The rule ID that this definition is being evaluated for (used to load the script data which is stored per definition and rule combination)
+	 * @param connection The database connection.
+	 * @param scanStartTime The date/time that the scan was started
+	 * @return
+	 * @throws ScriptException
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws NoSuchMethodException 
+	 * @throws IOException 
+	 */
+	public Result evaluate( HttpResponseData httpResponse, Variables variables, long ruleId, Connection connection, java.util.Date scanStartTime ) throws DefinitionEvaluationException{
 		
 		// 0 -- Precondition Check
 		if( httpResponse == null ){
@@ -696,7 +730,7 @@ public class ScriptDefinition extends Definition {
 		}
 		
 		Environment env = new Environment(data);
-		populateBindings(scriptEngine);
+		populateBindings(scriptEngine, scanStartTime);
 		
 		// 2 -- Execute the script
 		
