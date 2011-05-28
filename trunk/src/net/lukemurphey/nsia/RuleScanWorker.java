@@ -169,7 +169,7 @@ public class RuleScanWorker implements WorkerThread{
 	}
 
 	public String getTaskDescription() {
-		return "On-Demand Scanner";
+		return "Web-Application Scan";
 	}
 
 	public void pause() {
