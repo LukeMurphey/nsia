@@ -449,6 +449,9 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		
 		HttpClient client = new HttpClient(HttpDefinitionScanRule.getConnectionManager());
 		
+		// This is the date/time that the scan was initiated
+		java.util.Date scanStartDate = new java.util.Date();
+		
 		// 1.1 -- Add all of preset URLs to the list
 		for( URL url : this.seedUrls){
 			urls.add( URLDecoder.decode(url.toString(), "UTF-8") );
@@ -558,7 +561,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			// 2.3 -- Create a scan thread from one of the pending items and put it in the list of executing threads
 			else if( terminate == false && pending.size() > 0 ){
 				ScanRecord record = pending.remove(0); //Remove the URL from the pending list
-				ScanRunner runner = new ScanRunner( record, sigs, record.getLevel(), client );
+				ScanRunner runner = new ScanRunner( record, sigs, record.getLevel(), client, scanStartDate );
 				runningThreads.add(runner);
 
 				runner.setUncaughtExceptionHandler(new ScanThreadExceptionHandler(record.getURL()));
@@ -607,11 +610,13 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 		private HttpDefinitionScanResult parentScanResult = null;
 		private boolean done= false;
 		private int level = 0;
+		private java.util.Date ruleScanStartDate = null;
 		
-		public ScanRunner(ScanRecord record, DefinitionSet signatureSet, int level, HttpClient client){
+		public ScanRunner(ScanRecord record, DefinitionSet signatureSet, int level, HttpClient client, java.util.Date ruleScanStartDate){
 			this.rule = new HttpDefinitionScanRule(appRes, signatureSet, record.url, client);
 			this.level = level;
 			this.rule.setCallback( callback );
+			this.ruleScanStartDate = ruleScanStartDate;
 			
 			if( record.parentScanResult != null ){
 				this.parentScanResult = record.parentScanResult;
@@ -632,7 +637,7 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			try{
 				rule.suppressLoggingToEventLog(true);//Suppress the log messages because scan results for linked pages may update the scan result if they find a broken link 
 				rule.scanRuleId = scanRuleId; //This is necessary so that the rule can load the relevant exceptions
-				result = rule.doScanAndReturnParser(parentScanResult);
+				result = rule.doScanAndReturnParser(parentScanResult, ruleScanStartDate);
 			}
 			catch(IllegalStateException e){
 				//This exception occurs with protocols that are unsupported (such as mailto); ignore it.

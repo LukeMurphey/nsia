@@ -739,8 +739,19 @@ public class DefinitionSet {
 		
 	}
 
-	public DefinitionMatchResultSet scan(HttpResponseData httpResponse) throws ScriptException, NoDatabaseConnectionException, SQLException, NoSuchMethodException, InvalidDefinitionException{
-		return scan(httpResponse, null, -1, -1);
+	/**
+	 * Perform a scan against the given HTTP response.
+	 * @param httpResponse
+	 * @param scanStartDate
+	 * @return
+	 * @throws ScriptException
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws NoSuchMethodException
+	 * @throws InvalidDefinitionException
+	 */
+	public DefinitionMatchResultSet scan(HttpResponseData httpResponse, Date scanStartDate) throws ScriptException, NoDatabaseConnectionException, SQLException, NoSuchMethodException, InvalidDefinitionException{
+		return scan(httpResponse, null, -1, -1, scanStartDate);
 	}
 	
 	/**
@@ -800,7 +811,34 @@ public class DefinitionSet {
 		
 	}
 	
-	public DefinitionMatchResultSet scan(HttpResponseData httpResponse, DefinitionPolicySet definitionPolicySet, long siteGroupID, long ruleID) throws NoDatabaseConnectionException, SQLException, InvalidDefinitionException{
+	/**
+	 * Perform a scan in order to analyze the given HTTP response object.
+	 * @param httpResponse
+	 * @param definitionPolicySet
+	 * @param siteGroupID
+	 * @param ruleID
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InvalidDefinitionException
+	 */
+	public DefinitionMatchResultSet scan2(HttpResponseData httpResponse, DefinitionPolicySet definitionPolicySet, long siteGroupID, long ruleID ) throws NoDatabaseConnectionException, SQLException, InvalidDefinitionException{
+		return scan(httpResponse, definitionPolicySet, siteGroupID, ruleID, null);
+	}
+	
+	/**
+	 * Perform a scan in order to analyze the given HTTP response object.
+	 * @param httpResponse
+	 * @param definitionPolicySet
+	 * @param siteGroupID
+	 * @param ruleID
+	 * @param scanStartTime
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 * @throws InvalidDefinitionException
+	 */
+	public DefinitionMatchResultSet scan(HttpResponseData httpResponse, DefinitionPolicySet definitionPolicySet, long siteGroupID, long ruleID, Date scanStartTime ) throws NoDatabaseConnectionException, SQLException, InvalidDefinitionException{
 		
 		synchronized ( this ) {
 			
@@ -812,6 +850,9 @@ public class DefinitionSet {
 			
 			// The list of variables set by the definition:
 			Variables variables = new Variables();
+			
+			// Populate the variables list with some meta-data about the scan
+			variables.set("scanStartTime", scanStartTime);
 			
 			// The definition to be evaluated:
 			Iterator<Definition> iterator = definitions.iterator();
@@ -827,7 +868,7 @@ public class DefinitionSet {
 					if( definition instanceof ScriptDefinition){
 						
 						ScriptDefinition script = (ScriptDefinition)definition;
-						result = script.evaluate(httpResponse, variables, ruleID);
+						result = script.evaluate(httpResponse, variables, ruleID, scanStartTime);
 						
 						// Add the scan result to the list if it matched and if it is not ignored by the scan policy
 						if( isIncludedInPolicy(httpResponse, definitionPolicySet, siteGroupID, ruleID, script ) ){

@@ -23,7 +23,6 @@ import net.lukemurphey.nsia.eventlog.EventLogMessage.EventType;
 public class DefinitionErrorList {
 	
 	protected Vector<DefinitionError> definitionsErrors = new Vector<DefinitionError>();
-	//protected Application application;
 	private static Boolean errorsNoted = null;
 	
 	public static synchronized boolean errorsNoted(Application application) throws NoDatabaseConnectionException, SQLException{
@@ -41,6 +40,12 @@ public class DefinitionErrorList {
 		return errorsNoted;
 	}
 	
+	/**
+	 * Removes errors that are old and thus should no longer be displayed.
+	 * @param set
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public void clearOutdatedErrors( DefinitionSet set ) throws NoDatabaseConnectionException, SQLException{
 		
 		synchronized (this.definitionsErrors) {
@@ -52,12 +57,22 @@ public class DefinitionErrorList {
 				
 				connection = Application.getApplication().getDatabaseConnection(DatabaseAccessType.SCANNER);
 				
+				// Filter out the definitions whose version number is not the same (it has been updated so maybe it has been fixed)
 				while( it.hasNext() ){
+					
+					// Get the definition
 					DefinitionError definitionError = it.next();
 					
+					// Check the version number and remove it if has changed since the error was posted
 					try {
+						
+						// Get the current definition
 						Definition definition = set.getDefinition(definitionError.getDefinitionID());
+						
+						// Compare the current definition ID to the one that had the error
 						if (definition.revision != definitionError.definitionVersion ){
+							
+							// Versions are different so remove the error from the list
 							definitionError.clear(connection);
 							it.remove();
 						}
@@ -82,6 +97,10 @@ public class DefinitionErrorList {
 		}
 	}
 	
+	/**
+	 * Get the list of errors.
+	 * @return
+	 */
 	public DefinitionError[] getErrorsList(){
 		
 		DefinitionError[] errors = new DefinitionError[definitionsErrors.size()];
@@ -90,6 +109,15 @@ public class DefinitionErrorList {
 		return errors;
 	}
 	
+	/**
+	 * Log an error against the given definition.
+	 * @param definitionName
+	 * @param definitionVersion
+	 * @param errorName
+	 * @param notes
+	 * @param definitionID
+	 * @param localDefinitionID
+	 */
 	public static void logError(String definitionName, int definitionVersion, String errorName, String notes, int definitionID, int localDefinitionID){
 		DefinitionError error = new DefinitionError( definitionName, definitionVersion, new Date(), errorName, notes, definitionID, localDefinitionID );
 		
@@ -104,6 +132,13 @@ public class DefinitionErrorList {
 		}
 	}
 	
+	/**
+	 * Get the list of definition errors.
+	 * @param app
+	 * @return
+	 * @throws NoDatabaseConnectionException
+	 * @throws SQLException
+	 */
 	public static DefinitionErrorList load(Application app) throws NoDatabaseConnectionException, SQLException{
 		
 		Connection connection = null;
