@@ -11,4 +11,8 @@ public class JSoup {
 		return Jsoup.parse( response.getResponseAsString() );
 	}
 	
+	public static Document parse( String s ){
+		return Jsoup.parse( s );
+	}
+	
 }
