@@ -74,7 +74,7 @@ public class ScriptDefinition extends Definition {
 	private static final Pattern COMMENTS_REGEX = Pattern.compile("(/\\*.*?\\*/)|(//.*$)", Pattern.MULTILINE | Pattern.DOTALL);
 	
 	//The following regular expression find the meta options in the comments
-	private static final Pattern OPTION_REGEX = Pattern.compile("(Version|Name|ID|Message|Reference|Severity|Invasive)[ ]*\\:[ ]*([-\\w.\"/\\\\ (),?%=]+)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+	private static final Pattern OPTION_REGEX = Pattern.compile("(Version|Name|ID|Message|Reference|Severity|Invasive)[ ]*\\:[ ]*([-\\'\\w.\"/\\\\ (),?%=]+)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 	
 	//Mutex used to prevent multi-thread access to the invocable function 
 	private Object mutex = new Object();
@@ -254,6 +254,8 @@ public class ScriptDefinition extends Definition {
 				//Get the severity
 				else if( name.equalsIgnoreCase( "Severity" ) ){
 					String severity = stripLeadingQuotes( value );
+					
+					// Get the value of the severity
 					if( severity.equalsIgnoreCase("Low")){
 						this.severity = Severity.LOW;
 					}
