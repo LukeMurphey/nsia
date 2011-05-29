@@ -1,5 +1,15 @@
 Below is the history of NSIA with notes about the changes available in each version.
 
+Version 1.0.5 Changes
+------------------------------------------------------------------
+Version includes the following changes:
+ * Rule scan start time is now available to ThreatScripts (titled scanStarted)
+ * Definition messages can now include single quotes
+ * Fixed issue where the log transport protocol was not properly displayed in the configuration page
+ * Added ability to parse a string as XML using the JSoup library
+ * Fixed incorrect argument names in the default ThreatScript definition
+ * Updated the name of the on-demand scanner to "Web Application Scanner"
+
 Version 1.0.4 Changes
 ------------------------------------------------------------------
 Version includes the following changes:

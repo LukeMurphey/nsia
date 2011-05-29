@@ -214,6 +214,13 @@ nsia (0.9.6-1) unstable; urgency=low
  
  -- Luke Murphey <luke@threatfactor.com>  Fri, 1 Apr 2011 13:00:00 +0500
  
+ nsia (1.0.5-1) stable; urgency=low
  
+ * Rule scan start time is now available to ThreatScripts (titled scanStarted)
+ * Definition messages can now include single quotes
+ * Fixed issue where the log transport protocol was not properly displayed in the configuration page
+ * Added ability to parse a string as XML using the JSoup library
+ * Fixed incorrect argument names in the default ThreatScript definition
+ * Updated the name of the on-demand scanner to "Web Application Scanner"
  
- 
+ -- Luke Murphey <luke@threatfactor.com>  Fri, 28 May 2011 13:00:00 +0500
