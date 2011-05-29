@@ -545,7 +545,7 @@ public class SystemConfigurationView extends View {
 			log_transport[0] = new SelectParamValue("UDP", "UDP");
 			log_transport[1] = new SelectParamValue("TCP", "TCP");
 
-			logging_options.add( new Parameter("Transport Protocol", appConfig.getLogFormat(), ParameterTitles.LOG_TRANSPORT.getName(), log_transport) );
+			logging_options.add( new Parameter("Transport Protocol", appConfig.getLogServerProtocol(), ParameterTitles.LOG_TRANSPORT.getName(), log_transport) );
 			data.put("logging_options", logging_options);
 
 			Vector<Parameter> license_options = new Vector<Parameter>();
