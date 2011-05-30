@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 
 /**
@@ -64,6 +65,7 @@ public class ScriptClassLoader extends ClassLoader {
 				temp.put("ThreatScript.DataAnalysis", ScriptSignatureUtils.class.getName() );
 				temp.put("ThreatScript.Vector", net.lukemurphey.nsia.scan.scriptenvironment.Vector.class.getName() );
 				temp.put("ThreatScript.Date", Date.class.getName() );
+				temp.put("ThreatScript.Pattern", Pattern.class.getName() );
 				
 				SHORTCUTS = temp;
 			}
