@@ -86,8 +86,16 @@ public class Result{
 		return urls.size();
 	}
 	
+	public void addURL( URL url ){
+		addURL(url, URLToScan.IGNORE_DOMAIN_RESTRICTION_DEFAULT);
+	}
+	
 	public void addURL( URL url, boolean ignoreDomainRestriction ){
 		urls.add(  new URLToScan( url, ignoreDomainRestriction ) );
+	}
+	
+	public void addURL( NativeJavaObject url ){
+		addURL(url, URLToScan.IGNORE_DOMAIN_RESTRICTION_DEFAULT);
 	}
 	
 	public void addURL( NativeJavaObject url, boolean ignoreDomainRestriction ){
