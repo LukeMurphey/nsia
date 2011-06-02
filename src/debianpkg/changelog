@@ -222,5 +222,7 @@ nsia (0.9.6-1) unstable; urgency=low
  * Added ability to parse a string as XML using the JSoup library
  * Fixed incorrect argument names in the default ThreatScript definition
  * Updated the name of the on-demand scanner to "Web Application Scanner"
+ * Added the ability to use the Java Pattern class in ThreatScripts
+ * Added the ability to add URLs to Result objects (from ThreatScripts) without specifying whether the second argument
  
  -- Luke Murphey <luke@threatfactor.com>  Fri, 28 May 2011 13:00:00 +0500

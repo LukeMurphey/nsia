@@ -9,6 +9,8 @@ Version includes the following changes:
  * Added ability to parse a string as XML using the JSoup library
  * Fixed incorrect argument names in the default ThreatScript definition
  * Updated the name of the on-demand scanner to "Web Application Scanner"
+ * Added the ability to use the Java Pattern class in ThreatScripts
+ * Added the ability to add URLs to Result objects (from ThreatScripts) without specifying whether the second argument
 
 Version 1.0.4 Changes
 ------------------------------------------------------------------
