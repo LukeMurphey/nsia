@@ -2,6 +2,7 @@ package net.lukemurphey.nsia.scan;
 
 import net.lukemurphey.nsia.scan.scriptenvironment.DeleteMethod;
 import net.lukemurphey.nsia.scan.scriptenvironment.GetMethod;
+import net.lukemurphey.nsia.scan.scriptenvironment.Parser;
 import net.lukemurphey.nsia.scan.scriptenvironment.HeadMethod;
 import net.lukemurphey.nsia.scan.scriptenvironment.JSoup;
 import net.lukemurphey.nsia.scan.scriptenvironment.OptionsMethod;
@@ -52,6 +53,7 @@ public class ScriptClassLoader extends ClassLoader {
 				temp.put("HTTP.URL", URL.class.getName());
 				temp.put("HTTP.TagNameFilter", org.htmlparser.filters.TagNameFilter.class.getName());
 				temp.put("HTTP.JSoup", JSoup.class.getName());
+				temp.put("HTTP.Parser", Parser.class.getName());
 				 
 				//Web request methods
 				temp.put("HTTP.GetRequest", GetMethod.class.getName());
