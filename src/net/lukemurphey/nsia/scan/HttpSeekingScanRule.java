@@ -127,6 +127,10 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 	    	this.parentURL = parentURL;
 	    }
 	    
+	    public int getNodesVisitedCount(){
+	    	return nodes;
+	    }
+	    
 	    public LinkExtractionVisitor (URL parentURL, boolean shouldRecurseChildren)
 	    {
 	    	super(shouldRecurseChildren);
@@ -368,9 +372,6 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			urls.addAll(urlsTemp);
 		}
 		
-		//	 1.9 -- Shockwave Flash objects declared in JavaScript (this is the preferred way to load Flash). SWFObject[ ]*\([ ]*"([-0-9.a-z_A-Z/\\]*)
-		//TODO Load Shockware flash references made using the SWFObject 
-		
 		// 2 -- Return the result
 		return urls;
 		
@@ -470,8 +471,11 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			// 2.1 -- Loop through the threads and process the results. This will remove completed threads from the list of running threads. 
 			Iterator<ScanRunner> it = runningThreads.iterator();
 			while ( it.hasNext() ){
+				
+				// Get the scan runner that will handle the scan
 				ScanRunner runner = it.next();
 
+				// Determine the scan runner has completed
 				if( runner.done() ){
 
 					// 2.3.1 -- Move completed items to the finished queue 
@@ -906,9 +910,11 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 				}
 			}
 			
+			// Stop if we have been told to terminate
 			if( terminate == true ){
 				resultCode = ScanResultCode.SCAN_TERMINATED;
 			}
+			
 			// Return a scan failed code if no resources are scanned
 			else if( findings.size() == 0 ){
 				resultCode = ScanResultCode.SCAN_FAILED;
@@ -924,12 +930,15 @@ public class HttpSeekingScanRule extends ScanRule implements WorkerThread {
 			//	4.2 -- Log that the rule has completed
 			{
 				int devs = 0;
+				
+				// Add up the deviation count
 				for( int c = 0; c < findings.size(); c++){
 					if( findings.get(c).deviations > 0){
 						devs++;
 					}
 				}
 				
+				// Record the scan result
 				logScanResult(resultCode, devs);
 			}
 			
