@@ -24,10 +24,7 @@ public class HttpSeekingScanRuleTest extends TestCase {
 		
 		HttpDefinitionScanResult[] sigResults = result.getFindings(-1, 10, true);
 		
-		if( result == null ){
-			fail("The scan result was not returned (returned null instead)");
-		}
-		else if( sigResults == null ){
+		if( sigResults == null ){
 			fail("The scan findings were not returned (returned null instead)");
 		}
 		else if( sigResults.length != 5 ){

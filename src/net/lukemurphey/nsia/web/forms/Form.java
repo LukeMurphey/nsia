@@ -51,9 +51,10 @@ public class Form {
 	@SuppressWarnings("unchecked")
 	public FieldErrors validate( HttpServletRequest request ){
 		FieldErrors errors = new FieldErrors();
+		@SuppressWarnings("rawtypes")
 		Map params = request.getParameterMap();
 		Set<String> paramNames = params.keySet();
-		ArrayList<Field> fieldsUsed = new ArrayList();
+		ArrayList<Field> fieldsUsed = new ArrayList<Field>();
 		
 		// 1 -- Check all of the fields and make sure the values are valid
 		for (String fieldName: fields.keySet()) {

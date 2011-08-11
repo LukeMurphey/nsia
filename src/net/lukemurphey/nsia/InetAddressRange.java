@@ -59,11 +59,7 @@ public class InetAddressRange{
 		if( start.addressType() != HostAddress.IP_ADDRESS)
 			throw new IllegalArgumentException("The start address must be an IP address");
 		
-		//	 0.3 -- Make sure the end address is not null
-		if( start == null )
-			throw new NullArgumentException("The end address cannot be null");
-		
-		//	 0.4 -- Make sure the end address is an IP address
+		//	 0.3 -- Make sure the end address is an IP address
 		if( end.addressType() != HostAddress.IP_ADDRESS)
 			throw new IllegalArgumentException("The end address must be an IP address");
 		

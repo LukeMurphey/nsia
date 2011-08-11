@@ -332,8 +332,9 @@ public class SiteGroupManagement {
 				
 				return new SiteGroupDescriptor( groupId, groupName, groupDescription, groupStatus, objectId );
 			}
-			else
+			else{
 				throw new NotFoundException("A site group with the given identifier could not be found");//group could not be found
+			}
 		} finally {
 			if (result != null )
 				result.close();

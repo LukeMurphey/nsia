@@ -599,10 +599,7 @@ public class ApiSessionManagement extends ApiHandler{
 			throw new GeneralizedException();
 		}
 		catch (NotFoundException e) {
-			if( sessionInfo != null )
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
-			else
-				appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT,  new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_ID, "Unknown" ) );
+			appRes.logEvent(EventLogMessage.EventType.ACCESS_CONTROL_DENY_DEFAULT, new EventLogField( FieldName.OPERATION, "Enumerate user sessions" ), new EventLogField( FieldName.SOURCE_USER_ID, sessionInfo.getUserId() ) );
 			
 			throw new InsufficientPermissionException();
 		}
