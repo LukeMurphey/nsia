@@ -476,13 +476,13 @@ public class SiteGroupView extends View {
 			
 			if( args.length > 0 ){
 				SiteGroupManagement mgmr = new SiteGroupManagement(Application.getApplication());
+				
 				try {
 					siteGroup = mgmr.getGroupDescriptor( Integer.valueOf( args[0]) );
 				} catch (NotFoundException e) {
 					Dialog.getDialog(response, context, data, "The site-group ID provided is not valid", "site-group ID Invalid", DialogType.WARNING);
 					return true;
-				}
-				catch (NumberFormatException e) {
+				} catch (NumberFormatException e) {
 					Dialog.getDialog(response, context, data, "The site-group ID provided is not valid", "site-group ID Invalid", DialogType.WARNING);
 					return true;
 				}
@@ -680,16 +680,11 @@ public class SiteGroupView extends View {
 			
 			if( siteGroup != null ){
 				Shortcuts.addDashboardHeaders(request, response, data, createURL(siteGroup.getGroupId()));
-			}
-			else{
-				Shortcuts.addDashboardHeaders(request, response, data);
-			}
-			
-			if( siteGroup != null ){
 				TemplateLoader.renderToResponse("SiteGroup.ftl", data, response);
 			}
 			
 			return true;
+			
 		} catch (SQLException e) {
 			throw new ViewFailedException(e);
 		} catch (InputValidationException e) {

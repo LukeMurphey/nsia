@@ -20,7 +20,7 @@ public class DurationTemplateDirective implements TemplateDirectiveModel{
 	private static final String PARAM_TIME_SECS = "seconds";
 	
 	@SuppressWarnings("unchecked")
-	public void execute(Environment env, Map params, TemplateModel[] model, TemplateDirectiveBody body) throws TemplateException, IOException {
+	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] model, TemplateDirectiveBody body) throws TemplateException, IOException {
 		
 		// 1 -- Get the arguments
 		Iterator<Entry<String, TemplateModel>> paramIter = params.entrySet().iterator();

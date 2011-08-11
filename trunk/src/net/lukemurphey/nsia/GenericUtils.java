@@ -107,7 +107,7 @@ public class GenericUtils {
 		input = input.trim();
 		int nextLastSpace = input.indexOf(" ");
 		
-		for( int c = 0; nextLastSpace > 0 && nextLastSpace < desiredLength; c++){
+		for( ; nextLastSpace > 0 && nextLastSpace < desiredLength; ){
 			lastSpace = nextLastSpace;
 			nextLastSpace = input.indexOf(" ", nextLastSpace+1);
 		}

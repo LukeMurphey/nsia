@@ -1270,7 +1270,7 @@ public class HttpStaticScanRule extends ScanRule {
 		Vector<HttpHeaderRule> headerRules = new Vector<HttpHeaderRule>();
 		
 		for ( int c = 0; c < headerRulesVector.size(); c++ ){
-			HttpHeaderRule httpHeaderRule = HttpHeaderRule.getFromHashtable( (Hashtable)headerRulesVector.get(c) );
+			HttpHeaderRule httpHeaderRule = HttpHeaderRule.getFromHashtable( (Hashtable<String, Object>)headerRulesVector.get(c) );
 			headerRules.add( httpHeaderRule );
 		}
 		

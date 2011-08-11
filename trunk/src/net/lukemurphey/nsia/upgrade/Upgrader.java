@@ -42,12 +42,8 @@ public class Upgrader {
 		
 		// 2 -- Get the upgraders that perform changes past the given version
 		List<UpgradeProcessor> list = null;
-		if( schemaVersion == null ){
-			list = UpgraderList.getInstance().getList();
-		}
-		else{
-			list = UpgraderList.getInstance().getList( schemaVersion.getMajor(), schemaVersion.getMinor(), schemaVersion.getRevision() );
-		}
+		
+		list = UpgraderList.getInstance().getList( schemaVersion.getMajor(), schemaVersion.getMinor(), schemaVersion.getRevision() );
 		
 		// 3 -- Perform the upgrade
 		return peformUpgrades( list );
