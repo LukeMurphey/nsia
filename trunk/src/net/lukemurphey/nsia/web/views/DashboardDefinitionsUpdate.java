@@ -209,7 +209,7 @@ public class DashboardDefinitionsUpdate extends View {
 		}
 		
 		if( isNewerVersionAvailable() && currentDefinitionsID != null ){
-			data.put("new_version", currentDefinitionsID.toString());
+			data.put("new_version", currentDefinitionsID.formatID() + "." + currentDefinitionsID.revisionID() );
 			data.put("new_version_date", currentDefinitionsDate);
 			return TemplateLoader.renderToString("DashboardDefinitionUpdate.ftl", data);
 		}
