@@ -39,7 +39,7 @@ public class WebClient {
 	URL url = null;
 	
 	//The number of seconds to wait before forcibly stopping the connection 
-	int downloadTimeoutSeconds = 10; 
+	int downloadTimeoutSeconds = 5; 
 	
 	//The maximum amount of data to download
 	int downloadBytesMax = 1024 * 256; //256 bytes 
@@ -116,7 +116,7 @@ public class WebClient {
 	}
 	
 	/**
-	 * Set the maximum amount of time that the download will be allowed to continue.
+	 * Set the maximum amount of time (in seconds) that the request will be allowed to perform it operation.
 	 * @param seconds
 	 */
 	public void setTimeLimit( int seconds ){
@@ -124,7 +124,7 @@ public class WebClient {
 	}
 	
 	/**
-	 * Set the maximum amount of data that will be downloaded.
+	 * Set the maximum amount of data (in bytes) that will be downloaded.
 	 * @param bytes
 	 */
 	public void setSizeLimit( int bytes ){
