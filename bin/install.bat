@@ -7,7 +7,11 @@ echo.
 echo Step 1 of 5: Make sure a Java runtime exists
 echo ---------------------------------------------------
 
-@reg query "HKLM\SOFTWARE\JavaSoft\Java Runtime Environment" || goto JAVA_NOT_INSTALLED
+@reg query "HKLM\SOFTWARE\JavaSoft\Java Runtime Environment" || goto JAVA_CHECK_PATH
+goto JAVA_INSTALLED
+
+:JAVA_CHECK_PATH
+@java -version || goto JAVA_NOT_INSTALLED
 goto JAVA_INSTALLED
 
 :JAVA_NOT_INSTALLED
