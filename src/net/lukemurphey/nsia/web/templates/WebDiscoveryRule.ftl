@@ -15,7 +15,7 @@
         function submitEditorForm(editorform){
             document.editorform.StartAddresses2.value = cp1.getCode();
             document.editorform.submit();
-            return true;
+            return false;
         }
         
         function getDomain (thestring) {
