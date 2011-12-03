@@ -249,8 +249,7 @@ public class SiteGroupEditView extends View {
 				else{ //Editing an existing site group
 					Shortcuts.checkModify(context.getSessionInfo(), siteGroup.getObjectId(), "Edit site-group " + siteGroup.getGroupId() + " (" + siteGroup.getGroupName() + ")");
 				}
-			}
-			catch( NoSessionException e ){
+			} catch( NoSessionException e ){
 				throw new ViewFailedException(e);
 			} catch (GeneralizedException e) {
 				throw new ViewFailedException(e);
