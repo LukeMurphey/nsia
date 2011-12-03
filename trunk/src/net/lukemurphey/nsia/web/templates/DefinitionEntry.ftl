@@ -107,7 +107,7 @@
     function submitEditorForm(editorform){
         document.editorform.SignatureCode2.value = cp1.getCode();
         document.editorform.submit();
-        return true;
+        return false;
     }
 </script>
     

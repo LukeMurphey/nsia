@@ -16,7 +16,7 @@
             document.editorform.PortsExpectedOpen2.value = cp2.getCode();
             document.editorform.PortsToScan2.value = cp1.getCode();
             document.editorform.submit();
-            return true;
+            return false;
         }
         
 		$(document).ready( function(){
