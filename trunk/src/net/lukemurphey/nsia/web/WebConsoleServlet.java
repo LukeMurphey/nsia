@@ -34,7 +34,7 @@ public class WebConsoleServlet extends HttpServlet {
 		middleware.addAll(StandardMiddlewareList.getMiddleware());
 	}
 	
-	public void doRequest(HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+	public void doRequest(HttpServletRequest request, HttpServletResponse response ) {
 		try{
 			
 			response.setHeader("Server", SERVER_STRING);
@@ -87,6 +87,8 @@ public class WebConsoleServlet extends HttpServlet {
 				}
 				catch(ClientAbortException e){
 					//Ignore client abort exceptions since they are not a problem with the application
+					Application.getApplication().logEvent(EventLogMessage.EventType.WEB_INFO_LOG,  new EventLogField( EventLogField.FieldName.MESSAGE, "Connection closed"), new EventLogField( EventLogField.FieldName.URL, request.getServletPath()) );
+					handled = true;
 				}
 				catch(ViewFailedException e){
 					throw new ServletException("Exception thrown while generating view", e);
@@ -113,7 +115,8 @@ public class WebConsoleServlet extends HttpServlet {
 		response.setStatus(500);
 		try {
 			Dialog.getDialog(response, context, Shortcuts.getMapWithBasics(context, request), "An internal application error has occurred", "Internal Error", DialogType.CRITICAL);
-		} catch (ViewFailedException e) {
+		} 
+		catch (ViewFailedException e) {
 			e.printStackTrace();
 			//throw new ServletException("Exception thrown while generating view", e);
 		}

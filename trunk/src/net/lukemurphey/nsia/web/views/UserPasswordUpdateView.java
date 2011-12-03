@@ -87,7 +87,7 @@ public class UserPasswordUpdateView extends View {
 		}
 	}
 	
-	private boolean performActions( HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data, UserDescriptor user) throws ViewFailedException, NotFoundException, PasswordInvalidException{
+	private boolean performActions( HttpServletRequest request, HttpServletResponse response, RequestContext context, String[] args, Map<String, Object> data, UserDescriptor user) throws ViewFailedException, NotFoundException, PasswordInvalidException, IOException{
 		try{
 			
 			UserManagement userManager = new UserManagement(Application.getApplication());
@@ -143,8 +143,6 @@ public class UserPasswordUpdateView extends View {
 		} catch(InputValidationException e){
 			throw new ViewFailedException(e);
 		} catch( NumericalOverflowException e ){
-			throw new ViewFailedException(e);
-		} catch (IOException e) {
 			throw new ViewFailedException(e);
 		} catch (URLInvalidException e) {
 			throw new ViewFailedException(e);

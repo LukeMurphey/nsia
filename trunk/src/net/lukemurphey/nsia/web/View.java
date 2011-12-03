@@ -1,7 +1,6 @@
 package net.lukemurphey.nsia.web;
 
 import java.io.IOException;
-import java.net.SocketException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,11 +90,9 @@ public abstract class View {
 		
 		try {
 			return process( request, response, context, args, Shortcuts.getMapWithBasics(context, request) );
-		} catch (SocketException e) {
-			// Socket exceptions occur when clients terminate connections or drop off
-			throw new ClientAbortException();
 		} catch (IOException e) {
-			throw new ViewFailedException(e);
+			// These type of exception occur when a browser forcibly terminates a connection
+			throw new ClientAbortException(e);
 		} catch (URLInvalidException e) {
 			throw new ViewFailedException(e);
 		} catch (ViewNotFoundException e) {
