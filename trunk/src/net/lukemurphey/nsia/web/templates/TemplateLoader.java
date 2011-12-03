@@ -47,12 +47,28 @@ public class TemplateLoader {
 	}
 	
 	public static void renderToResponse(String templateName, Map<String, Object> data, HttpServletResponse response) throws ViewFailedException{
+		renderToResponse(templateName, data, response, null);
+	}
+	
+	public static void renderToResponse(String templateName, Map<String, Object> data, HttpServletResponse response, String content_type) throws ViewFailedException{
 		Template template = TemplateLoader.getTemplate(templateName);
 		PrintWriter writer;
 		
 		try {
+			
+			//Set the content-type if provided
+			if( content_type != null && response.isCommitted() == false ){
+				response.setContentType(content_type);
+			}
+			
+			// Set the content-type to HTML if no content-type was provided and the content-type was not set
+			else if( content_type == null && response.getContentType() == null  && response.isCommitted() == false ){
+				response.setContentType("text/html");
+			}
+			
 			writer = response.getWriter();
 			template.process(data, writer);
+			
 		} catch (IOException e) {
 			throw new ViewFailedException("Exception thrown while rendering template", e);
 		} catch (TemplateException e) {
