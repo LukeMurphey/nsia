@@ -31,9 +31,9 @@ public class DashboardVersionPanel extends View {
 				return TemplateLoader.renderToString("DashboardVersionWarning.ftl", data);
 			}
 		}
-		catch(IOException e){
+		catch (RESTRequestFailedException e) {
 			throw new ViewFailedException(e);
-		} catch (RESTRequestFailedException e) {
+		} catch (IOException e) {
 			throw new ViewFailedException(e);
 		}
 		

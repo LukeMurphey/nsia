@@ -70,7 +70,7 @@ public class ServiceScanRuleEditView extends View {
 
 	private boolean performActions(HttpServletRequest request,
 			HttpServletResponse response, RequestContext context,
-			String[] args, Map<String, Object> data, ServiceScanRule rule) throws ViewFailedException, URLInvalidException{
+			String[] args, Map<String, Object> data, ServiceScanRule rule) throws ViewFailedException, URLInvalidException, IOException{
 
 		Form form = getRuleForm();
 
@@ -200,8 +200,6 @@ public class ServiceScanRuleEditView extends View {
 			} catch (SQLException e) {
 				throw new ViewFailedException(e);
 			} catch (NoDatabaseConnectionException e) {
-				throw new ViewFailedException(e);
-			} catch (IOException e) {
 				throw new ViewFailedException(e);
 			}
 		}
