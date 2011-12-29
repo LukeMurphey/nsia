@@ -166,6 +166,8 @@ Section "MainSection" SEC01
   File "${ROOT_PATH}\bin\ThreatFactor NSIA.exe"
   File "${ROOT_PATH}\bin\ThreatFactor NSIA CLI.exe"
   File "${ROOT_PATH}\bin\ThreatFactor NSIA Service.exe"
+  
+  ; Create start menu shortcuts
   CreateDirectory "$SMPROGRAMS\ThreatFactor"
   CreateShortCut "$SMPROGRAMS\ThreatFactor\ThreatFactor NSIA.lnk" "$INSTDIR\bin\ThreatFactor NSIA.exe"
   CreateShortCut "$SMPROGRAMS\ThreatFactor\Quick Start Guide.lnk" "$INSTDIR\doc\Quick Start Guide.pdf"
@@ -281,12 +283,17 @@ Section Uninstall
   Delete "$INSTDIR\lib\chardet.jar"
   Delete "$INSTDIR\doc\Quick Start Guide.pdf"
   
+  ; Delete desktop shortcut
+  Delete "$DESKTOP\ThreatFactor NSIA.lnk"
+  
+  ; Delete start menu shortcuts
   Delete "$SMPROGRAMS\ThreatFactor\Uninstall.lnk"
   Delete "$SMPROGRAMS\ThreatFactor\Website.lnk"
-  Delete "$DESKTOP\ThreatFactor NSIA.lnk"
   Delete "$SMPROGRAMS\ThreatFactor\ThreatFactor NSIA.lnk"
   Delete "$SMPROGRAMS\ThreatFactor\ThreatFactor NSIA (with interactive console).lnk"
   Delete "$SMPROGRAMS\ThreatFactor\Quick Start Guide.lnk"
+  
+  ; Delete shortcuts in the install directory
   Delete "$INSTDIR\ThreatFactor NSIA.lnk"
   Delete "$INSTDIR\ThreatFactor NSIA (with interactive console).lnk"
   Delete "$INSTDIR\Quick Start Guide.lnk"
@@ -638,11 +645,13 @@ FunctionEnd
 !define CLASS "Sample"
 
 
-; Definitions for Java 6.0
-!define JRE_VERSION "6.0"
-!define JRE_URL "http://download.oracle.com/otn-pub/java/jdk/6u25-b06/jre-6u25-windows-i586.exe" ;Version 6 Update 25
+; Definitions for Java
 ;!define JRE_VERSION "5.0"
 ;!define JRE_URL "http://javadl.sun.com/webapps/download/AutoDL?BundleId=18675&/jre-1_5_0_15-windows-i586-p.exe"
+!define JRE_VERSION "6.0"
+!define JRE_URL "http://download.oracle.com/otn-pub/java/jdk/6u30-b12/jre-6u30-windows-i586.exe" ;Version 6 Update 30, offline edition (see http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+;!define JRE_VERSION "7.0"
+;!define JRE_URL "http://download.oracle.com/otn-pub/java/jdk/7u2-b13/jre-7u2-windows-i586.exe"
 
 ; use javaw.exe to avoid dosbox.
 ; use java.exe to keep stdout/stderr
