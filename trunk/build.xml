@@ -345,9 +345,13 @@
 	<target name="package_windows_installer_nsis_path_undefined" depends="check_nsis_path_defined,check_web_archive_exists,check_nsia_archive_exists" unless="isnsispathdefined">
 		<taskdef name="nsis" classpath="dev/lib/nsisant-1.2.jar" classname="net.sf.nsisant.Task" />
 		<mkdir dir="${value.build.packageoutput.directory}"/>
+		
+		<!-- Resolve the directory since NSIS acts odd with relative paths -->
+		<property name="nsis.absolute.dir" location="${value.build.packageoutput.directory}" />
+		
 		<nsis script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
 			<define name="VERSION" value="${value.build.version}"/>
-			<define name="OUT_FILE" value="${value.build.packageoutput.directory}/ThreatFactor NSIA Setup(${value.build.version}).exe"/>
+			<define name="OUT_FILE" value="${nsis.absolute.dir}/ThreatFactor NSIA Setup(${value.build.version}).exe"/>
 		</nsis>
 	</target>
 
@@ -357,10 +361,14 @@
 	<target name="package_windows_installer_nsis_path_defined" depends="check_nsis_path_defined,check_web_archive_exists,check_nsia_archive_exists" if="isnsispathdefined">
 		<taskdef name="nsis" classpath="dev/lib/nsisant-1.2.jar" classname="net.sf.nsisant.Task" />
 		<mkdir dir="${value.build.packageoutput.directory}"/>
+
+		<!-- Resolve the directory since NSIS acts odd with relative paths -->
+		<property name="nsis.absolute.dir" location="${value.build.packageoutput.directory}" />
+		
 		<nsis path="${value.build.makensis.directory}" script="src/installer/ThreatFactor Install Script.nsi" verbosity="4" noconfig="yes">
 			<define name="VERSION" value="${value.build.version}"/>
-			<define name="OUT_FILE" value="${value.build.packageoutput.directory}/ThreatFactor NSIA Setup(${value.build.version}).exe"/>
-		</nsis>
+			<define name="OUT_FILE" value="${nsis.absolute.dir}/ThreatFactor NSIA Setup(${value.build.version}).exe"/>
+		</nsis> 
 	</target>
 
 	<!-- ================================= 
