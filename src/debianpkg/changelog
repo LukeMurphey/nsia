@@ -226,3 +226,13 @@ nsia (0.9.6-1) unstable; urgency=low
  * Added the ability to add URLs to Result objects (from ThreatScripts) without specifying whether the second argument
  
  -- Luke Murphey <luke@threatfactor.com>  Fri, 28 May 2011 13:00:00 +0500
+ 
+  nsia (1.0.6-1) stable; urgency=low
+ 
+ * Fixed issue where duplicate rules were sometimes created when creating a new rule on Internet Explorer
+ * Fixed issue where the domain limit was not autopopulated on Internet Explorer
+ * Removed incorrect URL on exception creation page
+ * Install.bat now uses more methods to try to determine if Java is installed on Windows
+ * Exceptions are no longer displayed as internal errors if they are due to network disconnects from the browser
+ 
+ -- Luke Murphey <luke@threatfactor.com>  Wed, 29 Dec 2011 13:00:00 +0500
