@@ -21,6 +21,9 @@
         function getDomain (thestring) {
             //simple function that matches the beginning of a URL
             //in a string and then returns the domain.
+            
+            thestring = $.trim(thestring);
+            
             var urlpattern = new RegExp("(http|ftp|https)://(.*?)(/.*)?$");
             var parsedurl = thestring.match(urlpattern);
         
