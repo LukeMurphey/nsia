@@ -35,6 +35,7 @@ The rule status page shows indicates the current state of each rule; including w
 ### Rule History Overview ###
 
 The rule history page displays the status of past scans.
+
 ![Rule History Overview](doc/screenshots/Screenshot_RuleHistory.png "Rule History Overview")
 
 ### Access Control ###
