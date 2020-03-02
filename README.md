@@ -15,7 +15,7 @@ The main dashboard clearly displays the status of the scanner and of the monitor
 ### Scan Result Report ###
 
 Scan reports indicate what resources were discovered and provides details on what issues were observed. 
-![Scan Result Report](doc/screenshots/Screenshot_Scan_report.png "Scan Result Report")
+![Scan Result Report](doc/screenshots/Screenshot_Scan_Report.png "Scan Result Report")
 
 ### ThreatScript Signature ###
 
@@ -25,7 +25,7 @@ ThreatScript signatures perform deep content analysis and can detect significant
 ### ThreatPattern Signature ###
 
 ThreatPattern signatures can identify known-bad elements such as attacks, offensive language and information leaks. 
-![ThreatPattern Signature](doc/screenshots/Screenshot_Threatpattern.png "ThreatPattern Signature")
+![ThreatPattern Signature](doc/screenshots/Screenshot_ThreatPattern.png "ThreatPattern Signature")
 
 ### Rule Status Overview ###
 
@@ -34,7 +34,7 @@ The rule status page shows indicates the current state of each rule; including w
 
 ### Rule History Overview ###
 
-The rule history page displays the status of past scans. 
+The rule history page displays the status of past scans.
 ![Rule History Overview](doc/screenshots/Screenshot_RuleHistory.png "Rule History Overview")
 
 ### Access Control ###
